@@ -1,0 +1,271 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Variables */
+:root {
+    --background: #1A1A1A;
+    --text: #F5F5F5;
+    --teal: #497174;
+    --coral-orange: #FF6B35;
+    --border: #2A2A2A;
+}
+
+/* Base Styles */
+@layer base {
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background-color: var(--background);
+        color: var(--text);
+        font-size: 18px;
+        line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+/* Custom Utilities */
+@layer utilities {
+    .text-teal {
+        color: var(--teal);
+    }
+
+    .text-coral {
+        color: var(--coral-orange);
+    }
+
+    .bg-teal {
+        background-color: var(--teal);
+    }
+
+    .bg-coral {
+        background-color: var(--coral-orange);
+    }
+
+    .bg-dark {
+        background-color: var(--background);
+    }
+
+    .border-dark {
+        border-color: var(--border);
+    }
+
+    /* Translucent boxes */
+    .bg-teal-translucent {
+        background-color: rgba(73, 113, 116, 0.20);
+        backdrop-filter: blur(8px);
+    }
+
+    .bg-teal-translucent-light {
+        background-color: rgba(73, 113, 116, 0.15);
+        backdrop-filter: blur(8px);
+    }
+
+    .bg-coral-translucent {
+        background-color: rgba(255, 107, 53, 0.25);
+        backdrop-filter: blur(8px);
+    }
+}
+
+/* Hero Animations */
+.hero-title {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-desc {
+    transform: translateY(30px);
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+}
+
+.hero-img {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover Effects */
+@layer components {
+    .hover-lift {
+        transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-10px);
+    }
+}
+
+/* Glassmorphism */
+.backdrop-blur-xl {
+    backdrop-filter: blur(20px);
+}
+
+/* Custom Shadows */
+.shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Smooth Transitions */
+* {
+    transition-property: color, background-color, border-color, transform, opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+/* Enhanced Button Styles */
+@layer components {
+    button {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(255, 107, 53, 0.3);
+    }
+    
+    button:active {
+        transform: translateY(0);
+    }
+    
+    /* Teal/Orange element focus states */
+    .bg-accent:focus,
+    .bg-accent:focus-visible {
+        outline: 3px solid rgba(255, 107, 53, 0.5);
+        outline-offset: 3px;
+        box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.2);
+    }
+    
+    .bg-primary:focus,
+    .bg-primary:focus-visible {
+        outline: 3px solid rgba(255, 107, 53, 0.5);
+        outline-offset: 3px;
+        box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.2);
+    }
+}
+
+/* Form Styling */
+input, select, textarea {
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Squared text boxes */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+textarea {
+    height: 3rem;
+    aspect-ratio: auto;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: rgba(245, 245, 245, 0.3);
+}
+
+/* Enhanced focus states for inputs */
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--coral-orange) !important;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2) !important;
+    outline: none;
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: clamp(2.5rem, 10vw, 4rem);
+    }
+}
+
+/* Scroll Behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom Animations */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Performance Optimizations */
+img {
+    content-visibility: auto;
+}
+
+/* Focus States (Accessibility) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--coral-orange);
+    outline-offset: 2px;
+}
+
+/* Scroll Animation Styles */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-on-scroll.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered animation delays for cards and text boxes */
+.animate-on-scroll[data-delay="1"] {
+  transition-delay: 0.1s;
+}
+
+.animate-on-scroll[data-delay="2"] {
+  transition-delay: 0.2s;
+}
+
+.animate-on-scroll[data-delay="3"] {
+  transition-delay: 0.3s;
+}
+
+.animate-on-scroll[data-delay="4"] {
+  transition-delay: 0.4s;
+}
+
+.animate-on-scroll[data-delay="5"] {
+  transition-delay: 0.5s;
+}
+
+.animate-on-scroll[data-delay="6"] {
+  transition-delay: 0.6s;
+}
+
+/* Fade-in only (no slide) for hero elements */
+.fade-in-only {
+  opacity: 0;
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fade-in-only.animated {
+  opacity: 1;
+}
