@@ -1147,14 +1147,12 @@
 
             fetch(GOOGLE_SHEETS_URL, {
                 method: 'POST',
+                mode: 'no-cors',
+                redirect: 'follow',
+                headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify(sheetData)
-            }).then(response => response.json())
-            .then(data => {
-                if (data.result === 'success') {
-                    console.log('Data saved to Google Sheets');
-                } else {
-                    console.error('Google Sheets error:', data.message);
-                }
+            }).then(() => {
+                console.log('Data sent to Google Sheets');
             }).catch(error => console.error('Google Sheets error:', error));
 
             if (typeof gtag !== 'undefined') {
@@ -1298,14 +1296,12 @@
 
             fetch(GOOGLE_SHEETS_URL, {
                 method: 'POST',
+                mode: 'no-cors',
+                redirect: 'follow',
+                headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify(sheetData)
-            }).then(response => response.json())
-            .then(data => {
-                if (data.result === 'success') {
-                    console.log('Data saved to Google Sheets');
-                } else {
-                    console.error('Google Sheets error:', data.message);
-                }
+            }).then(() => {
+                console.log('Data sent to Google Sheets');
             }).catch(error => console.error('Google Sheets error:', error));
 
             if (typeof gtag !== 'undefined') {
