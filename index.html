@@ -1131,25 +1131,22 @@
             document.getElementById('scoreInterpretation').textContent = interpretation;
 
             // Send data to Google Sheets
-            const sheetData = {
-                formType: 'lead-gen-scorecard',
-                websiteUrl: websiteUrl,
-                email: email,
-                finalScore: finalScore.toFixed(1),
-                q1: q1,
-                q2: q2,
-                q3: q3,
-                q4: q4,
-                q5: q5,
-                scoreColor: scoreColor,
-                interpretation: interpretation
-            };
+const sheetData = {
+    Timestamp: new Date().toLocaleString(),
+    Calculator_Name: 'Lead Generation Capabilities',
+    Website_URL: websiteUrl,
+    Email: email,
+    Final_Score: typeof finalScore === 'number' ? finalScore.toFixed(1) : finalScore,
+    Q1: q1, 
+    Q2: q2, 
+    Q3: q3, 
+    Q4: q4, 
+    Q5: q5,
+    Score_Color: scoreColor,
+    Interpretation: interpretation
+};
 
-           fetch('https://submitcalculator.julioernestolov.workers.dev/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(sheetData)
-})
+submitToWorker(sheetData);
 .then(response => response.json())
 .then(data => console.log('Submission successful:', data))
 .catch(error => console.error('Submission error:', error));
@@ -1255,6 +1252,34 @@
                 (sslScore * 0.10) +
                 (seoScore * 0.20) +
                 (schemaScore * 0.25)
+
+// 1. Define the missing variables for the Sheet
+const interpretation = "Virtual Presence Score Scan";
+const scoreColor = finalScore >= 8 ? "#22c55e" : finalScore >= 5 ? "#eab308" : "#ef4444";
+
+// 2. Map the data to your Google Sheet Headers
+const sheetData = {
+    Timestamp: new Date().toLocaleString(),
+    Calculator_Name: 'Virtual Presence Score',
+    Website_URL: websiteUrl, // Takes the value from line 1202
+    Email: email,           // Takes the value from line 1203
+    Final_Score: typeof finalScore === 'number' ? finalScore.toFixed(1) : finalScore,
+    Q1: '', Q2: '', Q3: '', Q4: '', Q5: '', // Empty columns for this specific calculator
+    Score_Color: scoreColor,
+    Interpretation: interpretation
+};
+
+// 3. Send the data to your Cloudflare Worker
+fetch('https://submitcalculator.julioernestolov.workers.dev/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(sheetData)
+})
+.then(response => response.json())
+.then(data => console.log('Scan saved to Google Sheet:', data))
+.catch(error => console.error('Error saving scan:', error));
+
+
             );
 
             let scoreColor, interpretation;
