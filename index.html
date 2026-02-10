@@ -3,23 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Portfolio</title>
-    <script>
-        // Your fixed JavaScript code goes here
-        window.onload = function() {
-            // Corrected code for the broken JavaScript errors
-            try {
-                // Example of fixing errors
-                document.getElementById('example').innerText = 'Hello, World!';
-            } catch (error) {
-                console.error('Error occurred:', error);
-            }
-        };
-    </script>
 </head>
 <body>
-    <h1>Welcome to My Portfolio</h1>
-    <div id="example"></div>
-    <!-- Additional content -->
+    <header>
+        <h1>My Portfolio</h1>
+    </header>
+    <main>
+        <section id="projects">
+            <h2>Projects</h2>
+            <div class="project" id="project1">
+                <h3>Project 1</h3>
+                <p>Description of project 1.</p>
+            </div>
+            <div class="project" id="project2">
+                <h3>Project 2</h3>
+                <p>Description of project 2.</p>
+            </div>
+        </section>
+        <section id="contact">
+            <h2>Contact Me</h2>
+            <form id="contact-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </section>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        // Fix the broken promise chain
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            sendMessage(name, email, message)
+                .then(response => {
+                    console.log('Message sent successfully:', response);
+                })
+                .catch(error => {
+                    console.error('Error sending message:', error);
+                });
+        });
+
+        // Function to send message
+        function sendMessage(name, email, message) {
+            return new Promise((resolve, reject) => {
+                // Simulate an async operation using fetch
+                fetch('/send-message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, message })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        resolve(data);
+                    } else {
+                        reject(data.error);
+                    }
+                })
+                .catch(error => reject(error));
+            });
+        }
+    </script>
 </body>
 </html>
