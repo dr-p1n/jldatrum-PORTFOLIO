@@ -867,8 +867,9 @@
             applyTranslations(lang);
         }
 
-        // Google Sheets Apps Script endpoint
-        const GOOGLE_SHEETS_URL = 'https://script.google.com/a/macros/jldatrum.com/s/AKfycbwj2aawLcJr3N-OxaoTPqRN9gxfdP8MVaZqFDHfG88gljamhDoHAC2WtgSIFWtIjp_6/exec';
+        // Backend endpoints
+        const WORKER_URL = 'https://submitcalculator.julioernestolv.workers.dev/';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby69wlep4nM62zXVnA0QyUBhIvPd3xBkUz3z3VF2bPW01e2RwlQS7gilUULrXg5oa2/exec';
 
         // Initialize Lucide icons
         lucide.createIcons();
@@ -1130,29 +1131,24 @@
             document.getElementById('scoreCircle').style.backgroundColor = scoreColor;
             document.getElementById('scoreInterpretation').textContent = interpretation;
 
-            // Send data to Google Sheets
-            const sheetData = {
-                formType: 'lead-gen-scorecard',
-                websiteUrl: websiteUrl,
+            // Send data to Cloudflare Worker
+            const payload = {
+                url: websiteUrl,
                 email: email,
+                formType: 'lead-gen-scorecard',
                 finalScore: finalScore.toFixed(1),
-                q1: q1,
-                q2: q2,
-                q3: q3,
-                q4: q4,
-                q5: q5,
+                q1: q1, q2: q2, q3: q3, q4: q4, q5: q5,
                 scoreColor: scoreColor,
                 interpretation: interpretation
             };
 
-           fetch('https://submitcalculator.julioernestolv.workers.dev/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(sheetData)
-})
-.then(response => response.json())
-.then(data => console.log('Submission successful:', data))
-.catch(error => console.error('Submission error:', error));
+            fetch(WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(response => response.json())
+            .then(data => console.log('Scorecard data sent:', data))
+            .catch(error => console.error('Scorecard error:', error));
 
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'form_submission', {
@@ -1278,11 +1274,11 @@
             document.getElementById('vpScoreCircle').style.backgroundColor = scoreColor;
             document.getElementById('vpScoreInterpretation').textContent = interpretation;
 
-            // Send data to Google Sheets
-            const sheetData = {
-                formType: 'virtual-presence',
-                websiteUrl: websiteUrl,
+            // Send data to Cloudflare Worker
+            const payload = {
+                url: websiteUrl,
                 email: email,
+                formType: 'virtual-presence',
                 finalScore: finalScore.toFixed(1),
                 pageSpeed: pageSpeedScore,
                 mobile: mobileScore,
@@ -1293,14 +1289,13 @@
                 interpretation: interpretation
             };
 
-            fetch('https://submitcalculator.julioernestolv.workers.dev/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(sheetData)
-})
-.then(response => response.json())
-.then(data => console.log('Submission successful:', data))
-.catch(error => console.error('Submission error:', error));
+            fetch(WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(response => response.json())
+            .then(data => console.log('Scanner data sent:', data))
+            .catch(error => console.error('Scanner error:', error));
 
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'form_submission', {
