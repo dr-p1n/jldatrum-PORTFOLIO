@@ -1150,6 +1150,16 @@
             .then(data => console.log('Scorecard data sent:', data))
             .catch(error => console.error('Scorecard error:', error));
 
+            // Save to Google Sheets + send email via Apps Script
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                redirect: 'follow',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payload)
+            }).then(r => r.json())
+            .then(data => console.log('Sheet/email:', data))
+            .catch(e => console.error('Sheet/email error:', e));
+
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'form_submission', {
                     'event_category': 'Lead Generation Calculator',
@@ -1296,6 +1306,16 @@
             }).then(response => response.json())
             .then(data => console.log('Scanner data sent:', data))
             .catch(error => console.error('Scanner error:', error));
+
+            // Save to Google Sheets + send email via Apps Script
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                redirect: 'follow',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payload)
+            }).then(r => r.json())
+            .then(data => console.log('Sheet/email:', data))
+            .catch(e => console.error('Sheet/email error:', e));
 
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'form_submission', {
