@@ -869,7 +869,7 @@
 
         // Backend endpoints
         const WORKER_URL = 'https://submitcalculator.julioernestolv.workers.dev/';
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby69wlep4nM62zXVnA0QyUBhIvPd3xBkUz3z3VF2bPW01e2RwlQS7gilUULrXg5oa2/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw59uAdsZPU6TA_14TsmJp_ZmWcpJsUIm_bRSvL-LYfF4_atDM3DM0v74ExALpncHYO/exec';
 
         // Initialize Lucide icons
         lucide.createIcons();
@@ -1153,12 +1153,11 @@
             // Save to Google Sheets + send email via Apps Script
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                redirect: 'follow',
+                mode: 'no-cors',
                 headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify(payload)
-            }).then(r => r.json())
-            .then(data => console.log('Sheet/email:', data))
-            .catch(e => console.error('Sheet/email error:', e));
+            }).then(() => console.log('Data sent to Sheet'))
+            .catch(e => console.error('Sheet error:', e));
 
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'form_submission', {
@@ -1310,12 +1309,11 @@
             // Save to Google Sheets + send email via Apps Script
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                redirect: 'follow',
+                mode: 'no-cors',
                 headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify(payload)
-            }).then(r => r.json())
-            .then(data => console.log('Sheet/email:', data))
-            .catch(e => console.error('Sheet/email error:', e));
+            }).then(() => console.log('Data sent to Sheet'))
+            .catch(e => console.error('Sheet error:', e));
 
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'form_submission', {
