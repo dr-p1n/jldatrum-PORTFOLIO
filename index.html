@@ -719,7 +719,8 @@
                 footer_copyright: "\u00a9 2026 Julio Luque Valdes. Agencia de marketing DATRUM.",
                 alert_answer_all: "Por favor responde todas las preguntas antes de enviar.",
                 error_invalid_url: "Por favor ingresa una URL v\u00e1lida (ej: https://ejemplo.com)",
-                error_invalid_email: "Por favor ingresa un correo electr\u00f3nico v\u00e1lido"
+                error_invalid_email: "Por favor ingresa un correo electr\u00f3nico v\u00e1lido",
+                error_scan_failed: "El escaneo fall\u00f3. Por favor intenta de nuevo."
             },
             en: {
                 meta_title: "Julio Luque Valdes | DATRUM marketing agency",
@@ -817,7 +818,8 @@
                 footer_copyright: "\u00a9 2026 Julio Luque Valdes. DATRUM marketing agency.",
                 alert_answer_all: "Please answer all questions before submitting.",
                 error_invalid_url: "Please enter a valid website URL (e.g., https://example.com)",
-                error_invalid_email: "Please enter a valid email address"
+                error_invalid_email: "Please enter a valid email address",
+                error_scan_failed: "Scan failed. Please try again."
             }
         };
 
@@ -1221,80 +1223,98 @@
             document.getElementById('virtual-presence-form').classList.add('hidden');
             document.getElementById('vp-loading').classList.remove('hidden');
 
-            // Send URL to Worker for real scanning (runs in parallel with animation)
-            const checkIds = ['check-pagespeed', 'check-mobile', 'check-ssl', 'check-seo', 'check-schema'];
-            const workerPromise = fetch(WORKER_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url: websiteUrl, email: email })
-            }).then(r => r.json());
+            try {
+                // Send URL to Worker for real scanning (runs in parallel with animation)
+                const checkIds = ['check-pagespeed', 'check-mobile', 'check-ssl', 'check-seo', 'check-schema'];
+                const workerPromise = fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: websiteUrl, email: email })
+                }).then(r => r.json());
 
-            // Animate checkmarks progressively while Worker scans
-            for (let i = 0; i < checkIds.length; i++) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                const checkEl = document.getElementById(checkIds[i]);
-                checkEl.querySelector('.animate-spin').classList.remove('animate-spin');
-                checkEl.querySelector('.animate-spin, .border-4').classList.add('bg-green-500');
-                checkEl.querySelector('.animate-spin, .border-4').innerHTML = '<i data-lucide="check" class="size-5 text-white"></i>';
+                // Animate checkmarks progressively while Worker scans
+                for (let i = 0; i < checkIds.length; i++) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    const checkEl = document.getElementById(checkIds[i]);
+                    checkEl.querySelector('.animate-spin').classList.remove('animate-spin');
+                    checkEl.querySelector('.animate-spin, .border-4').classList.add('bg-green-500');
+                    checkEl.querySelector('.animate-spin, .border-4').innerHTML = '<i data-lucide="check" class="size-5 text-white"></i>';
+                    lucide.createIcons();
+                }
+
+                // Wait for real scan results from Worker
+                const workerData = await workerPromise;
+                const details = workerData.details || [0, 0, 0, 0, 0];
+                const finalScore = (workerData.score || 0) * 10; // Worker returns 0-1, display as 0-10
+
+                const pageSpeedScore = details[0] ? 10 : 0;
+                const mobileScore = details[1] ? 10 : 0;
+                const sslScore = details[2] ? 10 : 0;
+                const seoScore = details[3] ? 10 : 0;
+                const schemaScore = details[4] ? 10 : 0;
+
+                let scoreColor, interpretation;
+                if (finalScore >= 8) {
+                    scoreColor = '#10b981';
+                    interpretation = translations[currentLang].vp_score_high;
+                } else if (finalScore >= 5) {
+                    scoreColor = '#f59e0b';
+                    interpretation = translations[currentLang].vp_score_mid;
+                } else {
+                    scoreColor = '#ef4444';
+                    interpretation = translations[currentLang].vp_score_low;
+                }
+
+                document.getElementById('vp-loading').classList.add('hidden');
+                document.getElementById('vp-results').classList.remove('hidden');
+
+                document.getElementById('vpScoreValue').textContent = finalScore.toFixed(1);
+                document.getElementById('vpScoreCircle').style.backgroundColor = scoreColor;
+                document.getElementById('vpScoreInterpretation').textContent = interpretation;
+
+                console.log('Scanner data:', workerData);
+
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'form_submission', {
+                        'event_category': 'Virtual Presence Calculator',
+                        'event_label': 'Website Scan',
+                        'value': finalScore.toFixed(1)
+                    });
+                }
+
+                console.log('Virtual Presence scan:', {
+                    websiteUrl,
+                    email,
+                    scores: {
+                        pageSpeed: pageSpeedScore,
+                        mobile: mobileScore,
+                        ssl: sslScore,
+                        seo: seoScore,
+                        schema: schemaScore
+                    },
+                    finalScore: finalScore.toFixed(1),
+                    color: scoreColor
+                });
+
+                document.getElementById('vp-results').scrollIntoView({ behavior: 'smooth', block: 'center' });
                 lucide.createIcons();
-            }
+            } catch (error) {
+                console.error('VP Scanner error:', error);
+                // Reset to form view so user can try again
+                document.getElementById('vp-loading').classList.add('hidden');
+                document.getElementById('virtual-presence-form').classList.remove('hidden');
+                document.getElementById('vpUrlError').textContent = translations[currentLang].error_scan_failed;
+                document.getElementById('vp-question-url').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            // Wait for real scan results from Worker
-            const workerData = await workerPromise;
-            const details = workerData.details || [0, 0, 0, 0, 0];
-            const finalScore = (workerData.score || 0) * 10; // Worker returns 0-1, display as 0-10
-
-            const pageSpeedScore = details[0] ? 10 : 0;
-            const mobileScore = details[1] ? 10 : 0;
-            const sslScore = details[2] ? 10 : 0;
-            const seoScore = details[3] ? 10 : 0;
-            const schemaScore = details[4] ? 10 : 0;
-
-            let scoreColor, interpretation;
-            if (finalScore >= 8) {
-                scoreColor = '#10b981';
-                interpretation = translations[currentLang].vp_score_high;
-            } else if (finalScore >= 5) {
-                scoreColor = '#f59e0b';
-                interpretation = translations[currentLang].vp_score_mid;
-            } else {
-                scoreColor = '#ef4444';
-                interpretation = translations[currentLang].vp_score_low;
-            }
-
-            document.getElementById('vp-loading').classList.add('hidden');
-            document.getElementById('vp-results').classList.remove('hidden');
-
-            document.getElementById('vpScoreValue').textContent = finalScore.toFixed(1);
-            document.getElementById('vpScoreCircle').style.backgroundColor = scoreColor;
-            document.getElementById('vpScoreInterpretation').textContent = interpretation;
-
-            console.log('Scanner data:', workerData);
-
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'form_submission', {
-                    'event_category': 'Virtual Presence Calculator',
-                    'event_label': 'Website Scan',
-                    'value': finalScore.toFixed(1)
+                // Reset loading spinners for next attempt
+                const checks = ['check-pagespeed', 'check-mobile', 'check-ssl', 'check-seo', 'check-schema'];
+                checks.forEach(checkId => {
+                    const checkEl = document.getElementById(checkId);
+                    const spinner = checkEl.querySelector('div:first-child');
+                    spinner.className = 'size-8 rounded-full border-4 border-primary border-t-accent animate-spin';
+                    spinner.innerHTML = '';
                 });
             }
-
-            console.log('Virtual Presence scan:', {
-                websiteUrl,
-                email,
-                scores: {
-                    pageSpeed: pageSpeedScore,
-                    mobile: mobileScore,
-                    ssl: sslScore,
-                    seo: seoScore,
-                    schema: schemaScore
-                },
-                finalScore: finalScore.toFixed(1),
-                color: scoreColor
-            });
-
-            document.getElementById('vp-results').scrollIntoView({ behavior: 'smooth', block: 'center' });
-            lucide.createIcons();
         });
 
         // Reset Virtual Presence Calculator function
