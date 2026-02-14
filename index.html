@@ -1151,11 +1151,22 @@
             .catch(error => console.error('Scorecard error:', error));
 
             // Save to Google Sheets + send email via Apps Script
+            var sheetPayload = {
+                Calculator_Name: 'LeadGenScorecard',
+                Website_URL: websiteUrl,
+                Email: email,
+                Final_Score: finalScore.toFixed(1),
+                Q1: q1,
+                Q2: q2,
+                Q3: q3,
+                Q4: q4,
+                Q5: q5
+            };
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(sheetPayload)
             }).then(() => console.log('Data sent to Sheet'))
             .catch(e => console.error('Sheet error:', e));
 
@@ -1307,11 +1318,22 @@
             .catch(error => console.error('Scanner error:', error));
 
             // Save to Google Sheets + send email via Apps Script
+            var sheetPayload = {
+                Calculator_Name: 'VirtualPresenceScanner',
+                Website_URL: websiteUrl,
+                Email: email,
+                Final_Score: finalScore.toFixed(1),
+                Q1: pageSpeedScore,
+                Q2: mobileScore,
+                Q3: sslScore,
+                Q4: seoScore,
+                Q5: schemaScore
+            };
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(sheetPayload)
             }).then(() => console.log('Data sent to Sheet'))
             .catch(e => console.error('Sheet error:', e));
 
