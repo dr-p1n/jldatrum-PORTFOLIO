@@ -867,9 +867,8 @@
             applyTranslations(lang);
         }
 
-        // Backend endpoints
+        // Backend endpoint (Worker handles scan + Sheet write + email)
         const WORKER_URL = 'https://submitcalculator.julioernestolv.workers.dev/';
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw59uAdsZPU6TA_14TsmJp_ZmWcpJsUIm_bRSvL-LYfF4_atDM3DM0v74ExALpncHYO/exec';
 
         // Initialize Lucide icons
         lucide.createIcons();
@@ -1150,15 +1149,6 @@
             .then(data => console.log('Scorecard data sent:', data))
             .catch(error => console.error('Scorecard error:', error));
 
-            // Save to Google Sheets + send email via Apps Script
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify(payload)
-            }).then(() => console.log('Data sent to Sheet'))
-            .catch(e => console.error('Sheet error:', e));
-
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'form_submission', {
                     'event_category': 'Lead Generation Calculator',
@@ -1231,36 +1221,34 @@
             document.getElementById('virtual-presence-form').classList.add('hidden');
             document.getElementById('vp-loading').classList.remove('hidden');
 
-            const checks = [
-                { id: 'check-pagespeed', delay: 1500, score: Math.floor(Math.random() * 5) + 6 },
-                { id: 'check-mobile', delay: 2500, score: Math.random() > 0.3 ? 10 : (Math.random() > 0.5 ? 5 : 1) },
-                { id: 'check-ssl', delay: 3200, score: Math.random() > 0.2 ? 10 : (Math.random() > 0.5 ? 5 : 1) },
-                { id: 'check-seo', delay: 4000, score: Math.random() > 0.3 ? 10 : (Math.random() > 0.5 ? 5 : 1) },
-                { id: 'check-schema', delay: 5000, score: Math.random() > 0.5 ? 10 : (Math.random() > 0.6 ? 5 : 1) }
-            ];
+            // Send URL to Worker for real scanning (runs in parallel with animation)
+            const checkIds = ['check-pagespeed', 'check-mobile', 'check-ssl', 'check-seo', 'check-schema'];
+            const workerPromise = fetch(WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: websiteUrl, email: email })
+            }).then(r => r.json());
 
-            for (const check of checks) {
-                await new Promise(resolve => setTimeout(resolve, check.delay - (checks.indexOf(check) > 0 ? checks[checks.indexOf(check) - 1].delay : 0)));
-                const checkEl = document.getElementById(check.id);
+            // Animate checkmarks progressively while Worker scans
+            for (let i = 0; i < checkIds.length; i++) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                const checkEl = document.getElementById(checkIds[i]);
                 checkEl.querySelector('.animate-spin').classList.remove('animate-spin');
                 checkEl.querySelector('.animate-spin, .border-4').classList.add('bg-green-500');
                 checkEl.querySelector('.animate-spin, .border-4').innerHTML = '<i data-lucide="check" class="size-5 text-white"></i>';
                 lucide.createIcons();
             }
 
-            const pageSpeedScore = checks[0].score;
-            const mobileScore = checks[1].score;
-            const sslScore = checks[2].score;
-            const seoScore = checks[3].score;
-            const schemaScore = checks[4].score;
+            // Wait for real scan results from Worker
+            const workerData = await workerPromise;
+            const details = workerData.details || [0, 0, 0, 0, 0];
+            const finalScore = (workerData.score || 0) * 10; // Worker returns 0-1, display as 0-10
 
-            const finalScore = (
-                (pageSpeedScore * 0.30) +
-                (mobileScore * 0.15) +
-                (sslScore * 0.10) +
-                (seoScore * 0.20) +
-                (schemaScore * 0.25)
-            );
+            const pageSpeedScore = details[0] ? 10 : 0;
+            const mobileScore = details[1] ? 10 : 0;
+            const sslScore = details[2] ? 10 : 0;
+            const seoScore = details[3] ? 10 : 0;
+            const schemaScore = details[4] ? 10 : 0;
 
             let scoreColor, interpretation;
             if (finalScore >= 8) {
@@ -1274,8 +1262,6 @@
                 interpretation = translations[currentLang].vp_score_low;
             }
 
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
             document.getElementById('vp-loading').classList.add('hidden');
             document.getElementById('vp-results').classList.remove('hidden');
 
@@ -1283,37 +1269,7 @@
             document.getElementById('vpScoreCircle').style.backgroundColor = scoreColor;
             document.getElementById('vpScoreInterpretation').textContent = interpretation;
 
-            // Send data to Cloudflare Worker
-            const payload = {
-                url: websiteUrl,
-                email: email,
-                formType: 'virtual-presence',
-                finalScore: finalScore.toFixed(1),
-                pageSpeed: pageSpeedScore,
-                mobile: mobileScore,
-                ssl: sslScore,
-                seo: seoScore,
-                schema: schemaScore,
-                scoreColor: scoreColor,
-                interpretation: interpretation
-            };
-
-            fetch(WORKER_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            }).then(response => response.json())
-            .then(data => console.log('Scanner data sent:', data))
-            .catch(error => console.error('Scanner error:', error));
-
-            // Save to Google Sheets + send email via Apps Script
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify(payload)
-            }).then(() => console.log('Data sent to Sheet'))
-            .catch(e => console.error('Sheet error:', e));
+            console.log('Scanner data:', workerData);
 
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'form_submission', {
