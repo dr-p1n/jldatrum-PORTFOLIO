@@ -1137,7 +1137,9 @@
                 url: websiteUrl,
                 email: email,
                 formType: 'lead-gen-scorecard',
+                Calculator_Name: 'LeadGenScorecard',
                 finalScore: finalScore.toFixed(1),
+                score: finalScore / 10,
                 q1: q1, q2: q2, q3: q3, q4: q4, q5: q5,
                 scoreColor: scoreColor,
                 interpretation: interpretation
@@ -1229,7 +1231,7 @@
                 const workerPromise = fetch(WORKER_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: websiteUrl, email: email })
+                    body: JSON.stringify({ url: websiteUrl, email: email, formType: 'virtual-presence-scanner', Calculator_Name: 'VirtualPresenceScanner' })
                 }).then(r => r.json());
 
                 // Animate checkmarks progressively while Worker scans
