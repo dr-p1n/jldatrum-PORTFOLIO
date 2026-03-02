@@ -57,6 +57,9 @@ export default {
                 payload = {
                     url: url,
                     email: email || 'N/A',
+                    fullName: body.fullName || '',
+                    phone: body.phone || '',
+                    consent: body.consent === true,
                     score: body.score != null ? body.score : (body.finalScore ? parseFloat(body.finalScore) / 10 : 0),
                     Calculator_Name: 'LeadGenScorecard',
                     q1: body.q1 != null ? body.q1 : '',
@@ -99,6 +102,7 @@ export default {
                 payload = {
                     url: url,
                     email: email || 'N/A',
+                    consent: body.consent === true,
                     score: score,
                     Calculator_Name: 'VirtualPresenceScanner',
                     q1: scanResults[0],
