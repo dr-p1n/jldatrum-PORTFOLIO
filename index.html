@@ -167,6 +167,18 @@
 
                             <!-- Submit Button (Translucent Coral-Orange Box - ACTION) -->
                             <div class="bg-coral-translucent rounded-lg p-8 space-y-4 animate-on-scroll hidden" data-delay="4" id="vp-submit-section">
+                                <!-- Consent Checkbox (LEY 81) -->
+                                <div class="flex items-start gap-3">
+                                    <input
+                                        type="checkbox"
+                                        id="vpConsent"
+                                        class="mt-1 size-5 rounded border-primary accent-accent cursor-pointer flex-shrink-0"
+                                    >
+                                    <label for="vpConsent" class="text-sm text-text/80 cursor-pointer" data-i18n-html="consent_label">
+                                        He le&iacute;do y acepto la <a href="privacy.html" target="_blank" class="underline text-accent">Pol&iacute;tica de Privacidad</a> (LEY 81 de Panam&aacute;). <span class="text-accent">*</span>
+                                    </label>
+                                </div>
+                                <p class="text-sm text-accent hidden" id="vpConsentError"></p>
                                 <button
                                     type="submit"
                                     class="w-full bg-accent text-white py-4 rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-primary transition-all flex items-center justify-center gap-3"
@@ -478,6 +490,53 @@
                                     <p class="text-sm text-accent" id="emailError"></p>
                                 </div>
 
+                                <!-- Full Name Input -->
+                                <div class="space-y-3">
+                                    <label class="block text-sm font-bold uppercase tracking-wider text-text" data-i18n-html="lg_label_fullname">
+                                        Nombre Completo <span class="text-accent">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="fullName"
+                                        required
+                                        placeholder="Tu nombre completo"
+                                        data-i18n-placeholder="placeholder_fullname"
+                                        value=""
+                                        class="w-full px-5 py-3 bg-background border border-primary rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-colors text-text"
+                                    >
+                                    <p class="text-sm text-accent" id="fullNameError"></p>
+                                </div>
+
+                                <!-- Phone Input -->
+                                <div class="space-y-3">
+                                    <label class="block text-sm font-bold uppercase tracking-wider text-text" data-i18n-html="lg_label_phone">
+                                        Tel&eacute;fono <span class="text-accent">*</span>
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        id="phone"
+                                        required
+                                        placeholder="+507 6000-0000"
+                                        data-i18n-placeholder="placeholder_phone"
+                                        value=""
+                                        class="w-full px-5 py-3 bg-background border border-primary rounded-lg focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-colors text-text"
+                                    >
+                                    <p class="text-sm text-accent" id="phoneError"></p>
+                                </div>
+
+                                <!-- Consent Checkbox (LEY 81) -->
+                                <div class="flex items-start gap-3">
+                                    <input
+                                        type="checkbox"
+                                        id="lgConsent"
+                                        class="mt-1 size-5 rounded border-primary accent-accent cursor-pointer flex-shrink-0"
+                                    >
+                                    <label for="lgConsent" class="text-sm text-text/80 cursor-pointer" data-i18n-html="consent_label">
+                                        He le&iacute;do y acepto la <a href="privacy.html" target="_blank" class="underline text-accent">Pol&iacute;tica de Privacidad</a> (LEY 81 de Panam&aacute;). <span class="text-accent">*</span>
+                                    </label>
+                                </div>
+                                <p class="text-sm text-accent hidden" id="lgConsentError"></p>
+
                                 <!-- Submit Button -->
                                 <button
                                     type="submit"
@@ -720,7 +779,15 @@
                 alert_answer_all: "Por favor responde todas las preguntas antes de enviar.",
                 error_invalid_url: "Por favor ingresa una URL v\u00e1lida (ej: https://ejemplo.com)",
                 error_invalid_email: "Por favor ingresa un correo electr\u00f3nico v\u00e1lido",
-                error_scan_failed: "El escaneo fall\u00f3. Por favor intenta de nuevo."
+                error_scan_failed: "El escaneo fall\u00f3. Por favor intenta de nuevo.",
+                consent_label: "He le\u00eddo y acepto la <a href=\"privacy.html\" target=\"_blank\" class=\"underline text-accent\">Pol\u00edtica de Privacidad</a> (LEY 81 de Panam\u00e1). <span class=\"text-accent\">*</span>",
+                consent_error: "Debes aceptar la pol\u00edtica de privacidad para continuar.",
+                lg_label_fullname: "Nombre Completo <span class=\"text-accent\">*</span>",
+                placeholder_fullname: "Tu nombre completo",
+                lg_label_phone: "Tel\u00e9fono <span class=\"text-accent\">*</span>",
+                placeholder_phone: "+507 6000-0000",
+                error_required_fullname: "Por favor ingresa tu nombre completo.",
+                error_required_phone: "Por favor ingresa tu n\u00famero de tel\u00e9fono."
             },
             en: {
                 meta_title: "Julio Luque Valdes | DATRUM marketing agency",
@@ -819,7 +886,15 @@
                 alert_answer_all: "Please answer all questions before submitting.",
                 error_invalid_url: "Please enter a valid website URL (e.g., https://example.com)",
                 error_invalid_email: "Please enter a valid email address",
-                error_scan_failed: "Scan failed. Please try again."
+                error_scan_failed: "Scan failed. Please try again.",
+                consent_label: "I have read and agree to the <a href=\"privacy.html\" target=\"_blank\" class=\"underline text-accent\">Privacy Policy</a> (Panama LEY 81). <span class=\"text-accent\">*</span>",
+                consent_error: "You must accept the privacy policy to continue.",
+                lg_label_fullname: "Full Name <span class=\"text-accent\">*</span>",
+                placeholder_fullname: "Your full name",
+                lg_label_phone: "Phone <span class=\"text-accent\">*</span>",
+                placeholder_phone: "+507 6000-0000",
+                error_required_fullname: "Please enter your full name.",
+                error_required_phone: "Please enter your phone number."
             }
         };
 
@@ -1078,9 +1153,15 @@
 
             document.getElementById('urlError').textContent = '';
             document.getElementById('emailError').textContent = '';
+            document.getElementById('fullNameError').textContent = '';
+            document.getElementById('phoneError').textContent = '';
+            document.getElementById('lgConsentError').classList.add('hidden');
 
             const websiteUrl = document.getElementById('websiteUrl').value.trim();
             const email = document.getElementById('email').value.trim();
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const lgConsentChecked = document.getElementById('lgConsent').checked;
 
             try {
                 const urlObj = new URL(websiteUrl);
@@ -1096,6 +1177,25 @@
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             if (!emailRegex.test(email)) {
                 document.getElementById('emailError').textContent = translations[currentLang].error_invalid_email;
+                document.getElementById('lg-email-submit').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            if (!fullName) {
+                document.getElementById('fullNameError').textContent = translations[currentLang].error_required_fullname;
+                document.getElementById('lg-email-submit').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            if (!phone) {
+                document.getElementById('phoneError').textContent = translations[currentLang].error_required_phone;
+                document.getElementById('lg-email-submit').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            if (!lgConsentChecked) {
+                document.getElementById('lgConsentError').textContent = translations[currentLang].consent_error;
+                document.getElementById('lgConsentError').classList.remove('hidden');
                 document.getElementById('lg-email-submit').scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
@@ -1136,6 +1236,9 @@
             const payload = {
                 url: websiteUrl,
                 email: email,
+                fullName: fullName,
+                phone: phone,
+                consent: true,
                 formType: 'lead-gen-scorecard',
                 Calculator_Name: 'LeadGenScorecard',
                 finalScore: finalScore.toFixed(1),
@@ -1178,11 +1281,17 @@
             document.getElementById('diagnosticForm').reset();
             document.getElementById('websiteUrl').value = '';
             document.getElementById('email').value = '';
+            document.getElementById('fullName').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('lgConsent').checked = false;
             document.getElementById('scorecard-form').classList.remove('hidden');
             document.getElementById('scorecard-results').classList.add('hidden');
 
             document.getElementById('urlError').textContent = '';
             document.getElementById('emailError').textContent = '';
+            document.getElementById('fullNameError').textContent = '';
+            document.getElementById('phoneError').textContent = '';
+            document.getElementById('lgConsentError').classList.add('hidden');
 
             document.getElementById('lg-question-1').classList.add('hidden');
             document.getElementById('lg-question-2').classList.add('hidden');
@@ -1200,9 +1309,11 @@
 
             document.getElementById('vpUrlError').textContent = '';
             document.getElementById('vpEmailError').textContent = '';
+            document.getElementById('vpConsentError').classList.add('hidden');
 
             const websiteUrl = document.getElementById('vpWebsiteUrl').value.trim();
             const email = document.getElementById('vpEmail').value.trim();
+            const vpConsentChecked = document.getElementById('vpConsent').checked;
 
             try {
                 const urlObj = new URL(websiteUrl);
@@ -1222,6 +1333,13 @@
                 return;
             }
 
+            if (!vpConsentChecked) {
+                document.getElementById('vpConsentError').textContent = translations[currentLang].consent_error;
+                document.getElementById('vpConsentError').classList.remove('hidden');
+                document.getElementById('vp-submit-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
             document.getElementById('virtual-presence-form').classList.add('hidden');
             document.getElementById('vp-loading').classList.remove('hidden');
 
@@ -1231,7 +1349,7 @@
                 const workerPromise = fetch(WORKER_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: websiteUrl, email: email, formType: 'virtual-presence-scanner', Calculator_Name: 'VirtualPresenceScanner' })
+                    body: JSON.stringify({ url: websiteUrl, email: email, consent: true, formType: 'virtual-presence-scanner', Calculator_Name: 'VirtualPresenceScanner' })
                 }).then(r => r.json());
 
                 // Animate checkmarks progressively while Worker scans
@@ -1324,12 +1442,14 @@
             document.getElementById('virtualPresenceForm').reset();
             document.getElementById('vpWebsiteUrl').value = '';
             document.getElementById('vpEmail').value = '';
+            document.getElementById('vpConsent').checked = false;
             document.getElementById('virtual-presence-form').classList.remove('hidden');
             document.getElementById('vp-loading').classList.add('hidden');
             document.getElementById('vp-results').classList.add('hidden');
 
             document.getElementById('vpUrlError').textContent = '';
             document.getElementById('vpEmailError').textContent = '';
+            document.getElementById('vpConsentError').classList.add('hidden');
 
             document.getElementById('vp-question-email').classList.add('hidden');
             document.getElementById('vp-submit-section').classList.add('hidden');
