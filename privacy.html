@@ -12,8 +12,6 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         .lang-hidden { display: none; }
-        .lang-button { color: var(--text); opacity: 0.5; }
-        .lang-button.active { opacity: 1; color: var(--coral-orange); }
         .policy-section { border-top: 1px solid #2A2A2A; padding-top: 2rem; margin-top: 2rem; }
         .policy-section:first-child { border-top: none; padding-top: 0; margin-top: 0; }
         .policy-h1 { font-size: 2rem; font-weight: 800; color: #F5F5F5; margin-bottom: 0.5rem; }
@@ -50,12 +48,6 @@
                 <div style="font-size:0.75rem;font-weight:700;color:#497174;letter-spacing:0.1em;text-transform:uppercase;">
                     <span class="lang-es">Privacidad & Términos</span>
                     <span class="lang-en lang-hidden">Privacy & Terms</span>
-                </div>
-                <!-- Language Toggle -->
-                <div style="display:flex;align-items:center;gap:0.25rem;">
-                    <button id="lang-es" onclick="setLanguage('es')" class="lang-button active" style="padding:0.25rem 0.75rem;font-size:0.75rem;font-weight:700;border-radius:0.25rem;border:none;background:none;cursor:pointer;transition:all 0.2s;letter-spacing:0.05em;text-transform:uppercase;">ES</button>
-                    <span style="color:rgba(245,245,245,0.3);font-size:0.75rem;">|</span>
-                    <button id="lang-en" onclick="setLanguage('en')" class="lang-button" style="padding:0.25rem 0.75rem;font-size:0.75rem;font-weight:700;border-radius:0.25rem;border:none;background:none;cursor:pointer;transition:all 0.2s;letter-spacing:0.05em;text-transform:uppercase;">EN</button>
                 </div>
             </div>
         </div>
@@ -688,15 +680,13 @@
     <script>
         lucide.createIcons();
 
-        let currentLang = localStorage.getItem('jldatrum-lang') || 'es';
+        // Auto-detect from browser language, fallback to 'es'
+        const browserLang = (navigator.language || navigator.userLanguage || 'es').toLowerCase();
+        const currentLang = browserLang.startsWith('en') ? 'en' : 'es';
 
         function setLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('jldatrum-lang', lang);
             document.querySelectorAll('.lang-es').forEach(el => el.classList.toggle('lang-hidden', lang !== 'es'));
             document.querySelectorAll('.lang-en').forEach(el => el.classList.toggle('lang-hidden', lang !== 'en'));
-            document.getElementById('lang-es').classList.toggle('active', lang === 'es');
-            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
             document.documentElement.lang = lang;
         }
 

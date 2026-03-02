@@ -49,16 +49,6 @@
                     </button>
                 </div>
 
-                <!-- Language Toggle -->
-                <div class="flex items-center gap-1">
-                    <button id="lang-es" onclick="setLanguage('es')" class="lang-button active px-3 py-1 text-xs font-bold rounded transition-all duration-200 uppercase tracking-wider">
-                        ES
-                    </button>
-                    <span class="text-text/30 text-xs">|</span>
-                    <button id="lang-en" onclick="setLanguage('en')" class="lang-button px-3 py-1 text-xs font-bold rounded transition-all duration-200 uppercase tracking-wider">
-                        EN
-                    </button>
-                </div>
             </div>
         </div>
     </nav>
@@ -898,8 +888,9 @@
             }
         };
 
-        // Language state
-        let currentLang = localStorage.getItem('jldatrum-lang') || 'es';
+        // Language state — auto-detect from browser, fallback to 'es'
+        const browserLang = (navigator.language || navigator.userLanguage || 'es').toLowerCase();
+        let currentLang = browserLang.startsWith('en') ? 'en' : 'es';
 
         function applyTranslations(lang) {
             const t = translations[lang];
@@ -933,14 +924,10 @@
             const metaDesc = document.querySelector('meta[name="description"]');
             if (metaDesc && t.meta_description) metaDesc.setAttribute('content', t.meta_description);
 
-            // Update language toggle button active states
-            document.getElementById('lang-es').classList.toggle('active', lang === 'es');
-            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
         }
 
         function setLanguage(lang) {
             currentLang = lang;
-            localStorage.setItem('jldatrum-lang', lang);
             applyTranslations(lang);
         }
 
