@@ -101,13 +101,26 @@ nav {
 
 .nav-logo {
   font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--text);
   text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2;
+  gap: 1px;
 }
 .nav-logo .dot { color: var(--coral); }
+.nav-brand { white-space: nowrap; }
+.nav-name {
+  font-size: 8.5px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
 
 .nav-links {
   display: flex;
@@ -414,54 +427,18 @@ section {
   .section-title { font-size: clamp(24px, 7vw, 36px); margin-bottom: 40px; }
 }
 
-.about-grid {
+.lab-content {
+  max-width: 760px;
+}
+.lab-lower {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  gap: 48px;
+  margin-top: 8px;
   align-items: start;
 }
-@media (max-width: 1023px) {
-  .about-grid { grid-template-columns: 1fr; gap: 40px; }
-}
-
-/* Timeline */
-.timeline { display: flex; flex-direction: column; }
-.timeline-item {
-  padding: 20px 0;
-  border-bottom: 1px solid var(--border);
-  opacity: 0;
-  transform: translateX(-20px);
-  transition: opacity 0.5s, transform 0.5s;
-}
-.timeline-item:first-child { padding-top: 0; }
-.timeline-item:last-child { border-bottom: none; }
-.timeline-item.visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-.timeline-item:nth-child(2) { transition-delay: 0.12s; }
-.timeline-item:nth-child(3) { transition-delay: 0.24s; }
-.timeline-item:nth-child(4) { transition-delay: 0.36s; }
-
-.timeline-year {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--coral);
-  letter-spacing: 0.08em;
-  margin-bottom: 4px;
-}
-.timeline-title {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 6px;
-}
-.timeline-desc {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.6;
+@media (max-width: 767px) {
+  .lab-lower { grid-template-columns: 1fr; gap: 28px; }
 }
 
 /* Right column */
@@ -932,7 +909,10 @@ footer {
 
 <!-- NAV -->
 <nav>
-  <a href="#home" class="nav-logo">jl<span class="dot">.</span>datrum</a>
+  <a href="#home" class="nav-logo">
+    <span class="nav-brand">jl<span class="dot">.</span>datrum</span>
+    <span class="nav-name">Julio Luque Valdés</span>
+  </a>
   <div class="nav-links">
     <a href="#think">The Lab</a>
     <a href="#diagnose">Diagnose</a>
@@ -990,38 +970,13 @@ footer {
 <section id="think">
   <div class="section-inner">
     <div class="section-eyebrow">// 01 — The Lab</div>
-    <h2 class="section-title">I've seen the same problem<br>in four different industries.</h2>
+    <h2 class="section-title">Most firms don't have a talent gap.<br>They have a visibility gap.</h2>
 
-    <div class="about-grid">
-      <!-- Timeline -->
-      <div class="timeline" id="timeline">
-        <div class="timeline-item">
-          <div class="timeline-year">BROKERAGE</div>
-          <div class="timeline-title">Investment &amp; Insurance</div>
-          <div class="timeline-desc">Built distribution systems under financial regulation. Learned how trust compounds — and how quickly invisible firms lose to less-qualified ones.</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-year">RED BULL</div>
-          <div class="timeline-title">Panama</div>
-          <div class="timeline-desc">Culture observer and movement architect. Learned how attention spreads before algorithms do.</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-year">MUSEUM</div>
-          <div class="timeline-title">MADC, Costa Rica</div>
-          <div class="timeline-desc">Curator. Aesthetic judgment: what matters, what doesn't. How to edit, prioritize, and communicate value at a glance.</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-year">TECH</div>
-          <div class="timeline-title">Cybersecurity + UX Design</div>
-          <div class="timeline-desc">How systems break from the inside — and how to design ones that feel inevitable from the outside.</div>
-        </div>
-      </div>
-
-      <!-- Statement + tags -->
-      <div class="about-statement fade-up">
-        <blockquote class="pull-quote">
-          "The through-line isn't the industries. It's the pattern: every professional service losing clients to less-qualified competitors has the same problem. Not a talent gap. A visibility gap."
-        </blockquote>
+    <div class="lab-content fade-up">
+      <blockquote class="pull-quote">
+        "Every qualified firm losing clients to less-capable competitors has the same problem. The work is good. The system that gets the right people to find it — isn't."
+      </blockquote>
+      <div class="lab-lower">
         <p class="about-body">
           I build distribution infrastructure — websites that function as lead engines, diagnostic tools that qualify prospects automatically, and content systems that make the right clients find you in English and Spanish.
         </p>
@@ -1365,19 +1320,6 @@ footer {
   }, { threshold: 0.2 });
   document.querySelectorAll('.metric-cell').forEach(el => metricObs.observe(el));
 
-  // Timeline
-  const timelineEl = document.getElementById('timeline');
-  const tlObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.querySelectorAll('.timeline-item').forEach(item => {
-          item.classList.add('visible');
-        });
-        tlObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.15 });
-  if (timelineEl) tlObs.observe(timelineEl);
 })();
 
 // ── MOBILE NAV ─────────────────────────────────────────
