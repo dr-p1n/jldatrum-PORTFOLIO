@@ -853,6 +853,113 @@ section {
 .btn-download:hover { background: var(--teal-glow); color: var(--text); }
 .btn-download.generating { opacity: 0.6; pointer-events: none; }
 
+/* ── CLIENT WORK ────────────────────────────────────── */
+#work { background: var(--bg2); }
+
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 8px;
+}
+@media (max-width: 639px) {
+  .work-grid { grid-template-columns: 1fr; }
+}
+
+.work-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.work-card:hover {
+  border-color: var(--teal);
+  box-shadow: 0 0 28px var(--teal-glow);
+}
+
+.work-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.work-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.45s ease;
+  display: block;
+}
+.work-card:hover .work-thumb img {
+  transform: scale(1.04);
+}
+
+.work-card-body {
+  padding: 24px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+.work-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.work-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--teal);
+  letter-spacing: 0.12em;
+}
+
+.work-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.work-client {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.work-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.work-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--coral);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+  margin-top: auto;
+}
+.work-link:hover { color: var(--text); }
+
 /* ── FOOTER ─────────────────────────────────────────── */
 footer {
   position: relative;
@@ -902,6 +1009,7 @@ footer {
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
   <a href="#think" onclick="closeDrawer()">Think</a>
+  <a href="#work" onclick="closeDrawer()">Work</a>
   <a href="#diagnose" onclick="closeDrawer()">Diagnose</a>
   <a href="#diagnose" class="btn-diagnose-drawer" onclick="closeDrawer()">Run the Diagnostic →</a>
 </div>
@@ -914,6 +1022,7 @@ footer {
   </a>
   <div class="nav-links">
     <a href="#think">The Lab</a>
+    <a href="#work">Work</a>
     <a href="#diagnose">Diagnose</a>
     <a href="#diagnose" class="btn-diagnose">Run Diagnostic →</a>
   </div>
@@ -1174,6 +1283,84 @@ footer {
           <button class="btn-next" id="btnNext" onclick="nextStep()">Next →</button>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 4: PREVIOUS WORK ────────────────────── -->
+<section id="work">
+  <div class="section-inner">
+    <div class="section-eyebrow">// 03 — Client Work</div>
+    <h2 class="section-title">Systems built for real firms.</h2>
+
+    <div class="work-grid">
+      <article class="work-card fade-up" style="--delay:0.1s">
+        <a href="https://panamatreasures.com/" target="_blank" rel="noopener" class="work-thumb">
+          <img src="https://image.thum.io/get/width/800/crop/500/https://panamatreasures.com/" alt="Panama Treasures website preview" loading="lazy">
+        </a>
+        <div class="work-card-body">
+          <div class="work-card-header">
+            <span class="work-num">01</span>
+            <span class="work-tag">E-Commerce</span>
+          </div>
+          <h3 class="work-client">Panama Treasures</h3>
+          <p class="work-desc">
+            Bilingual product catalog with Cloudflare-optimized delivery, A+ security headers, and structured data for organic search. First-page positioning — zero ad spend.
+          </p>
+          <a href="https://panamatreasures.com/" target="_blank" rel="noopener" class="work-link">panamatreasures.com ↗</a>
+        </div>
+      </article>
+
+      <article class="work-card fade-up" style="--delay:0.2s">
+        <a href="https://www.seguroscorco.com/" target="_blank" rel="noopener" class="work-thumb">
+          <img src="https://image.thum.io/get/width/800/crop/500/https://www.seguroscorco.com/" alt="Seguros Corco website preview" loading="lazy">
+        </a>
+        <div class="work-card-body">
+          <div class="work-card-header">
+            <span class="work-num">02</span>
+            <span class="work-tag">Insurance</span>
+          </div>
+          <h3 class="work-client">Seguros Corco</h3>
+          <p class="work-desc">
+            Lead-generation site for an insurance brokerage — conversion-focused layout, Law 81 privacy compliance, JSON-LD schema markup, and bilingual SEO infrastructure.
+          </p>
+          <a href="https://www.seguroscorco.com/" target="_blank" rel="noopener" class="work-link">seguroscorco.com ↗</a>
+        </div>
+      </article>
+
+      <article class="work-card fade-up" style="--delay:0.3s">
+        <a href="https://dranalauradiaz.com/iv-therapy-services" target="_blank" rel="noopener" class="work-thumb">
+          <img src="https://image.thum.io/get/width/800/crop/500/https://dranalauradiaz.com/iv-therapy-services" alt="Dr. Ana Laura Díaz website preview" loading="lazy">
+        </a>
+        <div class="work-card-body">
+          <div class="work-card-header">
+            <span class="work-num">03</span>
+            <span class="work-tag">Healthcare</span>
+          </div>
+          <h3 class="work-client">Dr. Ana Laura Díaz</h3>
+          <p class="work-desc">
+            IV therapy service landing page — PageSpeed-optimized, local SEO, trust-first patient acquisition flow, and content structure built for medical search intent.
+          </p>
+          <a href="https://dranalauradiaz.com/iv-therapy-services" target="_blank" rel="noopener" class="work-link">dranalauradiaz.com ↗</a>
+        </div>
+      </article>
+
+      <article class="work-card fade-up" style="--delay:0.4s">
+        <a href="https://aglaw-preview.pages.dev/" target="_blank" rel="noopener" class="work-thumb">
+          <img src="https://image.thum.io/get/width/800/crop/500/https://aglaw-preview.pages.dev/" alt="AG Law website preview" loading="lazy">
+        </a>
+        <div class="work-card-body">
+          <div class="work-card-header">
+            <span class="work-num">04</span>
+            <span class="work-tag">Legal</span>
+          </div>
+          <h3 class="work-client">AG Law</h3>
+          <p class="work-desc">
+            Law firm digital presence — multi-practice service architecture, bilingual content for cross-border clients, Law 81 privacy compliance, and structured data tuned for legal search intent.
+          </p>
+          <a href="https://aglaw-preview.pages.dev/" target="_blank" rel="noopener" class="work-link">aglaw-preview.pages.dev ↗</a>
+        </div>
+      </article>
     </div>
   </div>
 </section>
