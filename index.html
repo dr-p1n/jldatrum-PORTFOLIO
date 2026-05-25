@@ -37,16 +37,16 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:         #070c1a;
-  --bg2:        #0d1326;
-  --surface:    #111c35;
-  --border:     #1a2540;
-  --teal:       #2d5fc2;
-  --coral:      #55d400;
-  --text:       #dde8f8;
-  --muted:      #4d6890;
-  --teal-glow:  rgba(45,95,194,0.15);
-  --coral-glow: rgba(85,212,0,0.15);
+  --bg:         #0a0a0b;
+  --bg2:        #141417;
+  --surface:    #1c1c20;
+  --border:     #2a2a30;
+  --teal:       #9a9aa2;
+  --coral:      #ffffff;
+  --text:       #f4f4f5;
+  --muted:      #7a7a82;
+  --teal-glow:  rgba(255,255,255,0.05);
+  --coral-glow: rgba(255,255,255,0.10);
 }
 
 html { scroll-behavior: smooth; }
@@ -90,7 +90,7 @@ nav {
   justify-content: space-between;
   padding: 0 48px;
   height: 64px;
-  background: rgba(7,12,26,0.7);
+  background: rgba(10,10,11,0.7);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
@@ -143,7 +143,7 @@ nav {
 }
 .nav-links a.btn-diagnose:hover {
   background: var(--coral);
-  color: #07091a;
+  color: #0a0a0b;
 }
 
 .hamburger {
@@ -197,7 +197,7 @@ nav {
   font-size: 15px;
   font-weight: 500;
   background: var(--coral);
-  color: #07091a;
+  color: #0a0a0b;
   padding: 14px 32px;
   border-radius: 8px;
   width: 80%;
@@ -322,7 +322,7 @@ section {
 .btn-primary {
   display: inline-block;
   background: var(--coral);
-  color: #07091a;
+  color: #0a0a0b;
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
@@ -522,7 +522,7 @@ section {
   height: 32px;
   border-radius: 8px;
   background: var(--teal-glow);
-  border: 1px solid rgba(45,95,194,0.3);
+  border: 1px solid rgba(255,255,255,0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -586,7 +586,7 @@ section {
   font-size: 10px;
   color: var(--coral);
   background: var(--coral-glow);
-  border: 1px solid rgba(235,100,64,0.3);
+  border: 1px solid rgba(255,255,255,0.18);
   padding: 4px 10px;
   border-radius: 4px;
   letter-spacing: 0.08em;
@@ -739,7 +739,7 @@ section {
   font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 600;
-  color: #07091a;
+  color: #0a0a0b;
   background: var(--coral);
   border: none;
   border-radius: 6px;
@@ -808,7 +808,7 @@ section {
 .btn-schedule {
   display: inline-block;
   background: var(--coral);
-  color: #07091a;
+  color: #0a0a0b;
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
@@ -963,6 +963,60 @@ section {
 }
 .work-link:hover { color: var(--text); }
 
+/* ── SERVICES ───────────────────────────────────────── */
+#services { background: var(--bg); }
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+@media (max-width: 639px) {
+  .services-grid { grid-template-columns: 1fr; }
+}
+
+.service-cell {
+  padding: 44px 36px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: background 0.3s ease;
+}
+.service-cell:hover { background: var(--surface); }
+
+@media (max-width: 639px) {
+  .service-cell { padding: 32px 24px; }
+}
+
+.service-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.14em;
+}
+
+.service-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+@media (max-width: 639px) {
+  .service-name { font-size: 22px; }
+}
+
+.service-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
 /* ── FOOTER ─────────────────────────────────────────── */
 footer {
   position: relative;
@@ -1012,6 +1066,7 @@ footer {
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
   <a href="#think" onclick="closeDrawer()">Think</a>
+  <a href="#services" onclick="closeDrawer()">Services</a>
   <a href="#work" onclick="closeDrawer()">Previous Work</a>
   <a href="#diagnose" onclick="closeDrawer()">Diagnose</a>
   <a href="#diagnose" class="btn-diagnose-drawer" onclick="closeDrawer()">Run the Diagnostic →</a>
@@ -1025,6 +1080,7 @@ footer {
   </a>
   <div class="nav-links">
     <a href="#think">The Lab</a>
+    <a href="#services">Services</a>
     <a href="#work">Previous Work</a>
     <a href="#diagnose">Diagnose</a>
     <a href="#diagnose" class="btn-diagnose">Run Diagnostic →</a>
@@ -1106,10 +1162,52 @@ footer {
   </div>
 </section>
 
-<!-- ── SECTION 3: THE DIAGNOSTIC ──────────────────── -->
+<!-- ── SECTION 3: SERVICES ──────────────────────────── -->
+<section id="services">
+  <div class="section-inner">
+    <div class="section-eyebrow">// 02 — Services</div>
+    <h2 class="section-title">What we build.</h2>
+
+    <div class="services-grid">
+      <article class="service-cell fade-up" style="--delay:0.1s">
+        <div class="service-num">01</div>
+        <h3 class="service-name">Bilingual SEO Infrastructure</h3>
+        <p class="service-desc">
+          Sites that rank in English and Spanish — JSON-LD schema, AI-search-ready content, local search positioning. One system, two audiences, zero translation drift.
+        </p>
+      </article>
+
+      <article class="service-cell fade-up" style="--delay:0.2s">
+        <div class="service-num">02</div>
+        <h3 class="service-name">Lead Diagnostic Systems</h3>
+        <p class="service-desc">
+          Custom calculator widgets and qualification tools that score prospects automatically — turning visitors into qualified leads, no salesperson required.
+        </p>
+      </article>
+
+      <article class="service-cell fade-up" style="--delay:0.3s">
+        <div class="service-num">03</div>
+        <h3 class="service-name">Distribution Infrastructure</h3>
+        <p class="service-desc">
+          Production-grade websites engineered as lead engines — Cloudflare-optimized delivery, A+ security headers, sub-3-second load times as a ranking moat.
+        </p>
+      </article>
+
+      <article class="service-cell fade-up" style="--delay:0.4s">
+        <div class="service-num">04</div>
+        <h3 class="service-name">Compliance & Performance</h3>
+        <p class="service-desc">
+          Law 81 privacy compliance, security headers, Core Web Vitals tuning, DVI auditing. The infrastructure layer most agencies skip — and search engines reward.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 4: THE DIAGNOSTIC ──────────────────── -->
 <section id="diagnose">
   <div class="section-inner">
-    <div class="section-eyebrow">// 02 — The Diagnostic</div>
+    <div class="section-eyebrow">// 03 — The Diagnostic</div>
 
     <div class="diagnostic-wrap">
       <!-- Left column -->
@@ -1290,10 +1388,10 @@ footer {
   </div>
 </section>
 
-<!-- ── SECTION 4: PREVIOUS WORK ────────────────────── -->
+<!-- ── SECTION 5: PREVIOUS WORK ────────────────────── -->
 <section id="work">
   <div class="section-inner">
-    <div class="section-eyebrow">// 03 — Previous Work</div>
+    <div class="section-eyebrow">// 04 — Previous Work</div>
     <h2 class="section-title">Systems built for real firms.</h2>
 
     <div class="work-grid">
@@ -1416,7 +1514,7 @@ footer {
     draw(ctx) {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(73,113,116,${this.op})`;
+      ctx.fillStyle = `rgba(200,200,210,${this.op})`;
       ctx.fill();
     }
   }
@@ -1442,7 +1540,7 @@ footer {
           ctx.beginPath();
           ctx.moveTo(nodes[i].x, nodes[i].y);
           ctx.lineTo(nodes[j].x, nodes[j].y);
-          ctx.strokeStyle = `rgba(73,113,116,${alpha})`;
+          ctx.strokeStyle = `rgba(180,180,190,${alpha})`;
           ctx.lineWidth   = 0.8;
           ctx.stroke();
         }
@@ -1458,7 +1556,7 @@ footer {
         ctx.beginPath();
         ctx.moveTo(nodes[i].x, nodes[i].y);
         ctx.lineTo(mouse.x, mouse.y);
-        ctx.strokeStyle = `rgba(235,100,64,${alpha})`;
+        ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
         ctx.lineWidth   = 0.8;
         ctx.stroke();
       }
@@ -1777,8 +1875,8 @@ function downloadPDF() {
     doc.setFontSize(9);
     doc.setTextColor(106, 138, 138);
     doc.text('Website Visibility Diagnostic Report', margin, 26);
-    // Coral dot accent
-    doc.setFillColor(235, 100, 64);
+    // White dot accent
+    doc.setFillColor(255, 255, 255);
     doc.circle(margin - 5, 15, 1.2, 'F');
 
     // ── Meta line
@@ -1895,8 +1993,8 @@ function downloadPDF() {
     doc.setFontSize(8.5);
     doc.setTextColor(106, 138, 138);
     doc.text('Schedule a strategy session at jldatrum.com', margin + 6, y + 18);
-    // Coral accent line
-    doc.setFillColor(235, 100, 64);
+    // White accent line
+    doc.setFillColor(255, 255, 255);
     doc.rect(margin, y, 3, 28, 'F');
 
     // ── Footer
