@@ -1010,6 +1010,63 @@ section {
   line-height: 1.7;
 }
 
+/* ── FRAMEWORK ──────────────────────────────────────── */
+#framework { background: var(--bg2); }
+
+.framework-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+@media (max-width: 1023px) {
+  .framework-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 639px) {
+  .framework-grid { grid-template-columns: 1fr; }
+}
+
+.framework-step {
+  padding: 40px 28px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: background 0.3s ease;
+}
+.framework-step:hover { background: var(--surface); }
+
+@media (max-width: 639px) {
+  .framework-step { padding: 32px 24px; }
+}
+
+.step-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.14em;
+}
+
+.step-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+@media (max-width: 639px) {
+  .step-name { font-size: 22px; }
+}
+
+.step-desc {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
 /* ── FOOTER ─────────────────────────────────────────── */
 footer {
   position: relative;
@@ -1060,8 +1117,8 @@ footer {
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
   <a href="#think" onclick="closeDrawer()">Think</a>
   <a href="#services" onclick="closeDrawer()">Services</a>
+  <a href="#framework" onclick="closeDrawer()">Framework</a>
   <a href="#work" onclick="closeDrawer()">Previous Work</a>
-  <a href="#diagnose" onclick="closeDrawer()">Diagnose</a>
   <a href="#diagnose" class="btn-diagnose-drawer" onclick="closeDrawer()">Run the Diagnostic →</a>
 </div>
 
@@ -1073,8 +1130,8 @@ footer {
   <div class="nav-links">
     <a href="#think">The Lab</a>
     <a href="#services">Services</a>
+    <a href="#framework">Framework</a>
     <a href="#work">Previous Work</a>
-    <a href="#diagnose">Diagnose</a>
     <a href="#diagnose" class="btn-diagnose">Run Diagnostic →</a>
   </div>
   <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
@@ -1183,20 +1240,34 @@ footer {
       </article>
 
       <article class="service-cell fade-up" style="--delay:0.25s">
+        <h3 class="service-name">AI SEO</h3>
+        <p class="service-desc">
+          Optimization for AI answer engines — ChatGPT, Perplexity, Google AI Overviews, Claude. Structured data, entity authority, and citation-worthy content that make your brand the default answer.
+        </p>
+      </article>
+
+      <article class="service-cell fade-up" style="--delay:0.3s">
         <h3 class="service-name">Lead Diagnostic Systems</h3>
         <p class="service-desc">
           Custom calculator widgets and qualification tools that score prospects automatically — turning visitors into qualified leads, no salesperson required.
         </p>
       </article>
 
-      <article class="service-cell fade-up" style="--delay:0.3s">
+      <article class="service-cell fade-up" style="--delay:0.35s">
         <h3 class="service-name">Distribution Infrastructure</h3>
         <p class="service-desc">
           Production-grade websites engineered as lead engines — Cloudflare-optimized delivery, A+ security headers, sub-3-second load times as a ranking moat.
         </p>
       </article>
 
-      <article class="service-cell fade-up" style="--delay:0.35s">
+      <article class="service-cell fade-up" style="--delay:0.4s">
+        <h3 class="service-name">Domain Security & Posture</h3>
+        <p class="service-desc">
+          Enterprise-grade domain hardening — DKIM, SPF, DMARC, HSTS preload, CSP, DNSSEC. Search engines and email providers trust your brand instead of flagging it as suspect.
+        </p>
+      </article>
+
+      <article class="service-cell fade-up" style="--delay:0.45s">
         <h3 class="service-name">Compliance & Performance</h3>
         <p class="service-desc">
           Law 81 privacy compliance, security headers, Core Web Vitals tuning, DVI auditing. The infrastructure layer most agencies skip — and search engines reward.
@@ -1206,10 +1277,52 @@ footer {
   </div>
 </section>
 
-<!-- ── SECTION 4: THE DIAGNOSTIC ──────────────────── -->
+<!-- ── SECTION 4: THE FRAMEWORK ─────────────────────── -->
+<section id="framework">
+  <div class="section-inner">
+    <div class="section-eyebrow">// 03 — The Framework</div>
+    <h2 class="section-title">How we engineer the results.</h2>
+
+    <div class="framework-grid">
+      <article class="framework-step fade-up" style="--delay:0.1s">
+        <div class="step-num">01</div>
+        <h3 class="step-name">Diagnose</h3>
+        <p class="step-desc">
+          We map your visibility gap, CAC baseline, and where leads leak from your funnel. No guesswork — actual numbers, not opinions.
+        </p>
+      </article>
+
+      <article class="framework-step fade-up" style="--delay:0.2s">
+        <div class="step-num">02</div>
+        <h3 class="step-name">Engineer</h3>
+        <p class="step-desc">
+          We build the missing infrastructure: lead-capture funnels, bilingual SEO, AI-search optimization, domain security, performance tuning.
+        </p>
+      </article>
+
+      <article class="framework-step fade-up" style="--delay:0.3s">
+        <div class="step-num">03</div>
+        <h3 class="step-name">Distribute</h3>
+        <p class="step-desc">
+          Your site compounds traffic in EN + ES across organic search, AI answer engines, and structured data. Qualified demand finds you, automatically.
+        </p>
+      </article>
+
+      <article class="framework-step fade-up" style="--delay:0.4s">
+        <div class="step-num">04</div>
+        <h3 class="step-name">Iterate</h3>
+        <p class="step-desc">
+          Monthly reviews against CAC and lead-volume targets. We tune what's working, kill what isn't, and ship improvements continuously.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 5: THE DIAGNOSTIC ──────────────────── -->
 <section id="diagnose">
   <div class="section-inner">
-    <div class="section-eyebrow">// 03 — The Diagnostic</div>
+    <div class="section-eyebrow">// 04 — The Diagnostic</div>
 
     <div class="diagnostic-wrap">
       <!-- Left column -->
@@ -1390,10 +1503,10 @@ footer {
   </div>
 </section>
 
-<!-- ── SECTION 5: PREVIOUS WORK ────────────────────── -->
+<!-- ── SECTION 6: PREVIOUS WORK ────────────────────── -->
 <section id="work">
   <div class="section-inner">
-    <div class="section-eyebrow">// 04 — Previous Work</div>
+    <div class="section-eyebrow">// 05 — Previous Work</div>
     <h2 class="section-title">Systems built for real firms.</h2>
 
     <div class="work-grid">
