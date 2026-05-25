@@ -858,9 +858,12 @@ section {
 
 .work-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   margin-top: 8px;
+}
+@media (max-width: 1023px) {
+  .work-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 639px) {
   .work-grid { grid-template-columns: 1fr; }
@@ -1359,6 +1362,23 @@ footer {
             Law firm digital presence — multi-practice service architecture, bilingual content for cross-border clients, Law 81 privacy compliance, and structured data tuned for legal search intent.
           </p>
           <a href="https://aglaw-preview.pages.dev/" target="_blank" rel="noopener" class="work-link">aglaw-preview.pages.dev ↗</a>
+        </div>
+      </article>
+
+      <article class="work-card fade-up" style="--delay:0.5s">
+        <a href="https://physicalmodelos.pages.dev/" target="_blank" rel="noopener" class="work-thumb">
+          <img src="https://image.thum.io/get/width/800/crop/500/https://physicalmodelos.pages.dev/" alt="Physical Ticketing OS website preview" loading="lazy">
+        </a>
+        <div class="work-card-body">
+          <div class="work-card-header">
+            <span class="work-num">05</span>
+            <span class="work-tag">SaaS</span>
+          </div>
+          <h3 class="work-client">Physical · Ticketing OS</h3>
+          <p class="work-desc">
+            White-label ticketing operating system for live-event organizers — multi-event dashboard, real-time order tracking, and bilingual checkout flow tailored to Panama's events market.
+          </p>
+          <a href="https://physicalmodelos.pages.dev/" target="_blank" rel="noopener" class="work-link">physicalmodelos.pages.dev ↗</a>
         </div>
       </article>
     </div>
