@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security & Compliance — DATRUM</title>
+  <meta name="description" content="DATRUM's complete security and compliance posture — GDPR (EU), PCI DSS SAQ A self-attestation, Ley 81 (Panama), subprocessors, and data-subject rights.">
+  <meta name="robots" content="index, follow">
+
+  <link rel="canonical" href="https://jldatrum.com/security">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/security">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/security">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0b; --bg2: #141417; --surface: #1c1c20; --border: #2a2a30;
+  --teal: #9a9aa2; --coral: #ffffff; --text: #f4f4f5; --muted: #7a7a82;
+  --green: #2d7d4f;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+}
+.wrap { max-width: 920px; margin: 0 auto; padding: 80px 32px 120px; }
+@media (max-width: 639px) { .wrap { padding: 56px 20px 80px; } }
+
+a { color: var(--coral); text-decoration: underline; text-underline-offset: 3px; }
+a:hover { opacity: 0.8; }
+
+.back-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  display: inline-block;
+}
+.back-link:hover { color: var(--text); }
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.lede {
+  font-size: 17px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 680px;
+}
+
+.last-updated {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 48px;
+}
+
+/* TOC */
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 56px;
+}
+.toc-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+  counter-reset: section;
+}
+@media (max-width: 639px) {
+  .toc ol { grid-template-columns: 1fr; }
+}
+.toc li { counter-increment: section; }
+.toc li::before {
+  content: counter(section, decimal-leading-zero) ".";
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-right: 8px;
+}
+.toc a { color: var(--text); text-decoration: none; font-size: 14px; }
+.toc a:hover { color: var(--coral); }
+
+/* Sections */
+section {
+  margin-top: 56px;
+  scroll-margin-top: 24px;
+}
+section h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+section p { color: var(--muted); margin-bottom: 16px; font-size: 15px; line-height: 1.75; }
+section ul { list-style: none; padding: 0; margin-bottom: 20px; }
+section ul li {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.75;
+  padding-left: 22px;
+  position: relative;
+  margin-bottom: 8px;
+}
+section ul li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--coral);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.callout {
+  border-left: 2px solid var(--coral);
+  padding: 16px 24px;
+  margin: 24px 0;
+  background: var(--surface);
+  border-radius: 0 8px 8px 0;
+}
+.callout p { color: var(--text); font-size: 14.5px; margin-bottom: 0; }
+
+.attest {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin: 24px 0;
+}
+.attest-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.attest-check {
+  color: var(--green);
+  font-size: 18px;
+  font-weight: 700;
+}
+.attest-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+}
+.attest p { font-size: 14px; }
+.attest .signature {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.footer-note {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="/" class="back-link">← Back to DATRUM</a>
+  <div class="eyebrow">// Trust · Security · Compliance</div>
+  <h1>Security & Compliance Posture</h1>
+  <p class="lede">
+    DATRUM's full record of how we handle data, secure our infrastructure, and align to GDPR, PCI DSS, and Ley 81 — written so prospects, auditors, and procurement teams can verify our claims in one read. If any of this isn't accurate, email <a href="mailto:hola@jldatrum.com">hola@jldatrum.com</a> and we'll fix it.
+  </p>
+  <div class="last-updated">Last reviewed: 2026-05-26 · Next review: 2026-11-26</div>
+
+  <nav class="toc" aria-label="Page contents">
+    <div class="toc-title">On this page</div>
+    <ol>
+      <li><a href="#gdpr">GDPR (EU/EEA)</a></li>
+      <li><a href="#pci">PCI DSS — SAQ A</a></li>
+      <li><a href="#ley81">Ley 81 (Panamá)</a></li>
+      <li><a href="#data">Data we collect</a></li>
+      <li><a href="#subprocessors">Subprocessors</a></li>
+      <li><a href="#rights">Your data-subject rights</a></li>
+      <li><a href="#infra">Infrastructure security</a></li>
+      <li><a href="#breach">Breach response</a></li>
+    </ol>
+  </nav>
+
+  <section id="gdpr">
+    <div class="section-tag">01 — GDPR</div>
+    <h2>EU General Data Protection Regulation</h2>
+    <p>
+      DATRUM acts as a <strong style="color:var(--text)">data controller</strong> for visitors to jldatrum.com and as a <strong style="color:var(--text)">data processor</strong> for the client projects we deliver. We comply with Regulation (EU) 2016/679 across both roles.
+    </p>
+
+    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:16px;color:var(--text);margin:20px 0 10px;font-weight:500">Lawful basis (Article 6)</h3>
+    <ul>
+      <li><strong style="color:var(--text)">Consent</strong> — analytics cookies (Google Analytics 4). Opt-in only, via the banner. Storage_consent denied by default until accepted.</li>
+      <li><strong style="color:var(--text)">Legitimate interest</strong> — request logs (Cloudflare) needed to deliver pages and prevent abuse. No tracking identifiers stored.</li>
+      <li><strong style="color:var(--text)">Contract</strong> — diagnostic widget submissions (email + URL you give us) used to deliver your PDF report.</li>
+    </ul>
+
+    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:16px;color:var(--text);margin:20px 0 10px;font-weight:500">Transparency (Articles 13–14)</h3>
+    <ul>
+      <li>What data we collect and why — disclosed in section 04 below and on <a href="/privacy">privacy.html</a>.</li>
+      <li>Who receives the data — disclosed on the <a href="/subprocessors">subprocessors page</a>.</li>
+      <li>Retention periods — disclosed in section 04 below.</li>
+      <li>Contact for DPO requests — <a href="mailto:hola@jldatrum.com">hola@jldatrum.com</a>.</li>
+    </ul>
+
+    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:16px;color:var(--text);margin:20px 0 10px;font-weight:500">International transfers (Article 46)</h3>
+    <p>
+      Some subprocessors (Google, Cloudflare, GitHub, Calendly) are US-based. Transfers rely on the EU–US Data Privacy Framework (where the subprocessor is certified) and on Standard Contractual Clauses (SCCs) as a backup. Cloudflare-edge processing happens regionally where possible.
+    </p>
+  </section>
+
+  <section id="pci">
+    <div class="section-tag">02 — PCI DSS</div>
+    <h2>PCI DSS — Self-Assessment Questionnaire A</h2>
+    <p>
+      DATRUM does not store, process, or transmit cardholder data on its own infrastructure. When we deliver e-commerce projects for clients, we engineer payment flows that fully outsource cardholder data handling to PCI DSS Level 1 service providers — primarily Stripe, with Adyen as an alternative.
+    </p>
+    <p>
+      That architecture means the client merchant qualifies for SAQ A — the simplest, lowest-burden PCI DSS compliance tier — and DATRUM as a service provider operates within that scope.
+    </p>
+
+    <div class="attest">
+      <div class="attest-header">
+        <span class="attest-check">✓</span>
+        <span class="attest-title">SAQ A Self-Attestation (PCI DSS v4.0.1)</span>
+      </div>
+      <p>
+        On behalf of DATRUM, I attest that for the period covered by this document, DATRUM:
+      </p>
+      <ul style="margin-top:10px">
+        <li>Does not directly handle, store, process, or transmit account data (PAN, sensitive authentication data) on any DATRUM-controlled system.</li>
+        <li>Outsources all payment acceptance and processing to PCI DSS Level 1 third-party service providers via redirect or Stripe Elements / Stripe Checkout.</li>
+        <li>Implements only the SAQ A applicable controls — primarily around contracting with compliant service providers, securing payment-page URLs against tampering, and verifying provider compliance annually.</li>
+        <li>Maintains a list of Stripe and Adyen attestations on file and re-verifies them at each renewal cycle.</li>
+      </ul>
+      <div class="signature">
+        Signed: Julio Luque Valdés · Founder, DATRUM · 2026-05-26<br>
+        SAQ A version: PCI DSS v4.0.1 (Dec 2024) · Next attestation: 2027-05-26
+      </div>
+    </div>
+
+    <div class="callout">
+      <p>
+        Honest framing: SAQ A is a self-attestation tier — not an audited certification like SOC 2 or ISO 27001. We publish this attestation so prospects can verify what we claim. If you need an audited PCI DSS report for a Level 1 / Level 2 merchant context, that's outside SAQ A scope; we'll architect with you and refer to a QSA partner.
+      </p>
+    </div>
+  </section>
+
+  <section id="ley81">
+    <div class="section-tag">03 — Ley 81</div>
+    <h2>Ley 81 de 2019 (Panama Personal Data Protection)</h2>
+    <p>
+      Every client site DATRUM delivers ships with Ley 81 controls built in — explicit consent collection, data-subject access mechanisms, retention controls, and breach-notification readiness. For our own jldatrum.com operations, we honor the same controls because much of our visitor base is in Panama.
+    </p>
+    <ul>
+      <li>Consent is collected before any non-essential data processing (Article 5).</li>
+      <li>Data-subject rights are honored within 15 working days (Article 18) via <a href="mailto:hola@jldatrum.com">hola@jldatrum.com</a>.</li>
+      <li>Retention is limited to the period necessary for the stated purpose (Article 6).</li>
+      <li>The Panamanian DPA (ANTAI) is our supervisory authority. Complaints may be filed at <a href="https://www.antai.gob.pa/">antai.gob.pa</a>.</li>
+    </ul>
+  </section>
+
+  <section id="data">
+    <div class="section-tag">04 — Data Collection</div>
+    <h2>What data we collect on jldatrum.com</h2>
+    <ul>
+      <li><strong style="color:var(--text)">Request logs</strong> — IP, user-agent, URL, timestamp. Source: Cloudflare. Purpose: serve pages, prevent abuse. Retention: 30 days.</li>
+      <li><strong style="color:var(--text)">Analytics</strong> — anonymized IP, pageviews, device class. Source: Google Analytics 4 (consent required). Purpose: aggregate traffic understanding. Retention: 14 months (GA4 default).</li>
+      <li><strong style="color:var(--text)">Diagnostic submissions</strong> — email + website URL + diagnostic answers. Source: the Diagnostic widget on the homepage. Purpose: generate and email you the PDF report. Retention: 24 months unless deletion requested.</li>
+      <li><strong style="color:var(--text)">Calendly bookings</strong> — name, email, meeting time, anything you type. Source: Calendly form (only triggered if you click "Schedule"). Purpose: confirm the meeting. Retention: per Calendly's own policy.</li>
+    </ul>
+    <p>
+      We do <strong style="color:var(--text)">not</strong> collect: payment card data, government ID numbers, health data, biometric data, or any "special category" data under GDPR Article 9 / Ley 81 Article 7.
+    </p>
+  </section>
+
+  <section id="subprocessors">
+    <div class="section-tag">05 — Subprocessors</div>
+    <h2>Third parties that handle data on our behalf</h2>
+    <p>
+      The full, current list is maintained on its own page so we can update it without revising this document. See <a href="/subprocessors">jldatrum.com/subprocessors</a> for each vendor, what they receive, why, and where.
+    </p>
+  </section>
+
+  <section id="rights">
+    <div class="section-tag">06 — Your Rights</div>
+    <h2>Data-subject rights and how to exercise them</h2>
+    <ul>
+      <li><strong style="color:var(--text)">Access</strong> — request a copy of the data we hold about you (GDPR Article 15 / Ley 81 Article 13).</li>
+      <li><strong style="color:var(--text)">Rectification</strong> — correct inaccurate data (GDPR Article 16 / Ley 81 Article 14).</li>
+      <li><strong style="color:var(--text)">Erasure</strong> — delete data we hold about you (GDPR Article 17 / Ley 81 Article 15).</li>
+      <li><strong style="color:var(--text)">Restriction</strong> — pause our processing while a dispute is resolved (GDPR Article 18).</li>
+      <li><strong style="color:var(--text)">Portability</strong> — receive your data in a structured machine-readable format (GDPR Article 20).</li>
+      <li><strong style="color:var(--text)">Objection</strong> — object to processing based on legitimate interest (GDPR Article 21).</li>
+      <li><strong style="color:var(--text)">Withdraw consent</strong> — re-open the cookie banner from the footer "Cookies" link, or email us.</li>
+    </ul>
+    <p>
+      Email <a href="mailto:hola@jldatrum.com">hola@jldatrum.com</a> with your request. We respond within 30 days (GDPR) or 15 working days (Ley 81), whichever is shorter for your case.
+    </p>
+  </section>
+
+  <section id="infra">
+    <div class="section-tag">07 — Infrastructure</div>
+    <h2>How DATRUM secures its own systems</h2>
+    <ul>
+      <li><strong style="color:var(--text)">Hosting</strong> — Cloudflare Pages (edge-deployed, DDoS-protected, automatic TLS 1.3).</li>
+      <li><strong style="color:var(--text)">Domain & email security</strong> — DKIM, SPF, DMARC enforced for jldatrum.com. HSTS preload, CSP, X-Frame-Options set on every page response. DNSSEC enabled.</li>
+      <li><strong style="color:var(--text)">Source code</strong> — Private GitHub repo with required signed commits and 2FA-mandated access for any contributor.</li>
+      <li><strong style="color:var(--text)">Secrets</strong> — stored as Cloudflare Worker secrets, never committed to source. Rotated on personnel changes.</li>
+      <li><strong style="color:var(--text)">Backup posture</strong> — static site (Git history is the backup), worker state is replicated edge-side by Cloudflare.</li>
+      <li><strong style="color:var(--text)">Endpoint security</strong> — DATRUM's working devices use full-disk encryption, OS-level firewall, and password managers (no shared passwords).</li>
+    </ul>
+  </section>
+
+  <section id="breach">
+    <div class="section-tag">08 — Incident Response</div>
+    <h2>Breach response</h2>
+    <p>
+      In the event of a confirmed data breach affecting personal data, DATRUM will:
+    </p>
+    <ul>
+      <li>Notify affected data subjects without undue delay (GDPR Article 34 / Ley 81 Article 24).</li>
+      <li>Notify the relevant supervisory authority within 72 hours of becoming aware (GDPR Article 33) — for Panama, ANTAI; for EU subjects, the lead supervisory authority of the data subject's habitual residence.</li>
+      <li>Publish a post-mortem at <a href="/security">/security</a> within 14 days describing what happened, what data was affected, and what mitigations are in place.</li>
+    </ul>
+    <p>
+      Report a suspected vulnerability or data exposure to <a href="mailto:security@jldatrum.com">security@jldatrum.com</a>. We acknowledge within 48 hours.
+    </p>
+  </section>
+
+  <div class="footer-note">
+    © 2026 DATRUM · <a href="/">Home</a> · <a href="/privacy">Privacy</a> · <a href="/subprocessors">Subprocessors</a> · This page is the source of truth for DATRUM's compliance claims. Anything we say elsewhere on the site about GDPR, PCI DSS, or Ley 81 reduces to what's written here.
+  </div>
+</div>
+</body>
+</html>

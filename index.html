@@ -1127,6 +1127,20 @@ section {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+.trust-cell:hover { background: var(--surface); }
+.trust-cell:hover .trust-link { color: var(--text); }
+
+.trust-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.08em;
+  margin-top: 12px;
+  transition: color 0.2s;
 }
 
 .trust-badge {
@@ -1757,29 +1771,32 @@ footer {
     <h2 class="section-title">Standards we engineer to.</h2>
 
     <div class="trust-grid">
-      <article class="trust-cell fade-up" style="--delay:0.1s">
+      <a href="/security#gdpr" class="trust-cell fade-up" style="--delay:0.1s">
         <div class="trust-badge">GDPR</div>
         <h3 class="trust-name">Compliant</h3>
         <p class="trust-desc">
           We meet EU General Data Protection Regulation requirements — transparency under Articles 13–14, lawful basis documented, data-subject rights honored. Cookie consent before tracking. Subprocessors disclosed.
         </p>
-      </article>
+        <span class="trust-link">Read our GDPR posture →</span>
+      </a>
 
-      <article class="trust-cell fade-up" style="--delay:0.2s">
+      <a href="/security#pci" class="trust-cell fade-up" style="--delay:0.2s">
         <div class="trust-badge">PCI DSS</div>
-        <h3 class="trust-name">Standards-Aligned</h3>
+        <h3 class="trust-name">SAQ A Self-Attested</h3>
         <p class="trust-desc">
-          We engineer e-commerce payment flows that minimize cardholder data scope via PCI Level 1 processors (Stripe, Adyen). Client merchants qualify for SAQ A — the simplest, lowest-risk PCI compliance tier.
+          DATRUM does not store, process, or transmit cardholder data. We engineer flows that fully outsource payment handling to PCI Level 1 processors (Stripe, Adyen) — keeping client merchants in SAQ A scope.
         </p>
-      </article>
+        <span class="trust-link">Read our SAQ A attestation →</span>
+      </a>
 
-      <article class="trust-cell fade-up" style="--delay:0.3s">
+      <a href="/security#ley81" class="trust-cell fade-up" style="--delay:0.3s">
         <div class="trust-badge">Ley 81 PA</div>
         <h3 class="trust-name">Compliant</h3>
         <p class="trust-desc">
           Panama's Personal Data Protection Law (Ley 81 de 2019). Built into every client site we deliver — explicit consent, data-subject access rights, retention controls, breach-notification readiness.
         </p>
-      </article>
+        <span class="trust-link">Read our Ley 81 implementation →</span>
+      </a>
     </div>
   </div>
 </section>
@@ -1789,8 +1806,9 @@ footer {
   <div class="footer-inner">
     <div class="footer-logo">DATRUM</div>
     <nav class="footer-links" aria-label="Legal">
+      <a href="/security">Security</a>
       <a href="/privacy.html">Privacy</a>
-      <a href="/subprocessors.html">Subprocessors</a>
+      <a href="/subprocessors">Subprocessors</a>
       <a href="#" onclick="showCookieBanner(); return false;">Cookies</a>
     </nav>
     <div class="footer-copy">© 2026 DATRUM · Distribution systems for professional services</div>
