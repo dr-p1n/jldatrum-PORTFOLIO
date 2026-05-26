@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subprocesadores — DATRUM</title>
+  <meta name="description" content="Subprocesadores de datos de terceros utilizados por DATRUM, en lenguaje claro. Transparencia según GDPR Artículo 28 y Ley 81.">
+  <meta name="robots" content="noindex, follow">
+
+  <link rel="canonical" href="https://jldatrum.com/es/subprocessors.html">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/subprocessors.html">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/subprocessors.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0b; --bg2: #141417; --surface: #1c1c20; --border: #2a2a30;
+  --teal: #9a9aa2; --coral: #ffffff; --text: #f4f4f5; --muted: #7a7a82;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 80px 32px; }
+@media (max-width: 639px) { .wrap { padding: 56px 20px; } }
+
+a { color: var(--coral); text-decoration: underline; text-underline-offset: 3px; }
+a:hover { opacity: 0.8; }
+
+.back-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  display: inline-block;
+}
+.back-link:hover { color: var(--text); }
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.lede {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 48px;
+  max-width: 640px;
+}
+
+.last-updated {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 40px;
+}
+
+h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--text);
+  margin: 56px 0 16px;
+  letter-spacing: -0.01em;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 14px;
+}
+th, td {
+  text-align: left;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+td:first-child {
+  font-weight: 500;
+  color: var(--text);
+}
+td { color: var(--muted); }
+
+p { margin-bottom: 16px; color: var(--muted); line-height: 1.7; font-size: 15px; }
+
+.footer {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="/es/" class="back-link">← Volver a DATRUM</a>
+  <div class="eyebrow">// Legal · Transparencia</div>
+  <h1>Subprocesadores</h1>
+  <p class="lede">
+    DATRUM utiliza los terceros listados abajo para operar este sitio y entregar proyectos de clientes. Cada uno recibe una porción definida de datos en nuestro nombre. Los divulgamos aquí según los requisitos de transparencia del GDPR Artículo 28 y la Ley 81.
+  </p>
+  <div class="last-updated">Última actualización: 2026-05-25</div>
+
+  <h2>Servicios usados en jldatrum.com</h2>
+  <table>
+    <thead>
+      <tr><th>Proveedor</th><th>Propósito</th><th>Datos procesados</th><th>Región</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Cloudflare</td>
+        <td>Hosting, CDN, protección DDoS, runtime de borde</td>
+        <td>Metadatos de solicitud (IP, user-agent, URL) — necesarios para servir páginas</td>
+        <td>Borde global · DPA: <a href="https://www.cloudflare.com/cloudflare-customer-dpa/">link</a></td>
+      </tr>
+      <tr>
+        <td>Google Analytics 4</td>
+        <td>Analítica de tráfico agregada (solo con consentimiento)</td>
+        <td>IP anonimizada, vistas de página, clase de dispositivo. Sin identificadores personales.</td>
+        <td>EE.UU. · <a href="https://policies.google.com/privacy">privacidad</a></td>
+      </tr>
+      <tr>
+        <td>GitHub</td>
+        <td>Hosting de código fuente + trigger de despliegue CI</td>
+        <td>Ninguno en runtime — solo metadatos del repo en tiempo de build</td>
+        <td>EE.UU. · <a href="https://docs.github.com/en/site-policy/privacy-policies">privacidad</a></td>
+      </tr>
+      <tr>
+        <td>thum.io</td>
+        <td>Generación de miniaturas de sitios web de clientes</td>
+        <td>URLs públicas de sitios cliente (no datos de visitante)</td>
+        <td>EE.UU. · <a href="https://www.thum.io/legal/privacy">privacidad</a></td>
+      </tr>
+      <tr>
+        <td>jsPDF (CDNJS)</td>
+        <td>Generación de PDF del lado cliente para el reporte de diagnóstico</td>
+        <td>Archivo de librería servido desde CDN. Ningún dato sale de tu navegador.</td>
+        <td>CDN · <a href="https://cdnjs.com/privacy">privacidad</a></td>
+      </tr>
+      <tr>
+        <td>Calendly</td>
+        <td>Agendamiento de sesión de estrategia (solo si haces click en "Agendar")</td>
+        <td>Nombre, email, hora de reunión que tú proporcionas en su formulario</td>
+        <td>EE.UU. · <a href="https://calendly.com/privacy">privacidad</a></td>
+      </tr>
+      <tr>
+        <td>Cloudflare Workers (DATRUM)</td>
+        <td>Almacenamiento de respuestas del diagnóstico + envío de reportes PDF</td>
+        <td>Email + URL que enviaste, puntajes del diagnóstico</td>
+        <td>Borde Cloudflare · operado por DATRUM</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Servicios que típicamente desplegamos en proyectos de clientes</h2>
+  <p>
+    La lista abajo es informativa. Cuando DATRUM construye un sitio o aplicación para un cliente, podemos integrar cualquier combinación de estos proveedores dependiendo del alcance del proyecto. Cada compromiso con cliente viene con su propia lista de subprocesadores como parte de los entregables.
+  </p>
+  <table>
+    <tbody>
+      <tr><td>Stripe</td><td>Pagos — procesador PCI DSS Nivel 1</td></tr>
+      <tr><td>Resend / SendGrid</td><td>Email transaccional</td></tr>
+      <tr><td>Cloudflare D1 / R2 / KV</td><td>Bases de datos de borde y almacenamiento de objetos</td></tr>
+      <tr><td>Google Sheets API</td><td>Captura de datos liviana (formularios de bajo volumen)</td></tr>
+      <tr><td>WhatsApp Business</td><td>CTA de chat con clientes</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Cómo ejercer tus derechos</h2>
+  <p>
+    Para solicitar acceso, corrección o eliminación de datos que DATRUM tiene sobre ti — o para preguntar qué subprocesador maneja una pieza específica de información — envía un correo a <a href="mailto:hola@jldatrum.com">hola@jldatrum.com</a>. Respondemos dentro de 30 días, según lo requerido por GDPR Artículos 15–17 y Ley 81 Artículos 13–16.
+  </p>
+
+  <h2>Cambios en esta página</h2>
+  <p>
+    Actualizamos esta página cada vez que añadimos o removemos un subprocesador. La fecha de "Última actualización" arriba es la fuente de verdad. Los cambios materiales también se reflejan en nuestro changelog.
+  </p>
+
+  <div class="footer">
+    © 2026 DATRUM · <a href="/es/">Inicio</a> · <a href="/privacy.html">Privacidad</a>
+  </div>
+</div>
+</body>
+</html>

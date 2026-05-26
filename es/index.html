@@ -21,14 +21,29 @@
   <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/">
   <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/">
 
-  <!-- Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
+  <!-- Google Analytics 4 (Consent Mode v2 — GDPR-compliant) -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    // Default: deny analytics until user consents (GDPR Article 6)
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied',
+      'wait_for_update': 500
+    });
+    // Restore prior consent if user already chose
+    try {
+      var prior = localStorage.getItem('datrum_consent');
+      if (prior === 'granted') {
+        gtag('consent', 'update', { 'analytics_storage': 'granted' });
+      }
+    } catch(e) {}
     gtag('js', new Date());
-    gtag('config', 'G-CL53ZQMZ4P');
+    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1093,6 +1108,103 @@ section {
   line-height: 1.7;
 }
 
+/* ── TRUST & COMPLIANCE ─────────────────────────────── */
+#trust { background: var(--bg2); }
+
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+@media (max-width: 1023px) {
+  .trust-grid { grid-template-columns: 1fr; }
+}
+
+.trust-cell {
+  padding: 36px 32px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.trust-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.18em;
+}
+
+.trust-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.trust-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-top: 4px;
+}
+
+/* ── COOKIE BANNER ──────────────────────────────────── */
+#cookieBanner {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1000;
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  max-width: 640px;
+  margin: 0 auto;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+}
+#cookieBanner.show { display: block; }
+.cookie-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+.cookie-text a { color: var(--coral); text-decoration: underline; }
+.cookie-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.cookie-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  transition: background 0.2s, border-color 0.2s;
+  min-height: 44px;
+}
+.cookie-btn:hover { background: var(--bg2); }
+.cookie-btn.primary {
+  background: var(--coral);
+  color: #0a0a0b;
+  border-color: var(--coral);
+  font-weight: 600;
+}
+.cookie-btn.primary:hover { opacity: 0.88; }
+
 /* ── FOOTER ─────────────────────────────────────────── */
 footer {
   position: relative;
@@ -1126,6 +1238,19 @@ footer {
   color: var(--text);
 }
 .footer-logo .dot { color: var(--coral); }
+.footer-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--text); }
 .footer-copy {
   font-family: 'DM Sans', sans-serif;
   font-size: 12px;
@@ -1627,13 +1752,63 @@ footer {
   </div>
 </section>
 
+<!-- ── TRUST & COMPLIANCE ──────────────────────────── -->
+<section id="trust">
+  <div class="section-inner">
+    <div class="section-eyebrow">// 06 — Confianza y Cumplimiento</div>
+    <h2 class="section-title">Los estándares con los que diseñamos.</h2>
+
+    <div class="trust-grid">
+      <article class="trust-cell fade-up" style="--delay:0.1s">
+        <div class="trust-badge">GDPR</div>
+        <h3 class="trust-name">Conforme</h3>
+        <p class="trust-desc">
+          Cumplimos los requisitos del Reglamento General de Protección de Datos de la UE — transparencia bajo los Artículos 13–14, base legal documentada, derechos del titular respetados. Consentimiento de cookies antes del tracking. Subprocesadores divulgados.
+        </p>
+      </article>
+
+      <article class="trust-cell fade-up" style="--delay:0.2s">
+        <div class="trust-badge">PCI DSS</div>
+        <h3 class="trust-name">Alineado al Estándar</h3>
+        <p class="trust-desc">
+          Diseñamos flujos de pago para e-commerce que minimizan el alcance de datos de tarjeta usando procesadores PCI Nivel 1 (Stripe, Adyen). Los merchants clientes califican para SAQ A — el nivel de cumplimiento PCI más simple y de menor riesgo.
+        </p>
+      </article>
+
+      <article class="trust-cell fade-up" style="--delay:0.3s">
+        <div class="trust-badge">Ley 81 PA</div>
+        <h3 class="trust-name">Conforme</h3>
+        <p class="trust-desc">
+          Ley de Protección de Datos Personales de Panamá (Ley 81 de 2019). Integrada en cada sitio que entregamos — consentimiento explícito, derechos de acceso del titular, controles de retención, preparación para notificación de brechas.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- ── FOOTER ──────────────────────────────────────── -->
 <footer>
   <div class="footer-inner">
     <div class="footer-logo">DATRUM</div>
+    <nav class="footer-links" aria-label="Legal">
+      <a href="/privacy.html">Privacidad</a>
+      <a href="/es/subprocessors.html">Subprocesadores</a>
+      <a href="#" onclick="showCookieBanner(); return false;">Cookies</a>
+    </nav>
     <div class="footer-copy">© 2026 DATRUM · Sistemas de distribución para servicios profesionales</div>
   </div>
 </footer>
+
+<!-- ── COOKIE CONSENT BANNER ──────────────────────── -->
+<div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Consentimiento de cookies">
+  <p class="cookie-text">
+    Usamos analítica que respeta la privacidad (Google Analytics 4 con IP anonimizada) para entender cómo los visitantes encuentran DATRUM. Nada personal, sin tracking publicitario. Puedes rechazar y el sitio funciona igual. <a href="/privacy.html">Política de privacidad</a>.
+  </p>
+  <div class="cookie-actions">
+    <button class="cookie-btn primary" onclick="acceptCookies()">Aceptar analítica</button>
+    <button class="cookie-btn" onclick="declineCookies()">Rechazar</button>
+  </div>
+</div>
 
 <script>
 // ── CANVAS NODE GRAPH ──────────────────────────────────
@@ -2158,6 +2333,31 @@ function downloadPDF() {
     if (btn) { btn.classList.remove('generating'); btn.textContent = '⬇ Descargar Reporte PDF'; }
   }
 }
+
+// ── COOKIE CONSENT (GDPR) ─────────────────────────────
+function acceptCookies() {
+  try { localStorage.setItem('datrum_consent', 'granted'); } catch(e) {}
+  if (typeof gtag === 'function') {
+    gtag('consent', 'update', { 'analytics_storage': 'granted' });
+  }
+  document.getElementById('cookieBanner')?.classList.remove('show');
+}
+function declineCookies() {
+  try { localStorage.setItem('datrum_consent', 'denied'); } catch(e) {}
+  document.getElementById('cookieBanner')?.classList.remove('show');
+}
+function showCookieBanner() {
+  document.getElementById('cookieBanner')?.classList.add('show');
+}
+(function() {
+  try {
+    if (!localStorage.getItem('datrum_consent')) {
+      setTimeout(showCookieBanner, 1200);
+    }
+  } catch(e) {
+    setTimeout(showCookieBanner, 1200);
+  }
+})();
 </script>
 </body>
 </html>
