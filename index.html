@@ -968,10 +968,13 @@ section {
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   margin-top: 8px;
   border-top: 1px solid var(--border);
   border-left: 1px solid var(--border);
+}
+@media (max-width: 1023px) {
+  .services-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 639px) {
   .services-grid { grid-template-columns: 1fr; }
@@ -1239,9 +1242,9 @@ footer {
       </article>
 
       <article class="service-cell fade-up" style="--delay:0.25s">
-        <h3 class="service-name">AI SEO</h3>
+        <h3 class="service-name">Answer Engine Optimization</h3>
         <p class="service-desc">
-          Optimization for AI answer engines — ChatGPT, Perplexity, Google AI Overviews, Claude. Structured data, entity authority, and citation-worthy content that make your brand the default answer.
+          Engineering for AI answer engines — ChatGPT, Perplexity, Gemini, Claude, Google AI Overviews. Structured data, entity authority, and citation-worthy content that make your brand the default answer to high-intent queries.
         </p>
       </article>
 
@@ -1253,20 +1256,27 @@ footer {
       </article>
 
       <article class="service-cell fade-up" style="--delay:0.35s">
+        <h3 class="service-name">Analytics Engine</h3>
+        <p class="service-desc">
+          Unified measurement across web, search, and AI mentions — GA4, Cloudflare Web Analytics, server-side events, conversion attribution. Every touchpoint measurable, every investment justified by data.
+        </p>
+      </article>
+
+      <article class="service-cell fade-up" style="--delay:0.4s">
         <h3 class="service-name">Distribution Infrastructure</h3>
         <p class="service-desc">
           Production-grade websites engineered as lead engines — Cloudflare-optimized delivery, A+ security headers, sub-3-second load times as a ranking moat.
         </p>
       </article>
 
-      <article class="service-cell fade-up" style="--delay:0.4s">
+      <article class="service-cell fade-up" style="--delay:0.45s">
         <h3 class="service-name">Domain Security & Posture</h3>
         <p class="service-desc">
           Enterprise-grade domain hardening — DKIM, SPF, DMARC, HSTS preload, CSP, DNSSEC. Search engines and email providers trust your brand instead of flagging it as suspect.
         </p>
       </article>
 
-      <article class="service-cell fade-up" style="--delay:0.45s">
+      <article class="service-cell fade-up" style="--delay:0.5s">
         <h3 class="service-name">Compliance & Performance</h3>
         <p class="service-desc">
           Law 81 privacy compliance, security headers, Core Web Vitals tuning, DVI auditing. The infrastructure layer most agencies skip — and search engines reward.
