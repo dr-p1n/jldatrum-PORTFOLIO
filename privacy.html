@@ -1,697 +1,479 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Política de Privacidad & Términos | DATRUM</title>
-    <meta name="description" content="Política de Privacidad y Términos de Servicio de DATRUM | Julio Luque Vald&eacute;s. Cumplimiento LEY 81 de Panamá.">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        .lang-hidden { display: none; }
-        .policy-section { border-top: 1px solid #2A2A2A; padding-top: 2rem; margin-top: 2rem; }
-        .policy-section:first-child { border-top: none; padding-top: 0; margin-top: 0; }
-        .policy-h1 { font-size: 2rem; font-weight: 800; color: #F5F5F5; margin-bottom: 0.5rem; }
-        .policy-h2 { font-size: 1.1rem; font-weight: 700; color: #FF6B35; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; margin-top: 2rem; }
-        .policy-h2:first-child { margin-top: 0; }
-        .policy-h3 { font-size: 0.95rem; font-weight: 700; color: #497174; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; margin-top: 1.25rem; }
-        .policy-p { color: rgba(245,245,245,0.8); line-height: 1.75; margin-bottom: 0.75rem; font-size: 0.95rem; }
-        .policy-ul { list-style: none; padding: 0; margin-bottom: 0.75rem; }
-        .policy-ul li { color: rgba(245,245,245,0.8); font-size: 0.95rem; line-height: 1.75; padding-left: 1.25rem; position: relative; margin-bottom: 0.25rem; }
-        .policy-ul li::before { content: "→"; position: absolute; left: 0; color: #FF6B35; font-size: 0.8rem; top: 0.15rem; }
-        .policy-ol { padding-left: 1.5rem; margin-bottom: 0.75rem; }
-        .policy-ol li { color: rgba(245,245,245,0.8); font-size: 0.95rem; line-height: 1.75; margin-bottom: 0.25rem; }
-        .check-list li::before { content: "✅ "; font-size: 0.85rem; top: 0.1rem; }
-        .x-list li::before { content: "❌ "; font-size: 0.85rem; top: 0.1rem; }
-        .card { background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; }
-        .divider { border: none; border-top: 2px solid #FF6B35; margin: 3rem 0; opacity: 0.3; }
-        .badge { display: inline-block; background: rgba(255,107,53,0.15); color: #FF6B35; border: 1px solid rgba(255,107,53,0.3); border-radius: 999px; padding: 0.2rem 0.75rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
-        .toc-link { color: rgba(245,245,245,0.6); text-decoration: none; font-size: 0.875rem; display: block; padding: 0.25rem 0; transition: color 0.2s; }
-        .toc-link:hover { color: #FF6B35; }
-        a { color: #FF6B35; }
-        a:hover { opacity: 0.8; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy & Terms — DATRUM</title>
+  <meta name="description" content="DATRUM's privacy policy and terms of service — what data we collect, how we use it, your rights under GDPR and Ley 81 of Panama.">
+  <meta name="robots" content="index, follow">
+
+  <link rel="canonical" href="https://jldatrum.com/privacy">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/privacy">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/privacy">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0b; --bg2: #141417; --surface: #1c1c20; --border: #2a2a30;
+  --teal: #9a9aa2; --coral: #ffffff; --text: #f4f4f5; --muted: #7a7a82;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 80px 32px 120px; }
+@media (max-width: 639px) { .wrap { padding: 56px 20px 80px; } }
+
+a { color: var(--coral); text-decoration: underline; text-underline-offset: 3px; }
+a:hover { opacity: 0.8; }
+
+.back-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  display: inline-block;
+}
+.back-link:hover { color: var(--text); }
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.lede {
+  font-size: 17px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 680px;
+}
+
+.meta-line {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 48px;
+}
+
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 56px;
+}
+.toc-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+  counter-reset: section;
+}
+@media (max-width: 639px) {
+  .toc ol { grid-template-columns: 1fr; }
+}
+.toc li { counter-increment: section; }
+.toc li::before {
+  content: counter(section, decimal-leading-zero) ".";
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-right: 8px;
+}
+.toc a { color: var(--text); text-decoration: none; font-size: 14px; }
+.toc a:hover { color: var(--coral); }
+
+section { margin-top: 56px; scroll-margin-top: 24px; }
+section h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+section p { color: var(--muted); margin-bottom: 16px; font-size: 15px; line-height: 1.75; }
+
+section h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  color: var(--text);
+  margin: 22px 0 10px;
+  font-weight: 500;
+}
+
+section ul { list-style: none; padding: 0; margin-bottom: 20px; }
+section ul li {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.75;
+  padding-left: 22px;
+  position: relative;
+  margin-bottom: 8px;
+}
+section ul li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--coral);
+  font-family: 'JetBrains Mono', monospace;
+}
+section ul.no-list li::before { display: none; }
+section ul.no-list li { padding-left: 0; }
+section strong { color: var(--text); font-weight: 500; }
+
+.callout {
+  border-left: 2px solid var(--coral);
+  padding: 16px 24px;
+  margin: 24px 0;
+  background: var(--surface);
+  border-radius: 0 8px 8px 0;
+}
+.callout p { color: var(--text); font-size: 14.5px; margin-bottom: 0; }
+
+.divider {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: 96px 0 56px;
+  position: relative;
+}
+.divider-label {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg);
+  padding: 0 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.footer-note {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+}
+</style>
 </head>
-<body class="antialiased bg-background" style="background-color: #1A1A1A; color: #F5F5F5; font-family: 'Inter', sans-serif;">
+<body>
+<div class="wrap">
+  <a href="/" class="back-link">← Back to DATRUM</a>
+  <div class="eyebrow">// Legal</div>
+  <h1>Privacy Policy &amp; Terms of Service</h1>
+  <p class="lede">
+    How DATRUM collects, uses, and protects your data — and the rules of the road when you use jldatrum.com. Written so you can scan it. For the operational detail behind these claims, see <a href="/security">/security</a>.
+  </p>
+  <div class="meta-line">Version 2.0 · Effective 2026-05-26 · Replaces v1.0 (March 2026)</div>
 
-    <!-- Nav -->
-    <nav style="position:fixed;top:0;left:0;right:0;background:rgba(26,26,26,0.95);backdrop-filter:blur(16px);border-bottom:1px solid #2A2A2A;z-index:50;">
-        <div style="max-width:1280px;margin:0 auto;padding:0 1.5rem;">
-            <div style="display:flex;align-items:center;justify-content:space-between;height:4rem;">
-                <a href="index.html" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;color:#F5F5F5;font-weight:700;font-size:1rem;">
-                    <i data-lucide="arrow-left" style="width:1rem;height:1rem;color:#FF6B35;"></i>
-                    Julio Luque Vald&eacute;s
-                </a>
-                <div style="font-size:0.75rem;font-weight:700;color:#497174;letter-spacing:0.1em;text-transform:uppercase;">
-                    <span class="lang-es">Privacidad & Términos</span>
-                    <span class="lang-en lang-hidden">Privacy & Terms</span>
-                </div>
-            </div>
-        </div>
-    </nav>
+  <nav class="toc" aria-label="Page contents">
+    <div class="toc-title">Privacy Policy · Sections</div>
+    <ol>
+      <li><a href="#who">Who we are</a></li>
+      <li><a href="#data">What data we collect</a></li>
+      <li><a href="#use">How we use it</a></li>
+      <li><a href="#share">Who we share it with</a></li>
+      <li><a href="#rights">Your rights</a></li>
+      <li><a href="#retention">Retention</a></li>
+      <li><a href="#consent">Consent</a></li>
+      <li><a href="#cookies">Cookies</a></li>
+      <li><a href="#transfers">International transfers</a></li>
+      <li><a href="#changes">Changes</a></li>
+      <li><a href="#contact">Contact &amp; complaints</a></li>
+    </ol>
+  </nav>
 
-    <main style="padding-top:4rem;">
-        <div style="max-width:860px;margin:0 auto;padding:3rem 1.5rem 6rem;">
+  <section id="who">
+    <div class="section-tag">01 — Identity</div>
+    <h2>Who we are</h2>
+    <p>
+      DATRUM is a marketing and data engineering agency operated by <strong>Julio Luque Valdés</strong>, based in Ciudad de Panamá, Panama. We design distribution systems for professional services firms — websites, funnels, AI-search optimization, and analytics.
+    </p>
+    <ul class="no-list">
+      <li><strong>Data controller:</strong> Julio Luque Valdés (DATRUM)</li>
+      <li><strong>Email:</strong> <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a></li>
+      <li><strong>Phone:</strong> <a href="tel:+50765213318">+507 6521-3318</a></li>
+      <li><strong>Address:</strong> Ciudad de Panamá, Panama</li>
+    </ul>
+  </section>
 
-            <!-- ===== SPANISH VERSION ===== -->
-            <div class="lang-es">
+  <section id="data">
+    <div class="section-tag">02 — Data Collection</div>
+    <h2>What data we collect</h2>
 
-                <!-- Header -->
-                <div style="margin-bottom:3rem;">
-                    <div class="badge">LEY 81 · Panamá</div>
-                    <h1 class="policy-h1">Política de Privacidad<br><span style="color:#FF6B35;">& Términos de Servicio</span></h1>
-                    <p class="policy-p" style="margin-top:0.75rem;">DATRUM | Julio Luque Vald&eacute;s</p>
-                    <div style="display:flex;gap:2rem;margin-top:1rem;">
-                        <span style="font-size:0.8rem;color:rgba(245,245,245,0.5);">Vigente: 1 de marzo de 2026</span>
-                        <span style="font-size:0.8rem;color:rgba(245,245,245,0.5);">Actualización: 1 de marzo de 2026</span>
-                    </div>
-                </div>
+    <h3>When you submit the diagnostic widget</h3>
+    <ul>
+      <li>Email address</li>
+      <li>Your website URL</li>
+      <li>Your answers to the 5 diagnostic questions</li>
+      <li>The computed score and tier</li>
+    </ul>
 
-                <!-- PRIVACY POLICY ES -->
-                <div class="card" style="background:rgba(73,113,116,0.08);border-color:rgba(73,113,116,0.3);margin-bottom:2rem;">
-                    <p style="font-size:0.8rem;font-weight:700;color:#497174;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem;">Sección 1</p>
-                    <p style="font-size:1.25rem;font-weight:700;color:#F5F5F5;">POLÍTICA DE PRIVACIDAD</p>
-                </div>
+    <h3>When you book via Calendly</h3>
+    <ul>
+      <li>Name, email, and any notes you enter on Calendly's form</li>
+      <li>Meeting time and timezone</li>
+    </ul>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">I. Quiénes Somos</h2>
-                    <p class="policy-p">DATRUM es una agencia de marketing engineering operada por Julio Luque Vald&eacute;s, domiciliada en Ciudad de Panamá, Panamá. Nos especializamos en sistemas de distribución de marketing para profesionales fiduciarios (abogados, corredores, asesores) en Panamá.</p>
-                    <h3 class="policy-h3">Datos de Contacto</h3>
-                    <ul class="policy-ul">
-                        <li>Email: <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a></li>
-                        <li>Teléfono: +507 6521-3318</li>
-                        <li>Dirección: Ciudad de Panamá, Panamá</li>
-                    </ul>
-                </div>
+    <h3>Automatically (every visitor)</h3>
+    <ul>
+      <li>IP address, user-agent, and request URL (Cloudflare logs — needed to serve pages and prevent abuse)</li>
+      <li>Anonymized analytics: pageviews, device class, referrer — <strong>only if you accept the cookie banner</strong></li>
+    </ul>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">II. Qué Datos Recopilamos</h2>
-                    <p class="policy-p">Cuando interactúas con nuestras herramientas de diagnóstico (Escáner de Presencia Virtual o Tarjeta de Puntuación de Generación de Leads), recopilamos:</p>
-                    <h3 class="policy-h3">Datos Personales Directos</h3>
-                    <ul class="policy-ul">
-                        <li>Nombre completo</li>
-                        <li>Dirección de correo electrónico</li>
-                        <li>Número de teléfono</li>
-                    </ul>
-                    <h3 class="policy-h3">Datos de Diagnóstico</h3>
-                    <ul class="policy-ul">
-                        <li>URL del sitio web analizado</li>
-                        <li>Respuestas a cuestionarios de diagnóstico</li>
-                        <li>Resultados de escaneo técnico (PageSpeed, HTTPS, SEO, etc.)</li>
-                    </ul>
-                    <h3 class="policy-h3">Datos Técnicos Automatizados</h3>
-                    <ul class="policy-ul">
-                        <li>Dirección IP de tu conexión</li>
-                        <li>Tipo de navegador y sistema operativo</li>
-                        <li>Fecha y hora de la sesión</li>
-                        <li>Identificador de encriptación único (para auditoría)</li>
-                    </ul>
-                    <h3 class="policy-h3">NO Recopilamos</h3>
-                    <ul class="policy-ul x-list">
-                        <li>Números de tarjeta de crédito o información bancaria</li>
-                        <li>Datos de clientes de terceros sin consentimiento explícito</li>
-                        <li>Información sensible que no hayas proporcionado voluntariamente</li>
-                    </ul>
-                </div>
+    <h3>What we do NOT collect</h3>
+    <ul>
+      <li>Payment card numbers or banking information</li>
+      <li>Government ID numbers</li>
+      <li>Health or biometric data</li>
+      <li>Any "special category" data under GDPR Article 9 / Ley 81 Article 7</li>
+    </ul>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">III. Cómo Usamos Tus Datos</h2>
-                    <p class="policy-p">Utilizamos tu información exclusivamente para:</p>
-                    <ol class="policy-ol">
-                        <li>Contactarte sobre resultados de diagnóstico y servicios de marketing</li>
-                        <li>Enviar tu reporte detallado con análisis y recomendaciones</li>
-                        <li>Programar consultas a través de Calendly (si lo solicitas)</li>
-                        <li>Mejorar nuestras herramientas analizando patrones anónimos de diagnóstico</li>
-                        <li>Cumplir obligaciones legales bajo Ley 81 de Panamá</li>
-                        <li>Mantener registros de auditoría para transparencia y seguridad</li>
-                    </ol>
-                    <h3 class="policy-h3">NO Hacemos</h3>
-                    <ul class="policy-ul x-list">
-                        <li>Vender tu información a terceros</li>
-                        <li>Compartir datos con empresas de publicidad</li>
-                        <li>Usar tu información para marketing no solicitado</li>
-                        <li>Transferir datos fuera de infraestructura panameña</li>
-                    </ul>
-                </div>
+  <section id="use">
+    <div class="section-tag">03 — Use</div>
+    <h2>How we use your data</h2>
+    <ul>
+      <li>Generate and email you the PDF diagnostic report you requested</li>
+      <li>Reply to your inquiry or follow up on a strategy session you booked</li>
+      <li>Operate and improve the website (anonymized analytics, if consented)</li>
+      <li>Meet our legal obligations under Ley 81 and GDPR (audit trail, breach notification readiness)</li>
+    </ul>
+    <p>
+      We do <strong>not</strong> sell your data, share it with advertising networks, or use it for unsolicited marketing campaigns.
+    </p>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">IV. Cómo Protegemos Tus Datos</h2>
-                    <h3 class="policy-h3">Encriptación</h3>
-                    <ul class="policy-ul check-list">
-                        <li>AES-256-GCM (estándar militar) aplicada a nivel de worker antes del almacenamiento</li>
-                        <li>Encriptación en tránsito (HTTPS/TLS 1.3) para todas las conexiones</li>
-                        <li>Claves de encriptación gestionadas por Cloudflare Workers (nunca en texto plano)</li>
-                    </ul>
-                    <h3 class="policy-h3">Almacenamiento</h3>
-                    <ul class="policy-ul check-list">
-                        <li>Google Workspace (infraestructura con residencia de datos en Panamá)</li>
-                        <li>Encriptación en reposo (Google gestiona encriptación adicional)</li>
-                        <li>Acceso restringido — solo Julio Luque Vald&eacute;s puede acceder</li>
-                        <li>Sin servidores privados — infraestructura cloud con auditoría automática</li>
-                    </ul>
-                    <h3 class="policy-h3">Auditoría & Logging</h3>
-                    <ul class="policy-ul check-list">
-                        <li>Cada envío registra: timestamp, ID de encriptación, algoritmo, estado de consentimiento</li>
-                        <li>Pista de auditoría completa para inspección regulatoria</li>
-                        <li>Logs retenidos por 90 días para investigación de incidentes</li>
-                    </ul>
-                    <h3 class="policy-h3">Cumplimiento</h3>
-                    <ul class="policy-ul check-list">
-                        <li>HTTPS en todas las conexiones</li>
-                        <li>Encriptación end-to-end para datos sensibles</li>
-                        <li>Sin rastreo de terceros en datos personales</li>
-                        <li>Cumplimiento con Ley 81 de Panamá</li>
-                    </ul>
-                </div>
+  <section id="share">
+    <div class="section-tag">04 — Sharing</div>
+    <h2>Who we share data with</h2>
+    <p>
+      Only with subprocessors we have contracted to operate the service — Cloudflare, Google Analytics (if you consent), GitHub, thum.io, Calendly, plus our own Cloudflare Worker storage. The full list, what each one receives, and where they store it, is on the <a href="/subprocessors">subprocessors page</a>.
+    </p>
+    <p>
+      We do not transfer data to third parties for their own marketing purposes. Period.
+    </p>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">V. Tus Derechos Bajo Ley 81</h2>
-                    <div style="display:grid;gap:0.75rem;margin-bottom:1rem;">
-                        <div class="card">
-                            <p style="font-weight:700;color:#F5F5F5;margin-bottom:0.25rem;font-size:0.9rem;">1. Derecho de Acceso</p>
-                            <p class="policy-p" style="margin:0;">Solicita ver todos tus datos. Respondemos dentro de 7 días hábiles.</p>
-                        </div>
-                        <div class="card">
-                            <p style="font-weight:700;color:#F5F5F5;margin-bottom:0.25rem;font-size:0.9rem;">2. Derecho de Rectificación</p>
-                            <p class="policy-p" style="margin:0;">Si alguna información es incorrecta, solicita corrección y la actualizamos inmediatamente.</p>
-                        </div>
-                        <div class="card">
-                            <p style="font-weight:700;color:#F5F5F5;margin-bottom:0.25rem;font-size:0.9rem;">3. Derecho al Olvido</p>
-                            <p class="policy-p" style="margin:0;">Solicita eliminación completa de tus datos. Eliminamos dentro de 7 días.</p>
-                        </div>
-                        <div class="card">
-                            <p style="font-weight:700;color:#F5F5F5;margin-bottom:0.25rem;font-size:0.9rem;">4. Derecho a la Portabilidad</p>
-                            <p class="policy-p" style="margin:0;">Recibe tus datos en formato digital (JSON/CSV) dentro de 7 días.</p>
-                        </div>
-                        <div class="card">
-                            <p style="font-weight:700;color:#F5F5F5;margin-bottom:0.25rem;font-size:0.9rem;">5. Derecho a Retirar Consentimiento</p>
-                            <p class="policy-p" style="margin:0;">Retira consentimiento en cualquier momento. Detenemos el procesamiento de inmediato.</p>
-                        </div>
-                        <div class="card">
-                            <p style="font-weight:700;color:#F5F5F5;margin-bottom:0.25rem;font-size:0.9rem;">6. Derecho a Oposición</p>
-                            <p class="policy-p" style="margin:0;">Puedes oponerte al procesamiento. Respetamos tu solicitud inmediatamente.</p>
-                        </div>
-                    </div>
-                    <div class="card" style="background:rgba(255,107,53,0.08);border-color:rgba(255,107,53,0.2);">
-                        <p class="policy-p" style="margin:0;">Para ejercer cualquier derecho, envía un email a <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a> con tu nombre completo, email registrado, y descripción clara de lo que solicitas.</p>
-                    </div>
-                </div>
+  <section id="rights">
+    <div class="section-tag">05 — Rights</div>
+    <h2>Your rights as a data subject</h2>
+    <p>Whether you're in Panama (Ley 81) or the EU/EEA (GDPR), you have the right to:</p>
+    <ul>
+      <li><strong>Access</strong> — a copy of the data we hold about you (GDPR Art. 15 / Ley 81 Art. 13)</li>
+      <li><strong>Rectification</strong> — correct anything that's wrong (GDPR Art. 16 / Ley 81 Art. 14)</li>
+      <li><strong>Erasure</strong> — delete what we have about you (GDPR Art. 17 / Ley 81 Art. 15)</li>
+      <li><strong>Restriction</strong> — pause our processing while a dispute is resolved (GDPR Art. 18)</li>
+      <li><strong>Portability</strong> — get your data in a structured machine-readable format (GDPR Art. 20)</li>
+      <li><strong>Objection</strong> — object to processing based on legitimate interest (GDPR Art. 21)</li>
+      <li><strong>Withdraw consent</strong> — reopen the cookie banner via the "Cookies" link in the footer, or email us</li>
+    </ul>
+    <p>
+      To exercise any right, email <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a> with your name, the email you used with us, and a brief description of what you're asking for. We respond within <strong>15 working days</strong> (Ley 81) or 30 days (GDPR) — whichever is shorter for your case.
+    </p>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">VI. Retención de Datos</h2>
-                    <ul class="policy-ul">
-                        <li><strong style="color:#F5F5F5;">Prospects activos:</strong> Datos retenidos hasta solicitud de eliminación</li>
-                        <li><strong style="color:#F5F5F5;">Fin de relación comercial:</strong> 12 meses, luego eliminación completa</li>
-                        <li><strong style="color:#F5F5F5;">Registros de auditoría:</strong> 90 días, luego eliminación automática</li>
-                        <li><strong style="color:#F5F5F5;">Logs técnicos:</strong> 30 días, luego purga automática</li>
-                    </ul>
-                </div>
+  <section id="retention">
+    <div class="section-tag">06 — Retention</div>
+    <h2>How long we keep your data</h2>
+    <ul>
+      <li><strong>Diagnostic submissions:</strong> 24 months, or until you request deletion</li>
+      <li><strong>Calendly booking data:</strong> per Calendly's own retention policy (we don't store a copy)</li>
+      <li><strong>Cloudflare request logs:</strong> 30 days (rolling), then purged</li>
+      <li><strong>Google Analytics events:</strong> 14 months (GA4 default), if you consented</li>
+      <li><strong>Email correspondence with us:</strong> indefinitely, unless you ask us to delete it</li>
+    </ul>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">VII. Consentimiento</h2>
-                    <p class="policy-p">Al usar nuestras calculadoras, consientes explícitamente:</p>
-                    <ol class="policy-ol">
-                        <li>Recopilación de tu nombre, email, teléfono</li>
-                        <li>Almacenamiento encriptado en Google Workspace</li>
-                        <li>Procesamiento por Julio Luque Vald&eacute;s para diagnóstico y contacto</li>
-                        <li>Envío de resultados y seguimiento de ventas por email</li>
-                        <li>Logging de auditoría para cumplimiento legal</li>
-                        <li>Envío de datos encriptados a nuestro worker de Cloudflare</li>
-                        <li>Que NO compartiremos tus datos con terceros</li>
-                    </ol>
-                    <h3 class="policy-h3">Tu consentimiento es</h3>
-                    <ul class="policy-ul check-list">
-                        <li>Libre (no obligatorio, pero necesario para usar la herramienta)</li>
-                        <li>Informado (esta política te lo explica claramente)</li>
-                        <li>Específico (solo para los propósitos indicados)</li>
-                        <li>Revocable (puedes retirar en cualquier momento)</li>
-                    </ul>
-                </div>
+  <section id="consent">
+    <div class="section-tag">07 — Consent</div>
+    <h2>What you consent to</h2>
+    <p>By using the diagnostic widget, you explicitly consent to:</p>
+    <ul>
+      <li>Storage of your email and URL submission in our Cloudflare Worker</li>
+      <li>Generation of a PDF report (in your browser; no extra data sent)</li>
+      <li>Receiving the report via email if you opted in for that</li>
+      <li>Processing by Julio Luque Valdés (DATRUM) for the stated purposes only</li>
+    </ul>
+    <p>
+      Your consent is <strong>free</strong> (you can use the rest of the site without it), <strong>informed</strong> (this policy explains it), <strong>specific</strong> (only for the purposes listed), and <strong>revocable</strong> (you can withdraw any time).
+    </p>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">VIII. Cookies & Rastreo</h2>
-                    <ul class="policy-ul">
-                        <li><strong style="color:#F5F5F5;">Esenciales:</strong> Para mantener sesión (necesarias para funcionar)</li>
-                        <li><strong style="color:#F5F5F5;">Analíticas:</strong> Google Analytics (datos anónimos, NO información personal)</li>
-                        <li><strong style="color:#F5F5F5;">Ningún tercero:</strong> No compartimos cookies con redes publicitarias</li>
-                    </ul>
-                </div>
+  <section id="cookies">
+    <div class="section-tag">08 — Cookies</div>
+    <h2>Cookies &amp; tracking</h2>
+    <ul>
+      <li><strong>Strictly necessary:</strong> none — the site works without setting cookies.</li>
+      <li><strong>Analytics (GA4):</strong> Only loaded if you click "Accept" in the cookie banner. Uses anonymized IP. No ad-tracking identifiers. No cross-site profiling.</li>
+      <li><strong>Third-party advertising:</strong> none. We don't run an ad network or share data with one.</li>
+    </ul>
+    <p>
+      To change your choice, click "Cookies" in the footer to reopen the banner.
+    </p>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">IX. Transferencias Internacionales</h2>
-                    <ul class="policy-ul check-list">
-                        <li>Todos los datos residen en Google Workspace (infraestructura panameña)</li>
-                        <li>Cloudflare CDN tiene presencia global, pero datos nunca salen de Panamá</li>
-                        <li>Cumplimos requisito de "residencia de datos" de Ley 81</li>
-                    </ul>
-                </div>
+  <section id="transfers">
+    <div class="section-tag">09 — Transfers</div>
+    <h2>International data transfers</h2>
+    <p>
+      Some subprocessors (Google, Cloudflare, GitHub, Calendly) are US-based. Transfers rely on the EU–US Data Privacy Framework (where the subprocessor is certified) and on Standard Contractual Clauses (SCCs) as a backup. Cloudflare edge processing happens regionally where possible.
+    </p>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">X. Cumplimiento & Regulación</h2>
-                    <ul class="policy-ul check-list">
-                        <li>Consentimiento explícito recopilado</li>
-                        <li>Privacidad documentada y clara</li>
-                        <li>Derechos del interesado especificados</li>
-                        <li>Seguridad técnica implementada</li>
-                        <li>Responsable de datos identificado</li>
-                        <li>Auditoría y logging disponibles</li>
-                    </ul>
-                </div>
+  <section id="changes">
+    <div class="section-tag">10 — Changes</div>
+    <h2>Changes to this policy</h2>
+    <p>
+      We update this page when our practices change. The version number and effective date at the top are the source of truth. Material changes will be noted on <a href="/security">/security</a> with a date. Continuing to use the site after the effective date means you accept the changes.
+    </p>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">XI. Cambios a Esta Política</h2>
-                    <p class="policy-p">Podemos actualizar esta política en cualquier momento. Te notificaremos por email si hay cambios materiales. Continuando el uso del sitio después de 7 días de notificación, aceptas los cambios.</p>
-                    <p class="policy-p" style="font-size:0.85rem;color:rgba(245,245,245,0.5);">Historial: 1 de marzo de 2026 — Versión inicial (v1.0)</p>
-                </div>
+  <section id="contact">
+    <div class="section-tag">11 — Contact</div>
+    <h2>Contact &amp; complaints</h2>
+    <ul class="no-list">
+      <li><strong>Email:</strong> <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a></li>
+      <li><strong>Phone:</strong> <a href="tel:+50765213318">+507 6521-3318</a></li>
+      <li><strong>Response window:</strong> 48 hours for general inquiries, 15 working days for data-subject requests</li>
+    </ul>
+    <p>
+      If you're not satisfied with our response, you may file a complaint with the <strong>Autoridad Nacional de Transparencia y Acceso a la Información (ANTAI)</strong> — Panama's data protection authority — at <a href="https://www.antai.gob.pa/">antai.gob.pa</a>. EU/EEA residents can also contact their local supervisory authority.
+    </p>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">XII. Contacto & Quejas</h2>
-                    <ul class="policy-ul">
-                        <li>Email: <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a></li>
-                        <li>Teléfono: +507 6521-3318</li>
-                        <li>Respondemos dentro de 48 horas</li>
-                    </ul>
-                    <p class="policy-p">Si tienes una queja, contáctanos primero. Si no estás satisfecho, puedes contactar a la Procuraduría de Panamá (defensa del consumidor).</p>
-                </div>
+  <hr class="divider"><span class="divider-label" style="position:relative;top:-66px;left:50%;transform:translateX(-50%);display:inline-block;background:var(--bg);padding:0 16px">Section 2 · Terms of Service</span>
 
-                <hr class="divider">
+  <section id="terms-acceptance">
+    <div class="section-tag">T1 — Acceptance</div>
+    <h2>Acceptance of terms</h2>
+    <p>
+      By using jldatrum.com and any tool or service offered here, you accept these terms in full. If you don't agree with any part, please stop using the site.
+    </p>
+  </section>
 
-                <!-- TERMS OF SERVICE ES -->
-                <div class="card" style="background:rgba(73,113,116,0.08);border-color:rgba(73,113,116,0.3);margin-bottom:2rem;">
-                    <p style="font-size:0.8rem;font-weight:700;color:#497174;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem;">Sección 2</p>
-                    <p style="font-size:1.25rem;font-weight:700;color:#F5F5F5;">TÉRMINOS DE SERVICIO</p>
-                </div>
+  <section id="terms-service">
+    <div class="section-tag">T2 — The service</div>
+    <h2>What we provide on this site</h2>
+    <ul>
+      <li><strong>Diagnostic widget:</strong> a 5-question scorecard that generates a PDF report on your website's visibility posture</li>
+      <li><strong>Strategy session booking:</strong> via Calendly (separate scheduling tool)</li>
+      <li><strong>Editorial content:</strong> the case studies, framework explanations, and service descriptions on this site</li>
+    </ul>
+    <p>
+      These are diagnostic and informational. Results are estimates, not guarantees, and are based on the inputs you provide.
+    </p>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">I. Aceptación de Términos</h2>
-                    <p class="policy-p">Al acceder a jldatrum.com y usar nuestras herramientas de diagnóstico, aceptas estos términos completamente. Si no estás de acuerdo, no uses el sitio.</p>
-                </div>
+  <section id="terms-acceptable">
+    <div class="section-tag">T3 — Acceptable use</div>
+    <h2>Acceptable use</h2>
+    <h3>You may</h3>
+    <ul>
+      <li>Use the diagnostic to analyze your own website</li>
+      <li>Share or quote the report you receive, with attribution</li>
+      <li>Contact DATRUM to discuss services</li>
+    </ul>
+    <h3>You may not</h3>
+    <ul>
+      <li>Use the diagnostic against websites you don't own or have explicit permission to analyze</li>
+      <li>Automate submissions with bots or scrapers</li>
+      <li>Use the site to collect emails for spam or marketing you don't have consent for</li>
+      <li>Attempt to interfere with the service or its underlying infrastructure</li>
+    </ul>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">II. Descripción del Servicio</h2>
-                    <p class="policy-p">DATRUM proporciona:</p>
-                    <ul class="policy-ul">
-                        <li><strong style="color:#F5F5F5;">Escáner de Presencia Virtual:</strong> Diagnóstico técnico automatizado de tu sitio web</li>
-                        <li><strong style="color:#F5F5F5;">Tarjeta de Puntuación de Generación de Leads:</strong> Evaluación de capacidad de generación de leads</li>
-                        <li><strong style="color:#F5F5F5;">Reportes por Email:</strong> Análisis detallado enviado a tu correo</li>
-                        <li><strong style="color:#F5F5F5;">Consultas:</strong> Sesiones de estrategia (opcional, por separado)</li>
-                    </ul>
-                    <p class="policy-p">Estos servicios son diagnósticos, no garantizados. Los resultados se basan en análisis técnico y datos que proporcionas.</p>
-                </div>
+  <section id="terms-liability">
+    <div class="section-tag">T4 — Liability</div>
+    <h2>Limitation of liability</h2>
+    <p>
+      DATRUM provides this site and its tools "as is". We're not liable for: the accuracy of diagnostic results (estimates by definition), changes in third-party algorithms that affect projections, content on linked third-party sites, or service interruptions beyond our reasonable control.
+    </p>
+    <div class="callout">
+      <p>
+        Plain version: the diagnostic gives you a useful estimate, not a guarantee. Use the results as a starting point, not the final word.
+      </p>
+    </div>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">III. Uso Aceptable</h2>
-                    <h3 class="policy-h3">Puedes usar nuestras herramientas para</h3>
-                    <ul class="policy-ul check-list">
-                        <li>Analizar tu propio sitio web</li>
-                        <li>Evaluar tu capacidad interna de marketing</li>
-                        <li>Recibir recomendaciones de mejora</li>
-                        <li>Contactarnos para discutir servicios</li>
-                    </ul>
-                    <h3 class="policy-h3">NO puedes</h3>
-                    <ul class="policy-ul x-list">
-                        <li>Escanear sitios de competidores sin permiso</li>
-                        <li>Automatizar solicitudes con bots</li>
-                        <li>Distribuir reportes sin atribución</li>
-                        <li>Usar herramientas para recopilar emails de spam</li>
-                        <li>Intentar piratear o interrumpir el servicio</li>
-                    </ul>
-                </div>
+  <section id="terms-ip">
+    <div class="section-tag">T5 — Intellectual property</div>
+    <h2>Intellectual property</h2>
+    <h3>Ours</h3>
+    <ul>
+      <li>Site design, code, copy, methodology, and the DATRUM brand</li>
+      <li>The PDF report template format (the content is yours)</li>
+    </ul>
+    <h3>Yours</h3>
+    <ul>
+      <li>Everything you submit (your URL, answers, email)</li>
+      <li>The completed PDF report you receive — use it however you want internally</li>
+      <li>All rights in your own website and brand</li>
+    </ul>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">IV. Limitación de Responsabilidad</h2>
-                    <p class="policy-p">DATRUM NO es responsable por: precisión de resultados (son estimaciones), daños indirectos, cambios en algoritmos de terceros, sitios web de terceros, ni interrupciones de servicio.</p>
-                    <div class="card" style="background:rgba(255,107,53,0.08);border-color:rgba(255,107,53,0.2);">
-                        <p class="policy-p" style="margin:0;font-weight:600;">En resumen: Usas nuestras herramientas "TAL CUAL." No garantizamos resultados específicos.</p>
-                    </div>
-                </div>
+  <section id="terms-law">
+    <div class="section-tag">T6 — Governing law</div>
+    <h2>Governing law</h2>
+    <p>
+      These terms are governed by the laws of the Republic of Panama. Any dispute that can't be resolved by direct correspondence will be heard in the competent courts of Panama City, Panama.
+    </p>
+  </section>
 
-                <div class="policy-section">
-                    <h2 class="policy-h2">V. Propiedad Intelectual</h2>
-                    <h3 class="policy-h3">Lo que es nuestro</h3>
-                    <ul class="policy-ul">
-                        <li>Diseño del sitio web, código de calculadoras, metodología de diagnóstico</li>
-                        <li>Reportes generados (formato y estructura)</li>
-                        <li>Marca DATRUM</li>
-                    </ul>
-                    <h3 class="policy-h3">Lo que es tuyo</h3>
-                    <ul class="policy-ul">
-                        <li>Información que proporcionas (datos personales, URL del sitio)</li>
-                        <li>Derechos sobre tu propio sitio web</li>
-                        <li>Reportes que recibas (puedes usarlos internamente)</li>
-                    </ul>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">VI. Ley Aplicable</h2>
-                    <p class="policy-p">Estos términos se rigen por leyes de Panamá. Cualquier disputa se resolverá en tribunales de Panamá.</p>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">XII. Contacto</h2>
-                    <ul class="policy-ul">
-                        <li>Email: <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a></li>
-                        <li>Teléfono: +507 6521-3318</li>
-                    </ul>
-                </div>
-
-            </div><!-- end lang-es -->
-
-            <!-- ===== ENGLISH VERSION ===== -->
-            <div class="lang-en lang-hidden">
-
-                <!-- Header -->
-                <div style="margin-bottom:3rem;">
-                    <div class="badge">LAW 81 · Panama</div>
-                    <h1 class="policy-h1">Privacy Policy<br><span style="color:#FF6B35;">& Terms of Service</span></h1>
-                    <p class="policy-p" style="margin-top:0.75rem;">DATRUM | Julio Luque Vald&eacute;s</p>
-                    <div style="display:flex;gap:2rem;margin-top:1rem;">
-                        <span style="font-size:0.8rem;color:rgba(245,245,245,0.5);">Effective: March 1, 2026</span>
-                        <span style="font-size:0.8rem;color:rgba(245,245,245,0.5);">Last Updated: March 1, 2026</span>
-                    </div>
-                </div>
-
-                <!-- PRIVACY POLICY EN -->
-                <div class="card" style="background:rgba(73,113,116,0.08);border-color:rgba(73,113,116,0.3);margin-bottom:2rem;">
-                    <p style="font-size:0.8rem;font-weight:700;color:#497174;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem;">Section 1</p>
-                    <p style="font-size:1.25rem;font-weight:700;color:#F5F5F5;">PRIVACY POLICY</p>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">I. Who We Are</h2>
-                    <p class="policy-p">DATRUM is a marketing engineering agency operated by Julio Luque Vald&eacute;s, based in Panama City, Panama. We specialize in marketing distribution systems for fiduciary professionals (lawyers, brokers, advisors) in Panama.</p>
-                    <h3 class="policy-h3">Contact Information</h3>
-                    <ul class="policy-ul">
-                        <li>Email: <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a></li>
-                        <li>Phone: +507 6521-3318</li>
-                        <li>Address: Panama City, Panama</li>
-                    </ul>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">II. What Data We Collect</h2>
-                    <p class="policy-p">When you interact with our diagnostic tools (Virtual Presence Scanner or Lead Generation Scorecard), we collect:</p>
-                    <h3 class="policy-h3">Personal Data</h3>
-                    <ul class="policy-ul">
-                        <li>Full name</li>
-                        <li>Email address</li>
-                        <li>Phone number</li>
-                    </ul>
-                    <h3 class="policy-h3">Diagnostic Data</h3>
-                    <ul class="policy-ul">
-                        <li>Website URL analyzed</li>
-                        <li>Questionnaire responses</li>
-                        <li>Technical scan results (PageSpeed, HTTPS, SEO, etc.)</li>
-                    </ul>
-                    <h3 class="policy-h3">Automated Technical Data</h3>
-                    <ul class="policy-ul">
-                        <li>IP address of your connection</li>
-                        <li>Browser type and operating system</li>
-                        <li>Session date and time</li>
-                        <li>Unique encryption identifier (for audit)</li>
-                    </ul>
-                    <h3 class="policy-h3">We Do NOT Collect</h3>
-                    <ul class="policy-ul x-list">
-                        <li>Credit card or banking information</li>
-                        <li>Third-party customer data without explicit consent</li>
-                        <li>Sensitive information you don't voluntarily provide</li>
-                    </ul>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">III. How We Use Your Data</h2>
-                    <p class="policy-p">We use your information exclusively to:</p>
-                    <ol class="policy-ol">
-                        <li>Contact you about diagnostic results and marketing services</li>
-                        <li>Send your detailed report with analysis and recommendations</li>
-                        <li>Schedule consultations via Calendly (if requested)</li>
-                        <li>Improve our tools by analyzing anonymous diagnostic patterns</li>
-                        <li>Comply with legal obligations under Panama Law 81</li>
-                        <li>Maintain audit records for transparency and security</li>
-                    </ol>
-                    <h3 class="policy-h3">We Do NOT</h3>
-                    <ul class="policy-ul x-list">
-                        <li>Sell your information to third parties</li>
-                        <li>Share data with advertising companies</li>
-                        <li>Use your information for unsolicited marketing</li>
-                        <li>Transfer data outside Panama infrastructure</li>
-                    </ul>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">IV. How We Protect Your Data</h2>
-                    <h3 class="policy-h3">Encryption</h3>
-                    <ul class="policy-ul check-list">
-                        <li>AES-256-GCM (military-grade) applied at worker level before storage</li>
-                        <li>Encryption in transit (HTTPS/TLS 1.3) for all connections</li>
-                        <li>Encryption keys managed by Cloudflare Workers (never stored in plaintext)</li>
-                    </ul>
-                    <h3 class="policy-h3">Storage</h3>
-                    <ul class="policy-ul check-list">
-                        <li>Google Workspace (infrastructure with Panama data residency)</li>
-                        <li>Encryption at rest (Google applies additional encryption)</li>
-                        <li>Restricted access — only Julio Luque Vald&eacute;s can access</li>
-                        <li>No private servers — cloud infrastructure with automatic audit</li>
-                    </ul>
-                    <h3 class="policy-h3">Audit & Logging</h3>
-                    <ul class="policy-ul check-list">
-                        <li>Every submission logs: timestamp, encryption ID, algorithm, consent status</li>
-                        <li>Complete audit trail for regulatory inspection</li>
-                        <li>Logs retained for 90 days for incident investigation</li>
-                    </ul>
-                    <h3 class="policy-h3">Compliance</h3>
-                    <ul class="policy-ul check-list">
-                        <li>HTTPS on all connections</li>
-                        <li>End-to-end encryption for sensitive data</li>
-                        <li>No third-party tracking on personal data</li>
-                        <li>Panama Law 81 compliance</li>
-                    </ul>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">V. Your Rights Under Law 81</h2>
-                    <div style="display:grid;gap:0.75rem;margin-bottom:1rem;">
-                        <div class="card">
-                            <p style="font-weight:700;color:#F5F5F5;margin-bottom:0.25rem;font-size:0.9rem;">1. Right of Access</p>
-                            <p class="policy-p" style="margin:0;">Request to see all your data. We respond within 7 business days.</p>
-                        </div>
-                        <div class="card">
-                            <p style="font-weight:700;color:#F5F5F5;margin-bottom:0.25rem;font-size:0.9rem;">2. Right of Rectification</p>
-                            <p class="policy-p" style="margin:0;">If any information is incorrect, request correction and we update immediately.</p>
-                        </div>
-                        <div class="card">
-                            <p style="font-weight:700;color:#F5F5F5;margin-bottom:0.25rem;font-size:0.9rem;">3. Right to Be Forgotten</p>
-                            <p class="policy-p" style="margin:0;">Request complete deletion of your data. We delete within 7 days.</p>
-                        </div>
-                        <div class="card">
-                            <p style="font-weight:700;color:#F5F5F5;margin-bottom:0.25rem;font-size:0.9rem;">4. Right to Data Portability</p>
-                            <p class="policy-p" style="margin:0;">Receive your data in digital format (JSON/CSV) within 7 days.</p>
-                        </div>
-                        <div class="card">
-                            <p style="font-weight:700;color:#F5F5F5;margin-bottom:0.25rem;font-size:0.9rem;">5. Right to Withdraw Consent</p>
-                            <p class="policy-p" style="margin:0;">Withdraw consent anytime. We stop processing immediately.</p>
-                        </div>
-                        <div class="card">
-                            <p style="font-weight:700;color:#F5F5F5;margin-bottom:0.25rem;font-size:0.9rem;">6. Right to Object</p>
-                            <p class="policy-p" style="margin:0;">You can object to data processing. We respect your request immediately.</p>
-                        </div>
-                    </div>
-                    <div class="card" style="background:rgba(255,107,53,0.08);border-color:rgba(255,107,53,0.2);">
-                        <p class="policy-p" style="margin:0;">To exercise any right, send an email to <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a> with your full name, registered email, and a clear description of your request.</p>
-                    </div>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">VI. Data Retention</h2>
-                    <ul class="policy-ul">
-                        <li><strong style="color:#F5F5F5;">Active prospects:</strong> Data retained until deletion request</li>
-                        <li><strong style="color:#F5F5F5;">After business relationship ends:</strong> 12 months, then complete deletion</li>
-                        <li><strong style="color:#F5F5F5;">Audit records:</strong> 90 days, then automatic deletion</li>
-                        <li><strong style="color:#F5F5F5;">Technical logs:</strong> 30 days, then automatic purge</li>
-                    </ul>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">VII. Consent</h2>
-                    <p class="policy-p">By using our calculators, you explicitly consent to:</p>
-                    <ol class="policy-ol">
-                        <li>Collection of your name, email, phone</li>
-                        <li>Encrypted storage in Google Workspace</li>
-                        <li>Processing by Julio Luque Vald&eacute;s for diagnosis and contact</li>
-                        <li>Sending results and sales follow-up via email</li>
-                        <li>Audit logging for legal compliance</li>
-                        <li>Sending encrypted data to our Cloudflare worker</li>
-                        <li>That we will NOT share your data with third parties</li>
-                    </ol>
-                    <h3 class="policy-h3">Your consent is</h3>
-                    <ul class="policy-ul check-list">
-                        <li>Freely given (not mandatory, but necessary to use the tool)</li>
-                        <li>Informed (this policy explains it clearly)</li>
-                        <li>Specific (only for stated purposes)</li>
-                        <li>Revocable (you can withdraw anytime)</li>
-                    </ul>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">VIII. Cookies & Tracking</h2>
-                    <ul class="policy-ul">
-                        <li><strong style="color:#F5F5F5;">Essential:</strong> To maintain session (necessary to function)</li>
-                        <li><strong style="color:#F5F5F5;">Analytics:</strong> Google Analytics (anonymous data only, NO personal info)</li>
-                        <li><strong style="color:#F5F5F5;">No third parties:</strong> We don't share cookies with advertising networks</li>
-                    </ul>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">IX. International Transfers</h2>
-                    <ul class="policy-ul check-list">
-                        <li>All data resides in Google Workspace (Panama infrastructure)</li>
-                        <li>Cloudflare CDN has global presence, but data never leaves Panama</li>
-                        <li>We comply with Law 81 "data residency" requirement</li>
-                    </ul>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">X. Compliance & Regulation</h2>
-                    <ul class="policy-ul check-list">
-                        <li>Explicit consent collected</li>
-                        <li>Privacy documented and clear</li>
-                        <li>Data subject rights specified</li>
-                        <li>Technical security implemented</li>
-                        <li>Data controller identified</li>
-                        <li>Audit and logging available</li>
-                    </ul>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">XI. Changes to This Policy</h2>
-                    <p class="policy-p">We may update this policy anytime. We'll notify you by email of material changes. Continuing to use the site after 7 days of notification means you accept changes.</p>
-                    <p class="policy-p" style="font-size:0.85rem;color:rgba(245,245,245,0.5);">History: March 1, 2026 — Initial version (v1.0)</p>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">XIII. Contact & Complaints</h2>
-                    <ul class="policy-ul">
-                        <li>Email: <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a></li>
-                        <li>Phone: +507 6521-3318</li>
-                        <li>We respond within 48 hours</li>
-                    </ul>
-                    <p class="policy-p">If you have a complaint, contact us first. If unsatisfied, you can contact Panama's Ombudsman Office (consumer protection).</p>
-                </div>
-
-                <hr class="divider">
-
-                <!-- TERMS OF SERVICE EN -->
-                <div class="card" style="background:rgba(73,113,116,0.08);border-color:rgba(73,113,116,0.3);margin-bottom:2rem;">
-                    <p style="font-size:0.8rem;font-weight:700;color:#497174;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem;">Section 2</p>
-                    <p style="font-size:1.25rem;font-weight:700;color:#F5F5F5;">TERMS OF SERVICE</p>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">I. Acceptance of Terms</h2>
-                    <p class="policy-p">By accessing jldatrum.com and using our diagnostic tools, you fully accept these terms. If you disagree, don't use the site.</p>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">II. Service Description</h2>
-                    <p class="policy-p">DATRUM provides:</p>
-                    <ul class="policy-ul">
-                        <li><strong style="color:#F5F5F5;">Virtual Presence Scanner:</strong> Automated technical diagnosis of your website</li>
-                        <li><strong style="color:#F5F5F5;">Lead Generation Scorecard:</strong> Evaluation of lead generation capability</li>
-                        <li><strong style="color:#F5F5F5;">Email Reports:</strong> Detailed analysis sent to your email</li>
-                        <li><strong style="color:#F5F5F5;">Consultations:</strong> Strategy sessions (optional, separate)</li>
-                    </ul>
-                    <p class="policy-p">These services are diagnostic, not guaranteed. Results are based on technical analysis and data you provide.</p>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">III. Acceptable Use</h2>
-                    <h3 class="policy-h3">You can use our tools to</h3>
-                    <ul class="policy-ul check-list">
-                        <li>Analyze your own website</li>
-                        <li>Evaluate your internal marketing capability</li>
-                        <li>Receive improvement recommendations</li>
-                        <li>Contact us about services</li>
-                    </ul>
-                    <h3 class="policy-h3">You cannot</h3>
-                    <ul class="policy-ul x-list">
-                        <li>Scan competitors' websites without permission</li>
-                        <li>Automate requests with bots</li>
-                        <li>Distribute reports without attribution</li>
-                        <li>Use tools for email harvesting/spam</li>
-                        <li>Attempt to hack or disrupt service</li>
-                    </ul>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">IV. Limitation of Liability</h2>
-                    <p class="policy-p">DATRUM is NOT responsible for: result accuracy (diagnostics are estimates), indirect damages, algorithm changes by third parties, third-party websites, or service interruptions.</p>
-                    <div class="card" style="background:rgba(255,107,53,0.08);border-color:rgba(255,107,53,0.2);">
-                        <p class="policy-p" style="margin:0;font-weight:600;">In short: You use our tools "AS IS." We don't guarantee specific results.</p>
-                    </div>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">V. Intellectual Property</h2>
-                    <h3 class="policy-h3">What's ours</h3>
-                    <ul class="policy-ul">
-                        <li>Website design, calculator code, diagnostic methodology</li>
-                        <li>Generated reports (format and structure)</li>
-                        <li>DATRUM brand</li>
-                    </ul>
-                    <h3 class="policy-h3">What's yours</h3>
-                    <ul class="policy-ul">
-                        <li>Information you provide (personal data, website URL)</li>
-                        <li>Rights to your own website</li>
-                        <li>Reports you receive (you can use internally)</li>
-                    </ul>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">VI. Governing Law</h2>
-                    <p class="policy-p">These terms are governed by Panama law. Any disputes will be resolved in Panama courts.</p>
-                </div>
-
-                <div class="policy-section">
-                    <h2 class="policy-h2">XII. Contact</h2>
-                    <ul class="policy-ul">
-                        <li>Email: <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a></li>
-                        <li>Phone: +507 6521-3318</li>
-                    </ul>
-                </div>
-
-            </div><!-- end lang-en -->
-
-            <!-- Footer -->
-            <div style="margin-top:4rem;padding-top:2rem;border-top:1px solid #2A2A2A;text-align:center;">
-                <p style="font-size:0.8rem;color:rgba(245,245,245,0.4);">© 2026 Julio Luque Vald&eacute;s | DATRUM. All rights reserved.</p>
-                <a href="index.html" style="display:inline-flex;align-items:center;gap:0.4rem;margin-top:0.75rem;font-size:0.85rem;color:#497174;text-decoration:none;">
-                    <i data-lucide="arrow-left" style="width:0.875rem;height:0.875rem;"></i>
-                    <span class="lang-es">Volver al sitio</span>
-                    <span class="lang-en lang-hidden">Back to site</span>
-                </a>
-            </div>
-
-        </div>
-    </main>
-
-    <script>
-        lucide.createIcons();
-
-        // Auto-detect from browser language, fallback to 'es'
-        const browserLang = (navigator.language || navigator.userLanguage || 'es').toLowerCase();
-        const currentLang = browserLang.startsWith('en') ? 'en' : 'es';
-
-        function setLanguage(lang) {
-            document.querySelectorAll('.lang-es').forEach(el => el.classList.toggle('lang-hidden', lang !== 'es'));
-            document.querySelectorAll('.lang-en').forEach(el => el.classList.toggle('lang-hidden', lang !== 'en'));
-            document.documentElement.lang = lang;
-        }
-
-        // Apply on load
-        setLanguage(currentLang);
-    </script>
+  <div class="footer-note">
+    © 2026 DATRUM · <a href="/">Home</a> · <a href="/security">Security</a> · <a href="/subprocessors">Subprocessors</a> · Version 2.0 · 2026-05-26
+  </div>
+</div>
 </body>
 </html>

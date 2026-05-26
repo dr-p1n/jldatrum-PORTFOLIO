@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidad & Términos — DATRUM</title>
+  <meta name="description" content="Política de privacidad y términos de servicio de DATRUM — qué datos recolectamos, cómo los usamos, y tus derechos bajo GDPR y la Ley 81 de Panamá.">
+  <meta name="robots" content="index, follow">
+
+  <link rel="canonical" href="https://jldatrum.com/es/privacy">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/privacy">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/privacy">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0b; --bg2: #141417; --surface: #1c1c20; --border: #2a2a30;
+  --teal: #9a9aa2; --coral: #ffffff; --text: #f4f4f5; --muted: #7a7a82;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 80px 32px 120px; }
+@media (max-width: 639px) { .wrap { padding: 56px 20px 80px; } }
+
+a { color: var(--coral); text-decoration: underline; text-underline-offset: 3px; }
+a:hover { opacity: 0.8; }
+
+.back-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  display: inline-block;
+}
+.back-link:hover { color: var(--text); }
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.lede {
+  font-size: 17px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 680px;
+}
+
+.meta-line {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 48px;
+}
+
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 56px;
+}
+.toc-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+  counter-reset: section;
+}
+@media (max-width: 639px) {
+  .toc ol { grid-template-columns: 1fr; }
+}
+.toc li { counter-increment: section; }
+.toc li::before {
+  content: counter(section, decimal-leading-zero) ".";
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-right: 8px;
+}
+.toc a { color: var(--text); text-decoration: none; font-size: 14px; }
+.toc a:hover { color: var(--coral); }
+
+section { margin-top: 56px; scroll-margin-top: 24px; }
+section h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+section p { color: var(--muted); margin-bottom: 16px; font-size: 15px; line-height: 1.75; }
+
+section h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  color: var(--text);
+  margin: 22px 0 10px;
+  font-weight: 500;
+}
+
+section ul { list-style: none; padding: 0; margin-bottom: 20px; }
+section ul li {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.75;
+  padding-left: 22px;
+  position: relative;
+  margin-bottom: 8px;
+}
+section ul li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--coral);
+  font-family: 'JetBrains Mono', monospace;
+}
+section ul.no-list li::before { display: none; }
+section ul.no-list li { padding-left: 0; }
+section strong { color: var(--text); font-weight: 500; }
+
+.callout {
+  border-left: 2px solid var(--coral);
+  padding: 16px 24px;
+  margin: 24px 0;
+  background: var(--surface);
+  border-radius: 0 8px 8px 0;
+}
+.callout p { color: var(--text); font-size: 14.5px; margin-bottom: 0; }
+
+.divider {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: 96px 0 56px;
+  position: relative;
+}
+
+.footer-note {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="/es/" class="back-link">← Volver a DATRUM</a>
+  <div class="eyebrow">// Legal</div>
+  <h1>Política de Privacidad &amp; Términos de Servicio</h1>
+  <p class="lede">
+    Cómo DATRUM recolecta, usa y protege tus datos — y las reglas del juego cuando usas jldatrum.com. Escrito para que puedas leerlo en diagonal. Para el detalle operativo detrás de estas afirmaciones, ver <a href="/es/security">/es/security</a>.
+  </p>
+  <div class="meta-line">Versión 2.0 · Vigente desde 2026-05-26 · Reemplaza v1.0 (Marzo 2026)</div>
+
+  <nav class="toc" aria-label="Contenido de la página">
+    <div class="toc-title">Política de Privacidad · Secciones</div>
+    <ol>
+      <li><a href="#who">Quiénes somos</a></li>
+      <li><a href="#data">Qué datos recolectamos</a></li>
+      <li><a href="#use">Cómo los usamos</a></li>
+      <li><a href="#share">Con quién los compartimos</a></li>
+      <li><a href="#rights">Tus derechos</a></li>
+      <li><a href="#retention">Retención</a></li>
+      <li><a href="#consent">Consentimiento</a></li>
+      <li><a href="#cookies">Cookies</a></li>
+      <li><a href="#transfers">Transferencias internacionales</a></li>
+      <li><a href="#changes">Cambios</a></li>
+      <li><a href="#contact">Contacto y quejas</a></li>
+    </ol>
+  </nav>
+
+  <section id="who">
+    <div class="section-tag">01 — Identidad</div>
+    <h2>Quiénes somos</h2>
+    <p>
+      DATRUM es una agencia de marketing e ingeniería de datos operada por <strong>Julio Luque Valdés</strong>, con sede en Ciudad de Panamá, Panamá. Diseñamos sistemas de distribución para firmas de servicios profesionales — sitios web, embudos, optimización para búsqueda con IA y analítica.
+    </p>
+    <ul class="no-list">
+      <li><strong>Responsable del tratamiento:</strong> Julio Luque Valdés (DATRUM)</li>
+      <li><strong>Email:</strong> <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a></li>
+      <li><strong>Teléfono:</strong> <a href="tel:+50765213318">+507 6521-3318</a></li>
+      <li><strong>Dirección:</strong> Ciudad de Panamá, Panamá</li>
+    </ul>
+  </section>
+
+  <section id="data">
+    <div class="section-tag">02 — Recolección</div>
+    <h2>Qué datos recolectamos</h2>
+
+    <h3>Cuando envías el widget de diagnóstico</h3>
+    <ul>
+      <li>Dirección de correo electrónico</li>
+      <li>URL de tu sitio web</li>
+      <li>Tus respuestas a las 5 preguntas del diagnóstico</li>
+      <li>El puntaje calculado y el nivel</li>
+    </ul>
+
+    <h3>Cuando reservas vía Calendly</h3>
+    <ul>
+      <li>Nombre, email y cualquier nota que escribas en el formulario de Calendly</li>
+      <li>Hora de reunión y zona horaria</li>
+    </ul>
+
+    <h3>Automáticamente (cada visitante)</h3>
+    <ul>
+      <li>Dirección IP, user-agent y URL de solicitud (logs de Cloudflare — necesarios para servir páginas y prevenir abuso)</li>
+      <li>Analítica anonimizada: vistas de página, clase de dispositivo, referente — <strong>solo si aceptas el banner de cookies</strong></li>
+    </ul>
+
+    <h3>Lo que NO recolectamos</h3>
+    <ul>
+      <li>Números de tarjeta de crédito o información bancaria</li>
+      <li>Números de identificación gubernamental</li>
+      <li>Datos de salud o biométricos</li>
+      <li>Ningún dato de "categoría especial" bajo el Artículo 9 del GDPR / Artículo 7 de la Ley 81</li>
+    </ul>
+  </section>
+
+  <section id="use">
+    <div class="section-tag">03 — Uso</div>
+    <h2>Cómo usamos tus datos</h2>
+    <ul>
+      <li>Generar y enviarte el reporte PDF de diagnóstico que solicitaste</li>
+      <li>Responder a tu consulta o dar seguimiento a una sesión de estrategia que reservaste</li>
+      <li>Operar y mejorar el sitio (analítica anonimizada, si consentiste)</li>
+      <li>Cumplir nuestras obligaciones legales bajo la Ley 81 y el GDPR (registro de auditoría, preparación para notificación de brechas)</li>
+    </ul>
+    <p>
+      <strong>No</strong> vendemos tus datos, no los compartimos con redes publicitarias, ni los usamos para campañas de marketing no solicitadas.
+    </p>
+  </section>
+
+  <section id="share">
+    <div class="section-tag">04 — Compartir</div>
+    <h2>Con quién compartimos los datos</h2>
+    <p>
+      Solo con subprocesadores que hemos contratado para operar el servicio — Cloudflare, Google Analytics (si consientes), GitHub, thum.io, Calendly, además de nuestro propio almacenamiento en Cloudflare Worker. La lista completa, qué recibe cada uno y dónde lo almacenan, está en la <a href="/es/subprocessors">página de subprocesadores</a>.
+    </p>
+    <p>
+      No transferimos datos a terceros para sus propios fines de marketing. Punto.
+    </p>
+  </section>
+
+  <section id="rights">
+    <div class="section-tag">05 — Derechos</div>
+    <h2>Tus derechos como titular</h2>
+    <p>Estés en Panamá (Ley 81) o en la UE/EEE (GDPR), tienes derecho a:</p>
+    <ul>
+      <li><strong>Acceso</strong> — copia de los datos que tenemos sobre ti (GDPR Art. 15 / Ley 81 Art. 13)</li>
+      <li><strong>Rectificación</strong> — corregir cualquier dato incorrecto (GDPR Art. 16 / Ley 81 Art. 14)</li>
+      <li><strong>Supresión</strong> — eliminar lo que tenemos sobre ti (GDPR Art. 17 / Ley 81 Art. 15)</li>
+      <li><strong>Limitación</strong> — pausar nuestro procesamiento mientras se resuelve una disputa (GDPR Art. 18)</li>
+      <li><strong>Portabilidad</strong> — recibir tus datos en formato estructurado y legible por máquina (GDPR Art. 20)</li>
+      <li><strong>Oposición</strong> — oponerte al procesamiento basado en interés legítimo (GDPR Art. 21)</li>
+      <li><strong>Retirar consentimiento</strong> — re-abre el banner de cookies vía el link "Cookies" en el footer, o escríbenos</li>
+    </ul>
+    <p>
+      Para ejercer cualquier derecho, escribe a <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a> con tu nombre, el email que usaste con nosotros, y una descripción breve de lo que solicitas. Respondemos dentro de <strong>15 días hábiles</strong> (Ley 81) o 30 días (GDPR) — lo que sea más corto para tu caso.
+    </p>
+  </section>
+
+  <section id="retention">
+    <div class="section-tag">06 — Retención</div>
+    <h2>Cuánto tiempo guardamos tus datos</h2>
+    <ul>
+      <li><strong>Envíos del diagnóstico:</strong> 24 meses, o hasta que solicites eliminación</li>
+      <li><strong>Datos de reserva de Calendly:</strong> según la política propia de Calendly (no guardamos copia)</li>
+      <li><strong>Logs de solicitudes de Cloudflare:</strong> 30 días (rotativos), luego se purgan</li>
+      <li><strong>Eventos de Google Analytics:</strong> 14 meses (default GA4), si consentiste</li>
+      <li><strong>Correspondencia por email con nosotros:</strong> indefinida, salvo que pidas eliminación</li>
+    </ul>
+  </section>
+
+  <section id="consent">
+    <div class="section-tag">07 — Consentimiento</div>
+    <h2>A qué consientes</h2>
+    <p>Al usar el widget de diagnóstico, consientes explícitamente a:</p>
+    <ul>
+      <li>Almacenamiento de tu email y URL en nuestro Cloudflare Worker</li>
+      <li>Generación de un reporte PDF (en tu navegador; ningún dato adicional se envía)</li>
+      <li>Recibir el reporte vía email si optaste por eso</li>
+      <li>Procesamiento por Julio Luque Valdés (DATRUM) para los propósitos declarados únicamente</li>
+    </ul>
+    <p>
+      Tu consentimiento es <strong>libre</strong> (puedes usar el resto del sitio sin él), <strong>informado</strong> (esta política te lo explica), <strong>específico</strong> (solo para los propósitos listados) y <strong>revocable</strong> (puedes retirarlo en cualquier momento).
+    </p>
+  </section>
+
+  <section id="cookies">
+    <div class="section-tag">08 — Cookies</div>
+    <h2>Cookies y rastreo</h2>
+    <ul>
+      <li><strong>Estrictamente necesarias:</strong> ninguna — el sitio funciona sin setear cookies.</li>
+      <li><strong>Analítica (GA4):</strong> Solo se carga si haces click en "Aceptar" en el banner de cookies. Usa IP anonimizada. Sin identificadores de tracking publicitario. Sin perfilado cross-site.</li>
+      <li><strong>Publicidad de terceros:</strong> ninguna. No corremos red publicitaria ni compartimos datos con alguna.</li>
+    </ul>
+    <p>
+      Para cambiar tu elección, haz click en "Cookies" en el footer para re-abrir el banner.
+    </p>
+  </section>
+
+  <section id="transfers">
+    <div class="section-tag">09 — Transferencias</div>
+    <h2>Transferencias internacionales de datos</h2>
+    <p>
+      Algunos subprocesadores (Google, Cloudflare, GitHub, Calendly) están en EE.UU. Las transferencias se basan en el Marco de Privacidad de Datos UE–EE.UU. (cuando el subprocesador está certificado) y en Cláusulas Contractuales Estándar (SCC) como respaldo. El procesamiento de borde de Cloudflare ocurre regionalmente cuando es posible.
+    </p>
+  </section>
+
+  <section id="changes">
+    <div class="section-tag">10 — Cambios</div>
+    <h2>Cambios a esta política</h2>
+    <p>
+      Actualizamos esta página cuando nuestras prácticas cambian. El número de versión y la fecha vigente arriba son la fuente de verdad. Los cambios materiales se anotarán en <a href="/es/security">/es/security</a> con fecha. Continuar usando el sitio después de la fecha vigente significa que aceptas los cambios.
+    </p>
+  </section>
+
+  <section id="contact">
+    <div class="section-tag">11 — Contacto</div>
+    <h2>Contacto y quejas</h2>
+    <ul class="no-list">
+      <li><strong>Email:</strong> <a href="mailto:julio@jldatrum.com">julio@jldatrum.com</a></li>
+      <li><strong>Teléfono:</strong> <a href="tel:+50765213318">+507 6521-3318</a></li>
+      <li><strong>Ventana de respuesta:</strong> 48 horas para consultas generales, 15 días hábiles para solicitudes de titular de datos</li>
+    </ul>
+    <p>
+      Si no estás satisfecho con nuestra respuesta, puedes presentar una queja ante la <strong>Autoridad Nacional de Transparencia y Acceso a la Información (ANTAI)</strong> — la autoridad panameña de protección de datos — en <a href="https://www.antai.gob.pa/">antai.gob.pa</a>. Los residentes de la UE/EEE también pueden contactar a su autoridad supervisora local.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <section id="terms-acceptance">
+    <div class="section-tag">T1 — Aceptación</div>
+    <h2>Aceptación de términos</h2>
+    <p>
+      Al usar jldatrum.com y cualquier herramienta o servicio ofrecido aquí, aceptas estos términos completamente. Si no estás de acuerdo con alguna parte, por favor deja de usar el sitio.
+    </p>
+  </section>
+
+  <section id="terms-service">
+    <div class="section-tag">T2 — El servicio</div>
+    <h2>Qué proporcionamos en este sitio</h2>
+    <ul>
+      <li><strong>Widget de diagnóstico:</strong> un scorecard de 5 preguntas que genera un reporte PDF sobre la postura de visibilidad de tu sitio web</li>
+      <li><strong>Reserva de sesión de estrategia:</strong> vía Calendly (herramienta de agendamiento separada)</li>
+      <li><strong>Contenido editorial:</strong> los casos de estudio, explicaciones del framework y descripciones de servicios en este sitio</li>
+    </ul>
+    <p>
+      Estos son diagnósticos e informativos. Los resultados son estimaciones, no garantías, y se basan en los insumos que proporcionas.
+    </p>
+  </section>
+
+  <section id="terms-acceptable">
+    <div class="section-tag">T3 — Uso aceptable</div>
+    <h2>Uso aceptable</h2>
+    <h3>Puedes</h3>
+    <ul>
+      <li>Usar el diagnóstico para analizar tu propio sitio web</li>
+      <li>Compartir o citar el reporte que recibes, con atribución</li>
+      <li>Contactar a DATRUM para discutir servicios</li>
+    </ul>
+    <h3>No puedes</h3>
+    <ul>
+      <li>Usar el diagnóstico contra sitios que no posees o para los que no tienes permiso explícito de analizar</li>
+      <li>Automatizar envíos con bots o scrapers</li>
+      <li>Usar el sitio para recolectar emails para spam o marketing sin consentimiento</li>
+      <li>Intentar interferir con el servicio o su infraestructura subyacente</li>
+    </ul>
+  </section>
+
+  <section id="terms-liability">
+    <div class="section-tag">T4 — Responsabilidad</div>
+    <h2>Limitación de responsabilidad</h2>
+    <p>
+      DATRUM proporciona este sitio y sus herramientas "tal cual". No somos responsables por: precisión de resultados del diagnóstico (estimaciones por definición), cambios en algoritmos de terceros que afecten proyecciones, contenido en sitios de terceros enlazados, o interrupciones del servicio fuera de nuestro control razonable.
+    </p>
+    <div class="callout">
+      <p>
+        Versión simple: el diagnóstico te da una estimación útil, no una garantía. Usa los resultados como punto de partida, no como palabra final.
+      </p>
+    </div>
+  </section>
+
+  <section id="terms-ip">
+    <div class="section-tag">T5 — Propiedad intelectual</div>
+    <h2>Propiedad intelectual</h2>
+    <h3>Nuestro</h3>
+    <ul>
+      <li>Diseño del sitio, código, copy, metodología y la marca DATRUM</li>
+      <li>El formato del template del reporte PDF (el contenido es tuyo)</li>
+    </ul>
+    <h3>Tuyo</h3>
+    <ul>
+      <li>Todo lo que envías (tu URL, respuestas, email)</li>
+      <li>El reporte PDF completo que recibes — úsalo como quieras internamente</li>
+      <li>Todos los derechos sobre tu propio sitio y marca</li>
+    </ul>
+  </section>
+
+  <section id="terms-law">
+    <div class="section-tag">T6 — Ley aplicable</div>
+    <h2>Ley aplicable</h2>
+    <p>
+      Estos términos se rigen por las leyes de la República de Panamá. Cualquier disputa que no pueda resolverse por correspondencia directa se conocerá en los tribunales competentes de la Ciudad de Panamá, Panamá.
+    </p>
+  </section>
+
+  <div class="footer-note">
+    © 2026 DATRUM · <a href="/es/">Inicio</a> · <a href="/es/security">Seguridad</a> · <a href="/es/subprocessors">Subprocesadores</a> · Versión 2.0 · 2026-05-26
+  </div>
+</div>
+</body>
+</html>
