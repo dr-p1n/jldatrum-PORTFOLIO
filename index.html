@@ -999,6 +999,110 @@ section {
 }
 .work-link:hover { color: var(--text); }
 
+/* ── WHO IT'S FOR ───────────────────────────────────── */
+#who { background: var(--bg2); }
+
+.who-formula {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(22px, 3.2vw, 32px);
+  font-weight: 300;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+  max-width: 900px;
+  margin-bottom: 64px;
+}
+.who-formula em {
+  font-style: normal;
+  color: var(--teal);
+}
+.who-formula .coral {
+  color: var(--coral);
+  font-style: normal;
+}
+@media (max-width: 639px) {
+  .who-formula { font-size: 22px; margin-bottom: 48px; }
+}
+
+.who-criteria {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+@media (max-width: 767px) {
+  .who-criteria { grid-template-columns: 1fr; }
+}
+
+.who-col {
+  padding: 36px 32px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+@media (max-width: 639px) {
+  .who-col { padding: 28px 24px; }
+}
+
+.who-col-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.who-col.not-fit .who-col-title { color: var(--muted); }
+
+.who-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.who-col ul li {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.65;
+  padding: 8px 0 8px 22px;
+  position: relative;
+}
+.who-col ul li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--coral);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+.who-col.not-fit ul li {
+  color: var(--muted);
+}
+.who-col.not-fit ul li::before {
+  content: "×";
+  color: var(--muted);
+}
+
+.who-industries {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.who-industries .tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.who-industries .tag:hover {
+  border-color: var(--coral);
+  color: var(--text);
+}
+
 /* ── SERVICES ───────────────────────────────────────── */
 #services { background: var(--bg); }
 
@@ -1150,6 +1254,17 @@ section {
   letter-spacing: 0.18em;
 }
 
+.trust-mark {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+.trust-mark .ring  { stroke: var(--border); fill: none; stroke-width: 1.5; }
+.trust-mark .arc   { stroke: var(--coral); fill: none; stroke-width: 1.5; stroke-linecap: round; }
+.trust-mark .glyph { fill: var(--coral); }
+.trust-mark text   { fill: var(--text); font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+
 .trust-name {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 22px;
@@ -1279,6 +1394,7 @@ footer {
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
   <a href="#think" onclick="closeDrawer()">Think</a>
+  <a href="#who" onclick="closeDrawer()">Who It's For</a>
   <a href="#services" onclick="closeDrawer()">Services</a>
   <a href="#framework" onclick="closeDrawer()">Framework</a>
   <a href="#work" onclick="closeDrawer()">Previous Work</a>
@@ -1293,9 +1409,10 @@ footer {
   </a>
   <div class="nav-links">
     <a href="#think">The Lab</a>
+    <a href="#who">Who</a>
     <a href="#services">Services</a>
     <a href="#framework">Framework</a>
-    <a href="#work">Previous Work</a>
+    <a href="#work">Work</a>
     <a href="/es/" lang="es" hreflang="es" class="nav-lang">ES</a>
     <a href="#diagnose" class="btn-diagnose">Run Diagnostic →</a>
   </div>
@@ -1375,10 +1492,54 @@ footer {
   </div>
 </section>
 
+<!-- ── SECTION 2.5: WHO IT'S FOR ────────────────────── -->
+<section id="who">
+  <div class="section-inner">
+    <div class="section-eyebrow">// 02 — Who It's For</div>
+    <h2 class="section-title">We're built for a specific kind of firm.</h2>
+
+    <p class="who-formula fade-up">
+      We're a <em>growth engineering agency</em> that makes <span class="coral">your brand the answer AI engines cite</span> for <em>professional services firms</em> growing across <span class="coral">EN + ES markets</span>.
+    </p>
+
+    <div class="who-criteria fade-up">
+      <div class="who-col">
+        <div class="who-col-title">You're a fit if</div>
+        <ul>
+          <li>You sell expert services — law, insurance, healthcare, real estate, finance, fiduciary, consulting.</li>
+          <li>Your clients increasingly start with ChatGPT, Perplexity, or Google's AI Overview instead of a regular search.</li>
+          <li>You operate across Panama, LatAm, the US — or want to, in both English and Spanish.</li>
+          <li>You want compounding inbound that lowers CAC over time, not ad spend that grows with the bill.</li>
+        </ul>
+      </div>
+      <div class="who-col not-fit">
+        <div class="who-col-title">Not your fit if</div>
+        <ul>
+          <li>You need a one-time brochure site and no ongoing distribution work.</li>
+          <li>You sell B2C impulse products under $50 — your funnel math doesn't match ours.</li>
+          <li>You're not willing to be the actual expert in your content. AI search rewards depth; we can't fake that for you.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="who-industries fade-up">
+      <span class="tag">Law</span>
+      <span class="tag">Insurance</span>
+      <span class="tag">Healthcare</span>
+      <span class="tag">Real Estate</span>
+      <span class="tag">Fiduciary</span>
+      <span class="tag">Finance</span>
+      <span class="tag">Talent Agencies</span>
+      <span class="tag">E-Commerce</span>
+      <span class="tag">SaaS</span>
+    </div>
+  </div>
+</section>
+
 <!-- ── SECTION 3: SERVICES ──────────────────────────── -->
 <section id="services">
   <div class="section-inner">
-    <div class="section-eyebrow">// 02 — Services</div>
+    <div class="section-eyebrow">// 03 — Services</div>
     <h2 class="section-title">What we build.</h2>
 
     <div class="services-grid">
@@ -1451,7 +1612,7 @@ footer {
 <!-- ── SECTION 4: THE FRAMEWORK ─────────────────────── -->
 <section id="framework">
   <div class="section-inner">
-    <div class="section-eyebrow">// 03 — The Framework</div>
+    <div class="section-eyebrow">// 04 — The Framework</div>
     <h2 class="section-title">How we engineer the results.</h2>
 
     <div class="framework-grid">
@@ -1493,7 +1654,7 @@ footer {
 <!-- ── SECTION 5: THE DIAGNOSTIC ──────────────────── -->
 <section id="diagnose">
   <div class="section-inner">
-    <div class="section-eyebrow">// 04 — The Diagnostic</div>
+    <div class="section-eyebrow">// 05 — The Diagnostic</div>
 
     <div class="diagnostic-wrap">
       <!-- Left column -->
@@ -1677,7 +1838,7 @@ footer {
 <!-- ── SECTION 6: PREVIOUS WORK ────────────────────── -->
 <section id="work">
   <div class="section-inner">
-    <div class="section-eyebrow">// 05 — Previous Work</div>
+    <div class="section-eyebrow">// 06 — Previous Work</div>
     <h2 class="section-title">Systems built for real firms.</h2>
 
     <div class="work-grid">
@@ -1767,11 +1928,27 @@ footer {
 <!-- ── TRUST & COMPLIANCE ──────────────────────────── -->
 <section id="trust">
   <div class="section-inner">
-    <div class="section-eyebrow">// 06 — Trust & Compliance</div>
+    <div class="section-eyebrow">// 07 — Trust & Compliance</div>
     <h2 class="section-title">Standards we engineer to.</h2>
 
     <div class="trust-grid">
       <a href="/security#gdpr" class="trust-cell fade-up" style="--delay:0.1s">
+        <svg class="trust-mark" viewBox="0 0 64 64" aria-hidden="true">
+          <circle class="ring" cx="32" cy="32" r="29"/>
+          <path class="arc" d="M 32 6 A 26 26 0 1 1 32 58" stroke-dasharray="2 3"/>
+          <circle class="glyph" cx="32" cy="13" r="1.6"/>
+          <circle class="glyph" cx="42" cy="16" r="1.6"/>
+          <circle class="glyph" cx="48" cy="24" r="1.6"/>
+          <circle class="glyph" cx="48" cy="40" r="1.6"/>
+          <circle class="glyph" cx="42" cy="48" r="1.6"/>
+          <circle class="glyph" cx="32" cy="51" r="1.6"/>
+          <circle class="glyph" cx="22" cy="48" r="1.6"/>
+          <circle class="glyph" cx="16" cy="40" r="1.6"/>
+          <circle class="glyph" cx="16" cy="24" r="1.6"/>
+          <circle class="glyph" cx="22" cy="16" r="1.6"/>
+          <circle class="glyph" cx="32" cy="13" r="1.6"/>
+          <text x="32" y="36" text-anchor="middle" font-size="9" letter-spacing="0.5">GDPR</text>
+        </svg>
         <div class="trust-badge">GDPR</div>
         <h3 class="trust-name">Compliant</h3>
         <p class="trust-desc">
@@ -1781,6 +1958,12 @@ footer {
       </a>
 
       <a href="/security#pci" class="trust-cell fade-up" style="--delay:0.2s">
+        <svg class="trust-mark" viewBox="0 0 64 64" aria-hidden="true">
+          <path class="ring" d="M 32 6 L 56 14 L 56 32 C 56 46 32 58 32 58 C 32 58 8 46 8 32 L 8 14 Z"/>
+          <path class="arc" d="M 22 32 L 29 39 L 43 25"/>
+          <text x="32" y="22" text-anchor="middle" font-size="6" letter-spacing="0.4">PCI DSS</text>
+          <text x="32" y="50" text-anchor="middle" font-size="5" letter-spacing="0.4" fill="#9a9aa2">SAQ A · v4.0.1</text>
+        </svg>
         <div class="trust-badge">PCI DSS</div>
         <h3 class="trust-name">SAQ A Self-Attested</h3>
         <p class="trust-desc">
@@ -1790,6 +1973,13 @@ footer {
       </a>
 
       <a href="/security#ley81" class="trust-cell fade-up" style="--delay:0.3s">
+        <svg class="trust-mark" viewBox="0 0 64 64" aria-hidden="true">
+          <rect class="ring" x="8" y="14" width="48" height="36" rx="3"/>
+          <rect x="8" y="14" width="24" height="18" class="glyph" opacity="0.18"/>
+          <rect x="32" y="32" width="24" height="18" class="glyph" opacity="0.18"/>
+          <text x="32" y="28" text-anchor="middle" font-size="7" letter-spacing="0.4">LEY 81</text>
+          <text x="32" y="44" text-anchor="middle" font-size="5" letter-spacing="0.4" fill="#9a9aa2">PA · 2019</text>
+        </svg>
         <div class="trust-badge">Ley 81 PA</div>
         <h3 class="trust-name">Compliant</h3>
         <p class="trust-desc">
