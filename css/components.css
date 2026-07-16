@@ -21,9 +21,9 @@ nav {
 
 .nav-logo {
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: 32px;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.08em;
   color: var(--text);
   text-decoration: none;
   display: flex;
@@ -185,7 +185,7 @@ nav {
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: clamp(42px, 6vw, 80px);
+  font-size: clamp(32px, 4.2vw, 56px);
   font-weight: 300;
   line-height: 1.05;
   letter-spacing: -0.02em;
@@ -197,7 +197,7 @@ nav {
 .hero-title .coral { color: var(--coral); font-style: normal; }
 
 @media (max-width: 639px) {
-  .hero-title { font-size: clamp(36px, 10vw, 60px); }
+  .hero-title { font-size: clamp(28px, 8vw, 44px); }
 }
 
 .hero-sub {
