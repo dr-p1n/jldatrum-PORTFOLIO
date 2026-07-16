@@ -559,12 +559,15 @@ section {
   border-radius: 8px;
   background: var(--teal-glow);
   border: 1px solid rgba(255,255,255,0.15);
+  color: var(--coral);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   flex-shrink: 0;
 }
+.feature-icon svg { width: 17px; height: 17px; display: block; }
+.btn-download svg { width: 15px; height: 15px; display: block; }
 @media (max-width: 639px) {
   .feature-icon { width: 28px; height: 28px; font-size: 12px; }
 }
@@ -951,7 +954,7 @@ section {
 .work-card-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .work-num {
@@ -1672,21 +1675,21 @@ footer {
         </p>
         <div class="feature-list">
           <div class="feature-item">
-            <div class="feature-icon">⚡</div>
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="2.5" x2="14" y2="2.5"/><line x1="12" y1="2.5" x2="12" y2="4.5"/><circle cx="12" cy="13" r="8"/><path d="M12 13l3-3"/></svg></div>
             <div class="feature-text">
               <div class="feature-title">Instant score (0–10)</div>
               <div class="feature-desc">Weighted across 5 brand performance dimensions</div>
             </div>
           </div>
           <div class="feature-item">
-            <div class="feature-icon">📊</div>
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="11"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="14"/></svg></div>
             <div class="feature-text">
               <div class="feature-title">PDF breakdown</div>
               <div class="feature-desc">Downloadable report with per-dimension analysis</div>
             </div>
           </div>
           <div class="feature-item">
-            <div class="feature-icon">🎯</div>
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg></div>
             <div class="feature-text">
               <div class="feature-title">No obligation</div>
               <div class="feature-desc">Useful whether you hire me or not</div>
@@ -1828,7 +1831,7 @@ footer {
           <div class="score-tier-label" id="scoreTierLabel"></div>
           <div class="score-desc" id="scoreDesc"></div>
           <a href="https://calendly.com/julio-jldatrum" id="scheduleBtn" class="btn-schedule" target="_blank" rel="noopener">Schedule a Strategy Session →</a>
-          <button id="btnDownloadPDF" class="btn-download" onclick="downloadPDF()">⬇ Download PDF Report</button>
+          <button id="btnDownloadPDF" class="btn-download" onclick="downloadPDF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg><span id="btnDownloadLabel">Download PDF Report</span></button>
           <button class="btn-reset" onclick="resetWidget()">← Start over</button>
         </div>
 
@@ -1859,7 +1862,6 @@ footer {
           </a>
           <div class="work-card-body">
             <div class="work-card-header">
-              <span class="work-num">01</span>
               <span class="work-tag">E-Commerce</span>
             </div>
             <h3 class="work-client">Panama Treasures</h3>
@@ -1875,7 +1877,6 @@ footer {
           </a>
           <div class="work-card-body">
             <div class="work-card-header">
-              <span class="work-num">02</span>
               <span class="work-tag">Insurance</span>
             </div>
             <h3 class="work-client">Seguros Corco</h3>
@@ -1891,7 +1892,6 @@ footer {
           </a>
           <div class="work-card-body">
             <div class="work-card-header">
-              <span class="work-num">03</span>
               <span class="work-tag">Legal</span>
             </div>
             <h3 class="work-client">AG Law</h3>
@@ -1907,7 +1907,6 @@ footer {
           </a>
           <div class="work-card-body">
             <div class="work-card-header">
-              <span class="work-num">04</span>
               <span class="work-tag">Services</span>
             </div>
             <h3 class="work-client">Go Clean</h3>
@@ -1931,7 +1930,6 @@ footer {
           </a>
           <div class="work-card-body">
             <div class="work-card-header">
-              <span class="work-num">05</span>
               <span class="work-tag">Sports Event</span>
             </div>
             <h3 class="work-client">Obstacle Race Panama</h3>
@@ -1943,14 +1941,13 @@ footer {
 
         <article class="work-card fade-up" style="--delay:0.2s">
           <a href="https://ucc-latam-demo.julioernestolv.workers.dev/" target="_blank" rel="noopener" class="work-thumb">
-            <img src="https://image.thum.io/get/width/800/crop/500/https://ucc-latam-demo.julioernestolv.workers.dev/" alt="Verite website preview" loading="lazy">
+            <img src="https://image.thum.io/get/width/800/crop/500/https://ucc-latam-demo.julioernestolv.workers.dev/" alt="Ultimate Combat Challenge website preview" loading="lazy">
           </a>
           <div class="work-card-body">
             <div class="work-card-header">
-              <span class="work-num">06</span>
               <span class="work-tag">Entertainment</span>
             </div>
-            <h3 class="work-client">Verite</h3>
+            <h3 class="work-client">Ultimate Combat Challenge</h3>
             <p class="work-desc">
               Brand identity and digital presence for a premium entertainment concept — built to attract the right audience and convert interest into bookings and deals.
             </p>
@@ -2419,7 +2416,8 @@ function downloadPDF() {
   if (!window.jspdf || lastScore === null) return;
 
   const btn = document.getElementById('btnDownloadPDF');
-  if (btn) { btn.classList.add('generating'); btn.textContent = '⏳ Generating…'; }
+  const btnLbl = document.getElementById('btnDownloadLabel');
+  if (btn) { btn.classList.add('generating'); if (btnLbl) btnLbl.textContent = 'Generating…'; }
 
   try {
     const { jsPDF } = window.jspdf;
@@ -2573,7 +2571,7 @@ function downloadPDF() {
   } catch(e) {
     console.error('PDF generation failed:', e);
   } finally {
-    if (btn) { btn.classList.remove('generating'); btn.textContent = '⬇ Download PDF Report'; }
+    if (btn) { btn.classList.remove('generating'); if (btnLbl) btnLbl.textContent = 'Download PDF Report'; }
   }
 }
 

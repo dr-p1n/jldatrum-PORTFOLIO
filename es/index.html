@@ -561,12 +561,15 @@ section {
   border-radius: 8px;
   background: var(--teal-glow);
   border: 1px solid rgba(255,255,255,0.15);
+  color: var(--coral);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   flex-shrink: 0;
 }
+.feature-icon svg { width: 17px; height: 17px; display: block; }
+.btn-download svg { width: 15px; height: 15px; display: block; }
 @media (max-width: 639px) {
   .feature-icon { width: 28px; height: 28px; font-size: 12px; }
 }
@@ -953,7 +956,7 @@ section {
 .work-card-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .work-num {
@@ -1668,21 +1671,21 @@ footer {
         </p>
         <div class="feature-list">
           <div class="feature-item">
-            <div class="feature-icon">⚡</div>
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="2.5" x2="14" y2="2.5"/><line x1="12" y1="2.5" x2="12" y2="4.5"/><circle cx="12" cy="13" r="8"/><path d="M12 13l3-3"/></svg></div>
             <div class="feature-text">
               <div class="feature-title">Puntaje instantáneo (0–10)</div>
               <div class="feature-desc">Ponderado en 5 dimensiones de desempeño de marca</div>
             </div>
           </div>
           <div class="feature-item">
-            <div class="feature-icon">📊</div>
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="11"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="14"/></svg></div>
             <div class="feature-text">
               <div class="feature-title">Reporte PDF</div>
               <div class="feature-desc">Reporte descargable con análisis por dimensión</div>
             </div>
           </div>
           <div class="feature-item">
-            <div class="feature-icon">🎯</div>
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg></div>
             <div class="feature-text">
               <div class="feature-title">Sin compromiso</div>
               <div class="feature-desc">Útil ya sea que nos contrates o no</div>
@@ -1824,7 +1827,7 @@ footer {
           <div class="score-tier-label" id="scoreTierLabel"></div>
           <div class="score-desc" id="scoreDesc"></div>
           <a href="https://calendly.com/julio-jldatrum" id="scheduleBtn" class="btn-schedule" target="_blank" rel="noopener">Agenda una Sesión de Estrategia →</a>
-          <button id="btnDownloadPDF" class="btn-download" onclick="downloadPDF()">⬇ Descargar Reporte PDF</button>
+          <button id="btnDownloadPDF" class="btn-download" onclick="downloadPDF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg><span id="btnDownloadLabel">Descargar Reporte PDF</span></button>
           <button class="btn-reset" onclick="resetWidget()">← Empezar de nuevo</button>
         </div>
 
@@ -1855,7 +1858,6 @@ footer {
           </a>
           <div class="work-card-body">
             <div class="work-card-header">
-              <span class="work-num">01</span>
               <span class="work-tag">E-Commerce</span>
             </div>
             <h3 class="work-client">Panama Treasures</h3>
@@ -1871,7 +1873,6 @@ footer {
           </a>
           <div class="work-card-body">
             <div class="work-card-header">
-              <span class="work-num">02</span>
               <span class="work-tag">Seguros</span>
             </div>
             <h3 class="work-client">Seguros Corco</h3>
@@ -1887,7 +1888,6 @@ footer {
           </a>
           <div class="work-card-body">
             <div class="work-card-header">
-              <span class="work-num">03</span>
               <span class="work-tag">Legal</span>
             </div>
             <h3 class="work-client">AG Law</h3>
@@ -1903,7 +1903,6 @@ footer {
           </a>
           <div class="work-card-body">
             <div class="work-card-header">
-              <span class="work-num">04</span>
               <span class="work-tag">Servicios</span>
             </div>
             <h3 class="work-client">Go Clean</h3>
@@ -1927,7 +1926,6 @@ footer {
           </a>
           <div class="work-card-body">
             <div class="work-card-header">
-              <span class="work-num">05</span>
               <span class="work-tag">Evento Deportivo</span>
             </div>
             <h3 class="work-client">Obstacle Race Panama</h3>
@@ -1943,26 +1941,24 @@ footer {
           </a>
           <div class="work-card-body">
             <div class="work-card-header">
-              <span class="work-num">06</span>
               <span class="work-tag">Medios</span>
             </div>
             <h3 class="work-client">Shooting in Panama</h3>
             <p class="work-desc">
-              Producción fotográfica y de medios — identidad de marca y presencia digital construida para atraer a la audiencia correcta y convertir el interés en reservas y acuerdos.
+              Productora internacional de películas y shows — identidad de marca y presencia digital construida para atraer a la audiencia correcta y convertir el interés en reservas y acuerdos.
             </p>
           </div>
         </article>
 
         <article class="work-card fade-up" style="--delay:0.3s">
           <a href="https://ucc-latam-demo.julioernestolv.workers.dev/" target="_blank" rel="noopener" class="work-thumb">
-            <img src="https://image.thum.io/get/width/800/crop/500/https://ucc-latam-demo.julioernestolv.workers.dev/" alt="Verite website preview" loading="lazy">
+            <img src="https://image.thum.io/get/width/800/crop/500/https://ucc-latam-demo.julioernestolv.workers.dev/" alt="Ultimate Combat Challenge website preview" loading="lazy">
           </a>
           <div class="work-card-body">
             <div class="work-card-header">
-              <span class="work-num">07</span>
               <span class="work-tag">Entretenimiento</span>
             </div>
-            <h3 class="work-client">Verite</h3>
+            <h3 class="work-client">Ultimate Combat Challenge</h3>
             <p class="work-desc">
               Identidad de marca y presencia digital para un concepto de entretenimiento premium — construida para atraer a la audiencia correcta y convertir el interés en reservas y acuerdos.
             </p>
@@ -2430,7 +2426,8 @@ function downloadPDF() {
   if (!window.jspdf || lastScore === null) return;
 
   const btn = document.getElementById('btnDownloadPDF');
-  if (btn) { btn.classList.add('generating'); btn.textContent = '⏳ Generando…'; }
+  const btnLbl = document.getElementById('btnDownloadLabel');
+  if (btn) { btn.classList.add('generating'); if (btnLbl) btnLbl.textContent = 'Generando…'; }
 
   try {
     const { jsPDF } = window.jspdf;
@@ -2584,7 +2581,7 @@ function downloadPDF() {
   } catch(e) {
     console.error('PDF generation failed:', e);
   } finally {
-    if (btn) { btn.classList.remove('generating'); btn.textContent = '⬇ Descargar Reporte PDF'; }
+    if (btn) { btn.classList.remove('generating'); if (btnLbl) btnLbl.textContent = 'Descargar Reporte PDF'; }
   }
 }
 
