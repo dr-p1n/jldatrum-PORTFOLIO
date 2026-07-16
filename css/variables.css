@@ -1,0 +1,51 @@
+/* ─────────────────────────────────────────────────────────
+   DATRUM Design System — Design Tokens
+   Dark editorial gallery: content glows against the dark.
+   ───────────────────────────────────────────────────────── */
+:root {
+  /* ── Palette ───────────────────────────────────────── */
+  --color-bg:          #0C1B1F; /* Midnight Teal — page background */
+  --color-surface:     #0F5C6D; /* Deep Teal — cards, nav, elevated surfaces */
+  --color-interactive: #1E7F98; /* Ocean Blue — links, hovers, secondary */
+  --color-accent:      #F2D24B; /* Lemon Glow — CTAs, headings on dark, emphasis */
+  --color-text:        #E8EDED; /* Frost — body text */
+  --color-text-muted:  #9AABAF; /* Muted Frost — labels, captions */
+  --color-divider:     #1A3A40; /* subtle separators */
+
+  /* ── Back-compat aliases (existing selectors use these) ─ */
+  --bg:         var(--color-bg);
+  --bg2:        #0E2329;         /* subtle elevated section background */
+  --surface:    var(--color-surface);
+  --border:     var(--color-divider);
+  --teal:       var(--color-interactive);
+  --coral:      var(--color-accent);
+  --text:       var(--color-text);
+  --muted:      var(--color-text-muted);
+  --teal-glow:  rgba(30, 127, 152, 0.12);
+  --coral-glow: rgba(242, 210, 75, 0.12);
+
+  /* ── Typography ────────────────────────────────────── */
+  --font-display: 'Adieu', 'DM Sans', sans-serif; /* Adieu falls back to DM Sans until self-hosted */
+  --font-body:    'DM Sans', sans-serif;
+
+  /* ── Spacing (8px base) ────────────────────────────── */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+  --space-5xl: 128px;
+
+  /* ── Radius ────────────────────────────────────────── */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* ── Transitions ───────────────────────────────────── */
+  --ease-default: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+}

@@ -1,0 +1,52 @@
+/* ── RESET & TOKENS ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── CANVAS ─────────────────────────────────────────── */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+@media (max-width: 639px) {
+  #bg-canvas { opacity: 0.4; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #bg-canvas { display: none; }
+}
+
+/* ── SECTIONS ───────────────────────────────────────── */
+section {
+  position: relative;
+  z-index: 1;
+}
+.section-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 100px 48px;
+}
+@media (max-width: 639px) {
+  .section-inner { padding: 60px 24px; }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .section-inner { padding: 80px 32px; }
+}
+
+/* ── ANIMATIONS ─────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+.fade-up { opacity: 0; }
+.fade-up.visible {
+  animation: fadeUp 0.7s cubic-bezier(0.4,0,0.2,1) forwards;
+}
