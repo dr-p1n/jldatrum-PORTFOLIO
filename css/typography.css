@@ -1,19 +1,7 @@
 /* ─────────────────────────────────────────────────────────
    DATRUM — Typography
-   Display: Adieu (self-hosted, commercial). Body: DM Sans.
+   Display: Space Grotesk. Body: DM Sans. Both via Google Fonts.
    ───────────────────────────────────────────────────────── */
-
-/* Adieu — commercial display font. Drop Adieu-Bold.woff2 into /fonts/.
-   Weight range claimed so any weight request maps to the single face
-   (no faux-synthesis), and headings render Adieu regardless of the
-   inherited weight declarations. Falls back to DM Sans until present. */
-@font-face {
-  font-family: 'Adieu';
-  src: url('/fonts/Adieu-Bold.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
 
 html { scroll-behavior: smooth; }
 

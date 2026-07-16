@@ -25,7 +25,7 @@
   --coral-glow: rgba(242, 210, 75, 0.12);
 
   /* ── Typography ────────────────────────────────────── */
-  --font-display: 'Adieu', 'DM Sans', sans-serif; /* Adieu falls back to DM Sans until self-hosted */
+  --font-display: 'Space Grotesk', sans-serif;
   --font-body:    'DM Sans', sans-serif;
 
   /* ── Spacing (8px base) ────────────────────────────── */
