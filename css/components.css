@@ -154,12 +154,14 @@ nav {
   flex-direction: column;
   justify-content: center;
 }
+/* nav is 64px + fixed; the extra top padding offsets it so the content
+   sits optically centered in the space below the nav (balanced, not floaty) */
 #home .section-inner {
-  padding-top: 140px;
-  padding-bottom: 60px;
+  padding-top: 104px;
+  padding-bottom: 40px;
 }
 @media (max-width: 639px) {
-  #home .section-inner { padding: 100px 24px 60px; }
+  #home .section-inner { padding: 92px 24px 32px; }
 }
 
 .eyebrow {
