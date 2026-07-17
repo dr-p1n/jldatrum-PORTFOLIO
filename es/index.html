@@ -64,12 +64,9 @@
 </head>
 <body>
 
-<!-- CANVAS -->
-<canvas id="bg-canvas" aria-hidden="true"></canvas>
-
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
-  <a href="#diagnose" onclick="closeDrawer()">Auditoría</a>
+  <a href="#offer" onclick="closeDrawer()">Servicios</a>
   <a href="#trust" onclick="closeDrawer()">Cumplimiento</a>
   <a href="/es/work/" onclick="closeDrawer()">Casos de estudio</a>
   <a href="/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
@@ -82,7 +79,7 @@
     <span class="nav-brand">DATRUM</span>
   </a>
   <div class="nav-links">
-    <a href="#diagnose">Auditoría</a>
+    <a href="#offer">Servicios</a>
     <a href="#trust">Cumplimiento</a>
     <a href="/es/work/">Casos de estudio</a>
     <a href="/" lang="en" hreflang="en" class="nav-lang">EN</a>
@@ -101,10 +98,13 @@
       Agencia de Marketing B2B · Deportes, Moda y servicios Creativos
     </div>
     <h1 class="hero-title fade-up" style="--delay:0.4s">
-      <em style="font-style: italic; color: inherit;">Tastemaker.</em><br>Tecnólogo creativo.<br><span class="coral">Estratega cultural.</span>
+      <em>Diseño de productos.</em><br>Marketing.<br><span class="coral">Estratega cultural.</span>
     </h1>
     <p class="hero-sub fade-up" style="--delay:0.6s">
-      Impulsamos crecimiento y lealtad de marca a través de experiencias de marca multivector en la vida real y en la esfera digital.
+      Construyo experiencias digitales que impulsan ventas y patrocinio en la intersección de moda y deporte — puentes entre los fans y sus equipos que perduran, combinando producción editorial con ingeniería digital.
+    </p>
+    <p class="hero-note fade-up" style="--delay:0.7s">
+      Bellas artes, correduría de inversiones, curaduría de museos, ciberseguridad, diseño de producto y desarrollo de software — <strong>la combinación que me permite sentarme con un director de marketing, un director creativo, un ejecutivo comercial y un CTO, hablar el idioma de cada uno y alinear sus metas.</strong>
     </p>
     <div class="hero-actions fade-up" style="--delay:0.8s">
       <a href="#diagnose" class="btn-primary">Audita tu marca →</a>
@@ -113,18 +113,97 @@
   </div>
 </section>
 
-<!-- ── SECTION 2: THE LAB ──────────────────────────── -->
+<!-- ── SERVICES TEASER ──────────────────────────────── -->
+<section id="offer">
+  <div class="section-inner">
+    <h2 class="section-title">Lo que construimos.</h2>
+    <p class="section-lead">Un estudio de producto de marketing para tastemakers de deporte, moda y creativos — tres motores que convierten tu reputación en ingresos.</p>
+    <div class="services-grid">
+      <article class="service-cell fade-up" style="--delay:0.1s">
+        <h3 class="service-name">Diseño de Producto de Marketing</h3>
+        <p class="service-desc">Sitios web, apps y productos digitales diseñados para vender — a la altura de tu marca y construidos para convertir la atención en acuerdos.</p>
+      </article>
+      <article class="service-cell fade-up" style="--delay:0.2s">
+        <h3 class="service-name">Sistemas de Generación de Leads</h3>
+        <p class="service-desc">Embudos, captura y seguimiento que convierten la atención en llamadas agendadas y clientes firmados — leads calificados que llegan en piloto automático.</p>
+      </article>
+      <article class="service-cell fade-up" style="--delay:0.3s">
+        <h3 class="service-name">Visibilidad en Búsqueda con IA</h3>
+        <p class="service-desc">Sé el nombre que ChatGPT, Perplexity y la IA de Google muestran cuando un cliente potencial pregunta a quién contratar en tu campo.</p>
+      </article>
+    </div>
+    <a href="/es/work/#services" class="offer-more">Ver todos los servicios →</a>
+  </div>
+</section>
 
-<!-- ── SECTION 2.5: WHO IT'S FOR ────────────────────── -->
+<!-- ── TRUST & COMPLIANCE ──────────────────────────── -->
+<section id="trust">
+  <div class="section-inner">
+    <h2 class="section-title">Los estándares con los que diseñamos.</h2>
 
-<!-- ── SECTION 3: SERVICES ──────────────────────────── -->
+    <div class="trust-grid">
+      <a href="/es/security#gdpr" class="trust-cell fade-up" style="--delay:0.1s">
+        <svg class="trust-mark" viewBox="0 0 64 64" aria-hidden="true">
+          <circle class="ring" cx="32" cy="32" r="29"/>
+          <path class="arc" d="M 32 6 A 26 26 0 1 1 32 58" stroke-dasharray="2 3"/>
+          <circle class="glyph" cx="32" cy="13" r="1.6"/>
+          <circle class="glyph" cx="42" cy="16" r="1.6"/>
+          <circle class="glyph" cx="48" cy="24" r="1.6"/>
+          <circle class="glyph" cx="48" cy="40" r="1.6"/>
+          <circle class="glyph" cx="42" cy="48" r="1.6"/>
+          <circle class="glyph" cx="32" cy="51" r="1.6"/>
+          <circle class="glyph" cx="22" cy="48" r="1.6"/>
+          <circle class="glyph" cx="16" cy="40" r="1.6"/>
+          <circle class="glyph" cx="16" cy="24" r="1.6"/>
+          <circle class="glyph" cx="22" cy="16" r="1.6"/>
+          <circle class="glyph" cx="32" cy="13" r="1.6"/>
+          <text x="32" y="36" text-anchor="middle" font-size="9" letter-spacing="0.5">GDPR</text>
+        </svg>
+        <div class="trust-badge">GDPR</div>
+        <h3 class="trust-name">Conforme</h3>
+        <p class="trust-desc">
+          Cumplimos los requisitos del Reglamento General de Protección de Datos de la UE — transparencia bajo los Artículos 13–14, base legal documentada, derechos del titular respetados. Consentimiento de cookies antes del tracking. Subprocesadores divulgados.
+        </p>
+        <span class="trust-link">Lee nuestra postura GDPR →</span>
+      </a>
 
-<!-- ── SECTION 4: THE FRAMEWORK ─────────────────────── -->
+      <a href="/es/security#pci" class="trust-cell fade-up" style="--delay:0.2s">
+        <svg class="trust-mark" viewBox="0 0 64 64" aria-hidden="true">
+          <path class="ring" d="M 32 6 L 56 14 L 56 32 C 56 46 32 58 32 58 C 32 58 8 46 8 32 L 8 14 Z"/>
+          <path class="arc" d="M 22 32 L 29 39 L 43 25"/>
+          <text x="32" y="22" text-anchor="middle" font-size="6" letter-spacing="0.4">PCI DSS</text>
+          <text x="32" y="50" text-anchor="middle" font-size="5" letter-spacing="0.4" fill="#9a9aa2">SAQ A · v4.0.1</text>
+        </svg>
+        <div class="trust-badge">PCI DSS</div>
+        <h3 class="trust-name">SAQ A Auto-Atestado</h3>
+        <p class="trust-desc">
+          DATRUM no almacena, procesa, ni transmite datos de tarjeta. Diseñamos flujos que delegan completamente el manejo de pagos a procesadores PCI Nivel 1 (Stripe, Adyen) — manteniendo a los merchants clientes en el alcance de SAQ A.
+        </p>
+        <span class="trust-link">Lee nuestra atestación SAQ A →</span>
+      </a>
 
-<!-- ── SECTION 5: THE DIAGNOSTIC ──────────────────── -->
+      <a href="/es/security#ley81" class="trust-cell fade-up" style="--delay:0.3s">
+        <svg class="trust-mark" viewBox="0 0 64 64" aria-hidden="true">
+          <rect class="ring" x="8" y="14" width="48" height="36" rx="3"/>
+          <rect x="8" y="14" width="24" height="18" class="glyph" opacity="0.18"/>
+          <rect x="32" y="32" width="24" height="18" class="glyph" opacity="0.18"/>
+          <text x="32" y="28" text-anchor="middle" font-size="7" letter-spacing="0.4">LEY 81</text>
+          <text x="32" y="44" text-anchor="middle" font-size="5" letter-spacing="0.4" fill="#9a9aa2">PA · 2019</text>
+        </svg>
+        <div class="trust-badge">Ley 81 PA</div>
+        <h3 class="trust-name">Conforme</h3>
+        <p class="trust-desc">
+          Ley de Protección de Datos Personales de Panamá (Ley 81 de 2019). Integrada en cada sitio que entregamos — consentimiento explícito, derechos de acceso del titular, controles de retención, preparación para notificación de brechas.
+        </p>
+        <span class="trust-link">Lee nuestra implementación Ley 81 →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── THE AUDIT ────────────────────────────────────── -->
 <section id="diagnose">
   <div class="section-inner">
-    <div class="section-eyebrow">// La Auditoría</div>
 
     <div class="diagnostic-wrap">
       <!-- Left column -->
@@ -301,73 +380,6 @@
           <button class="btn-next" id="btnNext" onclick="nextStep()">Siguiente →</button>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── SECTION 6: PREVIOUS WORK ────────────────────── -->
-
-<!-- ── TRUST & COMPLIANCE ──────────────────────────── -->
-<section id="trust">
-  <div class="section-inner">
-    <div class="section-eyebrow">// Confianza y Cumplimiento</div>
-    <h2 class="section-title">Los estándares con los que diseñamos.</h2>
-
-    <div class="trust-grid">
-      <a href="/es/security#gdpr" class="trust-cell fade-up" style="--delay:0.1s">
-        <svg class="trust-mark" viewBox="0 0 64 64" aria-hidden="true">
-          <circle class="ring" cx="32" cy="32" r="29"/>
-          <path class="arc" d="M 32 6 A 26 26 0 1 1 32 58" stroke-dasharray="2 3"/>
-          <circle class="glyph" cx="32" cy="13" r="1.6"/>
-          <circle class="glyph" cx="42" cy="16" r="1.6"/>
-          <circle class="glyph" cx="48" cy="24" r="1.6"/>
-          <circle class="glyph" cx="48" cy="40" r="1.6"/>
-          <circle class="glyph" cx="42" cy="48" r="1.6"/>
-          <circle class="glyph" cx="32" cy="51" r="1.6"/>
-          <circle class="glyph" cx="22" cy="48" r="1.6"/>
-          <circle class="glyph" cx="16" cy="40" r="1.6"/>
-          <circle class="glyph" cx="16" cy="24" r="1.6"/>
-          <circle class="glyph" cx="22" cy="16" r="1.6"/>
-          <text x="32" y="36" text-anchor="middle" font-size="9" letter-spacing="0.5">GDPR</text>
-        </svg>
-        <div class="trust-badge">GDPR</div>
-        <h3 class="trust-name">Conforme</h3>
-        <p class="trust-desc">
-          Cumplimos los requisitos del Reglamento General de Protección de Datos de la UE — transparencia bajo los Artículos 13–14, base legal documentada, derechos del titular respetados. Consentimiento de cookies antes del tracking. Subprocesadores divulgados.
-        </p>
-        <span class="trust-link">Lee nuestra postura GDPR →</span>
-      </a>
-
-      <a href="/es/security#pci" class="trust-cell fade-up" style="--delay:0.2s">
-        <svg class="trust-mark" viewBox="0 0 64 64" aria-hidden="true">
-          <path class="ring" d="M 32 6 L 56 14 L 56 32 C 56 46 32 58 32 58 C 32 58 8 46 8 32 L 8 14 Z"/>
-          <path class="arc" d="M 22 32 L 29 39 L 43 25"/>
-          <text x="32" y="22" text-anchor="middle" font-size="6" letter-spacing="0.4">PCI DSS</text>
-          <text x="32" y="50" text-anchor="middle" font-size="5" letter-spacing="0.4" fill="#9a9aa2">SAQ A · v4.0.1</text>
-        </svg>
-        <div class="trust-badge">PCI DSS</div>
-        <h3 class="trust-name">SAQ A Auto-Atestado</h3>
-        <p class="trust-desc">
-          DATRUM no almacena, procesa, ni transmite datos de tarjeta. Diseñamos flujos que delegan completamente el manejo de pagos a procesadores PCI Nivel 1 (Stripe, Adyen) — manteniendo a los merchants clientes en el alcance de SAQ A.
-        </p>
-        <span class="trust-link">Lee nuestra atestación SAQ A →</span>
-      </a>
-
-      <a href="/es/security#ley81" class="trust-cell fade-up" style="--delay:0.3s">
-        <svg class="trust-mark" viewBox="0 0 64 64" aria-hidden="true">
-          <rect class="ring" x="8" y="14" width="48" height="36" rx="3"/>
-          <rect x="8" y="14" width="24" height="18" class="glyph" opacity="0.18"/>
-          <rect x="32" y="32" width="24" height="18" class="glyph" opacity="0.18"/>
-          <text x="32" y="28" text-anchor="middle" font-size="7" letter-spacing="0.4">LEY 81</text>
-          <text x="32" y="44" text-anchor="middle" font-size="5" letter-spacing="0.4" fill="#9a9aa2">PA · 2019</text>
-        </svg>
-        <div class="trust-badge">Ley 81 PA</div>
-        <h3 class="trust-name">Conforme</h3>
-        <p class="trust-desc">
-          Ley de Protección de Datos Personales de Panamá (Ley 81 de 2019). Integrada en cada sitio que entregamos — consentimiento explícito, derechos de acceso del titular, controles de retención, preparación para notificación de brechas.
-        </p>
-        <span class="trust-link">Lee nuestra implementación Ley 81 →</span>
-      </a>
     </div>
   </div>
 </section>

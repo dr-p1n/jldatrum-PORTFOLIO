@@ -54,6 +54,7 @@ nav {
   transition: color 0.2s;
 }
 .nav-links a:hover { color: var(--coral); }
+.nav-links a.active { color: var(--coral); }
 .nav-links a.btn-diagnose {
   border: 1px solid var(--coral);
   color: var(--coral);
@@ -127,6 +128,7 @@ nav {
   transition: color 0.2s;
 }
 .nav-drawer a:hover { color: var(--coral); }
+.nav-drawer a.active { color: var(--coral); }
 .nav-drawer .btn-diagnose-drawer {
   font-family: var(--font-body);
   font-size: 15px;
@@ -212,6 +214,20 @@ nav {
 }
 @media (max-width: 639px) {
   .hero-sub { font-size: 15px; max-width: 100%; }
+}
+
+.hero-note {
+  font-size: 14.5px;
+  color: var(--muted);
+  font-weight: 300;
+  max-width: 600px;
+  line-height: 1.7;
+  margin-top: -22px;
+  margin-bottom: 40px;
+}
+.hero-note strong { color: var(--text); font-weight: 500; }
+@media (max-width: 639px) {
+  .hero-note { font-size: 13.5px; max-width: 100%; }
 }
 
 .hero-actions {
@@ -1024,6 +1040,27 @@ nav {
   color: var(--muted);
   line-height: 1.7;
 }
+
+/* ── OFFER TEASER (landing) ─────────────────────────── */
+#offer { background: var(--bg); }
+.section-lead {
+  font-size: 16px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.7;
+  max-width: 620px;
+  margin: -32px 0 40px;
+}
+.offer-more {
+  display: inline-block;
+  margin-top: 32px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--coral);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.offer-more:hover { color: var(--text); }
 
 /* ── FRAMEWORK ──────────────────────────────────────── */
 #framework { background: var(--bg2); }
