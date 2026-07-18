@@ -1,0 +1,258 @@
+/* ─────────────────────────────────────────────────────────
+   DATRUM — Legal / Compliance subpages
+   Shared styling for /security, /privacy, /subprocessors (EN + ES).
+   Dark editorial gallery palette — Space Grotesk + DM Sans.
+   ───────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #0C1B1F; /* Midnight Teal */
+  --bg2:     #0E2329; /* subtle elevated */
+  --surface: #0F5C6D; /* Deep Teal — cards/panels */
+  --border:  #1A3A40; /* dividers */
+  --teal:    #1E7F98; /* Ocean Blue — interactive */
+  --coral:   #F2D24B; /* Lemon Glow — accent/links */
+  --text:    #E8EDED; /* Frost */
+  --muted:   #9AABAF; /* Muted Frost */
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wrap { max-width: 920px; margin: 0 auto; padding: 80px 32px 120px; }
+@media (max-width: 639px) { .wrap { padding: 56px 20px 80px; } }
+
+a { color: var(--coral); text-decoration: underline; text-underline-offset: 3px; }
+a:hover { opacity: 0.82; }
+
+.back-link {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  display: inline-block;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--text); opacity: 1; }
+
+.eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(34px, 5vw, 56px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+
+.lede {
+  font-size: 17px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 680px;
+}
+
+.last-updated,
+.meta-line {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 48px;
+}
+
+/* ── Table of contents ──────────────────────────────── */
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 56px;
+}
+.toc-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--text);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+  counter-reset: section;
+}
+@media (max-width: 639px) { .toc ol { grid-template-columns: 1fr; } }
+.toc li { counter-increment: section; }
+.toc li::before {
+  content: counter(section, decimal-leading-zero) ".";
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--coral);
+  margin-right: 8px;
+}
+.toc a { color: var(--text); text-decoration: none; font-size: 14px; }
+.toc a:hover { color: var(--coral); opacity: 1; }
+
+/* ── Sections ───────────────────────────────────────── */
+section { margin-top: 56px; scroll-margin-top: 88px; }
+
+h2,
+section h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+h2 { font-size: 22px; margin: 56px 0 16px; }
+section h2 { font-size: 26px; margin-bottom: 8px; }
+
+section h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  color: var(--text);
+  margin: 22px 0 10px;
+  font-weight: 500;
+}
+
+.section-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--coral);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+p,
+section p { color: var(--muted); margin-bottom: 16px; font-size: 15px; line-height: 1.75; }
+
+section ul { list-style: none; padding: 0; margin-bottom: 20px; }
+section ul li {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.75;
+  padding-left: 22px;
+  position: relative;
+  margin-bottom: 8px;
+}
+section ul li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--coral);
+  font-family: 'DM Sans', sans-serif;
+}
+section ul.no-list li::before { display: none; }
+section ul.no-list li { padding-left: 0; }
+section strong, strong { color: var(--text); font-weight: 500; }
+
+/* ── Callout ────────────────────────────────────────── */
+.callout {
+  border-left: 2px solid var(--coral);
+  padding: 16px 24px;
+  margin: 24px 0;
+  background: var(--surface);
+  border-radius: 0 8px 8px 0;
+}
+.callout p { color: var(--text); font-size: 14.5px; margin-bottom: 0; }
+
+/* ── Attestation card ───────────────────────────────── */
+.attest {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin: 24px 0;
+}
+.attest-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.attest-check { color: var(--coral); font-size: 18px; font-weight: 700; }
+.attest-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+}
+.attest p { font-size: 14px; color: var(--text); }
+.attest .signature {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Divider (privacy) ──────────────────────────────── */
+.divider {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: 96px 0 56px;
+  position: relative;
+}
+.divider-label {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg);
+  padding: 0 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ── Table (subprocessors) ──────────────────────────── */
+table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px; }
+th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+td { color: var(--muted); }
+td:first-child { font-weight: 500; color: var(--text); }
+
+/* ── Footer ─────────────────────────────────────────── */
+.footer-note,
+.footer {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+}
