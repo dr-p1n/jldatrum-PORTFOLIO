@@ -61,8 +61,8 @@
 
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
   <link rel="manifest" href="/assets/manifest.json">
-  <!-- jsPDF for client-side PDF generation -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- jsPDF for client-side PDF generation (deferred — only needed for the audit report) -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </head>
 <body>
@@ -70,7 +70,7 @@
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
   <a href="#offer" onclick="closeDrawer()">Services</a>
-  <a href="#trust" onclick="closeDrawer()">Compliance</a>
+  <a href="#method" onclick="closeDrawer()">DATRUM Method</a>
   <a href="/work/" onclick="closeDrawer()">Case studies</a>
   <a href="/es/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
   <a href="#diagnose" class="btn-diagnose-drawer" onclick="closeDrawer()">Audit Your Brand →</a>
@@ -83,7 +83,7 @@
   </a>
   <div class="nav-links">
     <a href="#offer">Services</a>
-    <a href="#trust">Compliance</a>
+    <a href="#method">DATRUM Method</a>
     <a href="/work/">Case studies</a>
     <a href="/es/" lang="es" hreflang="es" class="nav-lang">ES</a>
     <a href="#diagnose" class="btn-diagnose">Audit Your Brand →</a>
@@ -132,6 +132,28 @@
       </article>
     </div>
     <a href="/work/#services" class="offer-more">See all services →</a>
+  </div>
+</section>
+
+<!-- ── DATRUM METHOD ───────────────────────────────── -->
+<section id="method">
+  <div class="section-inner">
+    <h2 class="section-title">The DATRUM method.</h2>
+    <p class="section-lead">Design and engineering, run as one practice — for a specific kind of client, with a repeatable system behind every project.</p>
+    <div class="method-grid">
+      <article class="method-pillar fade-up" style="--delay:0.1s">
+        <div class="method-kicker">Who we work with</div>
+        <p class="method-body">Tastemakers in sport, fashion, media, and creative who already have the influence and the audience — and need a system that turns it into revenue, not another brochure.</p>
+      </article>
+      <article class="method-pillar fade-up" style="--delay:0.2s">
+        <div class="method-kicker">How we work</div>
+        <p class="method-body">A closed loop: observe where reputation leaks revenue, build what's missing, let the brand compound, and adapt every month. Fewer guesses, more signed clients.</p>
+      </article>
+      <article class="method-pillar fade-up" style="--delay:0.3s">
+        <div class="method-kicker">Design meets engineering</div>
+        <p class="method-body">One team fluent in editorial craft and digital engineering — product design, software, data, and security under one roof, so the work looks like you and performs like a machine.</p>
+      </article>
+    </div>
   </div>
 </section>
 

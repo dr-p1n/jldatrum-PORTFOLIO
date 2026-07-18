@@ -1042,7 +1042,7 @@ nav {
 }
 
 /* ── OFFER TEASER (landing) ─────────────────────────── */
-#offer { background: var(--bg); }
+#offer { background: var(--bg2); }
 .section-lead {
   font-size: 16px;
   color: var(--muted);
@@ -1061,6 +1061,45 @@ nav {
   transition: color 0.2s;
 }
 .offer-more:hover { color: var(--text); }
+
+/* ── DATRUM METHOD (landing) ────────────────────────── */
+#method { background: var(--bg); }
+.method-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+@media (max-width: 1023px) {
+  .method-grid { grid-template-columns: 1fr; }
+}
+.method-pillar {
+  padding: 40px 32px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: background 0.3s ease;
+}
+.method-pillar:hover { background: var(--surface); }
+@media (max-width: 639px) {
+  .method-pillar { padding: 32px 24px; }
+}
+.method-kicker {
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 300;
+  color: var(--coral);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.method-body {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+}
 
 /* ── FRAMEWORK ──────────────────────────────────────── */
 #framework { background: var(--bg2); }

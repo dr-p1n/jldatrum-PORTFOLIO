@@ -63,8 +63,8 @@
 
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
   <link rel="manifest" href="/assets/manifest.json">
-  <!-- jsPDF for client-side PDF generation -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- jsPDF for client-side PDF generation (deferred — only needed for the audit report) -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </head>
 <body>
@@ -72,7 +72,7 @@
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
   <a href="#offer" onclick="closeDrawer()">Servicios</a>
-  <a href="#trust" onclick="closeDrawer()">Cumplimiento</a>
+  <a href="#method" onclick="closeDrawer()">Método DATRUM</a>
   <a href="/es/work/" onclick="closeDrawer()">Casos de estudio</a>
   <a href="/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
   <a href="#diagnose" class="btn-diagnose-drawer" onclick="closeDrawer()">Audita tu marca →</a>
@@ -85,7 +85,7 @@
   </a>
   <div class="nav-links">
     <a href="#offer">Servicios</a>
-    <a href="#trust">Cumplimiento</a>
+    <a href="#method">Método DATRUM</a>
     <a href="/es/work/">Casos de estudio</a>
     <a href="/" lang="en" hreflang="en" class="nav-lang">EN</a>
     <a href="#diagnose" class="btn-diagnose">Audita tu marca →</a>
@@ -134,6 +134,28 @@
       </article>
     </div>
     <a href="/es/work/#services" class="offer-more">Ver todos los servicios →</a>
+  </div>
+</section>
+
+<!-- ── DATRUM METHOD ───────────────────────────────── -->
+<section id="method">
+  <div class="section-inner">
+    <h2 class="section-title">El método DATRUM.</h2>
+    <p class="section-lead">Diseño e ingeniería como una sola práctica — para un tipo específico de cliente, con un sistema repetible detrás de cada proyecto.</p>
+    <div class="method-grid">
+      <article class="method-pillar fade-up" style="--delay:0.1s">
+        <div class="method-kicker">Con quién trabajamos</div>
+        <p class="method-body">Tastemakers de deporte, moda, medios y creativos que ya tienen la influencia y la audiencia — y necesitan un sistema que la convierta en ingresos, no otro folleto.</p>
+      </article>
+      <article class="method-pillar fade-up" style="--delay:0.2s">
+        <div class="method-kicker">Cómo trabajamos</div>
+        <p class="method-body">Un ciclo cerrado: observar dónde la reputación fuga ingresos, construir lo que falta, dejar que la marca componga y adaptar cada mes. Menos suposiciones, más clientes firmados.</p>
+      </article>
+      <article class="method-pillar fade-up" style="--delay:0.3s">
+        <div class="method-kicker">Diseño e ingeniería, integrados</div>
+        <p class="method-body">Un equipo fluido en producción editorial e ingeniería digital — diseño de producto, software, datos y seguridad bajo un mismo techo, para que el trabajo se vea como tú y rinda como una máquina.</p>
+      </article>
+    </div>
   </div>
 </section>
 
