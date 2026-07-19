@@ -1051,6 +1051,8 @@ nav {
   max-width: 620px;
   margin: -32px 0 40px;
 }
+/* Two stacked leads (e.g. method: philosophy + outcome) — give them air */
+.section-lead + .section-lead { margin-top: -16px; }
 .offer-more {
   display: inline-block;
   margin-top: 32px;
