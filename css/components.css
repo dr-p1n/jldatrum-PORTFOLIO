@@ -1103,6 +1103,73 @@ nav {
   line-height: 1.7;
 }
 
+/* ── BIO ────────────────────────────────────────────── */
+#bio { background: var(--bg); }
+.bio-wrap {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 64px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .bio-wrap { grid-template-columns: 1fr; gap: 36px; max-width: 560px; }
+}
+.bio-portrait {
+  display: block;
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface);
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.bio-portrait:hover { border-color: var(--teal); box-shadow: 0 0 28px var(--teal-glow); }
+.bio-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+/* Fallback when the portrait file isn't in place yet */
+.bio-portrait--empty::after {
+  content: "Portrait";
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 13px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.bio-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 300;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 22px;
+}
+.bio-lead {
+  font-family: var(--font-display);
+  font-size: clamp(19px, 2.4vw, 24px);
+  font-weight: 300;
+  line-height: 1.45;
+  color: var(--text);
+  margin-bottom: 28px;
+}
+.bio-body p {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 18px;
+  max-width: 660px;
+}
+.bio-body p strong { color: var(--text); font-weight: 500; }
+.bio-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 34px;
+}
+@media (max-width: 639px) {
+  .bio-actions { flex-direction: column; align-items: stretch; gap: 16px; }
+}
+
 /* ── FRAMEWORK ──────────────────────────────────────── */
 #framework { background: var(--bg2); }
 

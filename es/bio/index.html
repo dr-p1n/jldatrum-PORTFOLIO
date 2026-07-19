@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bio — DATRUM</title>
+  <meta name="description" content="Corredor, ingeniero de seguridad y artista en un solo operador. Por qué el fundador de DATRUM construye sistemas digitales que ninguna agencia puede replicar.">
+  <meta property="og:title" content="DATRUM — Por qué nadie más construye lo que yo construyo">
+  <meta property="og:description" content="Correduría de inversiones, ciberseguridad y arte contemporáneo en un solo operador — la combinación detrás de DATRUM.">
+  <meta property="og:type" content="profile">
+  <meta property="og:url" content="https://jldatrum.com/es/bio/">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DATRUM — Por qué nadie más construye lo que yo construyo">
+  <meta name="twitter:description" content="Corredor, ingeniero de seguridad, artista. Un solo operador, sin traspasos.">
+  <meta property="og:image" content="https://jldatrum.com/assets/og-image-es.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://jldatrum.com/assets/og-image-es.png">
+
+  <!-- Canonical + hreflang alternates -->
+  <link rel="canonical" href="https://jldatrum.com/es/bio/">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/bio/">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/bio/">
+  <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/bio/">
+
+  <!-- Google Analytics 4 (Consent Mode v2 — GDPR-compliant) -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied',
+      'wait_for_update': 500
+    });
+    try {
+      var prior = localStorage.getItem('datrum_consent');
+      if (prior === 'granted') {
+        gtag('consent', 'update', { 'analytics_storage': 'granted' });
+      }
+    } catch(e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Design system stylesheets -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/typography.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/layout.css">
+
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="/assets/manifest.json">
+
+</head>
+<body>
+
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
+  <a href="/es/work/#think" onclick="closeDrawer()">Nosotros</a>
+  <a href="/es/work/#who" onclick="closeDrawer()">Para Quién</a>
+  <a href="/es/work/#services" onclick="closeDrawer()">Servicios</a>
+  <a href="/es/work/#framework" onclick="closeDrawer()">Método DATRUM</a>
+  <a href="/es/work/#work" onclick="closeDrawer()">Casos de estudio</a>
+  <a href="/es/bio/" onclick="closeDrawer()">Bio</a>
+  <a href="/bio/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
+  <a href="/es/#diagnose" class="btn-diagnose-drawer" onclick="closeDrawer()">Audita tu marca →</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="/es/" class="nav-logo">
+    <span class="nav-brand">DATRUM</span>
+  </a>
+  <div class="nav-links">
+    <a href="/es/work/#think">Nosotros</a>
+    <a href="/es/work/#who">Para Quién</a>
+    <a href="/es/work/#services">Servicios</a>
+    <a href="/es/work/#framework">Método DATRUM</a>
+    <a href="/es/work/#work">Casos de estudio</a>
+    <a href="/es/bio/" class="active">Bio</a>
+    <a href="/bio/" lang="en" hreflang="en" class="nav-lang">EN</a>
+    <a href="/es/#diagnose" class="btn-diagnose">Audita tu marca →</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── BIO ──────────────────────────────────────────── -->
+<section id="bio">
+  <div class="section-inner">
+    <div class="bio-wrap">
+      <!-- TODO: set href to the real LinkedIn profile URL -->
+      <a href="#" target="_blank" rel="noopener" class="bio-portrait fade-up" aria-label="Perfil de LinkedIn" data-todo="linkedin-url">
+        <img src="/assets/images/bio.jpg" alt="Julio Luque Valdés — fundador de DATRUM" loading="lazy"
+             onerror="this.style.display='none';this.parentElement.classList.add('bio-portrait--empty')">
+      </a>
+      <div class="bio-text fade-up">
+        <h1 class="bio-title">Por qué nadie más construye lo que yo construyo.</h1>
+        <p class="bio-lead">La combinación es el punto. La mayoría de la gente en marketing llega por una sola puerta — diseño, o anuncios, o código. Yo llegué por tres.</p>
+        <div class="bio-body">
+          <p>Empecé como <strong>corredor de inversiones</strong>: ahí aprendí a leer el riesgo y a entender qué necesita ver un comprador de alto nivel antes de confiarte su dinero.</p>
+          <p>Entré a IT por la <strong>ciberseguridad</strong> — por eso la seguridad no se atornilla al final del sitio, sino que es la base sobre la que construyo la distribución.</p>
+          <p>Mi formación es en <strong>arte contemporáneo y fotografía</strong> — el ojo editorial que carga la altura de tu nombre.</p>
+          <p>Corredor, ingeniero de seguridad, artista. Un solo operador, sin traspasos, sin dilución — no un servicio que cualquiera puede copiar, sino una combinación que casi nadie más tiene.</p>
+        </div>
+        <div class="bio-actions">
+          <a href="/es/#diagnose" class="btn-primary">Audita tu marca →</a>
+          <a href="https://calendly.com/julio-jldatrum" target="_blank" rel="noopener" class="btn-ghost">Agenda una Sesión de Estrategia →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">DATRUM</div>
+    <nav class="footer-links" aria-label="Legal">
+      <a href="/es/security">Seguridad</a>
+      <a href="/es/privacy">Privacidad</a>
+      <a href="/es/subprocessors">Subprocesadores</a>
+      <a href="#" onclick="showCookieBanner(); return false;">Cookies</a>
+    </nav>
+    <div class="footer-copy">© 2026 DATRUM · Diseño e ingeniería para infraestructura digital de alto nivel</div>
+  </div>
+</footer>
+
+<!-- ── COOKIE CONSENT BANNER ──────────────────────── -->
+<div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Consentimiento de cookies">
+  <p class="cookie-text">
+    Usamos analítica que respeta la privacidad (Google Analytics 4 con IP anonimizada) para entender cómo los visitantes encuentran DATRUM. Nada personal, sin tracking publicitario. Puedes rechazar y el sitio funciona igual. <a href="/es/privacy">Política de privacidad</a>.
+  </p>
+  <div class="cookie-actions">
+    <button class="cookie-btn primary" onclick="acceptCookies()">Aceptar analítica</button>
+    <button class="cookie-btn" onclick="declineCookies()">Rechazar</button>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script defer src="/js/scroll-reveal.js"></script>
+<script defer src="/js/nav.js"></script>
+
+</body>
+</html>
