@@ -176,7 +176,7 @@ nav {
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  margin-bottom: 28px;
+  margin-bottom: 34px;
 }
 .eyebrow .pulse-dot {
   width: 6px;
@@ -195,7 +195,7 @@ nav {
   letter-spacing: -0.02em;
   color: var(--text);
   max-width: 820px;
-  margin-bottom: 24px;
+  margin-bottom: 34px;
 }
 .hero-title em  { font-style: normal; color: var(--teal); font-weight: 300; }
 .hero-title .coral { color: var(--coral); font-style: normal; }
