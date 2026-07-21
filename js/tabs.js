@@ -2,7 +2,7 @@
 // Turns the work-page nav links into real tabs: one section
 // visible at a time, no endless scroll.
 (function () {
-  const TAB_IDS = ['think', 'who', 'services', 'framework', 'work'];
+  const TAB_IDS = ['who', 'services', 'framework', 'work'];
 
   const sections = {};
   TAB_IDS.forEach(id => {
