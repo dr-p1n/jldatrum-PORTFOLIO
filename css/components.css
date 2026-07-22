@@ -861,6 +861,15 @@ nav {
   text-transform: uppercase;
 }
 
+.work-date {
+  font-family: var(--font-body);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: -4px 0 -6px;
+}
+
 .work-client {
   font-family: var(--font-display);
   font-size: 22px;

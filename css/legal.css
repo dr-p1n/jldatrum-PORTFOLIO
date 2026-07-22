@@ -256,3 +256,126 @@ td:first-child { font-weight: 500; color: var(--text); }
   font-size: 12px;
   color: var(--muted);
 }
+
+/* ── Case study pages ───────────────────────────────── */
+.cs-topbar {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 22px 32px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+@media (max-width: 639px) { .cs-topbar { padding: 18px 20px 0; } }
+.cs-wordmark {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.06em;
+  color: var(--coral);
+  text-decoration: none;
+}
+.cs-wordmark:hover { opacity: 0.85; }
+.cs-topbar .back-link { margin-bottom: 0; }
+
+.cs-deck {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(20px, 2.6vw, 27px);
+  font-weight: 300;
+  line-height: 1.35;
+  color: var(--muted);
+  max-width: 760px;
+  margin: 0 0 32px;
+}
+.cs-deck b, .cs-deck strong { color: var(--text); font-weight: 400; }
+
+.cs-figure {
+  margin: 8px 0 44px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg2);
+}
+.cs-figure img { width: 100%; height: auto; display: block; }
+.cs-figure figcaption {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+}
+.cs-figure--inline { margin: 40px 0; }
+
+.cs-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 8px;
+}
+.cs-meta span {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 12px;
+  letter-spacing: 0.06em;
+}
+.cs-meta span b { color: var(--coral); font-weight: 500; }
+
+.cs-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 24px;
+  align-items: center;
+  margin-top: 64px;
+  padding-top: 36px;
+  border-top: 1px solid var(--border);
+}
+.cs-btn-primary {
+  background: var(--coral);
+  color: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 14px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.cs-btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.cs-btn-ghost {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+}
+.cs-btn-ghost:hover { color: var(--text); opacity: 1; }
+
+/* ── Cookie banner (shared) ─────────────────────────── */
+#cookieBanner {
+  position: fixed;
+  left: 16px; right: 16px; bottom: 16px;
+  z-index: 1000;
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  max-width: 640px;
+  margin: 0 auto;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+}
+#cookieBanner.show { display: block; }
+.cookie-text { font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); line-height: 1.55; margin-bottom: 14px; }
+.cookie-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.cookie-btn {
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  padding: 10px 18px; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--border); background: transparent; color: var(--text);
+  min-height: 44px;
+}
+.cookie-btn:hover { background: var(--bg2); }
+.cookie-btn.primary { background: var(--coral); color: var(--bg); border-color: var(--coral); font-weight: 600; }
+.cookie-btn.primary:hover { opacity: 0.9; }

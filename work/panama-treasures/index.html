@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panama Treasures — Case Study · DATRUM</title>
+  <meta name="description" content="A luxury watch showroom with a spreadsheet for a CMS. How DATRUM built ecommerce that authenticates at a distance — structured product data and spreadsheet-as-CMS.">
+  <meta property="og:title" content="Panama Treasures — DATRUM Case Study">
+  <meta property="og:description" content="A luxury watch showroom with a spreadsheet for a CMS. How DATRUM built ecommerce that authenticates at a distance — structured product data and spreadsheet-as-CMS.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://jldatrum.com/work/panama-treasures/">
+  <meta property="og:image" content="https://jldatrum.com/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Panama Treasures — DATRUM Case Study">
+  <meta name="twitter:description" content="A luxury watch showroom with a spreadsheet for a CMS. How DATRUM built ecommerce that authenticates at a distance — structured product data and spreadsheet-as-CMS.">
+  <meta name="twitter:image" content="https://jldatrum.com/assets/og-image.png">
+
+  <link rel="canonical" href="https://jldatrum.com/work/panama-treasures/">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/work/panama-treasures/">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/panama-treasures/">
+  <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/panama-treasures/">
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { 'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500 });
+    try { if (localStorage.getItem('datrum_consent') === 'granted') gtag('consent','update',{ 'analytics_storage':'granted' }); } catch(e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/legal.css">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="/assets/manifest.json">
+</head>
+<body>
+<div class="cs-topbar">
+  <a href="/" class="cs-wordmark">DATRUM</a>
+  <a href="/work/#work" class="back-link">← Case studies</a>
+</div>
+
+<div class="wrap">
+  <div class="eyebrow">Case Study 03 · Luxury watches & jewelry</div>
+  <h1>Panama Treasures</h1>
+  <p class="cs-deck">150 luxury watches. A brick-and-mortar showroom. A spreadsheet that became the CMS.</p>
+  <div class="cs-meta">
+    <span><b>Market</b> Panama, international buyers</span>
+    <span><b>Engagement</b> Ecommerce infrastructure + inventory data layer</span>
+    <span><b>Completed</b> March 2026</span>
+  </div>
+
+  <figure class="cs-figure">
+    <img src="/assets/images/case-studies/pt.webp" alt="Panama Treasures rebuilt storefront" loading="lazy">
+    <figcaption>Panama Treasures — luxury inventory, now machine-readable in the trade's own vocabulary.</figcaption>
+  </figure>
+
+  <section>
+    <h2>El Problema</h2>
+    <p>Panama Treasures operates a physical luxury watch showroom — security, reception, staff, display cases — with roughly 150 watches in rotating inventory. Every trust signal a high-value buyer needs exists in that room.</p>
+    <p>None of it existed online.</p>
+    <p>The central diagnostic: <strong>luxury ecommerce is not retail. It is authentication at a distance.</strong> A buyer standing in the showroom reads the guard, the cases, the staff, the address. A buyer in Miami or Bogotá reads a URL and asks one question: <em>would I wire eight thousand dollars to this?</em></p>
+    <p>Every architectural decision answers that question or fails it.</p>
+    <p>The specific findings:</p>
+    <ul>
+      <li><strong>Domain plus Instagram, no infrastructure.</strong> A legitimate retail operation with a digital presence that read as a side business.</li>
+      <li><strong>Inventory tracked in a spreadsheet, unconnected to anything.</strong> 150 rotating SKUs maintained by hand, with no path from the operational record to any customer-facing surface.</li>
+      <li><strong>No structured product data.</strong> Reference numbers, box-and-papers status, condition, provenance — the exact attributes that determine value in the watch trade — existed as prose or not at all. A search engine, and more importantly a language model, could not read a single specification.</li>
+      <li><strong>No machine-readable inventory.</strong> A buyer asking an AI assistant to find a specific reference available in Latin America would never surface Panama Treasures, regardless of whether the watch was sitting in the case.</li>
+      <li><strong>Default platform assumption unexamined.</strong> The reflexive industry answer — Shopify, WooCommerce — carries transaction fees that on a $5,000 watch means roughly $145 leaving the business on every sale, permanently.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>El Costo</h2>
+    <p>The luxury watch buyer searches by <strong>reference number.</strong> Not by brand, not by category — by the specific alphanumeric string that identifies the exact model. That search is the highest-intent query in the entire vertical, and it is almost always run against Google or, increasingly, an AI assistant.</p>
+    <p>Panama Treasures held inventory matching those queries and was unfindable by them.</p>
+    <p>Here is the asymmetry that defines this category: <strong>the watch trade runs on structured data that nobody in it has structured.</strong> Reference numbers, box and papers, service history, condition grading — the vocabulary is already rigorous, already standardized, already the basis of every transaction. It simply lives in spreadsheets and in dealers' heads instead of in machine-readable form.</p>
+    <p>The dealer who encodes it first does not just rank better. They become the <strong>only participant in the market that automated systems can actually read</strong> — at the precise moment those systems are becoming how buyers search.</p>
+    <p>And the platform-fee question compounds it. A 2.9% transaction tax on a high-ticket, low-volume business is not a cost of doing business. It is a permanent margin transfer, accepted by default because nobody examined the assumption.</p>
+  </section>
+  <section>
+    <h2>La Intervención</h2>
+    <p>Custom ecommerce infrastructure built on the DATRUM stack rather than a platform.</p>
+    <p><strong>The spreadsheet became the CMS.</strong> Rather than migrating inventory into a platform database and retraining staff, the existing operational spreadsheet was connected directly via the Google Sheets API as the live data layer. Staff continue working in the tool they already use. The site reads from it. <strong>The correct architecture adapted to the operation rather than forcing the operation to adapt to the architecture</strong> — which is why most luxury ecommerce projects fail: they impose a workflow the business will not maintain.</p>
+  <figure class="cs-figure cs-figure--inline">
+    <img src="/assets/images/case-studies/pt-accent.webp" alt="Luxury chronograph watch" loading="lazy">
+    <figcaption>Reference numbers, box and papers, condition — the trade's own vocabulary, encoded as machine-readable data.</figcaption>
+  </figure>
+    <p><strong>Structured product data.</strong> Watch attributes encoded as machine-readable specifications — reference numbers, condition, box-and-papers status, provenance — rather than prose descriptions. This makes the inventory legible to search engines and AI retrieval systems using the exact vocabulary the trade already speaks.</p>
+    <p><strong>Stripe Checkout direct integration.</strong> Payment handled without a platform intermediary and without per-transaction platform tax.</p>
+    <p><strong>Trust architecture.</strong> Security header implementation, Cloudflare DNS, Ley 81 compliance, bilingual structure — assembled specifically to answer the wire-transfer question. Every element of the in-store trust experience reconstructed for a buyer who will never enter the room.</p>
+  </section>
+  <section>
+    <h2>El Resultado</h2>
+    <p>A physical luxury retail operation now has digital infrastructure that matches its physical credibility, with inventory that is machine-readable in the vocabulary the trade uses to transact.</p>
+    <p>The spreadsheet still runs the business. It now also runs the storefront.</p>
+    <p>The buyer searching a reference number from another country encounters structured, parseable, trustworthy data instead of an Instagram grid.</p>
+    <p>The full architecture — spreadsheet-as-CMS, the structured attribute schema, and why platform fees are a strategic decision rather than an operational one — is developed in <em>The Architecture</em> newsletter.</p>
+  </section>
+
+  <div class="cs-cta">
+    <a href="/#diagnose" class="cs-btn-primary">Audit Your Brand →</a>
+    <a href="https://calendly.com/julio-jldatrum" target="_blank" rel="noopener" class="cs-btn-ghost">Schedule a Strategy Session →</a>
+  </div>
+
+  <div class="footer-note">© 2026 DATRUM · <a href="/">Home</a> · <a href="/work/#work">Case studies</a> · Design and engineering for high-stakes digital infrastructure</div>
+</div>
+
+<div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <p class="cookie-text">We use a privacy-respecting analytics setup (Google Analytics 4 with IP anonymization) to understand how visitors find DATRUM. Nothing personal, no ad tracking. You can decline and the site works the same. <a href="/privacy">Privacy policy</a>.</p>
+  <div class="cookie-actions">
+    <button class="cookie-btn primary" onclick="acceptCookies()">Accept analytics</button>
+    <button class="cookie-btn" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+
+<script defer src="/js/nav.js"></script>
+</body>
+</html>

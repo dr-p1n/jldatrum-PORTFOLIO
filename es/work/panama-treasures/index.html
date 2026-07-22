@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panama Treasures — Caso de estudio · DATRUM</title>
+  <meta name="description" content="Un showroom de relojes de lujo con una hoja de cálculo como CMS. Cómo DATRUM construyó un ecommerce que autentica a distancia — datos de producto estructurados y hoja-de-cálculo-como-CMS.">
+  <meta property="og:title" content="Panama Treasures — Caso de estudio DATRUM">
+  <meta property="og:description" content="Un showroom de relojes de lujo con una hoja de cálculo como CMS. Cómo DATRUM construyó un ecommerce que autentica a distancia — datos de producto estructurados y hoja-de-cálculo-como-CMS.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://jldatrum.com/es/work/panama-treasures/">
+  <meta property="og:image" content="https://jldatrum.com/assets/og-image-es.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Panama Treasures — Caso de estudio DATRUM">
+  <meta name="twitter:description" content="Un showroom de relojes de lujo con una hoja de cálculo como CMS. Cómo DATRUM construyó un ecommerce que autentica a distancia — datos de producto estructurados y hoja-de-cálculo-como-CMS.">
+  <meta name="twitter:image" content="https://jldatrum.com/assets/og-image-es.png">
+
+  <link rel="canonical" href="https://jldatrum.com/es/work/panama-treasures/">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/work/panama-treasures/">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/panama-treasures/">
+  <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/panama-treasures/">
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { 'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500 });
+    try { if (localStorage.getItem('datrum_consent') === 'granted') gtag('consent','update',{ 'analytics_storage':'granted' }); } catch(e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/legal.css">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="/assets/manifest.json">
+</head>
+<body>
+<div class="cs-topbar">
+  <a href="/es/" class="cs-wordmark">DATRUM</a>
+  <a href="/es/work/#work" class="back-link">← Casos de estudio</a>
+</div>
+
+<div class="wrap">
+  <div class="eyebrow">Caso de estudio 03 · Relojes de lujo y joyería</div>
+  <h1>Panama Treasures</h1>
+  <p class="cs-deck">150 relojes de lujo. Un showroom físico. Una hoja de cálculo convertida en el CMS.</p>
+  <div class="cs-meta">
+    <span><b>Mercado</b> Panamá, compradores internacionales</span>
+    <span><b>Alcance</b> Infraestructura de ecommerce + capa de datos de inventario</span>
+    <span><b>Completado</b> Marzo 2026</span>
+  </div>
+
+  <figure class="cs-figure">
+    <img src="/assets/images/case-studies/pt.webp" alt="Tienda reconstruida de Panama Treasures" loading="lazy">
+    <figcaption>Panama Treasures — inventario de lujo, ahora legible por máquina en el vocabulario del propio comercio.</figcaption>
+  </figure>
+
+  <section>
+    <h2>El Problema</h2>
+    <p>Panama Treasures opera un showroom físico de relojes de lujo — seguridad, recepción, personal, vitrinas — con aproximadamente 150 relojes en inventario rotativo. Cada señal de confianza que un comprador de alto valor necesita existe en esa sala.</p>
+    <p>Nada de eso existía en línea.</p>
+    <p>El diagnóstico central: <strong>el ecommerce de lujo no es retail. Es autenticación a distancia.</strong> Un comprador parado en el showroom lee al guardia, las vitrinas, el personal, la dirección. Un comprador en Miami o Bogotá lee una URL y hace una sola pregunta: <em>¿transferiría ocho mil dólares a esto?</em></p>
+    <p>Cada decisión de arquitectura responde esa pregunta o falla en responderla.</p>
+    <p>Los hallazgos específicos:</p>
+    <ul>
+      <li><strong>Dominio más Instagram, sin infraestructura.</strong> Una operación de retail legítima con una presencia digital que se leía como un negocio secundario.</li>
+      <li><strong>Inventario llevado en una hoja de cálculo, desconectado de todo.</strong> 150 SKUs rotativos mantenidos a mano, sin ninguna ruta del registro operativo hacia ninguna superficie de cara al cliente.</li>
+      <li><strong>Sin datos de producto estructurados.</strong> Números de referencia, estado de caja y papeles, condición, procedencia — los atributos exactos que determinan el valor en el comercio de relojes — existían como prosa o no existían. Un motor de búsqueda, y más importante un modelo de lenguaje, no podía leer una sola especificación.</li>
+      <li><strong>Sin inventario legible por máquina.</strong> Un comprador que le pidiera a un asistente de IA encontrar una referencia específica disponible en Latinoamérica nunca haría aparecer a Panama Treasures, sin importar si el reloj estaba en la vitrina.</li>
+      <li><strong>Supuesto de plataforma por defecto sin examinar.</strong> La respuesta refleja de la industria — Shopify, WooCommerce — carga comisiones de transacción que en un reloj de $5,000 significan aproximadamente $145 saliendo del negocio en cada venta, permanentemente.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>El Costo</h2>
+    <p>El comprador de relojes de lujo busca por <strong>número de referencia.</strong> No por marca, no por categoría — por la cadena alfanumérica específica que identifica el modelo exacto. Esa búsqueda es la consulta de mayor intención de toda la vertical, y casi siempre se corre contra Google o, cada vez más, un asistente de IA.</p>
+    <p>Panama Treasures tenía inventario que coincidía con esas consultas y era inencontrable por ellas.</p>
+    <p>Aquí está la asimetría que define esta categoría: <strong>el comercio de relojes corre sobre datos estructurados que nadie en él ha estructurado.</strong> Números de referencia, caja y papeles, historial de servicio, gradación de condición — el vocabulario ya es riguroso, ya está estandarizado, ya es la base de cada transacción. Simplemente vive en hojas de cálculo y en la cabeza de los dealers en lugar de en forma legible por máquina.</p>
+    <p>El dealer que lo codifica primero no solo rankea mejor. Se convierte en el <strong>único participante del mercado que los sistemas automatizados pueden leer de verdad</strong> — en el momento preciso en que esos sistemas se están volviendo la forma en que los compradores buscan.</p>
+    <p>Y la cuestión de las comisiones de plataforma lo agrava. Un impuesto de transacción del 2.9% sobre un negocio de alto ticket y bajo volumen no es un costo de hacer negocios. Es una transferencia de margen permanente, aceptada por defecto porque nadie examinó el supuesto.</p>
+  </section>
+  <section>
+    <h2>La Intervención</h2>
+    <p>Infraestructura de ecommerce a medida construida sobre el stack de DATRUM en lugar de una plataforma.</p>
+    <p><strong>La hoja de cálculo se convirtió en el CMS.</strong> En lugar de migrar el inventario a la base de datos de una plataforma y reentrenar al personal, la hoja de cálculo operativa existente se conectó directamente vía la API de Google Sheets como la capa de datos en vivo. El personal sigue trabajando en la herramienta que ya usa. El sitio lee de ella. <strong>La arquitectura correcta se adaptó a la operación en lugar de forzar a la operación a adaptarse a la arquitectura</strong> — que es por lo que la mayoría de los proyectos de ecommerce de lujo fracasan: imponen un flujo de trabajo que el negocio no mantendrá.</p>
+  <figure class="cs-figure cs-figure--inline">
+    <img src="/assets/images/case-studies/pt-accent.webp" alt="Reloj cronógrafo de lujo" loading="lazy">
+    <figcaption>Números de referencia, caja y papeles, condición — el vocabulario del propio comercio, codificado como datos legibles por máquina.</figcaption>
+  </figure>
+    <p><strong>Datos de producto estructurados.</strong> Atributos de reloj codificados como especificaciones legibles por máquina — números de referencia, condición, estado de caja y papeles, procedencia — en lugar de descripciones en prosa. Esto hace el inventario legible para motores de búsqueda y sistemas de recuperación de IA usando el vocabulario exacto que el comercio ya habla.</p>
+    <p><strong>Integración directa de Stripe Checkout.</strong> Pago manejado sin intermediario de plataforma y sin impuesto de plataforma por transacción.</p>
+    <p><strong>Arquitectura de confianza.</strong> Implementación de encabezados de seguridad, DNS de Cloudflare, cumplimiento de Ley 81, estructura bilingüe — ensamblada específicamente para responder la pregunta de la transferencia. Cada elemento de la experiencia de confianza en tienda reconstruido para un comprador que nunca entrará a la sala.</p>
+  </section>
+  <section>
+    <h2>El Resultado</h2>
+    <p>Una operación física de retail de lujo ahora tiene infraestructura digital que iguala su credibilidad física, con inventario que es legible por máquina en el vocabulario que el comercio usa para transar.</p>
+    <p>La hoja de cálculo sigue corriendo el negocio. Ahora también corre la tienda.</p>
+    <p>El comprador que busca un número de referencia desde otro país encuentra datos estructurados, legibles y confiables en lugar de una cuadrícula de Instagram.</p>
+    <p>La arquitectura completa — hoja-de-cálculo-como-CMS, el esquema de atributos estructurados, y por qué las comisiones de plataforma son una decisión estratégica y no operativa — se desarrolla en el newsletter <em>The Architecture</em>.</p>
+  </section>
+
+  <div class="cs-cta">
+    <a href="/es/#diagnose" class="cs-btn-primary">Audita tu marca →</a>
+    <a href="https://calendly.com/julio-jldatrum" target="_blank" rel="noopener" class="cs-btn-ghost">Agenda una Sesión de Estrategia →</a>
+  </div>
+
+  <div class="footer-note">© 2026 DATRUM · <a href="/es/">Inicio</a> · <a href="/es/work/#work">Casos de estudio</a> · Diseño e ingeniería para infraestructura digital de alto nivel</div>
+</div>
+
+<div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <p class="cookie-text">Usamos analítica que respeta la privacidad (Google Analytics 4 con IP anonimizada) para entender cómo los visitantes encuentran DATRUM. Nada personal, sin tracking publicitario. Puedes rechazar y el sitio funciona igual. <a href="/es/privacy">Política de privacidad</a>.</p>
+  <div class="cookie-actions">
+    <button class="cookie-btn primary" onclick="acceptCookies()">Aceptar analítica</button>
+    <button class="cookie-btn" onclick="declineCookies()">Rechazar</button>
+  </div>
+</div>
+
+<script defer src="/js/nav.js"></script>
+</body>
+</html>
