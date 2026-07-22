@@ -307,6 +307,16 @@ td:first-child { font-weight: 500; color: var(--text); }
 }
 .cs-figure--inline { margin: 40px 0; }
 
+.cs-live { margin: -28px 0 44px; }
+.cs-live a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  color: var(--coral);
+  text-decoration: none;
+}
+.cs-live a:hover { color: var(--text); opacity: 1; }
+
 .cs-meta {
   display: flex;
   flex-wrap: wrap;
