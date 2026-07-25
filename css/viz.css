@@ -1,0 +1,174 @@
+/* ─────────────────────────────────────────────────────────
+   DATRUM — viz layer (icons + charts)
+   Loaded on EVERY page, after components.css OR legal.css.
+
+   ⚠ CONTRACT — do not break these two rules:
+
+   1. This file MUST NOT declare :root.
+      Two :root blocks already exist (variables.css, legal.css).
+      A third makes the duplication worse, not better.
+
+   2. EVERY token reference needs a literal fallback.
+      --font-display / --font-body DO NOT EXIST on the 20 pages
+      served by legal.css (it hardcodes family names). A bare
+      var(--font-body) renders serif on every case-study and
+      resource page.
+
+   Motion rule: the UNDRAWN state is applied only via .dx-anim,
+   which JS adds. Hidden styling is scoped to
+   .dx-anim:not(.is-drawn). So with JS off, reduced motion on,
+   or the observer never firing (hidden tab, print, crawler),
+   graphics render COMPLETE. Never the reverse.
+   ───────────────────────────────────────────────────────── */
+
+/* ── Icons ──────────────────────────────────────────── */
+.dx-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;          /* box reserved before JS injects — no CLS */
+  line-height: 0;
+  flex-shrink: 0;
+  color: var(--teal, #1E7F98);
+  transition: color 160ms ease;
+}
+.dx-icon svg { width: 100%; height: 100%; display: block; }
+
+a:hover .dx-icon,
+.dx-hoverable:hover .dx-icon,
+.service-cell:hover .dx-icon,
+.method-pillar:hover .dx-icon,
+.framework-step:hover .dx-icon { color: var(--lemon, #F2D24B); }
+
+.dx-icon--sm { width: 18px; height: 18px; }
+.dx-icon--lg { width: 32px; height: 32px; }
+/* standalone mark above a page eyebrow (resource tool pages) */
+.dx-icon--hero { display: block; margin-bottom: 14px; color: var(--lemon, #F2D24B); }
+
+/* Sit above the heading inside service/method/framework cards */
+.service-cell .dx-icon,
+.method-pillar .dx-icon,
+.framework-step .dx-icon { margin-bottom: 12px; }
+
+/* ── Chart shell ────────────────────────────────────── */
+.dx-viz { display: block; width: 100%; margin: 28px 0; }
+.dx-viz svg { display: block; width: 100%; height: auto; overflow: visible; }
+.dx-viz text {
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  fill: var(--muted, #9AABAF);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+.dx-viz .dx-t-strong { fill: var(--text, #E8EDED); font-weight: 500; }
+.dx-viz .dx-t-accent { fill: var(--lemon, #F2D24B); font-weight: 500; }
+
+.dx-grid   { stroke: var(--border, #1A3A40); fill: none; stroke-width: 1; }
+.dx-axis   { stroke: var(--border, #1A3A40); stroke-width: 1; }
+.dx-line   { stroke: var(--teal, #1E7F98); fill: none; stroke-width: 1.6;
+             stroke-linecap: round; stroke-linejoin: round; }
+.dx-accent { stroke: var(--lemon, #F2D24B); fill: none; stroke-width: 1.6;
+             stroke-linecap: round; stroke-linejoin: round; }
+.dx-fill   { fill: var(--teal, #1E7F98); fill-opacity: 0.18;
+             stroke: var(--lemon, #F2D24B); stroke-width: 1.6; stroke-linejoin: round; }
+.dx-node   { fill: var(--surface, #0F5C6D); stroke: var(--teal, #1E7F98); stroke-width: 1.4; }
+.dx-node--hub { fill: var(--lemon, #F2D24B); stroke: var(--lemon, #F2D24B); }
+.dx-box    { fill: var(--bg2, #0E2329); stroke: var(--border, #1A3A40); stroke-width: 1.2; }
+
+/* Caption under a chart */
+.dx-cap {
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: 11px;
+  color: var(--muted, #9AABAF);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+/* ── Animation primitives ───────────────────────────── */
+/* Undrawn state exists ONLY while .dx-anim is present and .is-drawn is not. */
+.dx-anim:not(.is-drawn) .dx-draw { stroke-dashoffset: var(--dx-len, 1000); }
+.dx-anim:not(.is-drawn) .dx-pop  { opacity: 0; transform: scale(0.7); }
+
+.dx-draw {
+  stroke-dasharray: var(--dx-len, 1000);
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 900ms cubic-bezier(0.4, 0, 0.2, 1) var(--dx-d, 0ms);
+}
+.dx-pop {
+  opacity: 1;
+  transform: scale(1);
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: opacity 300ms ease var(--dx-d, 0ms),
+              transform 300ms ease var(--dx-d, 0ms);
+}
+
+/* ── Flywheel (the one looping animation on the site) ── */
+.dx-spin {
+  transform-box: fill-box;      /* both properties required — */
+  transform-origin: 50% 50%;    /* bare transform-origin differs across engines */
+  animation: dx-rot 14s linear infinite;
+}
+@keyframes dx-rot { to { transform: rotate(360deg); } }
+
+/* ── Hero ambient line-graph ────────────────────────── */
+#home .section-inner { position: relative; }
+/* keep the copy above the motif without touching its own stacking */
+#home .section-inner > *:not(.dx-hero) { position: relative; z-index: 1; }
+
+.dx-hero {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(46%, 520px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.3;
+  margin: 0;
+}
+/* Below the two-column breakpoint the motif would sit under the headline —
+   it is ambient, so drop it rather than fight the text for contrast. */
+@media (max-width: 900px) { .dx-hero { display: none; } }
+
+/* The "renting attention" line — flat, dashed, muted. Needs its own class:
+   a CSS class beats inline stroke/stroke-dasharray presentation attributes. */
+.dx-hero-flat {
+  fill: none;
+  stroke: var(--muted, #9AABAF);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.8;
+}
+
+/* ── Flywheel placement ─────────────────────────────── */
+/* Centred in its pillar, with the labels carried inside the graphic. */
+.dx-viz--flywheel { margin: 24px auto 0; }
+.dx-viz--flywheel > svg {
+  max-width: 420px;
+  margin: 0 auto;
+  display: block;
+  overflow: visible;
+}
+
+/* Security Headers uses the existing .rc-check tick from legal.css — pass/fail,
+   deliberately unscored, so it needs no component here. */
+
+/* ── Reduced motion ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .dx-viz, .dx-viz *, .dx-icon, .dx-hero, .dx-hero * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .dx-spin { animation: none !important; }
+}
+
+/* ── Print ──────────────────────────────────────────── */
+/* The observer never fires for a print render, so force the drawn state —
+   otherwise a printed page loses every chart. */
+@media print {
+  .dx-anim:not(.is-drawn) .dx-draw { stroke-dashoffset: 0; }
+  .dx-anim:not(.is-drawn) .dx-pop  { opacity: 1; transform: none; }
+  .dx-spin { animation: none; }
+}

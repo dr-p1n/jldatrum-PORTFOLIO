@@ -60,24 +60,23 @@
   <link rel="stylesheet" href="/css/typography.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/viz.css">
 
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
   <link rel="manifest" href="/assets/manifest.json">
   <!-- jsPDF for client-side PDF generation (deferred — only needed for the audit report) -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </head>
 <body>
 
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
-  <a href="#offer" onclick="closeDrawer()">Servicios</a>
-  <a href="#method" onclick="closeDrawer()">Método DATRUM</a>
+  <a href="/es/work/#services" onclick="closeDrawer()">Servicios</a>
   <a href="/es/work/" onclick="closeDrawer()">Casos de estudio</a>
   <a href="/es/resources/" onclick="closeDrawer()">Recursos</a>
   <a href="/es/bio/" onclick="closeDrawer()">Bio</a>
   <a href="/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
-  <a href="#diagnose" class="btn-diagnose-drawer" onclick="closeDrawer()">Audita tu marca →</a>
+  <a href="/es/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audita tu marca →</a>
 </div>
 
 <!-- NAV -->
@@ -86,13 +85,12 @@
     <span class="nav-brand">DATRUM</span>
   </a>
   <div class="nav-links">
-    <a href="#offer">Servicios</a>
-    <a href="#method">Método DATRUM</a>
+    <a href="/es/work/#services">Servicios</a>
     <a href="/es/work/">Casos de estudio</a>
     <a href="/es/resources/">Recursos</a>
     <a href="/es/bio/">Bio</a>
     <a href="/" lang="en" hreflang="en" class="nav-lang">EN</a>
-    <a href="#diagnose" class="btn-diagnose">Audita tu marca →</a>
+    <a href="/es/audit/" class="btn-diagnose">Audita tu marca →</a>
   </div>
   <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
     <span></span><span></span><span></span>
@@ -102,18 +100,20 @@
 <!-- ── SECTION 1: HERO ──────────────────────────────── -->
 <section id="home">
   <div class="section-inner">
+    <div class="dx-hero" data-viz="herograph" aria-hidden="true"></div>
     <div class="eyebrow fade-up" style="--delay:0.2s">
       <span class="pulse-dot"></span>
-      Agencia de diseño de activos de marketing B2B
+      B2B Marketing Asset Design Agency
     </div>
     <h1 class="hero-title fade-up" style="--delay:0.4s">
-      <em>Productos digitales</em> que transforman tu marketing en <span class="coral">un activo que genera valor.</span>
+      <em>Construyo marketing</em> que se aprecia, no <span class="lemon">atención que alquilas cada mes.</span>
     </h1>
     <p class="hero-sub fade-up" style="--delay:0.6s">
-      Construyo productos y campañas digitales cuyo valor aumenta con el tiempo — para que dejes de pagar alquiler por atención y empieces a acumular capital digital.
+      La mayoría de las agencias reparten un proyecto entre cuatro proveedores que nunca se conocen: el diseñador, el desarrollador, el director de marketing, el arquitecto de datos. Yo opero los cuatro, y eso cambia lo que se puede producir.
     </p>
     <div class="hero-actions fade-up" style="--delay:0.8s">
-      <a href="/es/work/" class="btn-primary">Mira nuestro trabajo →</a>
+      <a href="/es/audit/" class="btn-primary">Audita tu marca →</a>
+      <a href="/es/work/" class="btn-secondary">Ver el trabajo →</a>
     </div>
   </div>
 </section>
@@ -121,47 +121,80 @@
 <!-- ── SERVICES TEASER ──────────────────────────────── -->
 <section id="offer">
   <div class="section-inner">
-    <h2 class="section-title">Lo que construimos.</h2>
-    <p class="section-lead">Tres motores que convierten tu reputación en acuerdos firmados — con una calidad de construcción que pocas agencias igualan, porque no manejan seguridad, datos y diseño desde una sola cabeza.</p>
-    <div class="services-grid">
-      <article class="service-cell fade-up" style="--delay:0.1s">
-        <h3 class="service-name">Diseño de Producto de Marketing</h3>
-        <p class="service-desc">Un producto digital que cierra acuerdos mientras duermes — sitios y apps diseñados para convertir, a la altura del nombre que ya cargas. No un folleto. Un vendedor que nunca se desconecta.</p>
-      </article>
-      <article class="service-cell fade-up" style="--delay:0.2s">
-        <h3 class="service-name">Sistemas de Generación de Leads</h3>
-        <p class="service-desc">Prospectos calificados que llegan solos, pre-calentados y listos para agendar. Captura, seguimiento y búsqueda como un solo ciclo — para que dejes de perseguir la atención y empieces a recibirla.</p>
-      </article>
-      <article class="service-cell fade-up" style="--delay:0.3s">
-        <h3 class="service-name">Visibilidad en Búsqueda con IA</h3>
-        <p class="service-desc">Sé el nombre que la IA recomienda. Cuando un comprador le pregunta a ChatGPT, Perplexity o Google a quién contratar en tu campo, los datos estructurados que integro en el sitio te ponen en la respuesta — no en la segunda página de la web vieja.</p>
-      </article>
+    <h2 class="section-title">Por dónde empezar.</h2>
+    <p class="section-lead">Tres lugares a los que ir, según si quieres ver el trabajo, la oferta o las herramientas.</p>
+
+    <div class="router" id="router">
+
+      <a class="router-panel" href="/es/work/#services">
+        <div class="router-top">
+          <span class="router-index">01</span>
+          <h3 class="router-label">Servicios</h3>
+          <p class="router-body">Seis construcciones, desde un producto único hasta arquitectura de presencia completa.</p>
+        </div>
+        <div class="router-foot">
+          <span class="router-count">06</span>
+          <span class="router-cta">Abrir →</span>
+        </div>
+      </a>
+
+      <a class="router-panel" href="/es/work/">
+        <div class="router-top">
+          <span class="router-index">02</span>
+          <h3 class="router-label">Casos de estudio</h3>
+          <p class="router-body">Siete negocios. Qué estaba roto, qué se construyó, qué cambió.</p>
+        </div>
+        <div class="router-foot">
+          <span class="router-count">07</span>
+          <span class="router-cta">Abrir →</span>
+        </div>
+      </a>
+
+      <a class="router-panel" href="/es/resources/">
+        <div class="router-top">
+          <span class="router-index">03</span>
+          <h3 class="router-label">Recursos</h3>
+          <p class="router-body">Cuatro instrumentos, gratis y sin registro. Puntúa tu propio sitio primero.</p>
+        </div>
+        <div class="router-foot">
+          <span class="router-count">04</span>
+          <span class="router-cta">Abrir →</span>
+        </div>
+      </a>
     </div>
-    <a href="/es/work/#services" class="offer-more">Ver todos los servicios →</a>
   </div>
 </section>
 
-<!-- ── DATRUM METHOD ───────────────────────────────── -->
-<section id="method">
+<!-- ── WHO IT'S FOR ──────────────────────────────── -->
+<section id="who">
   <div class="section-inner">
-    <h2 class="section-title">El método DATRUM.</h2>
-    <p class="section-lead">Nuestra filosofía se manifiesta como la intersección de la tecnología y el arte: el diseño como agente de cambio. Las ventajas en el mercado vienen de tácticas que la competencia no puede replicar — y ahí parte la metodología: diseño asimétrico de oportunidades.</p>
-    <p class="section-lead">Demanda que llega en lugar de demanda que persigues — ese es el resultado. La razón por la que funciona es un método que la mayoría de los estudios estructuralmente no pueden correr: distribución, ingeniería de crecimiento y oficio editorial construidos por un solo operador, para que nada se pierda en un traspaso.</p>
-    <div class="method-grid">
-      <article class="method-pillar fade-up" style="--delay:0.1s">
-        <div class="method-kicker">Sistemas de distribución</div>
-        <p class="method-body">Tu marca frente a la audiencia regional exacta que puede pagarte — colocada en búsqueda, resultados de IA y los canales que los compradores de alto nivel realmente usan. El alcance es fácil; llegar a la sala correcta es el trabajo.</p>
-      </article>
-      <article class="method-pillar fade-up" style="--delay:0.2s">
-        <div class="method-kicker">Motores de crecimiento</div>
-        <p class="method-body">Un ciclo cerrado que compone mes a mes — la atención se vuelve acuerdos agendados, y los acuerdos afinan el ciclo. El sistema mejora solo mientras tú no haces nada.</p>
-      </article>
-      <article class="method-pillar fade-up" style="--delay:0.3s">
-        <div class="method-kicker">Diseño + ingeniería</div>
-        <p class="method-body">Trabajo que luce como la cima de tu mercado y rinde como infraestructura. Diseño de producto, software, datos y seguridad bajo un mismo techo — sin el teléfono descompuesto agencia-a-freelancer que degrada el resultado.</p>
-      </article>
+    <h2 class="section-title">¿Para quién es?</h2>
+
+    <p class="who-formula fade-up">
+      Trabajo con negocios cuya <em>reputación ya es real</em>, pero cuya presencia digital no está convirtiendo nada de eso en ingresos — <span class="lemon">negocios de alta confianza donde el comprador te evalúa en línea antes de siquiera contactarte.</span>
+    </p>
+
+    <div class="who-criteria fade-up">
+      <div class="who-col">
+        <div class="who-col-title">Eres un fit si</div>
+        <ul>
+          <li>Tu reputación es real — pero tu sitio web, embudo o contenido no la está convirtiendo en clientes o acuerdos.</li>
+          <li>Quieres una presencia digital que realmente esté a la altura de tu trabajo.</li>
+          <li>Quieres que los clientes calificados te encuentren, no al revés.</li>
+          <li>Ves la tecnología como herramienta de distribución, no solo administrativa.</li>
+        </ul>
+      </div>
+      <div class="who-col not-fit">
+        <div class="who-col-title">No es para ti si</div>
+        <ul>
+          <li>Necesitas un folleto de una sola vez sin ningún sistema de marketing detrás.</li>
+          <li>Aún no tienes una audiencia o reputación establecida desde la cual construir.</li>
+          <li>No estás dispuesto a aportar tu dirección creativa — yo construyo el sistema, pero la marca tiene que ser tuya.</li>
+          <li>Quieres repetir las mismas tácticas genéricas del mercado.</li>
+        </ul>
+      </div>
     </div>
-    <a href="/es/work/#framework" class="offer-more">Ver el método completo →</a>
+
   </div>
 </section>
 
@@ -231,185 +264,21 @@
   </div>
 </section>
 
-<!-- ── THE AUDIT ────────────────────────────────────── -->
-<section id="diagnose">
+<!-- ── SPECIALIZATION ──────────────────────────────── -->
+<section id="specialization">
   <div class="section-inner">
+    <p class="specialization-line fade-up">Construyo marketing B2B para proveedores de servicios con clientes internacionales: joyeros y comerciantes de relojes, ejecutivos deportivos, productores de cine, profesionales fiduciarios.</p>
+  </div>
+</section>
 
-    <div class="diagnostic-wrap">
-      <!-- Left column -->
-      <div class="fade-up">
-        <h2 class="diag-title">Tu marca o te está trayendo clientes — o no.</h2>
-        <p class="diag-body">
-          Cinco preguntas. Un puntaje instantáneo, y un análisis de exactamente dónde estás fugando ingresos ahora mismo. Sin venta — solo tus números, y la imagen honesta de lo que tu presencia te cuesta cada mes que sigue igual.
-        </p>
-        <div class="feature-list">
-          <div class="feature-item">
-            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="2.5" x2="14" y2="2.5"/><line x1="12" y1="2.5" x2="12" y2="4.5"/><circle cx="12" cy="13" r="8"/><path d="M12 13l3-3"/></svg></div>
-            <div class="feature-text">
-              <div class="feature-title">Puntaje instantáneo (0–10)</div>
-              <div class="feature-desc">Ponderado en 5 dimensiones de desempeño de marca</div>
-            </div>
-          </div>
-          <div class="feature-item">
-            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="11"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="14"/></svg></div>
-            <div class="feature-text">
-              <div class="feature-title">Reporte PDF</div>
-              <div class="feature-desc">Reporte descargable con análisis por dimensión</div>
-            </div>
-          </div>
-          <div class="feature-item">
-            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg></div>
-            <div class="feature-text">
-              <div class="feature-title">Sin compromiso</div>
-              <div class="feature-desc">Útil ya sea que nos contrates o no</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Widget -->
-      <div class="widget fade-up">
-        <div class="widget-header">
-          <div class="widget-title">Auditoría de Ingresos de Marca</div>
-          <div class="live-badge">EN VIVO</div>
-        </div>
-
-        <!-- Progress bar (6 segments: 5 Qs + email) -->
-        <div class="progress-bar" id="progressBar">
-          <div class="progress-seg active" id="seg0"></div>
-          <div class="progress-seg" id="seg1"></div>
-          <div class="progress-seg" id="seg2"></div>
-          <div class="progress-seg" id="seg3"></div>
-          <div class="progress-seg" id="seg4"></div>
-          <div class="progress-seg" id="seg5"></div>
-        </div>
-
-        <!-- Step 1 -->
-        <div class="step active" id="step-0">
-          <p class="step-question">¿Cuántos leads calificados nuevos genera tu sitio web al mes?</p>
-          <div class="options">
-            <button class="option-btn" onclick="selectOption(0, 10, this)">
-              <span class="opt-badge">A</span>
-              <span class="opt-text">5 o más leads nuevos al mes</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(0, 5, this)">
-              <span class="opt-badge">B</span>
-              <span class="opt-text">2 a 4 leads al mes</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(0, 1, this)">
-              <span class="opt-badge">C</span>
-              <span class="opt-text">0 a 1 / no sé</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="step" id="step-1">
-          <p class="step-question">¿Qué porcentaje de esos leads está realmente calificado para tu negocio?</p>
-          <div class="options">
-            <button class="option-btn" onclick="selectOption(1, 10, this)">
-              <span class="opt-badge">A</span>
-              <span class="opt-text">75%+ son oportunidades reales</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(1, 5, this)">
-              <span class="opt-badge">B</span>
-              <span class="opt-text">50–75% están calificados</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(1, 1, this)">
-              <span class="opt-badge">C</span>
-              <span class="opt-text">Menos del 50% — mayormente mal ajuste</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="step" id="step-2">
-          <p class="step-question">Cuando los prospectos buscan tu área de servicio, ¿te encuentran?</p>
-          <div class="options">
-            <button class="option-btn" onclick="selectOption(2, 10, this)">
-              <span class="opt-badge">A</span>
-              <span class="opt-text">Sí — top 3 para mis palabras clave principales</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(2, 5, this)">
-              <span class="opt-badge">B</span>
-              <span class="opt-text">A veces — página 1 o 2 para algunos términos</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(2, 1, this)">
-              <span class="opt-badge">C</span>
-              <span class="opt-text">Rara vez o nunca</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Step 4 -->
-        <div class="step" id="step-3">
-          <p class="step-question">¿Los leads que recibes están atrayendo a los clientes que realmente quieres?</p>
-          <div class="options">
-            <button class="option-btn" onclick="selectOption(3, 10, this)">
-              <span class="opt-badge">A</span>
-              <span class="opt-text">Mayormente clientes de buen ajuste</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(3, 5, this)">
-              <span class="opt-badge">B</span>
-              <span class="opt-text">Mezclado</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(3, 1, this)">
-              <span class="opt-badge">C</span>
-              <span class="opt-text">Mayormente de mal ajuste o bajo valor</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Step 5 -->
-        <div class="step" id="step-4">
-          <p class="step-question">¿Cuántas horas/semana invierte tu firma en marketing outbound?</p>
-          <div class="options">
-            <button class="option-btn" onclick="selectOption(4, 10, this)">
-              <span class="opt-badge">A</span>
-              <span class="opt-text">0–5 horas/semana</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(4, 5, this)">
-              <span class="opt-badge">B</span>
-              <span class="opt-text">5–15 horas/semana</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(4, 1, this)">
-              <span class="opt-badge">C</span>
-              <span class="opt-text">15+ horas/semana</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Step 6: Email -->
-        <div class="step" id="step-5">
-          <p class="email-step-title">Un último paso — ingresa tus datos para generar tu reporte PDF.</p>
-          <div class="form-group">
-            <input type="email" class="form-input" id="emailInput" placeholder="Correo electrónico" required autocomplete="email">
-            <input type="url"   class="form-input" id="urlInput"   placeholder="URL de tu sitio web" required autocomplete="url">
-          </div>
-        </div>
-
-        <!-- Score result (inline) -->
-        <div class="score-result" id="scoreResult">
-          <div class="score-ring-wrap">
-            <svg width="120" height="120" viewBox="0 0 120 120">
-              <circle id="ring-bg" cx="60" cy="60" r="52" fill="none" stroke-width="6"/>
-              <circle id="ring-fg" cx="60" cy="60" r="52" fill="none" stroke-width="6"/>
-            </svg>
-            <div class="score-center" id="scoreDisplay">—</div>
-          </div>
-          <div class="score-tier-label" id="scoreTierLabel"></div>
-          <div class="score-desc" id="scoreDesc"></div>
-          <a href="https://calendly.com/julio-jldatrum" id="scheduleBtn" class="btn-schedule" target="_blank" rel="noopener">Agenda una Sesión de Estrategia →</a>
-          <button id="btnDownloadPDF" class="btn-download" onclick="downloadPDF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg><span id="btnDownloadLabel">Descargar Reporte PDF</span></button>
-          <button class="btn-reset" onclick="resetWidget()">← Empezar de nuevo</button>
-        </div>
-
-        <!-- Footer nav -->
-        <div class="widget-footer" id="widgetFooter">
-          <span class="step-counter" id="stepCounter">Paso 1 de 6</span>
-          <button class="btn-next" id="btnNext" onclick="nextStep()">Siguiente →</button>
-        </div>
-      </div>
+<!-- ── CONTACT ─────────────────────────────────────── -->
+<section id="contact">
+  <div class="section-inner">
+    <h2 class="section-title">O simplemente pregunta.</h2>
+    <p class="section-lead">Ambos me llegan directamente.</p>
+    <div class="contact-actions fade-up">
+      <a href="https://wa.me/50765213318?text=Hola%20Julio%20%E2%80%94%20vengo%20de%20jldatrum.com" class="btn-primary" target="_blank" rel="noopener">WhatsApp →</a>
+      <a href="mailto:julio@jldatrum.com?subject=Consulta%20%E2%80%94%20jldatrum.com" class="btn-secondary">julio@jldatrum.com →</a>
     </div>
   </div>
 </section>
@@ -442,7 +311,7 @@
 <!-- Scripts -->
 <script defer src="/js/scroll-reveal.js"></script>
 <script defer src="/js/nav.js"></script>
-<script defer src="/js/scorecard.es.js"></script>
 
+<script defer src="/js/viz.js"></script>
 </body>
 </html>

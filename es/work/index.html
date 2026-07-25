@@ -60,6 +60,7 @@
   <link rel="stylesheet" href="/css/typography.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/viz.css">
 
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
   <link rel="manifest" href="/assets/manifest.json">
@@ -69,14 +70,12 @@
 
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
-  <a href="#who" onclick="closeDrawer()">Para Quién</a>
   <a href="#services" onclick="closeDrawer()">Servicios</a>
-  <a href="#framework" onclick="closeDrawer()">Método DATRUM</a>
   <a href="#work" onclick="closeDrawer()">Casos de estudio</a>
   <a href="/es/resources/" onclick="closeDrawer()">Recursos</a>
   <a href="/es/bio/" onclick="closeDrawer()">Bio</a>
   <a href="/work/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
-  <a href="/es/#diagnose" class="btn-diagnose-drawer" onclick="closeDrawer()">Audita tu marca →</a>
+  <a href="/es/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audita tu marca →</a>
 </div>
 
 <!-- NAV -->
@@ -85,14 +84,12 @@
     <span class="nav-brand">DATRUM</span>
   </a>
   <div class="nav-links">
-    <a href="#who">Para Quién</a>
     <a href="#services">Servicios</a>
-    <a href="#framework">Método DATRUM</a>
     <a href="#work">Casos de estudio</a>
     <a href="/es/resources/">Recursos</a>
     <a href="/es/bio/">Bio</a>
     <a href="/work/" lang="en" hreflang="en" class="nav-lang">EN</a>
-    <a href="/es/#diagnose" class="btn-diagnose">Audita tu marca →</a>
+    <a href="/es/audit/" class="btn-diagnose">Audita tu marca →</a>
   </div>
   <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
     <span></span><span></span><span></span>
@@ -101,39 +98,6 @@
 
 <!-- ── SECTION 1: HERO ──────────────────────────────── -->
 
-<!-- ── SECTION 2.5: WHO IT'S FOR ────────────────────── -->
-<section id="who">
-  <div class="section-inner">
-    <h2 class="section-title">Construido para un tipo específico de profesional.</h2>
-
-    <p class="who-formula fade-up">
-      Trabajo con negocios cuya <em>reputación ya es real</em>, pero cuya presencia digital no está convirtiendo nada de eso en ingresos — <span class="coral">negocios de alta confianza donde el comprador te evalúa en línea antes de siquiera contactarte.</span>
-    </p>
-
-    <div class="who-criteria fade-up">
-      <div class="who-col">
-        <div class="who-col-title">Eres un fit si</div>
-        <ul>
-          <li>Tu reputación es real — pero tu sitio web, embudo o contenido no la está convirtiendo en clientes o acuerdos.</li>
-          <li>Quieres una presencia digital que realmente esté a la altura de tu trabajo.</li>
-          <li>Quieres que los clientes calificados te encuentren, no al revés.</li>
-          <li>Ves la tecnología como herramienta de distribución, no solo administrativa.</li>
-        </ul>
-      </div>
-      <div class="who-col not-fit">
-        <div class="who-col-title">No es para ti si</div>
-        <ul>
-          <li>Necesitas un folleto de una sola vez sin ningún sistema de marketing detrás.</li>
-          <li>Aún no tienes una audiencia o reputación establecida desde la cual construir.</li>
-          <li>No estás dispuesto a aportar tu dirección creativa — yo construyo el sistema, pero la marca tiene que ser tuya.</li>
-          <li>Quieres repetir las mismas tácticas genéricas del mercado.</li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-</section>
-
 <!-- ── SECTION 3: SERVICES ──────────────────────────── -->
 <section id="services">
   <div class="section-inner">
@@ -141,6 +105,7 @@
 
     <div class="services-grid">
       <article class="service-cell fade-up" style="--delay:0.1s">
+        <span class="dx-icon" data-icon="layers" aria-hidden="true"></span>
         <h3 class="service-name">Diseño de Producto</h3>
         <p class="service-desc">
           Un producto digital que tus clientes realmente quieren usar — plataformas de reservas, portales y apps diseñadas a la altura de tu trabajo.
@@ -148,6 +113,7 @@
       </article>
 
       <article class="service-cell fade-up" style="--delay:0.15s">
+        <span class="dx-icon" data-icon="compass" aria-hidden="true"></span>
         <h3 class="service-name">Estrategia de Marketing</h3>
         <p class="service-desc">
           Una posición que tus competidores no pueden ocupar — porque está construida sobre la historia que solo tú puedes contar, dirigida a la audiencia exacta que paga. Defino cómo apareces antes de construir nada.
@@ -155,6 +121,7 @@
       </article>
 
       <article class="service-cell fade-up" style="--delay:0.2s">
+        <span class="dx-icon" data-icon="bars" aria-hidden="true"></span>
         <h3 class="service-name">Motores de Generación de Leads</h3>
         <p class="service-desc">
           El sistema que convierte la atención en llamadas agendadas y clientes firmados — embudos, captura, seguimiento y visibilidad en búsqueda trabajando juntos para que los leads calificados lleguen en piloto automático.
@@ -162,6 +129,7 @@
       </article>
 
       <article class="service-cell fade-up" style="--delay:0.25s">
+        <span class="dx-icon" data-icon="window" aria-hidden="true"></span>
         <h3 class="service-name">Diseño Web</h3>
         <p class="service-desc">
           Un sitio que detiene el scroll y se sostiene junto a los nombres más grandes de tu campo — distintivo, rápido y construido para convertir. Se ve como tú y trabaja como tu mejor vendedor.
@@ -169,6 +137,7 @@
       </article>
 
       <article class="service-cell fade-up" style="--delay:0.3s">
+        <span class="dx-icon" data-icon="app" aria-hidden="true"></span>
         <h3 class="service-name">Apps Web y Desarrollo de Aplicaciones</h3>
         <p class="service-desc">
           Productos web y móviles a medida — sistemas de reservas, portales, plataformas para fans, herramientas internas. Construcción moderna, despliegue rápido, diseñados para que quienes los usan regresen. Ingeniería, no plantilla.
@@ -176,23 +145,22 @@
       </article>
 
       <article class="service-cell fade-up" style="--delay:0.35s">
+        <span class="dx-icon" data-icon="mesh" aria-hidden="true"></span>
         <h3 class="service-name">Visibilidad en Búsqueda con IA</h3>
         <p class="service-desc">
           Tu nombre en la respuesta de la IA, no enterrado en los links azules viejos. ChatGPT, Perplexity y la IA de Google son la nueva portada — estructuro los datos de tu sitio para que seas el que muestran cuando un comprador pregunta a quién contratar.
         </p>
       </article>
     </div>
-  </div>
-</section>
 
-<!-- ── SECTION 4: THE FRAMEWORK ─────────────────────── -->
-<section id="framework">
-  <div class="section-inner">
+    <div class="tab-rule"></div>
+
     <h2 class="section-title">Metodología DATRUM</h2>
     <p class="section-lead">El resultado es una presencia que gana posicionamiento, referencias y confianza por sí sola. La razón por la que funciona: trato la seguridad, la estructura, el schema y la estrategia como un solo sistema — las mismas disciplinas que la mayoría de las agencias reparte entre cuatro proveedores que nunca se hablan.</p>
 
     <div class="framework-grid">
       <article class="framework-step fade-up" style="--delay:0.1s">
+        <span class="dx-icon" data-icon="lock" aria-hidden="true"></span>
         <div class="step-num">01</div>
         <h3 class="step-name">Infraestructura Segura</h3>
         <p class="step-desc">
@@ -201,6 +169,7 @@
       </article>
 
       <article class="framework-step fade-up" style="--delay:0.2s">
+        <span class="dx-icon" data-icon="hierarchy" aria-hidden="true"></span>
         <div class="step-num">02</div>
         <h3 class="step-name">Estrategia de Encabezados</h3>
         <p class="step-desc">
@@ -209,6 +178,7 @@
       </article>
 
       <article class="framework-step fade-up" style="--delay:0.3s">
+        <span class="dx-icon" data-icon="mesh" aria-hidden="true"></span>
         <div class="step-num">03</div>
         <h3 class="step-name">Esquemas JSON-LD (AI SEO)</h3>
         <p class="step-desc">
@@ -217,6 +187,7 @@
       </article>
 
       <article class="framework-step fade-up" style="--delay:0.4s">
+        <span class="dx-icon" data-icon="compass" aria-hidden="true"></span>
         <div class="step-num">04</div>
         <h3 class="step-name">Arquitectura de Información</h3>
         <p class="step-desc">
@@ -224,6 +195,9 @@
         </p>
       </article>
     </div>
+    <div class="dx-viz dx-viz--flywheel fade-up" data-viz="flywheel"
+         data-labels="Autoridad y expertise|Recursos educativos|Activo de marketing con valor compuesto"></div>
+
   </div>
 </section>
 
@@ -257,7 +231,7 @@
         </article>
 
         <article class="work-card fade-up" style="--delay:0.2s">
-          <a href="https://www.seguroscorco.com/" target="_blank" rel="noopener" class="work-thumb">
+          <a href="/es/work/seguros/" class="work-thumb">
             <img src="/assets/images/case-studies/seguros.webp" alt="Seguros Corco website preview" loading="lazy">
           </a>
           <div class="work-card-body">
@@ -269,11 +243,12 @@
             <p class="work-desc">
               Motor de crecimiento para firma de corretaje de seguros de segunda generación — estrategia de mercadeo enfocada en clientes de alta gama, sobre infraestructura SEO bilingüe y segura.
             </p>
+            <a href="/es/work/seguros/" class="work-link">Leer el caso de estudio →</a>
           </div>
         </article>
 
         <article class="work-card fade-up" style="--delay:0.3s">
-          <a href="https://aglaw-preview.pages.dev/" target="_blank" rel="noopener" class="work-thumb">
+          <a href="/es/work/ag-law/" class="work-thumb">
             <img src="/assets/images/case-studies/aglaw.webp" alt="AG Law website preview" loading="lazy">
           </a>
           <div class="work-card-body">
@@ -285,6 +260,7 @@
             <p class="work-desc">
               Presencia digital para abogado deportivo por excelencia y presidente de la WBC en Panamá — arquitectura de servicios, seguridad de dominio y posicionamiento en búsqueda afinado para intención legal.
             </p>
+            <a href="/es/work/ag-law/" class="work-link">Leer el caso de estudio →</a>
           </div>
         </article>
 
@@ -314,7 +290,7 @@
       <div class="work-grid">
 
         <article class="work-card fade-up" style="--delay:0.1s">
-          <a href="https://www.obstacleracepanama.com/" target="_blank" rel="noopener" class="work-thumb">
+          <a href="/es/work/obstacle-race/" class="work-thumb">
             <img src="/assets/images/case-studies/obstacle.webp" alt="Obstacle Race Panama website preview" loading="lazy">
           </a>
           <div class="work-card-body">
@@ -325,6 +301,7 @@
             <p class="work-desc">
               Producto de Panama Sports Magazine — dirección creativa de una campaña de sostenibilidad y desarrollo del sitio web, con flujo de registro para la comunidad competitiva de Panamá.
             </p>
+            <a href="/es/work/obstacle-race/" class="work-link">Leer el caso de estudio →</a>
           </div>
         </article>
 
@@ -346,7 +323,7 @@
         </article>
 
         <article class="work-card fade-up" style="--delay:0.3s">
-          <a href="https://ucc-latam-demo.julioernestolv.workers.dev/" target="_blank" rel="noopener" class="work-thumb">
+          <a href="/es/work/ucc/" class="work-thumb">
             <img src="/assets/images/case-studies/ucc.webp" alt="Ultimate Combat Challenge website preview" loading="lazy">
           </a>
           <div class="work-card-body">
@@ -358,6 +335,7 @@
             <p class="work-desc">
               Promotora de MMA en Panamá con 25 años de trayectoria — identidad de marca, seguridad de dominio y presencia digital construidas para atraer a la audiencia correcta y convertir el interés en reservas.
             </p>
+            <a href="/es/work/ucc/" class="work-link">Leer el caso de estudio →</a>
           </div>
         </article>
 
@@ -396,7 +374,9 @@
 <!-- Scripts -->
 <script defer src="/js/scroll-reveal.js"></script>
 <script defer src="/js/nav.js"></script>
+<script>window.TAB_IDS = ['services', 'work'];</script>
 <script defer src="/js/tabs.js"></script>
 
+<script defer src="/js/viz.js"></script>
 </body>
 </html>

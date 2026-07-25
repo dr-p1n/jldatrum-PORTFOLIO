@@ -2,6 +2,7 @@
 function toggleDrawer() {
   const drawer = document.getElementById('navDrawer');
   const burger = document.getElementById('hamburger');
+  if (!drawer || !burger) return; // pages without a mobile drawer (e.g. resources hub)
   const isOpen = drawer.classList.toggle('open');
   burger.setAttribute('aria-expanded', isOpen);
   drawer.setAttribute('aria-hidden', !isOpen);
@@ -10,6 +11,7 @@ function toggleDrawer() {
 function closeDrawer() {
   const drawer = document.getElementById('navDrawer');
   const burger = document.getElementById('hamburger');
+  if (!drawer || !burger) return; // pages without a mobile drawer (e.g. resources hub)
   drawer.classList.remove('open');
   burger.setAttribute('aria-expanded', false);
   drawer.setAttribute('aria-hidden', true);

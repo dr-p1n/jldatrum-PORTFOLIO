@@ -11,13 +11,19 @@
 
     function update() {
       var total = 0;
+      var parts = [];
       groups.forEach(function (g) {
         var checks  = Array.prototype.slice.call(g.querySelectorAll('input[type="checkbox"]'));
         var checked = checks.filter(function (c) { return c.checked; }).length;
-        var pts = g.getAttribute('data-mode') === 'all'
-          ? (checks.length > 0 && checked === checks.length ? 1 : 0)
-          : checked;
+        var isAll   = g.getAttribute('data-mode') === 'all';
+        var full    = checks.length > 0 && checked === checks.length;
+        var pts = isAll ? (full ? 1 : 0) : checked;
         total += pts;
+        parts.push({
+          checked:  checked,
+          max:      isAll ? checks.length : (+g.getAttribute('data-part-max') || checks.length),
+          complete: full
+        });
         var partNum = g.querySelector('.rc-part-num');
         if (partNum) partNum.textContent = checked + ' / ' + g.getAttribute('data-part-max');
       });
@@ -27,6 +33,11 @@
         var max = +r.getAttribute('data-max');
         r.classList.toggle('active', total >= min && total <= max);
       });
+      // Publish for js/viz.js. Scoring stays authoritative here — the charts
+      // only consume this, they never recompute the data-mode rules.
+      tool.dispatchEvent(new CustomEvent('rc:update', {
+        bubbles: true, detail: { total: total, parts: parts }
+      }));
     }
 
     tool.addEventListener('change', function (e) {

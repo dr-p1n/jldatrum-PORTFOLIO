@@ -8,6 +8,7 @@ const answerLabels = ['', '', '', '', ''];            // Q1-Q5 selected text
 let currentEmail = '';
 let currentUrl   = '';
 let lastScore    = null;
+let scoreRaf     = null;
 let lastColor    = '';
 let lastTier     = '';
 let lastDesc     = '';
@@ -133,7 +134,7 @@ function showScore(email, url) {
 
   // Show result
   scoreResult.classList.add('visible');
-  scoreDisplay.textContent     = finalScore.toFixed(1);
+  animateScore(scoreDisplay, finalScore);
   scoreDisplay.style.color     = color;
   ringFg.style.stroke          = color;
   document.getElementById('scoreTierLabel').textContent  = tier;
@@ -178,6 +179,33 @@ function showScore(email, url) {
   }).catch(() => {});
 }
 
+// Count the score up in step with the ring sweep. Cosmetic only:
+// downloadPDF() reads lastScore, never the DOM, so this cannot affect
+// the PDF or the Worker payload.
+function animateScore(el, target) {
+  if (scoreRaf) { cancelAnimationFrame(scoreRaf); scoreRaf = null; }
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = target.toFixed(1);
+    return;
+  }
+  const DUR = 1150;                    // 50ms lead-in + 1150 = 1200ms, 200ms clear of the 1400ms PDF
+  let t0 = null;
+  let done = false;
+  const finish = () => { done = true; scoreRaf = null; el.textContent = target.toFixed(1); };
+  const step = (ts) => {
+    if (t0 === null) t0 = ts;
+    const p = Math.min((ts - t0) / DUR, 1);
+    const e = 1 - Math.pow(1 - p, 3);  // easeOutCubic, matching the ring's cubic-bezier(.4,0,.2,1)
+    el.textContent = (target * e).toFixed(1);
+    if (p < 1) { scoreRaf = requestAnimationFrame(step); } else { finish(); }
+  };
+  setTimeout(() => { scoreRaf = requestAnimationFrame(step); }, 50);  // match the ring lead-in
+  // requestAnimationFrame is paused in a hidden/background tab, so the count
+  // would never run and the score would sit at the placeholder. setTimeout still
+  // fires there, so guarantee the final value lands before the PDF at 1400ms.
+  setTimeout(() => { if (!done) finish(); }, DUR + 130);
+}
+
 function resetWidget() {
   currentStep = 0;
   answers.fill(null);
@@ -197,6 +225,11 @@ function resetWidget() {
 
   // Reset ring
   document.getElementById('ring-fg').style.strokeDashoffset = '326.7';
+
+  // Stop any in-flight count-up: an orphaned frame would tick a stale
+  // number over the next session.
+  if (scoreRaf) { cancelAnimationFrame(scoreRaf); scoreRaf = null; }
+  document.getElementById('scoreDisplay').textContent = '0.0';
 
   updateProgress();
 }

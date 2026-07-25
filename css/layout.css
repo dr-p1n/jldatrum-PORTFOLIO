@@ -12,16 +12,40 @@ section {
 body.tabbed > section {
   min-height: calc(100vh - 64px - 160px);
 }
+/* Spacing follows an 8px baseline: 8 · 16 · 24 · 32 · 48 · 64 · 96 · 144 */
 .section-inner {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 100px 48px;
+  padding: 96px 48px;
 }
 @media (max-width: 639px) {
-  .section-inner { padding: 60px 24px; }
+  .section-inner { padding: 56px 24px; }   /* outer page padding stays ≥ 16px */
 }
 @media (min-width: 640px) and (max-width: 1023px) {
   .section-inner { padding: 80px 32px; }
+}
+
+/* ── Fixed-nav clearance ────────────────────────────────
+   nav is position:fixed at 64px tall, so a section sitting at the top of the
+   viewport starts *underneath* it. Without this the heading cleared the nav by
+   only 32px. Add the nav height on top of the section's own spacing so the
+   heading gets a full 80px of air.
+   #home is excluded: it centres itself in the viewport and has its own offset. */
+body.tabbed > section > .section-inner,
+body > section:first-of-type:not(#home) > .section-inner {
+  padding-top: 144px;                       /* 64 nav + 80 breathing */
+}
+@media (max-width: 639px) {
+  body.tabbed > section > .section-inner,
+  body > section:first-of-type:not(#home) > .section-inner {
+    padding-top: 112px;                     /* 64 nav + 48 breathing */
+  }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  body.tabbed > section > .section-inner,
+  body > section:first-of-type:not(#home) > .section-inner {
+    padding-top: 128px;                     /* 64 nav + 64 breathing */
+  }
 }
 
 /* ── ANIMATIONS ─────────────────────────────────────── */

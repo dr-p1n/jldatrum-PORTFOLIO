@@ -11,7 +11,7 @@
   --surface: #0F5C6D; /* Deep Teal — cards/panels */
   --border:  #1A3A40; /* dividers */
   --teal:    #1E7F98; /* Ocean Blue — interactive */
-  --coral:   #F2D24B; /* Lemon Glow — accent/links */
+  --lemon:   #F2D24B; /* Lemon Glow — accent/links */
   --text:    #E8EDED; /* Frost */
   --muted:   #9AABAF; /* Muted Frost */
 }
@@ -30,7 +30,13 @@ body {
 .wrap { max-width: 920px; margin: 0 auto; padding: 80px 32px 120px; }
 @media (max-width: 639px) { .wrap { padding: 56px 20px 80px; } }
 
-a { color: var(--coral); text-decoration: underline; text-underline-offset: 3px; }
+/* Pages carrying the full site nav (Resources hub) need to clear its fixed
+   64px bar. Scoped to .has-nav so the ~18 pages using the static .cs-topbar
+   keep their existing spacing. 64 nav + 80 breathing = 144. */
+body.has-nav .wrap { padding-top: 144px; }
+@media (max-width: 639px) { body.has-nav .wrap { padding-top: 112px; } }
+
+a { color: var(--lemon); text-decoration: underline; text-underline-offset: 3px; }
 a:hover { opacity: 0.82; }
 
 .back-link {
@@ -49,7 +55,7 @@ a:hover { opacity: 0.82; }
 .eyebrow {
   font-family: 'DM Sans', sans-serif;
   font-size: 11px;
-  color: var(--coral);
+  color: var(--lemon);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   margin-bottom: 16px;
@@ -115,11 +121,11 @@ h1 {
   content: counter(section, decimal-leading-zero) ".";
   font-family: 'DM Sans', sans-serif;
   font-size: 11px;
-  color: var(--coral);
+  color: var(--lemon);
   margin-right: 8px;
 }
 .toc a { color: var(--text); text-decoration: none; font-size: 14px; }
-.toc a:hover { color: var(--coral); opacity: 1; }
+.toc a:hover { color: var(--lemon); opacity: 1; }
 
 /* ── Sections ───────────────────────────────────────── */
 section { margin-top: 56px; scroll-margin-top: 88px; }
@@ -145,7 +151,7 @@ section h3 {
 .section-tag {
   font-family: 'DM Sans', sans-serif;
   font-size: 11px;
-  color: var(--coral);
+  color: var(--lemon);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   margin-bottom: 16px;
@@ -167,7 +173,7 @@ section ul li::before {
   content: "→";
   position: absolute;
   left: 0;
-  color: var(--coral);
+  color: var(--lemon);
   font-family: 'DM Sans', sans-serif;
 }
 section ul.no-list li::before { display: none; }
@@ -176,7 +182,7 @@ section strong, strong { color: var(--text); font-weight: 500; }
 
 /* ── Callout ────────────────────────────────────────── */
 .callout {
-  border-left: 2px solid var(--coral);
+  border-left: 2px solid var(--lemon);
   padding: 16px 24px;
   margin: 24px 0;
   background: var(--surface);
@@ -193,7 +199,7 @@ section strong, strong { color: var(--text); font-weight: 500; }
   margin: 24px 0;
 }
 .attest-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-.attest-check { color: var(--coral); font-size: 18px; font-weight: 700; }
+.attest-check { color: var(--lemon); font-size: 18px; font-weight: 700; }
 .attest-title {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 16px;
@@ -272,7 +278,7 @@ td:first-child { font-weight: 500; color: var(--text); }
   font-weight: 700;
   font-size: 22px;
   letter-spacing: 0.06em;
-  color: var(--coral);
+  color: var(--lemon);
   text-decoration: none;
 }
 .cs-wordmark:hover { opacity: 0.85; }
@@ -312,7 +318,7 @@ td:first-child { font-weight: 500; color: var(--text); }
   font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   letter-spacing: 0.03em;
-  color: var(--coral);
+  color: var(--lemon);
   text-decoration: none;
 }
 .cs-live a:hover { color: var(--text); opacity: 1; }
@@ -340,7 +346,7 @@ pre code {
   border: 1px solid var(--border);
   padding: 1px 6px;
   border-radius: 4px;
-  color: var(--coral);
+  color: var(--lemon);
 }
 
 /* ── Resources: interactive checklists ──────────────── */
@@ -394,7 +400,7 @@ pre code {
   transition: background 0.15s, border-color 0.15s;
 }
 .rc-check:hover .rc-box { border-color: var(--teal); }
-.rc-check input:checked + .rc-box { background: var(--coral); border-color: var(--coral); }
+.rc-check input:checked + .rc-box { background: var(--lemon); border-color: var(--lemon); }
 .rc-check input:checked + .rc-box::after {
   content: "✓";
   position: absolute; inset: 0;
@@ -405,6 +411,16 @@ pre code {
 .rc-label { font-size: 15px; color: var(--muted); line-height: 1.6; }
 .rc-check input:checked ~ .rc-label { color: var(--text); }
 
+/* Security-header pass/fail list — deliberately unscored, so it sits
+   outside .rc-tool and js/resources.js never sees it. */
+.rc-headercheck {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 0;
+  margin: 18px 0 8px;
+}
+.rc-headercheck .rc-check { padding: 7px 0; }
+
 .rc-fail {
   font-size: 14px;
   color: var(--muted);
@@ -412,9 +428,9 @@ pre code {
   padding: 4px 0 4px 16px;
   margin: 14px 0 4px;
 }
-.rc-fail b { color: var(--coral); font-weight: 500; }
+.rc-fail b { color: var(--lemon); font-weight: 500; }
 .rc-note { font-size: 14px; color: var(--muted); margin: 12px 0 4px; }
-.rc-note b { color: var(--coral); font-weight: 500; }
+.rc-note b { color: var(--lemon); font-weight: 500; }
 
 .rc-part-score {
   font-family: 'Space Grotesk', sans-serif;
@@ -424,7 +440,7 @@ pre code {
   margin-top: 14px;
   letter-spacing: 0.04em;
 }
-.rc-part-num { color: var(--coral); font-weight: 500; }
+.rc-part-num { color: var(--lemon); font-weight: 500; }
 
 /* Live score readout */
 .rc-readout {
@@ -439,7 +455,7 @@ pre code {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 52px;
   font-weight: 300;
-  color: var(--coral);
+  color: var(--lemon);
   line-height: 1;
 }
 .rc-readout .rc-of { font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: var(--muted); font-weight: 300; }
@@ -448,7 +464,7 @@ pre code {
 .rc-bands tr { transition: background 0.2s; }
 .rc-bands tr.active { background: rgba(242,210,75,0.09); }
 .rc-bands tr.active td { color: var(--text); }
-.rc-bands tr.active td:first-child { color: var(--coral); box-shadow: inset 3px 0 0 var(--coral); }
+.rc-bands tr.active td:first-child { color: var(--lemon); box-shadow: inset 3px 0 0 var(--lemon); }
 
 .cs-meta {
   display: flex;
@@ -465,7 +481,7 @@ pre code {
   padding: 6px 12px;
   letter-spacing: 0.06em;
 }
-.cs-meta span b { color: var(--coral); font-weight: 500; }
+.cs-meta span b { color: var(--lemon); font-weight: 500; }
 
 .cs-cta {
   display: flex;
@@ -477,7 +493,7 @@ pre code {
   border-top: 1px solid var(--border);
 }
 .cs-btn-primary {
-  background: var(--coral);
+  background: var(--lemon);
   color: var(--bg);
   font-family: 'DM Sans', sans-serif;
   font-weight: 600;
@@ -520,5 +536,335 @@ pre code {
   min-height: 44px;
 }
 .cookie-btn:hover { background: var(--bg2); }
-.cookie-btn.primary { background: var(--coral); color: var(--bg); border-color: var(--coral); font-weight: 600; }
+.cookie-btn.primary { background: var(--lemon); color: var(--bg); border-color: var(--lemon); font-weight: 600; }
 .cookie-btn.primary:hover { opacity: 0.9; }
+
+/* ── Resources hub: Engineering / Literary squares ──── */
+/* Native <details> — keyboard support, SR semantics and find-in-page
+   expansion come free, and it needs no JavaScript at all. */
+.rc-squares { display: grid; gap: 20px; margin: 8px 0 8px; }
+
+.rc-square {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.rc-square[open] { border-color: var(--teal); }
+
+.rc-square-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 24px 26px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.rc-square-head::-webkit-details-marker { display: none; }
+.rc-square-head:hover .rc-square-title { color: var(--lemon); }
+
+.rc-square-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  transition: color 0.2s;
+}
+.rc-square-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-left: auto;
+  text-align: right;
+}
+@media (max-width: 639px) {
+  /* Keep icon + title + chevron on one row and wrap only the meta line beneath.
+     Without the explicit order the full-width meta pushed the chevron onto a
+     third line of its own. */
+  .rc-square-head { flex-wrap: wrap; gap: 8px 12px; padding: 20px; }
+  .rc-square-title { flex: 1 1 auto; }
+  .rc-square-chev { order: 2; margin-left: auto; }
+  .rc-square-sub { order: 3; margin-left: 0; width: 100%; text-align: left; }
+}
+.rc-square-chev {
+  flex-shrink: 0;
+  width: 20px; height: 20px;
+  color: var(--muted);
+  transition: transform 0.22s ease, color 0.2s;
+}
+.rc-square-chev svg { width: 100%; height: 100%; }
+.rc-square[open] .rc-square-chev { transform: rotate(180deg); color: var(--lemon); }
+
+.rc-square-body { padding: 0 26px 26px; }
+@media (max-width: 639px) { .rc-square-body { padding: 0 20px 20px; } }
+.rc-square-body > p:first-child { margin-top: 0; }
+
+/* ── Resources hub: 2×2 tool grid ───────────────────── */
+.rc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 8px 0 8px;
+}
+@media (max-width: 639px) { .rc-grid { grid-template-columns: 1fr; } }
+.rc-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 208px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 28px 24px;
+  text-decoration: none;
+  transition: transform 0.15s, border-color 0.2s;
+}
+.rc-card:hover { transform: translateY(-2px); border-color: var(--teal); opacity: 1; }
+.rc-card .dx-icon { margin-bottom: 14px; }
+.rc-card--audit { border-color: rgba(242,210,75,0.42); }
+.rc-card--audit:hover { border-color: var(--lemon); }
+.rc-card-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lemon);
+  margin-bottom: 14px;
+}
+.rc-card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin: 0 0 10px;
+}
+.rc-card p { color: var(--muted); font-size: 14px; line-height: 1.6; margin: 0; }
+.rc-card-meta {
+  margin-top: 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.rc-card-cta {
+  margin-top: auto;
+  padding-top: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--lemon);
+}
+
+/* ── Resources hub: research tab ────────────────────── */
+.rc-articles { list-style: none; margin: 8px 0 0; padding: 0; }
+.rc-articles li { margin: 0; padding: 0; }
+.rc-article {
+  display: block;
+  border-top: 1px solid var(--border);
+  padding: 26px 0;
+  text-decoration: none;
+}
+.rc-articles li:last-child .rc-article { border-bottom: 1px solid var(--border); }
+.rc-article:hover { opacity: 1; }
+.rc-article-meta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.rc-article h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin: 0 0 8px;
+  transition: color 0.2s;
+}
+.rc-article:hover h3 { color: var(--lemon); }
+.rc-article p { color: var(--muted); font-size: 15px; margin: 0; max-width: 640px; }
+
+.rc-empty {
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 44px 32px;
+  text-align: center;
+  margin-top: 8px;
+}
+.rc-empty-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lemon);
+  margin-bottom: 12px;
+}
+.rc-empty p:last-child { margin-bottom: 0; }
+
+
+/* ── PORTED NAV ──────────────────────────────────────────
+   Resources is a top-level nav destination but is served by legal.css,
+   which never loaded the nav rules — so the page had no navigation and no
+   hamburger at all. Lifted verbatim from components.css, with the two font
+   tokens inlined because legal.css does not define --font-display/--font-body.
+   Keep in sync with components.css if the nav changes there.
+   ───────────────────────────────────────────────────────── */
+/* ── NAV ────────────────────────────────────────────── */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 64px;
+  background: rgba(12,27,31,0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+@media (prefers-reduced-motion: reduce) {
+  nav { backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+
+.nav-logo {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2;
+  gap: 2px;
+}
+.nav-brand { white-space: nowrap; font-family: 'Space Grotesk', sans-serif; color: var(--lemon); }
+.nav-name {
+  font-size: 8.5px;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.nav-links a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--lemon); }
+.nav-links a.active { color: var(--lemon); }
+.nav-links a.btn-diagnose {
+  border: 1px solid var(--lemon);
+  color: var(--lemon);
+  padding: 8px 18px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-links a.btn-diagnose:hover {
+  background: var(--lemon);
+  color: var(--bg);
+}
+
+.nav-links a.nav-lang {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  border-radius: 4px;
+  color: var(--muted);
+  transition: border-color 0.2s, color 0.2s;
+}
+.nav-links a.nav-lang:hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--lemon);
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+/* mobile drawer */
+.nav-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.nav-drawer.open { transform: translateX(0); }
+.nav-drawer a {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-drawer a:hover { color: var(--lemon); }
+.nav-drawer a.active { color: var(--lemon); }
+.nav-drawer .btn-diagnose-drawer {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  background: var(--lemon);
+  color: var(--bg);
+  padding: 14px 32px;
+  border-radius: 8px;
+  width: 80%;
+  text-align: center;
+  margin-top: 16px;
+}
+.nav-drawer .btn-diagnose-drawer:hover { opacity: 0.9; }
+
+@media (max-width: 767px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+}

@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resources — free site self-diagnostics · DATRUM</title>
-  <meta name="description" content="Three working instruments — a Ley 81 compliance checklist, a security-header reference, and an AI-visibility self-diagnostic. Free, no forms, run them against your own site.">
-  <meta property="og:title" content="DATRUM — Free site self-diagnostics">
-  <meta property="og:description" content="Three working instruments — a Ley 81 compliance checklist, a security-header reference, and an AI-visibility self-diagnostic. Free, no forms, run them against your own site.">
+  <title>Resources — free tools + research · DATRUM</title>
+  <meta name="description" content="Free instruments to diagnose your own site — a Ley 81 checklist, a security-header reference, an AI-visibility diagnostic, and a guided brand audit — plus research on why they decide who gets shortlisted. No forms.">
+  <meta property="og:title" content="DATRUM — Free tools and research">
+  <meta property="og:description" content="Free instruments to diagnose your own site — a Ley 81 checklist, a security-header reference, an AI-visibility diagnostic, and a guided brand audit — plus research on why they decide who gets shortlisted. No forms.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jldatrum.com/resources/">
   <meta property="og:image" content="https://jldatrum.com/assets/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="DATRUM — Free site self-diagnostics">
-  <meta name="twitter:description" content="Three working instruments — a Ley 81 compliance checklist, a security-header reference, and an AI-visibility self-diagnostic. Free, no forms, run them against your own site.">
+  <meta name="twitter:title" content="DATRUM — Free tools and research">
+  <meta name="twitter:description" content="Free instruments to diagnose your own site — a Ley 81 checklist, a security-header reference, an AI-visibility diagnostic, and a guided brand audit — plus research on why they decide who gets shortlisted. No forms.">
   <meta name="twitter:image" content="https://jldatrum.com/assets/og-image.png">
 
   <link rel="canonical" href="https://jldatrum.com/resources/">
@@ -36,289 +36,133 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/legal.css">
+  <link rel="stylesheet" href="/css/viz.css">
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
   <link rel="manifest" href="/assets/manifest.json">
 </head>
-<body>
-<div class="cs-topbar">
-  <a href="/" class="cs-wordmark">DATRUM</a>
-  <a href="/#diagnose" class="back-link">Audit Your Brand →</a>
+<body class="has-nav">
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
+  <a href="/work/#services" onclick="closeDrawer()">Services</a>
+  <a href="/work/" onclick="closeDrawer()">Case studies</a>
+  <a href="/resources/" class="active" onclick="closeDrawer()">Resources</a>
+  <a href="/bio/" onclick="closeDrawer()">Bio</a>
+  <a href="/es/resources/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
+  <a href="/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audit Your Brand →</a>
 </div>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="nav-brand">DATRUM</span>
+  </a>
+  <div class="nav-links">
+    <a href="/work/#services">Services</a>
+    <a href="/work/">Case studies</a>
+    <a href="/resources/" class="active">Resources</a>
+    <a href="/bio/">Bio</a>
+    <a href="/es/resources/" lang="es" hreflang="es" class="nav-lang">ES</a>
+    <a href="/audit/" class="btn-diagnose">Audit Your Brand →</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
 <div class="wrap">
   <div class="eyebrow">Resources</div>
-  <h1>Three instruments you can run today.</h1>
-  <p class="cs-deck">Free. No forms. No email required.</p>
-  <p class="lede">These are the instruments we use on client engagements, published open — because a business that can diagnose its own exposure is a better conversation than one that can't. Each answers two questions: <strong>what's broken</strong>, and <strong>what being visible would actually get you.</strong></p>
+  <h1>Tools you can run today. Research worth your time.</h1>
+  <p class="lede">Free instruments to diagnose your own site — and the writing that explains what the findings actually cost you. No forms, no email required.</p>
 
-  <nav class="toc" aria-label="The three instruments">
-    <div class="toc-title">The three instruments</div>
-    <ol>
-      <li><a href="#ley81">Ley 81 Compliance Checklist</a></li>
-      <li><a href="#headers">Security Header Reference</a></li>
-      <li><a href="#visibility">Visibility Self-Diagnostic</a></li>
-    </ol>
-  </nav>
+  <div class="rc-squares">
 
-<section id="ley81">
-  <div class="eyebrow">Resource 01</div>
-  <h2>Ley 81 Compliance Checklist</h2>
-  <p class="rc-deck">The compliance document that doubles as a procurement credential</p>
-  <p class="rc-runmeta">Run time ~30 min · Requires access to your site and your data practices</p>
+    <details class="rc-square" id="tools" open>
+      <summary class="rc-square-head">
+        <span class="dx-icon" data-icon="gauge" aria-hidden="true"></span>
+        <span class="rc-square-title">Engineering</span>
+        <span class="rc-square-sub">4 instruments · run them yourself</span>
+        <span class="rc-square-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></span>
+      </summary>
+      <div class="rc-square-body">
+        <p>Four instruments we use on client engagements, published open — because a business that can diagnose its own exposure is a better conversation than one that can't. Each answers two questions: <strong>what's broken</strong>, and <strong>what being visible would actually get you.</strong></p>
 
-  <h3 class="rc-subhead">Why this matters beyond compliance</h3>
-    <p>Ley 81 de 2019 is Panama's personal data protection law. Most businesses treat it as a legal box to check. That framing costs them contracts.</p>
-    <p>Here's the distribution reality: <strong>corporate and institutional buyers run vendor reviews before they run negotiations.</strong> A procurement officer at a bank, a hospital, a government contractor, or a multinational's Panama office has a checklist. Data handling is on it. If you cannot demonstrate compliance, you are not rejected — you are <strong>filtered out before anyone reads your proposal.</strong></p>
-    <p>The businesses that document compliance don't just avoid fines. They stay on shortlists their competitors never learn they were removed from.</p>
-    <p>Compliance is a <strong>market-access credential.</strong> Treat it as one.</p>
+        <div class="rc-grid">
+          <a class="rc-card" href="/resources/ley81/">
+            <span class="dx-icon" data-icon="shield" aria-hidden="true"></span>
+            <div class="rc-card-tag">Instrument 01</div>
+            <h3>Ley 81 Compliance Checklist</h3>
+            <p>The six-principle self-assessment that doubles as a procurement credential. Score your site out of six.</p>
+            <div class="rc-card-meta">Checklist · ~30 min · scores /6</div>
+            <div class="rc-card-cta">Open the checklist →</div>
+          </a>
+          <a class="rc-card" href="/resources/security-headers/">
+            <span class="dx-icon" data-icon="lock" aria-hidden="true"></span>
+            <div class="rc-card-tag">Instrument 02</div>
+            <h3>Security Header Reference</h3>
+            <p>The vendor review you're failing without knowing it — what each header does and the exact config to deploy.</p>
+            <div class="rc-card-meta">Reference · ~1 hr to fix</div>
+            <div class="rc-card-cta">Open the reference →</div>
+          </a>
+          <a class="rc-card" href="/resources/visibility/">
+            <span class="dx-icon" data-icon="mesh" aria-hidden="true"></span>
+            <div class="rc-card-tag">Instrument 03</div>
+            <h3>Visibility Self-Diagnostic</h3>
+            <p>Can a machine tell a buyer what you do? 25 points of legibility to AI-mediated discovery.</p>
+            <div class="rc-card-meta">Diagnostic · ~45 min · scores /25</div>
+            <div class="rc-card-cta">Run the diagnostic →</div>
+          </a>
+          <a class="rc-card rc-card--audit" href="/audit/">
+            <span class="dx-icon" data-icon="gauge" aria-hidden="true"></span>
+            <div class="rc-card-tag">Interactive</div>
+            <h3>Audit Your Brand</h3>
+            <p>A guided read on what your site is costing you right now — and what fixing it returns. Five minutes, no email.</p>
+            <div class="rc-card-meta">Interactive · ~5 min</div>
+            <div class="rc-card-cta">Start the audit →</div>
+          </a>
+        </div>
 
-  <h3 class="rc-subhead">The six principles — self-assessment</h3>
-  <p>Score one point per principle you can fully evidence. Partial credit is zero credit — a procurement officer doesn't award partial credit either.</p>
-  <div class="rc-tool">
-    <div class="rc-group" data-mode="all">
-      <h3>1. Confidencialidad</h3>
-      <p class="rc-group-sub">Personal data is protected from unauthorized access.</p>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Site is served exclusively over HTTPS, with HTTP requests redirected</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">A Content-Security-Policy header is present and restricts script sources</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Form submissions transmit over encrypted connections only</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Third-party scripts (analytics, chat widgets, pixels) are inventoried and justified</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">No personal data appears in URL parameters or query strings</span></label>
-      <p class="rc-fail"><b>Common failure:</b> A contact form posting to an unencrypted endpoint, or a chat widget loading third-party scripts with unrestricted access to form fields.</p>
-    </div>
-    <div class="rc-group" data-mode="all">
-      <h3>2. Transferencia</h3>
-      <p class="rc-group-sub">Data movement to third parties is disclosed and controlled.</p>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Privacy policy names every third party that receives user data</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">International transfers are disclosed (most analytics and hosting qualify)</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Data processors are documented — hosting, email, CRM, analytics</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Users are informed before data leaves the original collection context</span></label>
-      <p class="rc-fail"><b>Common failure:</b> Running Google Analytics, Meta Pixel, and a CRM integration without disclosing any of them. Three undisclosed transfers on a site that believes it collects nothing.</p>
-    </div>
-    <div class="rc-group" data-mode="all">
-      <h3>3. Custodia</h3>
-      <p class="rc-group-sub">Data is held responsibly for a defined period.</p>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Retention periods are defined per data type and documented</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">A deletion process exists and someone owns it</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Backups are covered by the same retention rules as live data</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Form submissions are not accumulating indefinitely in an unmanaged inbox</span></label>
-      <p class="rc-fail"><b>Common failure:</b> Six years of contact-form submissions sitting in a shared inbox four employees can access, with no retention policy and no deletion path.</p>
-    </div>
-    <div class="rc-group" data-mode="all">
-      <h3>4. Integridad</h3>
-      <p class="rc-group-sub">Data is accurate and protected from unauthorized modification.</p>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">X-Content-Type-Options header is set to <code>nosniff</code></span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">X-Frame-Options or an equivalent frame-ancestors directive prevents clickjacking</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Form inputs are validated server-side, not only in the browser</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">A correction mechanism exists for users to fix their own data</span></label>
-      <p class="rc-fail"><b>Common failure:</b> Client-side validation only. The form looks protected in a browser and accepts anything sent directly to the endpoint.</p>
-    </div>
-    <div class="rc-group" data-mode="all">
-      <h3>5. Seguridad</h3>
-      <p class="rc-group-sub">Technical measures protect data proportionally to its sensitivity.</p>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Strict-Transport-Security header is present with a meaningful max-age</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Referrer-Policy is set to limit data leakage to external sites</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Permissions-Policy restricts unnecessary browser APIs</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Administrative access uses multi-factor authentication</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Security-headers score is verifiable by an external scan</span></label>
-      <p class="rc-fail"><b>Common failure:</b> Every header missing. This is the single most common finding, and the fastest to correct.</p>
-    </div>
-    <div class="rc-group" data-mode="all">
-      <h3>6. Portabilidad</h3>
-      <p class="rc-group-sub">Users can access and retrieve their own data — ARCO rights.</p>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">A documented process exists for Acceso, Rectificación, Cancelación, Oposición requests</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">A named contact or channel handles ARCO requests</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Response timeframes are defined</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">The privacy policy explains how to exercise these rights</span></label>
-      <p class="rc-fail"><b>Common failure:</b> A privacy policy that mentions ARCO rights without providing any mechanism to exercise them.</p>
-    </div>
-    <div class="rc-readout"><span class="rc-num">0</span> <span class="rc-of">/ 6</span> <span class="rc-caption">Your score</span></div>
-    <table class="rc-bands">
-      <tr><th>Score</th><th>Reading</th></tr>
-      <tr data-min="6" data-max="6"><td>6 / 6</td><td>Defensible. You can answer a vendor security questionnaire without preparation.</td></tr>
-      <tr data-min="4" data-max="5"><td>4–5 / 6</td><td>Correctable in days. The gaps are usually headers and documentation, not architecture.</td></tr>
-      <tr data-min="2" data-max="3"><td>2–3 / 6</td><td>You are being filtered out of procurement processes and receiving no signal that it happened.</td></tr>
-      <tr data-min="0" data-max="1"><td>0–1 / 6</td><td>Structural exposure. Any buyer who checks will find it, and institutional buyers check.</td></tr>
-    </table>
+        <p>Run all three diagnostics against your own site before running them against anyone else's. The results are usually uncomfortable and always actionable. Nothing here is gated, and nothing requires an email address.</p>
+      </div>
+    </details>
+
+    <details class="rc-square" id="research">
+      <summary class="rc-square-head">
+        <span class="dx-icon" data-icon="hierarchy" aria-hidden="true"></span>
+        <span class="rc-square-title">Literary</span>
+        <span class="rc-square-sub">Long-form research · in progress</span>
+        <span class="rc-square-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></span>
+      </summary>
+      <div class="rc-square-body">
+        <p>The instruments above measure. This is the argument behind them: <strong>digital legibility, compliance posture, and machine-readable authority now decide who reaches a shortlist</strong> — and the businesses filtered out are never told it happened. Failure in this channel is silent, which is precisely what makes it worth writing about.</p>
+
+        <p class="rc-empty-tag">In the works</p>
+        <ul>
+          <li><strong>Compliance is a distribution channel.</strong> Why Ley 81 documentation belongs in a growth budget rather than a legal one, and what it opens that marketing spend cannot.</li>
+          <li><strong>The silent disqualifier.</strong> A failing security scan removes you from vendor lists without generating a single email. What that costs, and why you never see the invoice.</li>
+          <li><strong>Legibility beats spend.</strong> Search rewarded whoever paid most. AI-mediated discovery rewards whoever is most parseable — and that is a one-time build, not a monthly cost.</li>
+        </ul>
+
+        <p>Until these publish, the instruments are the shortest path to the same conclusions — run them against your own site, or bring findings to a conversation.</p>
+        <p><a href="/audit/">Audit your brand →</a></p>
+
+        <!-- ARTICLE TEMPLATE — replace the list above; newest first:
+        <ul class="rc-articles">
+          <li>
+            <a class="rc-article" href="/resources/research/SLUG/">
+              <div class="rc-article-meta">Research · Jul 2026 · 8 min</div>
+              <h3>Article title goes here</h3>
+              <p>One or two sentences of dek that make the argument worth reading.</p>
+            </a>
+          </li>
+        </ul>
+        -->
+      </div>
+    </details>
+
   </div>
-
-  <h3 class="rc-subhead">What visibility this unlocks</h3>
-  <p>A documented compliance posture changes what you can pursue:</p>
-    <ul>
-      <li><strong>Institutional and corporate contracts</strong> that require vendor data-handling review as a gate</li>
-      <li><strong>Multinational Panama offices</strong> operating under stricter parent-company standards</li>
-      <li><strong>Regulated sectors</strong> — financial services, healthcare, legal — where the review is non-negotiable</li>
-      <li><strong>International clients</strong> whose own compliance obligations extend to their vendors</li>
-    </ul>
-  <p>The asymmetry: this is a <strong>one-time infrastructure investment that permanently expands your addressable market.</strong> Most competitors in most Panamanian verticals have not done it, and the buyer cannot tell who has until they ask.</p>
-</section>
-
-<section id="headers">
-  <div class="eyebrow">Resource 02</div>
-  <h2>Security Header Reference</h2>
-  <p class="rc-deck">The vendor review you're failing without knowing it</p>
-  <p class="rc-runmeta">Run time ~5 min to scan, ~1 hour to correct · Requires access to your hosting configuration</p>
-
-  <h3 class="rc-subhead">Why this matters beyond hardening</h3>
-    <p>Security headers are instructions your server sends to browsers before a single word of content loads. They are trivially checkable by anyone, from anywhere, in seconds, without permission.</p>
-    <p>That last point is the one businesses miss. <strong>A prospect, a competitor, a procurement officer, or an auditor can grade your security posture without asking and without telling you.</strong></p>
-    <p>The distribution consequence: enterprise and institutional buyers increasingly run an automated scan as a pre-qualification step. It costs them nothing. A failing grade doesn't produce a conversation about remediation — it produces a quiet removal from the vendor list.</p>
-    <p>You will never receive that email. That's the entire problem.</p>
-
-  <h3 class="rc-subhead">Run the scan first</h3>
-    <p>Scan your domain at <strong>Mozilla Observatory</strong> (<a href="https://developer.mozilla.org/en-US/observatory" target="_blank" rel="noopener">developer.mozilla.org/observatory</a>). Note your grade before reading further. Most Panamanian business sites score <strong>F</strong>.</p>
-    <p>If you scored F, nothing is wrong with your business. Your server was simply never configured to say anything — and defaults are silence.</p>
-
-  <h3 class="rc-subhead">The headers</h3>
-    <h3 class="rc-subhead">Strict-Transport-Security (HSTS)</h3>
-    <pre><code>Strict-Transport-Security: max-age=31536000; includeSubDomains; preload</code></pre>
-    <p>Forces browsers to use HTTPS exclusively for one year, including subdomains.</p>
-    <p class="rc-fail"><b>Without it:</b> A browser will attempt an unencrypted connection first. On untrusted networks — hotel wifi, airport, café — that initial request is interceptable. Session-downgrade attacks depend on this gap.</p>
-    <h3 class="rc-subhead">Content-Security-Policy (CSP)</h3>
-    <pre><code>Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self'</code></pre>
-    <p>Declares which sources may load scripts, styles, images, and other resources.</p>
-    <p class="rc-fail"><b>Without it:</b> Any injected script executes with full page access — including access to your form fields. This is the header that turns a minor vulnerability into a data breach.</p>
-    <p class="rc-note"><b>Note:</b> Add your actual third-party domains to the relevant directives. Analytics, payment processors, and font providers each need explicit permission.</p>
-    <h3 class="rc-subhead">X-Frame-Options</h3>
-    <pre><code>X-Frame-Options: DENY</code></pre>
-    <p>Prevents your site from being embedded in a frame on another domain.</p>
-    <p class="rc-fail"><b>Without it:</b> Clickjacking. Your site rendered invisibly over an attacker's page, so users interact with your interface while believing they're somewhere else.</p>
-    <h3 class="rc-subhead">X-Content-Type-Options</h3>
-    <pre><code>X-Content-Type-Options: nosniff</code></pre>
-    <p>Stops browsers from guessing file types.</p>
-    <p class="rc-fail"><b>Without it:</b> An uploaded file the server labels as an image may be interpreted and executed as a script.</p>
-    <h3 class="rc-subhead">Referrer-Policy</h3>
-    <pre><code>Referrer-Policy: strict-origin-when-cross-origin</code></pre>
-    <p>Controls how much URL information travels with outbound links.</p>
-    <p class="rc-fail"><b>Without it:</b> Full URLs — including any parameters — leak to every external site your users visit from yours. This is also a Ley 81 exposure if those URLs carry personal data.</p>
-    <h3 class="rc-subhead">Permissions-Policy</h3>
-    <pre><code>Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()</code></pre>
-    <p>Disables browser APIs your site doesn't use.</p>
-    <p class="rc-fail"><b>Without it:</b> Any script on your page can request camera, microphone, or location access. Remove <code>payment=()</code> if you use a payment processor requiring the Payment Request API.</p>
-
-  <h3 class="rc-subhead">Implementation</h3>
-    <p><strong>Cloudflare Pages</strong> — create a file named <code>_headers</code> in your site root:</p>
-  <pre><code>/*
-  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
-  Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self'</code></pre>
-    <p>Other platforms use different mechanisms — Netlify uses the same <code>_headers</code> format, Apache uses <code>.htaccess</code>, nginx uses the server block. The header values are identical regardless.</p>
-    <p><strong>Verify by rescanning.</strong> F to A is typically a single deployment.</p>
-
-  <h3 class="rc-subhead">What visibility this unlocks</h3>
-    <ul>
-      <li><strong>Passing automated pre-qualification</strong> at institutional buyers who scan before they shortlist</li>
-      <li><strong>Surviving vendor security questionnaires</strong> without a remediation delay that costs you the timeline</li>
-      <li><strong>Credibility with technical buyers</strong> — CTOs, IT directors, and security-conscious executives check, and they check first</li>
-      <li><strong>Ley 81 evidence</strong> — four of these headers directly evidence Seguridad, Integridad, and Confidencialidad</li>
-    </ul>
-  <p>The asymmetry: this costs one afternoon and permanently removes a silent disqualifier. <strong>Most of your competitors are scoring F right now and have no idea, because failure in this channel is invisible from the inside.</strong></p>
-</section>
-
-<section id="visibility">
-  <div class="eyebrow">Resource 03</div>
-  <h2>Visibility Self-Diagnostic</h2>
-  <p class="rc-deck">Can a machine tell a buyer what you do?</p>
-  <p class="rc-runmeta">Run time ~45 min · Requires your site, a browser, and honesty</p>
-
-  <h3 class="rc-subhead">Why this matters</h3>
-    <p>Buyers no longer only search. They ask.</p>
-    <p><em>"Who does industrial cleaning in Panama with ISO certification?"</em></p>
-    <p><em>"Which production companies in Panama have worked with US networks?"</em></p>
-    <p><em>"Where can I find a specific watch reference in Latin America?"</em></p>
-    <p>A language model answering those questions builds its response from sources it can <strong>parse, classify, and cite.</strong> Being on page one is irrelevant if the model cannot determine what your business is, where it operates, or what it's certified to do.</p>
-    <p>The shift is structural. Search rewarded whoever spent the most on ads. <strong>AI-mediated discovery rewards whoever is most legible to a machine — and legibility is a one-time build, not a recurring spend.</strong></p>
-    <p>That's the asymmetry, and it is temporary. It closes as competitors notice.</p>
-
-  <div class="rc-tool">
-    <div class="rc-group" data-mode="each" data-part-max="5">
-      <h3>Part 1 — Entity legibility</h3>
-      <p>Can a machine determine what your business <em>is</em>?</p>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Your site contains JSON-LD structured data declaring an Organization or LocalBusiness</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Your legal business name appears in structured form, not only in an image or logo</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Your physical address is marked up as structured data</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Your service areas are explicitly declared, not implied by prose</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Your industry or category is stated in machine-readable form</span></label>
-      <p class="rc-note"><b>Check:</b> view source and search for <code>application/ld+json</code>. If nothing appears, you have zero structured entity data. Google's Rich Results Test will validate what you do have.</p>
-      <p class="rc-part-score">Score: <span class="rc-part-num">0 / 5</span></p>
-    </div>
-    <div class="rc-group" data-mode="each" data-part-max="5">
-      <h3>Part 2 — Credential legibility</h3>
-      <p>Can a machine verify what qualifies you?</p>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Certifications appear as text, not only as logo images</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Certifications are encoded in structured data with the issuing organization named</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Licenses, memberships, and accreditations are individually listed</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Years of operation or founding date is declared in structured form</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Notable clients or projects are named where confidentiality permits</span></label>
-      <p class="rc-note"><b>The most common single failure across every vertical:</b> certifications rendered exclusively as logo images in a footer. To a machine, that is a decorative picture — your strongest differentiator, invisible.</p>
-      <p class="rc-part-score">Score: <span class="rc-part-num">0 / 5</span></p>
-    </div>
-    <div class="rc-group" data-mode="each" data-part-max="5">
-      <h3>Part 3 — Service legibility</h3>
-      <p>Can a machine determine what you actually sell?</p>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Each distinct service has its own page or clearly delineated section</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Services are described in the vocabulary buyers use, not internal branding</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Structured data declares your service catalog</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Pricing structure is indicated, even as a range or a "starting from"</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Service-area coverage is stated per service where it varies</span></label>
-      <p class="rc-note"><b>Check:</b> ask a language model directly — <em>"What services does [your business] offer?"</em> If the answer is vague, wrong, or "I don't have information about this business," you have your result.</p>
-      <p class="rc-part-score">Score: <span class="rc-part-num">0 / 5</span></p>
-    </div>
-    <div class="rc-group" data-mode="each" data-part-max="5">
-      <h3>Part 4 — Structural legibility</h3>
-      <p>Can a machine extract meaning from your pages?</p>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Each page has exactly one H1 that describes the page's actual content</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Heading hierarchy is sequential — no H2 followed directly by H4</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Meta descriptions exist on every page and stay under ~155 characters</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">No page returns a 404 that should return content</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Images carry descriptive alt text, and content is real HTML text — not baked into images</span></label>
-      <p class="rc-note"><b>Check:</b> a free crawler (Screaming Frog's free tier handles 500 URLs) will surface every one of these in a single pass.</p>
-      <p class="rc-part-score">Score: <span class="rc-part-num">0 / 5</span></p>
-    </div>
-    <div class="rc-group" data-mode="each" data-part-max="5">
-      <h3>Part 5 — Language legibility</h3>
-      <p>Can a machine serve the right audience the right version?</p>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">If you serve international buyers, an English version exists</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Language versions use <code>hreflang</code> declarations</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Translations are genuine, not machine-generated approximations</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Each language version is independently indexable at its own URL</span></label>
-      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label">Terminology matches how each audience actually searches</span></label>
-      <p class="rc-note"><b>The distribution consequence:</b> an international buyer searching in English and a local buyer searching in Spanish are running two different queries with two different vocabularies. One site attempting both without structural separation serves neither well.</p>
-      <p class="rc-part-score">Score: <span class="rc-part-num">0 / 5</span></p>
-    </div>
-    <div class="rc-readout"><span class="rc-num">0</span> <span class="rc-of">/ 25</span> <span class="rc-caption">Total</span></div>
-    <table class="rc-bands">
-      <tr><th>Score</th><th>Reading</th></tr>
-      <tr data-min="21" data-max="25"><td>21–25</td><td>Machine-legible. You are a candidate for AI-mediated recommendation.</td></tr>
-      <tr data-min="15" data-max="20"><td>15–20</td><td>Partially legible. Machines know you exist but cannot reliably classify what you do.</td></tr>
-      <tr data-min="8" data-max="14"><td>8–14</td><td>Structurally illegible. You are absent from consideration sets your competitors appear in.</td></tr>
-      <tr data-min="0" data-max="7"><td>0–7</td><td>Invisible. Operational credibility with no machine-readable counterpart.</td></tr>
-    </table>
-  </div>
-
-  <h3 class="rc-subhead">What visibility this unlocks</h3>
-    <ul>
-      <li><strong>Presence in AI-generated shortlists</strong> at the moment the vendor list is written — before any human contacts you</li>
-      <li><strong>Correct classification</strong> so you appear for queries you can actually serve</li>
-      <li><strong>Credential visibility</strong> so what qualifies you is readable rather than decorative</li>
-      <li><strong>Audience separation</strong> so international and local buyers each reach the right version</li>
-      <li><strong>Compounding returns</strong> — structured data is a permanent asset, not a monthly spend</li>
-    </ul>
-  <p>The asymmetric window: most businesses in most Panamanian verticals score below 10. The gap between operational credibility and machine legibility is the widest and least-contested opportunity in the market right now — and it closes the moment competitors notice it exists.</p>
-</section>
-
-<div class="divider"><span class="divider-label">Using these</span></div>
-<section id="using">
-  <h2>Using these</h2>
-    <p>Run all three against your own site before running them against anyone else's. The results are usually uncomfortable and always actionable.</p>
-    <p>Nothing here is gated. Nothing requires an email address. If they're useful, use them.</p>
-    <p>If the findings raise questions about your specific situation — that's a conversation worth having.</p>
-</section>
 
   <div class="cs-cta">
-    <a href="/#diagnose" class="cs-btn-primary">Audit Your Brand →</a>
+    <a href="/audit/" class="cs-btn-primary">Audit Your Brand →</a>
     <a href="https://calendly.com/julio-jldatrum" target="_blank" rel="noopener" class="cs-btn-ghost">Schedule a Strategy Session →</a>
   </div>
 
@@ -334,6 +178,6 @@
 </div>
 
 <script defer src="/js/nav.js"></script>
-<script defer src="/js/resources.js"></script>
+<script defer src="/js/viz.js"></script>
 </body>
 </html>

@@ -58,6 +58,7 @@
   <link rel="stylesheet" href="/css/typography.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/viz.css">
 
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
   <link rel="manifest" href="/assets/manifest.json">
@@ -67,14 +68,12 @@
 
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
-  <a href="#who" onclick="closeDrawer()">Who It's For</a>
   <a href="#services" onclick="closeDrawer()">Services</a>
-  <a href="#framework" onclick="closeDrawer()">DATRUM Method</a>
   <a href="#work" onclick="closeDrawer()">Case studies</a>
   <a href="/resources/" onclick="closeDrawer()">Resources</a>
   <a href="/bio/" onclick="closeDrawer()">Bio</a>
   <a href="/es/work/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
-  <a href="/#diagnose" class="btn-diagnose-drawer" onclick="closeDrawer()">Audit Your Brand →</a>
+  <a href="/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audit Your Brand →</a>
 </div>
 
 <!-- NAV -->
@@ -83,14 +82,12 @@
     <span class="nav-brand">DATRUM</span>
   </a>
   <div class="nav-links">
-    <a href="#who">Who</a>
     <a href="#services">Services</a>
-    <a href="#framework">DATRUM Method</a>
     <a href="#work">Case studies</a>
     <a href="/resources/">Resources</a>
     <a href="/bio/">Bio</a>
     <a href="/es/work/" lang="es" hreflang="es" class="nav-lang">ES</a>
-    <a href="/#diagnose" class="btn-diagnose">Audit Your Brand →</a>
+    <a href="/audit/" class="btn-diagnose">Audit Your Brand →</a>
   </div>
   <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
     <span></span><span></span><span></span>
@@ -99,40 +96,6 @@
 
 <!-- ── SECTION 1: HERO ──────────────────────────────── -->
 
-
-<!-- ── SECTION 2.5: WHO IT'S FOR ────────────────────── -->
-<section id="who">
-  <div class="section-inner">
-    <h2 class="section-title">Built for a specific kind of professional.</h2>
-
-    <p class="who-formula fade-up">
-      I work with businesses whose <em>reputation is already real</em>, but whose digital presence isn't converting any of it into revenue — <span class="coral">high-trust businesses where a buyer vets you online before they ever make contact.</span>
-    </p>
-
-    <div class="who-criteria fade-up">
-      <div class="who-col">
-        <div class="who-col-title">You're a fit if</div>
-        <ul>
-          <li>Your reputation is real — but your website, funnel, or content isn't converting it into clients or deals.</li>
-          <li>You want a digital presence that actually matches the caliber of your work.</li>
-          <li>You want qualified clients finding you, not the other way around.</li>
-          <li>You see technology as a distribution tool, not just an administrative one.</li>
-        </ul>
-      </div>
-      <div class="who-col not-fit">
-        <div class="who-col-title">Not your fit if</div>
-        <ul>
-          <li>You need a one-time brochure with no marketing system behind it.</li>
-          <li>You have no established audience or reputation to build from yet.</li>
-          <li>You're not willing to bring your creative direction — I build the system, but the brand has to be yours.</li>
-          <li>You want to repeat the same generic tactics everyone else runs.</li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-</section>
-
 <!-- ── SECTION 3: SERVICES ──────────────────────────── -->
 <section id="services">
   <div class="section-inner">
@@ -140,6 +103,7 @@
 
     <div class="services-grid">
       <article class="service-cell fade-up" style="--delay:0.1s">
+        <span class="dx-icon" data-icon="layers" aria-hidden="true"></span>
         <h3 class="service-name">Product Design</h3>
         <p class="service-desc">
           A digital product your clients actually want to use — booking platforms, portals, apps designed to the caliber of your work.
@@ -147,6 +111,7 @@
       </article>
 
       <article class="service-cell fade-up" style="--delay:0.15s">
+        <span class="dx-icon" data-icon="compass" aria-hidden="true"></span>
         <h3 class="service-name">Marketing Strategy</h3>
         <p class="service-desc">
           A position your competitors can't occupy — because it's built on the story only you can tell, aimed at the exact audience that pays. I define how you show up before a single thing gets built.
@@ -154,6 +119,7 @@
       </article>
 
       <article class="service-cell fade-up" style="--delay:0.2s">
+        <span class="dx-icon" data-icon="bars" aria-hidden="true"></span>
         <h3 class="service-name">Lead Generation Engines</h3>
         <p class="service-desc">
           The system that turns attention into booked calls and signed clients — funnels, capture, follow-up, and search visibility working together so qualified leads arrive on autopilot.
@@ -161,6 +127,7 @@
       </article>
 
       <article class="service-cell fade-up" style="--delay:0.25s">
+        <span class="dx-icon" data-icon="window" aria-hidden="true"></span>
         <h3 class="service-name">Website Design</h3>
         <p class="service-desc">
           A site that stops a scroll and holds its own next to the biggest names in your field — distinctive, fast, and built to convert. It looks like you and works like your best salesperson.
@@ -168,6 +135,7 @@
       </article>
 
       <article class="service-cell fade-up" style="--delay:0.3s">
+        <span class="dx-icon" data-icon="app" aria-hidden="true"></span>
         <h3 class="service-name">Web App & App Development</h3>
         <p class="service-desc">
           Custom web and mobile products — booking systems, portals, fan platforms, internal tools. Modern build, fast deploy, designed so the people using it come back. Engineered, not templated.
@@ -175,23 +143,22 @@
       </article>
 
       <article class="service-cell fade-up" style="--delay:0.35s">
+        <span class="dx-icon" data-icon="mesh" aria-hidden="true"></span>
         <h3 class="service-name">AI Search Visibility</h3>
         <p class="service-desc">
           Your name in the AI's answer, not buried in the old blue links. ChatGPT, Perplexity, and Google's AI are the new homepage — I structure your site's data so you're the one they surface when a buyer asks who to hire.
         </p>
       </article>
     </div>
-  </div>
-</section>
 
-<!-- ── SECTION 4: THE FRAMEWORK ─────────────────────── -->
-<section id="framework">
-  <div class="section-inner">
+    <div class="tab-rule"></div>
+
     <h2 class="section-title">The DATRUM methodology</h2>
     <p class="section-lead">The outcome is a presence that earns rankings, references, and trust on its own. The reason it works: I treat security, structure, schema, and strategy as one system — the same disciplines most agencies split across four vendors who never talk.</p>
 
     <div class="framework-grid">
       <article class="framework-step fade-up" style="--delay:0.1s">
+        <span class="dx-icon" data-icon="lock" aria-hidden="true"></span>
         <div class="step-num">01</div>
         <h3 class="step-name">Secure Infrastructure</h3>
         <p class="step-desc">
@@ -200,6 +167,7 @@
       </article>
 
       <article class="framework-step fade-up" style="--delay:0.2s">
+        <span class="dx-icon" data-icon="hierarchy" aria-hidden="true"></span>
         <div class="step-num">02</div>
         <h3 class="step-name">Heading Architecture</h3>
         <p class="step-desc">
@@ -208,6 +176,7 @@
       </article>
 
       <article class="framework-step fade-up" style="--delay:0.3s">
+        <span class="dx-icon" data-icon="mesh" aria-hidden="true"></span>
         <div class="step-num">03</div>
         <h3 class="step-name">JSON-LD Schema (AI SEO)</h3>
         <p class="step-desc">
@@ -216,6 +185,7 @@
       </article>
 
       <article class="framework-step fade-up" style="--delay:0.4s">
+        <span class="dx-icon" data-icon="compass" aria-hidden="true"></span>
         <div class="step-num">04</div>
         <h3 class="step-name">Information Architecture</h3>
         <p class="step-desc">
@@ -223,6 +193,9 @@
         </p>
       </article>
     </div>
+    <div class="dx-viz dx-viz--flywheel fade-up" data-viz="flywheel"
+         data-labels="Authority &amp; expertise|Educational resources|Compounding marketing asset"></div>
+
   </div>
 </section>
 
@@ -256,7 +229,7 @@
         </article>
 
         <article class="work-card fade-up" style="--delay:0.2s">
-          <a href="https://www.seguroscorco.com/" target="_blank" rel="noopener" class="work-thumb">
+          <a href="/work/seguros/" class="work-thumb">
             <img src="/assets/images/case-studies/seguros.webp" alt="Seguros Corco website preview" loading="lazy">
           </a>
           <div class="work-card-body">
@@ -268,11 +241,12 @@
             <p class="work-desc">
               Growth engine for a second-generation insurance brokerage — marketing strategy focused on high-end clients, on secure bilingual SEO infrastructure.
             </p>
+            <a href="/work/seguros/" class="work-link">Read the case study →</a>
           </div>
         </article>
 
         <article class="work-card fade-up" style="--delay:0.3s">
-          <a href="https://aglaw-preview.pages.dev/" target="_blank" rel="noopener" class="work-thumb">
+          <a href="/work/ag-law/" class="work-thumb">
             <img src="/assets/images/case-studies/aglaw.webp" alt="AG Law website preview" loading="lazy">
           </a>
           <div class="work-card-body">
@@ -284,6 +258,7 @@
             <p class="work-desc">
               Digital presence for a premier sports lawyer and president of the WBC in Panama — service architecture, domain security, and search positioning tuned for legal intent.
             </p>
+            <a href="/work/ag-law/" class="work-link">Read the case study →</a>
           </div>
         </article>
 
@@ -313,7 +288,7 @@
       <div class="work-grid">
 
         <article class="work-card fade-up" style="--delay:0.1s">
-          <a href="https://www.obstacleracepanama.com/" target="_blank" rel="noopener" class="work-thumb">
+          <a href="/work/obstacle-race/" class="work-thumb">
             <img src="/assets/images/case-studies/obstacle.webp" alt="Obstacle Race Panama website preview" loading="lazy">
           </a>
           <div class="work-card-body">
@@ -324,6 +299,7 @@
             <p class="work-desc">
               A product of Panama Sports Magazine — creative direction of a sustainability campaign and website development, with a registration flow for Panama's competitive community.
             </p>
+            <a href="/work/obstacle-race/" class="work-link">Read the case study →</a>
           </div>
         </article>
 
@@ -345,7 +321,7 @@
         </article>
 
         <article class="work-card fade-up" style="--delay:0.3s">
-          <a href="https://ucc-latam-demo.julioernestolv.workers.dev/" target="_blank" rel="noopener" class="work-thumb">
+          <a href="/work/ucc/" class="work-thumb">
             <img src="/assets/images/case-studies/ucc.webp" alt="Ultimate Combat Challenge website preview" loading="lazy">
           </a>
           <div class="work-card-body">
@@ -357,6 +333,7 @@
             <p class="work-desc">
               An MMA promotion in Panama with 25 years of history — brand identity, domain security, and digital presence built to attract the right audience and convert interest into bookings.
             </p>
+            <a href="/work/ucc/" class="work-link">Read the case study →</a>
           </div>
         </article>
 
@@ -395,7 +372,9 @@
 <!-- Scripts -->
 <script defer src="/js/scroll-reveal.js"></script>
 <script defer src="/js/nav.js"></script>
+<script>window.TAB_IDS = ['services', 'work'];</script>
 <script defer src="/js/tabs.js"></script>
 
+<script defer src="/js/viz.js"></script>
 </body>
 </html>

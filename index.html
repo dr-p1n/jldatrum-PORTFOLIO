@@ -58,24 +58,23 @@
   <link rel="stylesheet" href="/css/typography.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/viz.css">
 
   <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
   <link rel="manifest" href="/assets/manifest.json">
   <!-- jsPDF for client-side PDF generation (deferred — only needed for the audit report) -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </head>
 <body>
 
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
-  <a href="#offer" onclick="closeDrawer()">Services</a>
-  <a href="#method" onclick="closeDrawer()">DATRUM Method</a>
+  <a href="/work/#services" onclick="closeDrawer()">Services</a>
   <a href="/work/" onclick="closeDrawer()">Case studies</a>
   <a href="/resources/" onclick="closeDrawer()">Resources</a>
   <a href="/bio/" onclick="closeDrawer()">Bio</a>
   <a href="/es/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
-  <a href="#diagnose" class="btn-diagnose-drawer" onclick="closeDrawer()">Audit Your Brand →</a>
+  <a href="/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audit Your Brand →</a>
 </div>
 
 <!-- NAV -->
@@ -84,13 +83,12 @@
     <span class="nav-brand">DATRUM</span>
   </a>
   <div class="nav-links">
-    <a href="#offer">Services</a>
-    <a href="#method">DATRUM Method</a>
+    <a href="/work/#services">Services</a>
     <a href="/work/">Case studies</a>
     <a href="/resources/">Resources</a>
     <a href="/bio/">Bio</a>
     <a href="/es/" lang="es" hreflang="es" class="nav-lang">ES</a>
-    <a href="#diagnose" class="btn-diagnose">Audit Your Brand →</a>
+    <a href="/audit/" class="btn-diagnose">Audit Your Brand →</a>
   </div>
   <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
     <span></span><span></span><span></span>
@@ -100,18 +98,20 @@
 <!-- ── SECTION 1: HERO ──────────────────────────────── -->
 <section id="home">
   <div class="section-inner">
+    <div class="dx-hero" data-viz="herograph" aria-hidden="true"></div>
     <div class="eyebrow fade-up" style="--delay:0.2s">
       <span class="pulse-dot"></span>
       B2B Marketing Asset Design Agency
     </div>
     <h1 class="hero-title fade-up" style="--delay:0.4s">
-      <em>Digital products</em> that transform your marketing into <span class="coral">a value-generating asset.</span>
+      <em>I build marketing</em> that appreciates, not <span class="lemon">attention you rent every month.</span>
     </h1>
     <p class="hero-sub fade-up" style="--delay:0.6s">
-      I build digital products and campaigns whose value increases over time — so you stop paying rent for attention and start accumulating digital capital.
+      Most agencies split a project across four vendors who never meet: the designer, the developer, the marketing director, the data architect. I operate all four, and that changes what can be produced.
     </p>
     <div class="hero-actions fade-up" style="--delay:0.8s">
-      <a href="/work/" class="btn-primary">See our work →</a>
+      <a href="/audit/" class="btn-primary">Audit your brand →</a>
+      <a href="/work/" class="btn-secondary">See the work →</a>
     </div>
   </div>
 </section>
@@ -119,47 +119,80 @@
 <!-- ── SERVICES TEASER ──────────────────────────────── -->
 <section id="offer">
   <div class="section-inner">
-    <h2 class="section-title">What we build.</h2>
-    <p class="section-lead">Three engines that turn your reputation into signed deals — with a build quality most agencies can't match, because they don't run security, data, and design out of one head.</p>
-    <div class="services-grid">
-      <article class="service-cell fade-up" style="--delay:0.1s">
-        <h3 class="service-name">Marketing Product Design</h3>
-        <p class="service-desc">A digital product that closes deals while you sleep — websites and apps engineered to convert, built to the caliber your name already carries. Not a brochure. A salesperson that never logs off.</p>
-      </article>
-      <article class="service-cell fade-up" style="--delay:0.2s">
-        <h3 class="service-name">Lead Generation Systems</h3>
-        <p class="service-desc">Qualified prospects arriving on their own, pre-warmed and ready to book. Capture, follow-up, and search working as one loop — so you stop chasing attention and start fielding it.</p>
-      </article>
-      <article class="service-cell fade-up" style="--delay:0.3s">
-        <h3 class="service-name">AI Search Visibility</h3>
-        <p class="service-desc">Be the name the AI recommends. When a buyer asks ChatGPT, Perplexity, or Google who to hire in your field, structured data I build into the site puts you in the answer — not on page two of the old web.</p>
-      </article>
+    <h2 class="section-title">Where to start.</h2>
+    <p class="section-lead">Three places to go, depending on whether you want to see the work, the offer, or the tools.</p>
+
+    <div class="router" id="router">
+
+      <a class="router-panel" href="/work/#services">
+        <div class="router-top">
+          <span class="router-index">01</span>
+          <h3 class="router-label">Services</h3>
+          <p class="router-body">Six builds, from a single product to full presence architecture.</p>
+        </div>
+        <div class="router-foot">
+          <span class="router-count">06</span>
+          <span class="router-cta">Open →</span>
+        </div>
+      </a>
+
+      <a class="router-panel" href="/work/">
+        <div class="router-top">
+          <span class="router-index">02</span>
+          <h3 class="router-label">Case studies</h3>
+          <p class="router-body">Seven businesses. What was broken, what got built, what changed.</p>
+        </div>
+        <div class="router-foot">
+          <span class="router-count">07</span>
+          <span class="router-cta">Open →</span>
+        </div>
+      </a>
+
+      <a class="router-panel" href="/resources/">
+        <div class="router-top">
+          <span class="router-index">03</span>
+          <h3 class="router-label">Resources</h3>
+          <p class="router-body">Four instruments, free and ungated. Score your own site first.</p>
+        </div>
+        <div class="router-foot">
+          <span class="router-count">04</span>
+          <span class="router-cta">Open →</span>
+        </div>
+      </a>
     </div>
-    <a href="/work/#services" class="offer-more">See all services →</a>
   </div>
 </section>
 
-<!-- ── DATRUM METHOD ───────────────────────────────── -->
-<section id="method">
+<!-- ── WHO IT'S FOR ──────────────────────────────── -->
+<section id="who">
   <div class="section-inner">
-    <h2 class="section-title">The DATRUM method.</h2>
-    <p class="section-lead">Our philosophy lives at the intersection of technology and art: design as an agent of change. Market advantages come from tactics competitors can't replicate — and that's where the methodology begins: the asymmetric design of opportunity.</p>
-    <p class="section-lead">Demand that arrives instead of demand you chase — that's the outcome. The reason it works is a method most studios structurally can't run: distribution, growth engineering, and editorial craft built by one operator, so nothing gets lost in a handoff.</p>
-    <div class="method-grid">
-      <article class="method-pillar fade-up" style="--delay:0.1s">
-        <div class="method-kicker">Distribution systems</div>
-        <p class="method-body">Your brand in front of the exact regional audience that can afford you — placed across search, AI results, and the channels higher-end buyers actually use. Reach is easy; reaching the right room is the work.</p>
-      </article>
-      <article class="method-pillar fade-up" style="--delay:0.2s">
-        <div class="method-kicker">Growth engines</div>
-        <p class="method-body">A closed loop that compounds month over month — attention becomes booked deals, booked deals sharpen the loop. The system gets better while you do nothing to it.</p>
-      </article>
-      <article class="method-pillar fade-up" style="--delay:0.3s">
-        <div class="method-kicker">Design + engineering</div>
-        <p class="method-body">Work that looks like the top of your market and performs like infrastructure. Product design, software, data, and security under one roof — no agency-to-freelancer telephone game degrading the result.</p>
-      </article>
+    <h2 class="section-title">Who's it for?</h2>
+
+    <p class="who-formula fade-up">
+      I work with businesses whose <em>reputation is already real</em>, but whose digital presence isn't converting any of it into revenue — <span class="lemon">high-trust businesses where a buyer vets you online before they ever make contact.</span>
+    </p>
+
+    <div class="who-criteria fade-up">
+      <div class="who-col">
+        <div class="who-col-title">You're a fit if</div>
+        <ul>
+          <li>Your reputation is real — but your website, funnel, or content isn't converting it into clients or deals.</li>
+          <li>You want a digital presence that actually matches the caliber of your work.</li>
+          <li>You want qualified clients finding you, not the other way around.</li>
+          <li>You see technology as a distribution tool, not just an administrative one.</li>
+        </ul>
+      </div>
+      <div class="who-col not-fit">
+        <div class="who-col-title">Not your fit if</div>
+        <ul>
+          <li>You need a one-time brochure with no marketing system behind it.</li>
+          <li>You have no established audience or reputation to build from yet.</li>
+          <li>You're not willing to bring your creative direction — I build the system, but the brand has to be yours.</li>
+          <li>You want to repeat the same generic tactics everyone else runs.</li>
+        </ul>
+      </div>
     </div>
-    <a href="/work/#framework" class="offer-more">See the full method →</a>
+
   </div>
 </section>
 
@@ -229,185 +262,21 @@
   </div>
 </section>
 
-<!-- ── THE AUDIT ────────────────────────────────────── -->
-<section id="diagnose">
+<!-- ── SPECIALIZATION ──────────────────────────────── -->
+<section id="specialization">
   <div class="section-inner">
+    <p class="specialization-line fade-up">I build B2B marketing for service providers with international clients: jewelers and watch dealers, sports executives, film producers, fiduciary professionals.</p>
+  </div>
+</section>
 
-    <div class="diagnostic-wrap">
-      <!-- Left column -->
-      <div class="fade-up">
-        <h2 class="diag-title">Your brand is either bringing clients to you — or it isn't.</h2>
-        <p class="diag-body">
-          Five questions. An instant score, and a breakdown of exactly where you're leaking revenue right now. No pitch — just your numbers, and the honest picture of what your presence is costing you every month it stays as-is.
-        </p>
-        <div class="feature-list">
-          <div class="feature-item">
-            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="2.5" x2="14" y2="2.5"/><line x1="12" y1="2.5" x2="12" y2="4.5"/><circle cx="12" cy="13" r="8"/><path d="M12 13l3-3"/></svg></div>
-            <div class="feature-text">
-              <div class="feature-title">Instant score (0–10)</div>
-              <div class="feature-desc">Weighted across 5 brand performance dimensions</div>
-            </div>
-          </div>
-          <div class="feature-item">
-            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="11"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="14"/></svg></div>
-            <div class="feature-text">
-              <div class="feature-title">PDF breakdown</div>
-              <div class="feature-desc">Downloadable report with per-dimension analysis</div>
-            </div>
-          </div>
-          <div class="feature-item">
-            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg></div>
-            <div class="feature-text">
-              <div class="feature-title">No obligation</div>
-              <div class="feature-desc">Useful whether you hire me or not</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Widget -->
-      <div class="widget fade-up">
-        <div class="widget-header">
-          <div class="widget-title">Brand Revenue Audit</div>
-          <div class="live-badge">LIVE</div>
-        </div>
-
-        <!-- Progress bar (6 segments: 5 Qs + email) -->
-        <div class="progress-bar" id="progressBar">
-          <div class="progress-seg active" id="seg0"></div>
-          <div class="progress-seg" id="seg1"></div>
-          <div class="progress-seg" id="seg2"></div>
-          <div class="progress-seg" id="seg3"></div>
-          <div class="progress-seg" id="seg4"></div>
-          <div class="progress-seg" id="seg5"></div>
-        </div>
-
-        <!-- Step 1 -->
-        <div class="step active" id="step-0">
-          <p class="step-question">How many new qualified leads does your website generate per month?</p>
-          <div class="options">
-            <button class="option-btn" onclick="selectOption(0, 10, this)">
-              <span class="opt-badge">A</span>
-              <span class="opt-text">5 or more new leads/month</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(0, 5, this)">
-              <span class="opt-badge">B</span>
-              <span class="opt-text">2 to 4 leads/month</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(0, 1, this)">
-              <span class="opt-badge">C</span>
-              <span class="opt-text">0 to 1 / don't know</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="step" id="step-1">
-          <p class="step-question">What percentage of those leads are actually qualified for your practice?</p>
-          <div class="options">
-            <button class="option-btn" onclick="selectOption(1, 10, this)">
-              <span class="opt-badge">A</span>
-              <span class="opt-text">75%+ are real opportunities</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(1, 5, this)">
-              <span class="opt-badge">B</span>
-              <span class="opt-text">50–75% are qualified</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(1, 1, this)">
-              <span class="opt-badge">C</span>
-              <span class="opt-text">Less than 50% — mostly wrong fit</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="step" id="step-2">
-          <p class="step-question">When prospects search for your practice area, do they find you?</p>
-          <div class="options">
-            <button class="option-btn" onclick="selectOption(2, 10, this)">
-              <span class="opt-badge">A</span>
-              <span class="opt-text">Yes — top 3 results for my main keywords</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(2, 5, this)">
-              <span class="opt-badge">B</span>
-              <span class="opt-text">Sometimes — page 1 or 2 for some terms</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(2, 1, this)">
-              <span class="opt-badge">C</span>
-              <span class="opt-text">Rarely or never</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Step 4 -->
-        <div class="step" id="step-3">
-          <p class="step-question">Are the leads you get attracting the clients you actually want?</p>
-          <div class="options">
-            <button class="option-btn" onclick="selectOption(3, 10, this)">
-              <span class="opt-badge">A</span>
-              <span class="opt-text">Mostly right-fit clients</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(3, 5, this)">
-              <span class="opt-badge">B</span>
-              <span class="opt-text">Mixed bag</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(3, 1, this)">
-              <span class="opt-badge">C</span>
-              <span class="opt-text">Mostly wrong-fit or low-value</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Step 5 -->
-        <div class="step" id="step-4">
-          <p class="step-question">How many hours/week does your firm spend on outbound marketing?</p>
-          <div class="options">
-            <button class="option-btn" onclick="selectOption(4, 10, this)">
-              <span class="opt-badge">A</span>
-              <span class="opt-text">0–5 hours/week</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(4, 5, this)">
-              <span class="opt-badge">B</span>
-              <span class="opt-text">5–15 hours/week</span>
-            </button>
-            <button class="option-btn" onclick="selectOption(4, 1, this)">
-              <span class="opt-badge">C</span>
-              <span class="opt-text">15+ hours/week</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Step 6: Email -->
-        <div class="step" id="step-5">
-          <p class="email-step-title">One last thing — enter your details to generate your PDF report.</p>
-          <div class="form-group">
-            <input type="email" class="form-input" id="emailInput" placeholder="Email address" required autocomplete="email">
-            <input type="url"   class="form-input" id="urlInput"   placeholder="Your website URL" required autocomplete="url">
-          </div>
-        </div>
-
-        <!-- Score result (inline) -->
-        <div class="score-result" id="scoreResult">
-          <div class="score-ring-wrap">
-            <svg width="120" height="120" viewBox="0 0 120 120">
-              <circle id="ring-bg" cx="60" cy="60" r="52" fill="none" stroke-width="6"/>
-              <circle id="ring-fg" cx="60" cy="60" r="52" fill="none" stroke-width="6"/>
-            </svg>
-            <div class="score-center" id="scoreDisplay">—</div>
-          </div>
-          <div class="score-tier-label" id="scoreTierLabel"></div>
-          <div class="score-desc" id="scoreDesc"></div>
-          <a href="https://calendly.com/julio-jldatrum" id="scheduleBtn" class="btn-schedule" target="_blank" rel="noopener">Schedule a Strategy Session →</a>
-          <button id="btnDownloadPDF" class="btn-download" onclick="downloadPDF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg><span id="btnDownloadLabel">Download PDF Report</span></button>
-          <button class="btn-reset" onclick="resetWidget()">← Start over</button>
-        </div>
-
-        <!-- Footer nav -->
-        <div class="widget-footer" id="widgetFooter">
-          <span class="step-counter" id="stepCounter">Step 1 of 6</span>
-          <button class="btn-next" id="btnNext" onclick="nextStep()">Next →</button>
-        </div>
-      </div>
+<!-- ── CONTACT ─────────────────────────────────────── -->
+<section id="contact">
+  <div class="section-inner">
+    <h2 class="section-title">Or just ask.</h2>
+    <p class="section-lead">Both of these reach me directly.</p>
+    <div class="contact-actions fade-up">
+      <a href="https://wa.me/50765213318?text=Hi%20Julio%20%E2%80%94%20coming%20from%20jldatrum.com" class="btn-primary" target="_blank" rel="noopener">WhatsApp →</a>
+      <a href="mailto:julio@jldatrum.com?subject=Enquiry%20%E2%80%94%20jldatrum.com" class="btn-secondary">julio@jldatrum.com →</a>
     </div>
   </div>
 </section>
@@ -440,7 +309,7 @@
 <!-- Scripts -->
 <script defer src="/js/scroll-reveal.js"></script>
 <script defer src="/js/nav.js"></script>
-<script defer src="/js/scorecard.js"></script>
 
+<script defer src="/js/viz.js"></script>
 </body>
 </html>

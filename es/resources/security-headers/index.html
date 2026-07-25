@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Referencia de encabezados de seguridad — gratis · DATRUM</title>
+  <meta name="description" content="Los seis encabezados de seguridad que los compradores institucionales escanean antes de armar su shortlist — qué hace cada uno, qué se rompe sin él, y la configuración exacta a desplegar. Referencia gratis.">
+  <meta property="og:title" content="Referencia de encabezados de seguridad · DATRUM">
+  <meta property="og:description" content="Los seis encabezados de seguridad que los compradores institucionales escanean antes de armar su shortlist — qué hace cada uno, qué se rompe sin él, y la configuración exacta a desplegar. Referencia gratis.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://jldatrum.com/es/resources/security-headers/">
+  <meta property="og:image" content="https://jldatrum.com/assets/og-image-es.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Referencia de encabezados de seguridad · DATRUM">
+  <meta name="twitter:description" content="Los seis encabezados de seguridad que los compradores institucionales escanean antes de armar su shortlist — qué hace cada uno, qué se rompe sin él, y la configuración exacta a desplegar. Referencia gratis.">
+  <meta name="twitter:image" content="https://jldatrum.com/assets/og-image-es.png">
+
+  <link rel="canonical" href="https://jldatrum.com/es/resources/security-headers/">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/security-headers/">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/security-headers/">
+  <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/security-headers/">
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { 'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500 });
+    try { if (localStorage.getItem('datrum_consent') === 'granted') gtag('consent','update',{ 'analytics_storage':'granted' }); } catch(e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/legal.css">
+  <link rel="stylesheet" href="/css/viz.css">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="/assets/manifest.json">
+</head>
+<body>
+<div class="cs-topbar">
+  <a href="/es/" class="cs-wordmark">DATRUM</a>
+  <a href="/es/resources/" class="back-link">← Todos los recursos</a>
+</div>
+
+<div class="wrap">
+  <span class="dx-icon dx-icon--lg dx-icon--hero" data-icon="lock" aria-hidden="true"></span>
+  <div class="eyebrow">Instrumento 02</div>
+  <h1>Referencia de encabezados de seguridad</h1>
+  <p class="cs-deck">La revisión de proveedor que estás reprobando sin saberlo.</p>
+  <p class="rc-runmeta">Tiempo ~5 min para escanear, ~1 hora para corregir · Requiere acceso a tu configuración de hosting · Gratis, sin formularios</p>
+
+  <h3 class="rc-subhead">Por qué importa más allá del hardening</h3>
+    <p>Los encabezados de seguridad son instrucciones que tu servidor envía a los navegadores antes de que cargue una sola palabra de contenido. Son trivialmente verificables por cualquiera, desde cualquier lugar, en segundos, sin permiso.</p>
+    <p>Ese último punto es el que los negocios pasan por alto. <strong>Un prospecto, un competidor, un oficial de compras o un auditor puede calificar tu postura de seguridad sin preguntarte y sin avisarte.</strong></p>
+    <p>La consecuencia de distribución: los compradores empresariales e institucionales cada vez más corren un escaneo automatizado como paso de precalificación. No les cuesta nada. Una calificación reprobatoria no produce una conversación sobre remediación — produce una remoción silenciosa de la lista de proveedores.</p>
+    <p>Nunca recibirás ese correo. Ese es todo el problema.</p>
+
+  <h3 class="rc-subhead">Corre el escaneo primero</h3>
+    <p>Escanea tu dominio en <strong>Mozilla Observatory</strong> (<a href="https://developer.mozilla.org/en-US/observatory" target="_blank" rel="noopener">developer.mozilla.org/observatory</a>). Anota tu calificación antes de seguir leyendo. La mayoría de los sitios de negocios panameños sacan <strong>F</strong>.</p>
+    <p>Si sacaste F, no hay nada mal con tu negocio. Tu servidor simplemente nunca fue configurado para decir nada — y el default es el silencio.</p>
+
+  <h3 class="rc-subhead">Los encabezados</h3>
+    <h3 class="rc-subhead">Strict-Transport-Security (HSTS)</h3>
+    <pre><code>Strict-Transport-Security: max-age=31536000; includeSubDomains; preload</code></pre>
+    <p>Fuerza a los navegadores a usar HTTPS exclusivamente por un año, incluyendo subdominios.</p>
+    <p class="rc-fail"><b>Sin él:</b> Un navegador intentará primero una conexión sin cifrar. En redes no confiables — wifi de hotel, aeropuerto, café — esa petición inicial es interceptable. Los ataques de degradación de sesión dependen de esa brecha.</p>
+    <h3 class="rc-subhead">Content-Security-Policy (CSP)</h3>
+    <pre><code>Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self'</code></pre>
+    <p>Declara qué fuentes pueden cargar scripts, estilos, imágenes y otros recursos.</p>
+    <p class="rc-fail"><b>Sin él:</b> Cualquier script inyectado se ejecuta con acceso completo a la página — incluyendo acceso a los campos de tu formulario. Este es el encabezado que convierte una vulnerabilidad menor en una brecha de datos.</p>
+    <p class="rc-note"><b>Nota:</b> Agrega tus dominios de terceros reales a las directivas relevantes. Analítica, procesadores de pago y proveedores de fuentes necesitan permiso explícito cada uno.</p>
+    <h3 class="rc-subhead">X-Frame-Options</h3>
+    <pre><code>X-Frame-Options: DENY</code></pre>
+    <p>Evita que tu sitio sea embebido en un frame en otro dominio.</p>
+    <p class="rc-fail"><b>Sin él:</b> Clickjacking. Tu sitio renderizado invisiblemente sobre la página de un atacante, para que los usuarios interactúen con tu interfaz creyendo que están en otro lado.</p>
+    <h3 class="rc-subhead">X-Content-Type-Options</h3>
+    <pre><code>X-Content-Type-Options: nosniff</code></pre>
+    <p>Impide que los navegadores adivinen los tipos de archivo.</p>
+    <p class="rc-fail"><b>Sin él:</b> Un archivo subido que el servidor etiqueta como imagen puede ser interpretado y ejecutado como un script.</p>
+    <h3 class="rc-subhead">Referrer-Policy</h3>
+    <pre><code>Referrer-Policy: strict-origin-when-cross-origin</code></pre>
+    <p>Controla cuánta información de URL viaja con los enlaces salientes.</p>
+    <p class="rc-fail"><b>Sin él:</b> Las URLs completas — incluyendo cualquier parámetro — se filtran a cada sitio externo que tus usuarios visitan desde el tuyo. Esto también es una exposición de Ley 81 si esas URLs cargan datos personales.</p>
+    <h3 class="rc-subhead">Permissions-Policy</h3>
+    <pre><code>Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()</code></pre>
+    <p>Deshabilita las APIs de navegador que tu sitio no usa.</p>
+    <p class="rc-fail"><b>Sin él:</b> Cualquier script en tu página puede solicitar acceso a cámara, micrófono o ubicación. Quita <code>payment=()</code> si usas un procesador de pago que requiere la Payment Request API.</p>
+
+  <h3 class="rc-subhead">Implementación</h3>
+    <p><strong>Cloudflare Pages</strong> — crea un archivo llamado <code>_headers</code> en la raíz de tu sitio:</p>
+  <pre><code>/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self'</code></pre>
+    <p>Otras plataformas usan mecanismos distintos — Netlify usa el mismo formato <code>_headers</code>, Apache usa <code>.htaccess</code>, nginx usa el bloque de servidor. Los valores de los encabezados son idénticos en todos los casos.</p>
+    <p><strong>Verifica reescaneando.</strong> De F a A suele ser un solo despliegue.</p>
+
+  <h3 class="rc-subhead">¿Cuáles tienes?</h3>
+    <p>Seis encabezados, pasa o falla. Marca los que tu escaneo ya devuelve — aquí no hay puntaje, solo una lista de brechas. Cada fila sin marcar es una línea más en tu archivo <code>_headers</code>.</p>
+    <div class="rc-headercheck">
+      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label"><code>Strict-Transport-Security</code></span></label>
+      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label"><code>Content-Security-Policy</code></span></label>
+      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label"><code>X-Frame-Options</code></span></label>
+      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label"><code>X-Content-Type-Options</code></span></label>
+      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label"><code>Referrer-Policy</code></span></label>
+      <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label"><code>Permissions-Policy</code></span></label>
+    </div>
+
+  <h3 class="rc-subhead">Qué visibilidad desbloquea</h3>
+    <ul>
+      <li><strong>Pasar la precalificación automatizada</strong> en compradores institucionales que escanean antes de armar el shortlist</li>
+      <li><strong>Sobrevivir cuestionarios de seguridad de proveedores</strong> sin una demora de remediación que te cuesta el cronograma</li>
+      <li><strong>Credibilidad con compradores técnicos</strong> — CTOs, directores de IT y ejecutivos conscientes de seguridad revisan, y revisan primero</li>
+      <li><strong>Evidencia de Ley 81</strong> — cuatro de estos encabezados evidencian directamente Seguridad, Integridad y Confidencialidad</li>
+    </ul>
+  <p>La asimetría: esto cuesta una tarde y remueve permanentemente un descalificador silencioso. <strong>La mayoría de tus competidores están sacando F ahora mismo y no tienen idea, porque la falla en este canal es invisible desde adentro.</strong></p>
+
+  <div class="cs-cta">
+    <a href="/es/audit/" class="cs-btn-primary">Audita tu marca →</a>
+    <a href="https://calendly.com/julio-jldatrum" target="_blank" rel="noopener" class="cs-btn-ghost">Agenda una Sesión de Estrategia →</a>
+  </div>
+
+  <div class="footer-note">© 2026 DATRUM · <a href="/es/">Inicio</a> · <a href="/es/resources/">Todos los recursos</a></div>
+</div>
+
+<div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <p class="cookie-text">Usamos analítica que respeta la privacidad (Google Analytics 4 con IP anonimizada) para entender cómo los visitantes encuentran DATRUM. Nada personal, sin tracking publicitario. Puedes rechazar y el sitio funciona igual. <a href="/es/privacy">Política de privacidad</a>.</p>
+  <div class="cookie-actions">
+    <button class="cookie-btn primary" onclick="acceptCookies()">Aceptar analítica</button>
+    <button class="cookie-btn" onclick="declineCookies()">Rechazar</button>
+  </div>
+</div>
+
+<script defer src="/js/nav.js"></script>
+<script defer src="/js/viz.js"></script>
+</body>
+</html>

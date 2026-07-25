@@ -2,7 +2,10 @@
 // Turns the work-page nav links into real tabs: one section
 // visible at a time, no endless scroll.
 (function () {
-  const TAB_IDS = ['who', 'services', 'framework', 'work'];
+  // Page may override the tab set (e.g. the Resources hub) via window.TAB_IDS.
+  const TAB_IDS = (window.TAB_IDS && window.TAB_IDS.length)
+    ? window.TAB_IDS
+    : ['who', 'services', 'framework', 'work'];
 
   const sections = {};
   TAB_IDS.forEach(id => {
@@ -27,6 +30,10 @@
     tabLinks.forEach(a => {
       a.classList.toggle('active', a.getAttribute('href').slice(1) === id);
     });
+    // Inside a display:none subtree IntersectionObserver never fires and CSS
+    // animations do not run, so any chart in a hidden tab would stay frozen.
+    // js/viz.js listens for this and re-scans the now-visible section.
+    document.dispatchEvent(new CustomEvent('tab:activate', { detail: { id: id } }));
     window.scrollTo(0, 0);
   }
 

@@ -1,0 +1,146 @@
+DATRUM — WEBSITE COPY (ES)
+Editable working copy. Adjust freely; hand back and I'll wire changes into both language builds.
+
+================================================================
+LANDING  (jldatrum.com/es/)
+================================================================
+NAV/TABS: Servicios · Método DATRUM · Casos de estudio · [EN] · Audita tu marca →
+
+
+── HERO  (#home) ────────────────────────────────────
+EYEBROW: Agencia de Marketing B2B · Deportes, Moda y servicios Creativos
+HEADLINE: Diseño de productos. / Marketing. / Estratega cultural.
+SUBTEXT: Construyo experiencias digitales que generan ingresos en la intersección de moda, medios y deporte, desarrollando productos de marketing cuyo valor aumenta con el tiempo. El marketing debe ser un activo a largo plazo con retornos a corto plazo, no un costo recurrente.
+CTA Mira nuestro trabajo →
+
+── SERVICES (teaser)  (#offer) ───────────────────────
+§ HEADING: Lo que construimos.
+Lead: Un estudio de producto de marketing para tastemakers de deporte, moda y creativos — tres motores que convierten tu reputación en ingresos.
+▸ Diseño de Producto de Marketing
+    Sitios web, apps y productos digitales diseñados para vender — a la altura de tu marca y construidos para convertir la atención en acuerdos.
+▸ Sistemas de Generación de Leads
+    Embudos, captura y seguimiento que convierten la atención en llamadas agendadas y clientes firmados — leads calificados que llegan en piloto automático.
+▸ Visibilidad en Búsqueda con IA
+    Sé el nombre que ChatGPT, Perplexity y la IA de Google muestran cuando un cliente potencial pregunta a quién contratar en tu campo.
+CTA Ver todos los servicios →
+
+── DATRUM METHOD (teaser)  (#method) ──────────────────
+§ HEADING: El método DATRUM.
+Lead: Una metodología interna para sistemas de distribución y motores de crecimiento — agnóstica de industria, construida para empresas que expanden su presencia regional y atraen compradores de alto nivel.
+▸ Sistemas de distribución
+    Ponemos tu marca frente a la audiencia regional correcta — en búsqueda, resultados de IA y los canales que tus compradores de alto nivel realmente usan.
+▸ Motores de crecimiento
+    Un ciclo cerrado que convierte la atención en acuerdos agendados y compone mes a mes — para que la demanda llegue en lugar de perseguirla.
+▸ Diseño + ingeniería
+    Producción editorial e ingeniería digital bajo un mismo techo — diseño de producto, software, datos y seguridad, para que el trabajo luzca y rinda como una máquina.
+CTA Ver el método completo →
+
+── COMPLIANCE  (#trust) ──────────────────────────────
+§ HEADING: Los estándares con los que diseñamos.
+[badge] GDPR
+▸ Conforme
+    Cumplimos los requisitos del Reglamento General de Protección de Datos de la UE — transparencia bajo los Artículos 13–14, base legal documentada, derechos del titular respetados. Consentimiento de cookies antes del tracking. Subprocesadores divulgados.
+[badge] PCI DSS
+▸ SAQ A Auto-Atestado
+    DATRUM no almacena, procesa, ni transmite datos de tarjeta. Diseñamos flujos que delegan completamente el manejo de pagos a procesadores PCI Nivel 1 (Stripe, Adyen) — manteniendo a los merchants clientes en el alcance de SAQ A.
+[badge] Ley 81 PA
+▸ Conforme
+    Ley de Protección de Datos Personales de Panamá (Ley 81 de 2019). Integrada en cada sitio que entregamos — consentimiento explícito, derechos de acceso del titular, controles de retención, preparación para notificación de brechas.
+
+── AUDIT  (#diagnose) ───────────────────────────────────
+§ HEADING: Tu marca o te está trayendo clientes — o no.
+Body: Responde 5 preguntas sobre cómo está rindiendo tu presencia en línea ahora mismo. Obtendrás un puntaje instantáneo y un análisis que muestra exactamente dónde estás fugando ingresos. Sin venta. Solo tus números.
+  • feature Puntaje instantáneo (0–10)
+      – Ponderado en 5 dimensiones de desempeño de marca
+  • feature Reporte PDF
+      – Reporte descargable con análisis por dimensión
+  • feature Sin compromiso
+      – Útil ya sea que nos contrates o no
+Audit widget title: Auditoría de Ingresos de Marca
+Q ¿Cuántos leads calificados nuevos genera tu sitio web al mes?
+Q ¿Qué porcentaje de esos leads está realmente calificado para tu negocio?
+Q Cuando los prospectos buscan tu área de servicio, ¿te encuentran?
+Q ¿Los leads que recibes están atrayendo a los clientes que realmente quieres?
+Q ¿Cuántas horas/semana invierte tu firma en marketing outbound?
+Q Un último paso — ingresa tus datos para generar tu reporte PDF.
+CTA Agenda una Sesión de Estrategia →
+
+================================================================
+WORK / CASE STUDIES  (jldatrum.com/es/work/)
+================================================================
+NAV/TABS: Nosotros · Para Quién · Servicios · Método DATRUM · Casos de estudio · [EN] · Audita tu marca →
+
+
+── ABOUT  (#think) ───────────────────────────────────
+§ HEADING: La inversión de marketing se desperdicia en tácticas genéricas. / Tú dominas mercados con ventajas no replicables.
+Quote: "El alcance no es la ventaja — el sistema detrás de él sí lo es. Convertimos la influencia en deporte, moda y creativo en ventajas no replicables que transforman la atención en acuerdos firmados."
+Body: Somos una agencia B2B que combina visión técnica y creativa — aprovechando la tecnología, desde el formateo de datos hasta la visibilidad en IA, para impulsar la distribución y construir ventajas que la competencia no puede replicar.
+
+── WHO IT'S FOR  (#who) ────────────────────────────
+§ HEADING: Construido para un tipo específico de profesional.
+Body: Trabajamos con profesionales del deporte, marcas de moda y profesionales creativos que tienen la influencia y la audiencia — pero necesitan un sistema de marketing que realmente convierta eso en ingresos.
+▸ Eres un fit si
+   - Eres un equipo deportivo, marca de moda, estudio de fotografía, proyecto musical, agencia de talento o estudio creativo construyendo un negocio serio.
+   - Tu reputación es real — pero tu sitio web, embudo o contenido no la está convirtiendo en clientes o acuerdos.
+   - Quieres una presencia digital que realmente esté a la altura de tu trabajo.
+   - Quieres que los clientes calificados te encuentren, no al revés.
+▸ No es para ti si
+   - Necesitas un folleto de una sola vez sin ningún sistema de marketing detrás.
+   - Aún no tienes una audiencia o reputación establecida desde la cual construir.
+   - No estás dispuesto a aportar tu dirección creativa — nosotros construimos el sistema, pero la marca tiene que ser tuya.
+
+── SERVICES  (#services) ────────────────────────────────
+§ HEADING: Lo que construimos.
+▸ Diseño de Producto
+    Investigación, estrategia y diseño de alta fidelidad para productos digitales — plataformas de reservas, portales de clientes y apps construidas para estar a la altura de tu trabajo. Validamos antes de construir para que nada se desperdicie.
+▸ Estrategia de Marketing
+    Posicionamiento, mensaje y el plan de salida al mercado que convierte tu reputación en demanda — la historia correcta, la audiencia correcta, los canales correctos. Definimos cómo apareces antes de construir nada.
+▸ Motores de Generación de Leads
+    El sistema que convierte la atención en llamadas agendadas y clientes firmados — embudos, captura, seguimiento y visibilidad en búsqueda trabajando juntos para que los leads calificados lleguen en piloto automático.
+▸ Diseño Web
+    Un sitio web que se ve como tú y trabaja como un vendedor. Distintivo, rápido y construido para convertir — el tipo de presencia que detiene el scroll y se sostiene junto a los nombres más grandes de tu industria.
+▸ Apps Web y Desarrollo de Aplicaciones
+    Apps web y móviles a medida — sistemas de reservas, portales de clientes, plataformas para fans y herramientas internas. Construidas con tecnología moderna, desplegadas rápido y diseñadas para que tus clientes realmente quieran usarlas.
+▸ Visibilidad en Búsqueda con IA
+    ChatGPT, Perplexity y los resultados de IA de Google se están convirtiendo en la nueva portada. Nos aseguramos de que tu marca sea la que muestran — para que cuando un cliente potencial le pregunte a una IA a quién contratar, tu nombre aparezca.
+
+── DATRUM METHOD (full)  (#framework) ────────────────────
+§ HEADING: Metodología DATRUM
+Lead: El alcance completo detrás del teaser — el sistema de distribución y crecimiento que implementamos en cada proyecto, desde infraestructura segura hasta datos estructurados listos para IA.
+▸ Infraestructura Segura
+    Una postura de seguridad robusta en cada sitio que entregamos — las señales que los motores de búsqueda premian, construyendo la confianza que gana referencias y posicionamiento.
+▸ Estrategia de Encabezados
+    Una estrategia de encabezados por página que traza una red de información sobre la industria — te posiciona como autoridad de mercado y facilita la indexación.
+▸ Esquemas JSON-LD (AI SEO)
+    Optimizamos los formatos con esquemas JSON-LD — campañas interactivas, contenido del sitio y productos de mercadeo — para que los motores de búsqueda con IA muestren tu marca.
+▸ Arquitectura de Información
+    Dirección creativa para la estrategia e implementación de campañas de distribución a corto y largo plazo, impulsada por minería de datos.
+
+── CASE STUDIES  (#work) ────────────────────────────
+§ HEADING: Marcas para las que hemos construido.
+── group Servicios Corporativos
+[tag] E-Commerce
+▸ Panama Treasures
+    Catálogo de productos bilingüe con entrega rápida, seguridad A+ y posicionamiento en búsqueda construido para crecimiento orgánico — sin gasto en anuncios.
+[tag] Seguros
+▸ Seguros Corco
+    Sitio de generación de leads para un corretaje de seguros — layout enfocado en conversión, cumplimiento de privacidad e infraestructura SEO bilingüe.
+[tag] Legal
+▸ AG Law
+    Presencia digital para firma de abogados — arquitectura de servicios multi-práctica, contenido bilingüe para clientes transfronterizos y posicionamiento en búsqueda afinado para intención legal.
+[tag] Servicios
+▸ Go Clean
+    Marca de limpieza comercial — sitio de generación de leads, SEO local y flujo de reservas construido para convertir visitantes en clientes recurrentes.
+── group Deportes, Medios y Lujo
+[tag] Proyecto de Marca
+▸ Obstacle Race Panama
+    Un proyecto de marca para Panama Sports Magazine — identidad del evento, flujo de registro y presencia digital construida para la comunidad competitiva de fitness y deportes de Panamá.
+[tag] Medios
+▸ Shooting in Panama
+    Productora internacional de películas y shows — identidad de marca y presencia digital construida para atraer a la audiencia correcta y convertir el interés en reservas y acuerdos.
+[tag] Promoción MMA
+▸ Ultimate Combat Challenge
+    Una promotora de MMA en Panamá con más de 25 años de experiencia — identidad de marca y presencia digital construida para atraer a la audiencia correcta y convertir el interés en reservas y acuerdos.
+
+NOTE: Audit answer options + score-result text live in the widget JS (js/scorecard.js / scorecard.es.js), not here.
+Legal pages (security / privacy / subprocessors) are separate — ask if you want those in a file too.

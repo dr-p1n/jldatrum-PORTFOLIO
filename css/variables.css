@@ -18,11 +18,11 @@
   --surface:    var(--color-surface);
   --border:     var(--color-divider);
   --teal:       var(--color-interactive);
-  --coral:      var(--color-accent);
+  --lemon:      var(--color-accent);
   --text:       var(--color-text);
   --muted:      var(--color-text-muted);
   --teal-glow:  rgba(30, 127, 152, 0.12);
-  --coral-glow: rgba(242, 210, 75, 0.12);
+  --lemon-glow: rgba(242, 210, 75, 0.12);
 
   /* ── Typography ────────────────────────────────────── */
   --font-display: 'Space Grotesk', sans-serif;
