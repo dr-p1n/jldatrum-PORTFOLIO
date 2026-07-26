@@ -203,11 +203,18 @@
                '" r="6.5" style="--dx-d:' + d + 'ms"/>';
       var anchor = Math.abs(p[0] - cx) < 8 ? 'middle' : (p[0] > cx ? 'start' : 'end');
       var ox = anchor === 'middle' ? 0 : (p[0] > cx ? 12 : -12);
-      inner += '<text class="dx-pop" x="' + (p[0] + ox).toFixed(1) + '" y="' + (p[1] + 3.5).toFixed(1) +
-               '" text-anchor="' + anchor + '" style="--dx-d:' + d + 'ms">' + esc(L[i]) + '</text>';
+      // Labels wrap. Unwrapped, a long one (e.g. "Cross-border commercial") runs past
+      // the viewBox and .cs-figure clips it with overflow:hidden.
+      var lines = wrapWords(L[i], 14), tx = (p[0] + ox).toFixed(1);
+      var ty = (p[1] + 3.5 - (lines.length - 1) * 6).toFixed(1);
+      inner += '<text class="dx-pop" x="' + tx + '" y="' + ty + '" text-anchor="' + anchor +
+               '" style="--dx-d:' + d + 'ms">' +
+               lines.map(function (ln, k) {
+                 return '<tspan x="' + tx + '" dy="' + (k ? 13 : 0) + '">' + esc(ln) + '</tspan>';
+               }).join('') + '</text>';
       d += 110;
     });
-    el.innerHTML = svgWrap('0 0 420 280', inner);
+    el.innerHTML = svgWrap('0 0 420 300', inner);
   };
 
   // Timeline — UCC, 25 years. Draws left to right (enacts duration).
