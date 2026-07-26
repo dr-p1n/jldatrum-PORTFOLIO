@@ -868,3 +868,64 @@ nav {
   .nav-links { display: none; }
   .hamburger { display: flex; }
 }
+
+/* ── Research articles (/resources/research/) ────────── */
+.rs-meta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.rs-body > p:first-of-type { font-size: 17px; color: var(--text); }
+.rs-body h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin: 48px 0 16px;
+}
+.rs-body p { font-size: 16px; line-height: 1.8; }
+.rs-body strong { color: var(--text); font-weight: 500; }
+.rs-pull {
+  border-left: 2px solid var(--lemon);
+  padding: 8px 0 8px 24px;
+  margin: 32px 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 19px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+/* Standing close — identical on every piece */
+.rs-close {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin: 56px 0 0;
+}
+.rs-close p { color: var(--text); font-size: 15px; margin-bottom: 16px; }
+@media (max-width: 639px) { .rs-close { padding: 24px; } }
+
+/* Article index inside the Literary square */
+.rc-articles { list-style: none; margin: 8px 0 0; padding: 0; }
+.rc-article { display: block; border-top: 1px solid var(--border); padding: 24px 0; text-decoration: none; }
+.rc-articles li:last-child .rc-article { border-bottom: 1px solid var(--border); }
+.rc-article:hover { opacity: 1; }
+.rc-article-meta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 8px;
+}
+.rc-article h3 {
+  font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 20px;
+  letter-spacing: -0.01em; color: var(--text); margin: 0 0 6px; transition: color 0.2s;
+}
+.rc-article:hover h3 { color: var(--lemon); }
+.rc-article p { color: var(--muted); font-size: 15px; margin: 0; max-width: 640px; }
