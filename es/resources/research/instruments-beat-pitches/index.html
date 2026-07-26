@@ -23,7 +23,27 @@
   <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/instruments-beat-pitches/">
 
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Los instrumentos le ganan a los pitches","description":"Un pitch le pide al prospecto que acepte tu marco. Un instrumento lo hace medirse contra &eacute;l y llegar a la conclusi&oacute;n por su cuenta. La categor&iacute;a de falla es persuadir donde medir funcionar&iacute;a mejor.","datePublished":"2026-07-25","inLanguage":"es","author":{"@type":"Person","name":"Julio Luque Vald\u00e9s"},"publisher":{"@type":"Organization","name":"DATRUM","url":"https://jldatrum.com"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jldatrum.com/es/resources/research/instruments-beat-pitches/"}}
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Los instrumentos le ganan a los pitches",
+  "description": "Un pitch le pide al prospecto que acepte tu marco. Un instrumento lo hace medirse contra él y llegar a la conclusión por su cuenta. La categoría de falla es persuadir donde medir funcionaría mejor.",
+  "datePublished": "2026-07-25",
+  "inLanguage": "es",
+  "author": {
+    "@type": "Person",
+    "name": "Julio Luque Valdés"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "DATRUM",
+    "url": "https://jldatrum.com"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jldatrum.com/es/resources/research/instruments-beat-pitches/"
+  }
+}
   </script>
 
   <script>
@@ -45,9 +65,23 @@
   <link rel="manifest" href="/assets/manifest.json">
 </head>
 <body>
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
+  <a href="/es/work/#services" onclick="closeDrawer()">Servicios</a>
+  <a href="/es/work/" onclick="closeDrawer()">Casos de estudio</a>
+  <a href="/es/resources/" onclick="closeDrawer()">Recursos</a>
+  <a href="/es/bio/" onclick="closeDrawer()">Bio</a>
+  <a href="/resources/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
+  <a href="/es/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audita tu marca &rarr;</a>
+</div>
 <div class="cs-topbar">
   <a href="/es/" class="cs-wordmark">DATRUM</a>
-  <a href="/es/resources/" class="back-link">&larr; Todos los recursos</a>
+  <div class="cs-topbar-right">
+    <a href="/es/resources/" class="back-link">&larr; Todos los recursos</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </div>
 
 <div class="wrap">

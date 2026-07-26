@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datos estructurados para inventario de alto valor: relojes, joyer&iacute;a, arte y gremios especializados · DATRUM</title>
+  <meta name="description" content="Los gremios de alto valor ya mantienen los est&aacute;ndares de identificaci&oacute;n que exigen los datos estructurados. La tarea es mapear una taxonom&iacute;a existente, no inventarla.">
+  <meta property="og:title" content="Datos estructurados para inventario de alto valor: relojes, joyer&iacute;a, arte y gremios especializados">
+  <meta property="og:description" content="Los gremios de alto valor ya mantienen los est&aacute;ndares de identificaci&oacute;n que exigen los datos estructurados. La tarea es mapear una taxonom&iacute;a existente, no inventarla.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://jldatrum.com/es/resources/guides/structured-data-high-value-inventory/">
+  <meta property="og:image" content="https://jldatrum.com/assets/og-image-es.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Datos estructurados para inventario de alto valor: relojes, joyer&iacute;a, arte y gremios especializados">
+  <meta name="twitter:description" content="Los gremios de alto valor ya mantienen los est&aacute;ndares de identificaci&oacute;n que exigen los datos estructurados. La tarea es mapear una taxonom&iacute;a existente, no inventarla.">
+  <meta name="twitter:image" content="https://jldatrum.com/assets/og-image-es.png">
+
+  <link rel="canonical" href="https://jldatrum.com/es/resources/guides/structured-data-high-value-inventory/">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/structured-data-high-value-inventory/">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/structured-data-high-value-inventory/">
+  <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/structured-data-high-value-inventory/">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "¿Qué datos estructurados necesitan las piezas únicas de alto valor?",
+      "description": "Los gremios de alto valor ya mantienen los estándares de identificación que exigen los datos estructurados. La tarea es mapear una taxonomía existente, no inventarla.",
+      "datePublished": "2026-07-25",
+      "dateModified": "2026-07-25",
+      "inLanguage": "es",
+      "author": {
+        "@type": "Person",
+        "name": "Julio Luque Valdés"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "DATRUM",
+        "url": "https://jldatrum.com"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://jldatrum.com/es/resources/guides/structured-data-high-value-inventory/"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Qué datos estructurados necesitan las piezas únicas de alto valor?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cada pieza necesita su propio registro en vez de una entrada de modelo compartida: identificador, condición, procedencia cuando sea publicable, especificaciones y precio o disponibilidad. El requisito distintivo es que la condición y la procedencia se adhieren al objeto individual, no a la línea de producto."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo se mapean los identificadores del gremio a propiedades de schema?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Los números de referencia y modelo mapean a propiedades como mpn o productID; los seriales y números de certificado mapean a identificadores adicionales. La regla es mantener cada identificador en su propio campo en vez de concatenarlos en una descripción, porque solo los valores separados son coincidibles."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿En qué se diferencia el inventario único de los productos de catálogo?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un producto de catálogo es un modelo con muchas unidades idénticas que varían por talla o color. El inventario único es lo inverso: cada registro es un objeto distinto cuyo valor depende de su historia y estado individuales. Aplicar marcado de catálogo describe el modelo y descarta lo que hace valioso al objeto."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué datos de procedencia publicar y cuáles no?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Publica lo que establece autenticidad y especificación: referencia, certificación, historia documentada cuando el dueño lo permita. Reserva lo que establece custodia: ubicación de almacenamiento, arreglos de seguridad, identidades de dueños previos y precios de adquisición. Un número de referencia es un hecho público; la ubicación de una bóveda no."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuáles son los errores más comunes en el marcado de artículos de lujo?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Usar marcado de categoría para piezas únicas. Aplanar identificadores en una descripción de texto. Omitir la condición, que en estos gremios es un determinante primario de valor. Publicar imágenes sin el texto identificador, de modo que el objeto es visible pero inclasificable."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿De dónde deben salir los datos?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Del archivo que el negocio ya mantiene. En estos gremios los registros de inventario se llevan con rigor porque la autenticación lo exige, así que el vocabulario ya existe y ya está al día. Construir una taxonomía paralela para el sitio crea una segunda fuente de verdad que se desviará."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { 'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500 });
+    try { if (localStorage.getItem('datrum_consent') === 'granted') gtag('consent','update',{ 'analytics_storage':'granted' }); } catch(e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/legal.css">
+  <link rel="stylesheet" href="/css/viz.css">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="/assets/manifest.json">
+</head>
+<body>
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
+  <a href="/es/work/#services" onclick="closeDrawer()">Servicios</a>
+  <a href="/es/work/" onclick="closeDrawer()">Casos de estudio</a>
+  <a href="/es/resources/" onclick="closeDrawer()">Recursos</a>
+  <a href="/es/bio/" onclick="closeDrawer()">Bio</a>
+  <a href="/resources/guides/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
+  <a href="/es/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audita tu marca &rarr;</a>
+</div>
+
+<div class="cs-topbar">
+  <a href="/es/" class="cs-wordmark">DATRUM</a>
+  <div class="cs-topbar-right">
+    <a href="/es/resources/" class="back-link">&larr; Todos los recursos</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="eyebrow">Gu&iacute;a 05 &middot; Datos estructurados</div>
+  <h1>&iquest;Qu&eacute; datos estructurados necesitan las piezas &uacute;nicas de alto valor?</h1>
+
+  <div class="gd-answer"><p>Los gremios de alto valor ya mantienen los est&aacute;ndares de identificaci&oacute;n que exigen los datos estructurados &mdash; n&uacute;meros de referencia, seriales, procedencia, certificaci&oacute;n. La tarea de implementaci&oacute;n no es inventar una taxonom&iacute;a sino mapear una existente a propiedades de Product, Offer e identificadores. El inventario &uacute;nico necesita marcado por pieza y no por categor&iacute;a.</p></div>
+  <p class="gd-updated">Actualizado el 25 de julio de 2026</p>
+
+  <div class="gd-body">
+    <h2>&iquest;Qu&eacute; datos estructurados necesitan las piezas &uacute;nicas de alto valor?</h2>
+    <div class="gd-answer"><p>Cada pieza necesita su propio registro en vez de una entrada de modelo compartida: identificador, condici&oacute;n, procedencia cuando sea publicable, especificaciones y precio o disponibilidad. El requisito distintivo es que la condici&oacute;n y la procedencia se adhieren al objeto individual, no a la l&iacute;nea de producto.</p></div>
+    <p>Los registros por pieza tambi&eacute;n le dan a cada objeto su propia URL direccionable, que es lo que permite a un comprador que busca una referencia espec&iacute;fica llegar directo.</p>
+    <h2>&iquest;C&oacute;mo se mapean los identificadores del gremio a propiedades de schema?</h2>
+    <div class="gd-answer"><p>Los n&uacute;meros de referencia y modelo mapean a propiedades como mpn o productID; los seriales y n&uacute;meros de certificado mapean a identificadores adicionales. La regla es mantener cada identificador en su propio campo en vez de concatenarlos en una descripci&oacute;n, porque solo los valores separados son coincidibles.</p></div>
+    <p>Los identificadores separados son lo que permite que un comprador que sabe exactamente qu&eacute; quiere lo encuentre &mdash; el tr&aacute;fico m&aacute;s calificado de estas categor&iacute;as, y el m&aacute;s f&aacute;cil de perder.</p>
+    <h2>&iquest;En qu&eacute; se diferencia el inventario &uacute;nico de los productos de cat&aacute;logo?</h2>
+    <div class="gd-answer"><p>Un producto de cat&aacute;logo es un modelo con muchas unidades id&eacute;nticas que var&iacute;an por talla o color. El inventario &uacute;nico es lo inverso: cada registro es un objeto distinto cuyo valor depende de su historia y estado individuales. Aplicar marcado de cat&aacute;logo describe el modelo y descarta lo que hace valioso al objeto.</p></div>
+    <p>Casi toda la documentaci&oacute;n de schema y casi todos los ejemplos de e-commerce asumen el caso de cat&aacute;logo, por eso las implementaciones gen&eacute;ricas validan sin problema mientras describen la cosa equivocada.</p>
+    <h2>&iquest;Qu&eacute; datos de procedencia publicar y cu&aacute;les no?</h2>
+    <div class="gd-answer"><p>Publica lo que establece autenticidad y especificaci&oacute;n: referencia, certificaci&oacute;n, historia documentada cuando el due&ntilde;o lo permita. Reserva lo que establece custodia: ubicaci&oacute;n de almacenamiento, arreglos de seguridad, identidades de due&ntilde;os previos y precios de adquisici&oacute;n. Un n&uacute;mero de referencia es un hecho p&uacute;blico; la ubicaci&oacute;n de una b&oacute;veda no.</p></div>
+    <div class="gd-note"><b>Disciplina.</b> M&aacute;s divulgaci&oacute;n no es autom&aacute;ticamente mejor aqu&iacute;. Publica atributos que prueben el objeto; reserva atributos que lo ubiquen.</div>
+    <h2>&iquest;Cu&aacute;les son los errores m&aacute;s comunes en el marcado de art&iacute;culos de lujo?</h2>
+    <div class="gd-answer"><p>Usar marcado de categor&iacute;a para piezas &uacute;nicas. Aplanar identificadores en una descripci&oacute;n de texto. Omitir la condici&oacute;n, que en estos gremios es un determinante primario de valor. Publicar im&aacute;genes sin el texto identificador, de modo que el objeto es visible pero inclasificable.</p></div>
+    <p>La omisi&oacute;n de la condici&oacute;n es la cara, ya que dos piezas con la misma referencia pueden diferir sustancialmente en valor solo por su estado.</p>
+    <h2>&iquest;De d&oacute;nde deben salir los datos?</h2>
+    <div class="gd-answer"><p>Del archivo que el negocio ya mantiene. En estos gremios los registros de inventario se llevan con rigor porque la autenticaci&oacute;n lo exige, as&iacute; que el vocabulario ya existe y ya est&aacute; al d&iacute;a. Construir una taxonom&iacute;a paralela para el sitio crea una segunda fuente de verdad que se desviar&aacute;.</p></div>
+    <p>La versi&oacute;n duradera conecta el archivo mantenido a un paso de publicaci&oacute;n en vez de reemplazarlo, as&iacute; los datos siguen vigentes porque el negocio ya depende de ellos.</p>
+  </div>
+
+  <div class="gd-cta">
+    <p>El diagn&oacute;stico de visibilidad puntúa si tu entidad, credenciales y cat&aacute;logo est&aacute;n declarados en una forma que una m&aacute;quina pueda clasificar.</p>
+    <a href="/es/resources/visibility/" class="cs-btn-primary">Correr el diagn&oacute;stico &rarr;</a>
+  </div>
+
+  <div class="footer-note">&copy; 2026 DATRUM &middot; <a href="/es/">Inicio</a> &middot; <a href="/es/resources/">Todos los recursos</a></div>
+</div>
+
+<div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <p class="cookie-text">Usamos anal&iacute;tica que respeta la privacidad (Google Analytics 4 con IP anonimizada) para entender c&oacute;mo los visitantes encuentran DATRUM. Nada personal, sin tracking publicitario. Puedes rechazar y el sitio funciona igual. <a href="/es/privacy">Pol&iacute;tica de privacidad</a>.</p>
+  <div class="cookie-actions">
+    <button class="cookie-btn primary" onclick="acceptCookies()">Aceptar anal&iacute;tica</button>
+    <button class="cookie-btn" onclick="declineCookies()">Rechazar</button>
+  </div>
+</div>
+
+<script defer src="/js/nav.js"></script>
+</body>
+</html>

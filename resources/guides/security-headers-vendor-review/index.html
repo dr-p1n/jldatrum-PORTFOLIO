@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Which security headers do B2B buyers and procurement reviews check? · DATRUM</title>
+  <meta name="description" content="Corporate vendor reviews check six response headers. Missing headers are visible to anyone without special access, so a procurement officer can disqualify a supplier before any conversation.">
+  <meta property="og:title" content="Which security headers do B2B buyers and procurement reviews check?">
+  <meta property="og:description" content="Corporate vendor reviews check six response headers. Missing headers are visible to anyone without special access, so a procurement officer can disqualify a supplier before any conversation.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://jldatrum.com/resources/guides/security-headers-vendor-review/">
+  <meta property="og:image" content="https://jldatrum.com/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Which security headers do B2B buyers and procurement reviews check?">
+  <meta name="twitter:description" content="Corporate vendor reviews check six response headers. Missing headers are visible to anyone without special access, so a procurement officer can disqualify a supplier before any conversation.">
+  <meta name="twitter:image" content="https://jldatrum.com/assets/og-image.png">
+
+  <link rel="canonical" href="https://jldatrum.com/resources/guides/security-headers-vendor-review/">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/security-headers-vendor-review/">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/security-headers-vendor-review/">
+  <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/security-headers-vendor-review/">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Which security headers do B2B buyers actually check?",
+      "description": "Corporate vendor reviews check six response headers. Missing headers are visible to anyone without special access, so a procurement officer can disqualify a supplier before any conversation.",
+      "datePublished": "2026-07-25",
+      "dateModified": "2026-07-25",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "name": "Julio Luque Valdés"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "DATRUM",
+        "url": "https://jldatrum.com"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://jldatrum.com/resources/guides/security-headers-vendor-review/"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What are security headers and why do buyers check them?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Security headers are instructions a server sends to the browser before any content loads. They are checkable by anyone, from anywhere, in seconds, without permission. That makes them a free pre-qualification signal — a buyer can grade your posture without asking and without telling you the result."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which six headers does a vendor review look for?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A vendor review checks six response headers. Strict-Transport-Security forces HTTPS. Content-Security-Policy restricts what can execute. X-Content-Type-Options stops MIME sniffing. X-Frame-Options prevents clickjacking. Referrer-Policy limits URL leakage. Permissions-Policy disables unused browser APIs. Together they form the baseline an automated scan grades against, and all six are server configuration rather than application code."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What does each header actually prevent?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "HSTS closes the unencrypted first request that session-downgrade attacks rely on. CSP is the one that turns a minor injection into a contained event rather than a data breach. The other four each remove a specific, well-understood class of attack, and all six are configuration rather than code."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you check your own site in under a minute?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Request your domain and read the response headers, or run it through a public scanner such as Mozilla Observatory. You will get a grade and a list of what is missing. No access or credentials are required — which is precisely why buyers can do it too."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What does a failing grade signal to a procurement officer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It signals unmanaged infrastructure rather than active negligence, but the distinction rarely survives a filtering step. A failing grade does not usually produce a remediation conversation. It produces a quiet removal from the list, and no notification that it happened."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does it take to fix?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "For a static site or a modern host, adding all six is a configuration file and a deployment — typically under an hour, with F-to-A in a single release. The main care needed is with Content-Security-Policy, which must name the third-party domains you actually use or it will block them."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { 'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500 });
+    try { if (localStorage.getItem('datrum_consent') === 'granted') gtag('consent','update',{ 'analytics_storage':'granted' }); } catch(e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/legal.css">
+  <link rel="stylesheet" href="/css/viz.css">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="/assets/manifest.json">
+</head>
+<body>
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
+  <a href="/work/#services" onclick="closeDrawer()">Services</a>
+  <a href="/work/" onclick="closeDrawer()">Case studies</a>
+  <a href="/resources/" onclick="closeDrawer()">Resources</a>
+  <a href="/bio/" onclick="closeDrawer()">Bio</a>
+  <a href="/es/resources/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
+  <a href="/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audit Your Brand &rarr;</a>
+</div>
+
+<div class="cs-topbar">
+  <a href="/" class="cs-wordmark">DATRUM</a>
+  <div class="cs-topbar-right">
+    <a href="/resources/" class="back-link">&larr; All resources</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="eyebrow">Guide 02 &middot; Security</div>
+  <h1>Which security headers do B2B buyers actually check?</h1>
+
+  <div class="gd-answer"><p>Corporate vendor reviews typically check for six response headers: Strict-Transport-Security, Content-Security-Policy, X-Content-Type-Options, X-Frame-Options, Referrer-Policy and Permissions-Policy. Missing headers are visible to anyone without special access, which means a procurement officer can disqualify a supplier before any conversation, and usually without telling them why.</p></div>
+  <p class="gd-updated">Last updated 25 July 2026</p>
+
+  <div class="gd-body">
+    <h2>What are security headers and why do buyers check them?</h2>
+    <div class="gd-answer"><p>Security headers are instructions a server sends to the browser before any content loads. They are checkable by anyone, from anywhere, in seconds, without permission. That makes them a free pre-qualification signal &mdash; a buyer can grade your posture without asking and without telling you the result.</p></div>
+    <p>The asymmetry worth noticing is that this check is silent in both directions. You cannot see who ran it, and they have no reason to tell you the outcome.</p>
+    <h2>Which six headers does a vendor review look for?</h2>
+    <div class="gd-answer"><p>A vendor review checks six response headers. Strict-Transport-Security forces HTTPS. Content-Security-Policy restricts what can execute. X-Content-Type-Options stops MIME sniffing. X-Frame-Options prevents clickjacking. Referrer-Policy limits URL leakage. Permissions-Policy disables unused browser APIs. Together they form the baseline an automated scan grades against, and all six are server configuration rather than application code.</p></div>
+    <p>A seventh, Cross-Origin-Resource-Policy, appears in stricter reviews but is not yet standard in most supplier checklists.</p>
+    <h2>What does each header actually prevent?</h2>
+    <div class="gd-answer"><p>HSTS closes the unencrypted first request that session-downgrade attacks rely on. CSP is the one that turns a minor injection into a contained event rather than a data breach. The other four each remove a specific, well-understood class of attack, and all six are configuration rather than code.</p></div>
+    <p>Because these are response headers rather than application logic, they can be added to an existing site without touching its code &mdash; which is why the cost-to-benefit ratio here is unusually favourable.</p>
+    <h2>How do you check your own site in under a minute?</h2>
+    <div class="gd-answer"><p>Request your domain and read the response headers, or run it through a public scanner such as Mozilla Observatory. You will get a grade and a list of what is missing. No access or credentials are required &mdash; which is precisely why buyers can do it too.</p></div>
+    <p>Run it against a competitor while you are there. In most categories the results explain a good deal about who is being shortlisted.</p>
+    <h2>What does a failing grade signal to a procurement officer?</h2>
+    <div class="gd-answer"><p>It signals unmanaged infrastructure rather than active negligence, but the distinction rarely survives a filtering step. A failing grade does not usually produce a remediation conversation. It produces a quiet removal from the list, and no notification that it happened.</p></div>
+    <p>In regulated sectors the scan often runs before a human reads the proposal at all, which inverts the usual assumption that credentials get evaluated first.</p>
+    <h2>How long does it take to fix?</h2>
+    <div class="gd-answer"><p>For a static site or a modern host, adding all six is a configuration file and a deployment &mdash; typically under an hour, with F-to-A in a single release. The main care needed is with Content-Security-Policy, which must name the third-party domains you actually use or it will block them.</p></div>
+    <div class="gd-note"><b>Note.</b> Add your real third-party domains to the relevant CSP directives. Analytics, payment processors and font providers each need explicit permission, and a policy that blocks your own assets is worse than none.</div>
+  </div>
+
+  <div class="gd-cta">
+    <p>The security header reference on this site lists each header, what it prevents, and a copy-paste configuration.</p>
+    <a href="/resources/security-headers/" class="cs-btn-primary">Open the header reference &rarr;</a>
+  </div>
+
+  <div class="footer-note">&copy; 2026 DATRUM &middot; <a href="/">Home</a> &middot; <a href="/resources/">All resources</a></div>
+</div>
+
+<div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <p class="cookie-text">We use a privacy-respecting analytics setup (Google Analytics 4 with IP anonymization) to understand how visitors find DATRUM. Nothing personal, no ad tracking. You can decline and the site works the same. <a href="/privacy">Privacy policy</a>.</p>
+  <div class="cookie-actions">
+    <button class="cookie-btn primary" onclick="acceptCookies()">Accept analytics</button>
+    <button class="cookie-btn" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+
+<script defer src="/js/nav.js"></script>
+</body>
+</html>

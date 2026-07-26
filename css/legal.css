@@ -929,3 +929,51 @@ nav {
 }
 .rc-article:hover h3 { color: var(--lemon); }
 .rc-article p { color: var(--muted); font-size: 15px; margin: 0; max-width: 640px; }
+
+/* ── Topbar hamburger (deep pages) ───────────────────────
+   Deep pages keep the back arrow so a reader can retrace one step, and
+   gain a hamburger so they can jump to any section instead. Unlike the
+   marketing nav, this burger is visible at EVERY width: these pages have
+   no .nav-links row, so it is the only way out. */
+.cs-topbar-right { display: flex; align-items: center; gap: 20px; }
+.cs-topbar .hamburger { display: flex; }
+.cs-topbar .back-link { margin-bottom: 0; white-space: nowrap; }
+@media (max-width: 480px) {
+  .cs-topbar-right { gap: 10px; }
+  .cs-topbar .back-link { font-size: 10px; letter-spacing: 0.1em; }
+}
+
+/* ── AEO guides (/resources/guides/) ─────────────────────
+   Answer-first register. Each section must read correctly when a
+   retrieval system extracts it WITHOUT its neighbours, so the answer
+   block carries the weight and the prose below it only adds detail. */
+.gd-answer {
+  background: var(--bg2);
+  border-left: 2px solid var(--lemon);
+  border-radius: 0 8px 8px 0;
+  padding: 20px 24px;
+  margin: 0 0 24px;
+}
+.gd-answer p { color: var(--text); font-size: 16px; line-height: 1.7; margin: 0; }
+.gd-updated {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin: 0 0 40px; padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.gd-body h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 23px; font-weight: 400; color: var(--text);
+  letter-spacing: -0.01em; margin: 48px 0 14px;
+}
+.gd-body p { font-size: 16px; line-height: 1.8; }
+.gd-note {
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 18px 22px; margin: 28px 0; font-size: 14px; color: var(--muted);
+}
+.gd-note b { color: var(--lemon); font-weight: 500; }
+.gd-cta {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+  padding: 26px 30px; margin: 48px 0 0;
+}
+.gd-cta p { color: var(--text); font-size: 15px; margin-bottom: 16px; }

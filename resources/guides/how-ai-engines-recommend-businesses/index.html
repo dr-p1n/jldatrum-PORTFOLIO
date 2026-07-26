@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How AI engines decide which businesses to recommend · DATRUM</title>
+  <meta name="description" content="Answer engines assemble recommendations from retrieved sources rather than from a ranking. A business absent from AI recommendations is usually not penalised, it is unparsed.">
+  <meta property="og:title" content="How AI engines decide which businesses to recommend">
+  <meta property="og:description" content="Answer engines assemble recommendations from retrieved sources rather than from a ranking. A business absent from AI recommendations is usually not penalised, it is unparsed.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://jldatrum.com/resources/guides/how-ai-engines-recommend-businesses/">
+  <meta property="og:image" content="https://jldatrum.com/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How AI engines decide which businesses to recommend">
+  <meta name="twitter:description" content="Answer engines assemble recommendations from retrieved sources rather than from a ranking. A business absent from AI recommendations is usually not penalised, it is unparsed.">
+  <meta name="twitter:image" content="https://jldatrum.com/assets/og-image.png">
+
+  <link rel="canonical" href="https://jldatrum.com/resources/guides/how-ai-engines-recommend-businesses/">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/how-ai-engines-recommend-businesses/">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/how-ai-engines-recommend-businesses/">
+  <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/how-ai-engines-recommend-businesses/">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "How do AI engines decide which businesses to recommend?",
+      "description": "Answer engines assemble recommendations from retrieved sources rather than from a ranking. A business absent from AI recommendations is usually not penalised, it is unparsed.",
+      "datePublished": "2026-07-25",
+      "dateModified": "2026-07-25",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "name": "Julio Luque Valdés"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "DATRUM",
+        "url": "https://jldatrum.com"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://jldatrum.com/resources/guides/how-ai-engines-recommend-businesses/"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do AI answer engines pick which sources to cite?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "They retrieve candidate passages relevant to the query, then compose an answer from the ones that most directly address it. Retrieval operates on chunks rather than whole pages, so a section that answers a question in its first two sentences is far more citable than one that builds to the point."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between ranking and citation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ranking orders a list of links for a person to choose from. Citation selects source material for an answer the system writes itself. Ranking rewards authority accumulated over time; citation rewards extractability right now. A page can be excellent at one and invisible in the other."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does a site rank on Google but never appear in AI answers?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Usually because its content is structured for browsing rather than extraction: the answer is buried below context, entities are described in prose rather than declared in structured data, or sections depend on the ones before them and lose meaning when retrieved alone."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What can actually be measured, and what cannot?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Measurable: whether your entity is declared in structured data, whether headings answer real questions, whether sections stand alone, whether claims are text rather than images, whether content is current. Not measurable: the internal weighting of any model, or why one source was chosen over another in a specific answer."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What should you implement first?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Declare the entity — organisation, location, service area, credentials — in structured data, because nothing else can be classified without it. Then make each section self-contained and answer-first. Those two changes address the majority of cases where a real business is simply unreadable."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this replace SEO?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The underlying work overlaps heavily with technical SEO: clean semantics, sound heading structure, structured data, fast pages. What changes is the objective — being extractable rather than merely being ranked — and that shifts emphasis toward answer placement and entity clarity."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { 'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500 });
+    try { if (localStorage.getItem('datrum_consent') === 'granted') gtag('consent','update',{ 'analytics_storage':'granted' }); } catch(e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/legal.css">
+  <link rel="stylesheet" href="/css/viz.css">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="/assets/manifest.json">
+</head>
+<body>
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
+  <a href="/work/#services" onclick="closeDrawer()">Services</a>
+  <a href="/work/" onclick="closeDrawer()">Case studies</a>
+  <a href="/resources/" onclick="closeDrawer()">Resources</a>
+  <a href="/bio/" onclick="closeDrawer()">Bio</a>
+  <a href="/es/resources/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
+  <a href="/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audit Your Brand &rarr;</a>
+</div>
+
+<div class="cs-topbar">
+  <a href="/" class="cs-wordmark">DATRUM</a>
+  <div class="cs-topbar-right">
+    <a href="/resources/" class="back-link">&larr; All resources</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="eyebrow">Guide 03 &middot; Retrieval</div>
+  <h1>How do AI engines decide which businesses to recommend?</h1>
+
+  <div class="gd-answer"><p>Answer engines assemble recommendations from retrieved sources rather than from a ranking. Selection favours content that answers the query directly in its opening sentences, declares entities in structured data, and was updated recently. A business absent from AI recommendations is usually not penalised &mdash; it is unparsed, meaning nothing was retrievable enough to cite.</p></div>
+  <p class="gd-updated">Last updated 25 July 2026</p>
+
+  <div class="gd-body">
+    <h2>How do AI answer engines pick which sources to cite?</h2>
+    <div class="gd-answer"><p>They retrieve candidate passages relevant to the query, then compose an answer from the ones that most directly address it. Retrieval operates on chunks rather than whole pages, so a section that answers a question in its first two sentences is far more citable than one that builds to the point.</p></div>
+    <p>The practical consequence is that burying a conclusion under three paragraphs of context, which reads well to a person, actively costs you here.</p>
+    <h2>What is the difference between ranking and citation?</h2>
+    <div class="gd-answer"><p>Ranking orders a list of links for a person to choose from. Citation selects source material for an answer the system writes itself. Ranking rewards authority accumulated over time; citation rewards extractability right now. A page can be excellent at one and invisible in the other.</p></div>
+    <p>The two are not in conflict. A page built for extraction usually reads more clearly to people as well, because it states its point before elaborating.</p>
+    <h2>Why does a site rank on Google but never appear in AI answers?</h2>
+    <div class="gd-answer"><p>Usually because its content is structured for browsing rather than extraction: the answer is buried below context, entities are described in prose rather than declared in structured data, or sections depend on the ones before them and lose meaning when retrieved alone.</p></div>
+    <p>The most common single cause is credentials rendered as logo images. To a retrieval system those are decorative, so the strongest differentiator on the page contributes nothing.</p>
+    <h2>What can actually be measured, and what cannot?</h2>
+    <div class="gd-answer"><p>Measurable: whether your entity is declared in structured data, whether headings answer real questions, whether sections stand alone, whether claims are text rather than images, whether content is current. Not measurable: the internal weighting of any model, or why one source was chosen over another in a specific answer.</p></div>
+    <div class="gd-note"><b>On statistics.</b> Projections about AI-driven traffic change circulate widely and most trace back to vendor-published reports with undisclosed methodology. None are cited here. The mechanism argues for itself without them.</div>
+    <h2>What should you implement first?</h2>
+    <div class="gd-answer"><p>Declare the entity &mdash; organisation, location, service area, credentials &mdash; in structured data, because nothing else can be classified without it. Then make each section self-contained and answer-first. Those two changes address the majority of cases where a real business is simply unreadable.</p></div>
+    <p>Both are one-time structural work rather than recurring spend, which is what makes them worth doing before anything more speculative.</p>
+    <h2>Does this replace SEO?</h2>
+    <div class="gd-answer"><p>No. The underlying work overlaps heavily with technical SEO: clean semantics, sound heading structure, structured data, fast pages. What changes is the objective &mdash; being extractable rather than merely being ranked &mdash; and that shifts emphasis toward answer placement and entity clarity.</p></div>
+    <p>The honest framing is that this is a new objective for existing disciplines, not a new discipline &mdash; and treating it as the latter is how the category ended up full of unfalsifiable claims.</p>
+  </div>
+
+  <div class="gd-cta">
+    <p>The visibility self-diagnostic scores your site across five parts of machine legibility, out of twenty-five.</p>
+    <a href="/resources/visibility/" class="cs-btn-primary">Run the visibility diagnostic &rarr;</a>
+  </div>
+
+  <div class="footer-note">&copy; 2026 DATRUM &middot; <a href="/">Home</a> &middot; <a href="/resources/">All resources</a></div>
+</div>
+
+<div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <p class="cookie-text">We use a privacy-respecting analytics setup (Google Analytics 4 with IP anonymization) to understand how visitors find DATRUM. Nothing personal, no ad tracking. You can decline and the site works the same. <a href="/privacy">Privacy policy</a>.</p>
+  <div class="cookie-actions">
+    <button class="cookie-btn primary" onclick="acceptCookies()">Accept analytics</button>
+    <button class="cookie-btn" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+
+<script defer src="/js/nav.js"></script>
+</body>
+</html>

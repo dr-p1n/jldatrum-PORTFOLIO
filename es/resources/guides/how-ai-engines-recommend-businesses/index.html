@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C&oacute;mo deciden los motores de IA qu&eacute; negocios recomendar · DATRUM</title>
+  <meta name="description" content="Los motores de respuesta ensamblan recomendaciones desde fuentes recuperadas y no desde un ranking. Un negocio ausente normalmente no est&aacute; penalizado, est&aacute; sin interpretar.">
+  <meta property="og:title" content="C&oacute;mo deciden los motores de IA qu&eacute; negocios recomendar">
+  <meta property="og:description" content="Los motores de respuesta ensamblan recomendaciones desde fuentes recuperadas y no desde un ranking. Un negocio ausente normalmente no est&aacute; penalizado, est&aacute; sin interpretar.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://jldatrum.com/es/resources/guides/how-ai-engines-recommend-businesses/">
+  <meta property="og:image" content="https://jldatrum.com/assets/og-image-es.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="C&oacute;mo deciden los motores de IA qu&eacute; negocios recomendar">
+  <meta name="twitter:description" content="Los motores de respuesta ensamblan recomendaciones desde fuentes recuperadas y no desde un ranking. Un negocio ausente normalmente no est&aacute; penalizado, est&aacute; sin interpretar.">
+  <meta name="twitter:image" content="https://jldatrum.com/assets/og-image-es.png">
+
+  <link rel="canonical" href="https://jldatrum.com/es/resources/guides/how-ai-engines-recommend-businesses/">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/how-ai-engines-recommend-businesses/">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/how-ai-engines-recommend-businesses/">
+  <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/how-ai-engines-recommend-businesses/">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "¿Cómo deciden los motores de IA qué negocios recomendar?",
+      "description": "Los motores de respuesta ensamblan recomendaciones desde fuentes recuperadas y no desde un ranking. Un negocio ausente normalmente no está penalizado, está sin interpretar.",
+      "datePublished": "2026-07-25",
+      "dateModified": "2026-07-25",
+      "inLanguage": "es",
+      "author": {
+        "@type": "Person",
+        "name": "Julio Luque Valdés"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "DATRUM",
+        "url": "https://jldatrum.com"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://jldatrum.com/es/resources/guides/how-ai-engines-recommend-businesses/"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cómo eligen los motores de respuesta qué fuentes citar?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Recuperan pasajes candidatos relevantes a la consulta y luego componen una respuesta con los que la abordan más directamente. La recuperación opera sobre bloques y no sobre páginas completas, así que una sección que responde en sus dos primeras oraciones es mucho más citable que una que construye hacia el punto."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuál es la diferencia entre ranking y citación?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "El ranking ordena una lista de enlaces para que una persona elija. La citación selecciona material fuente para una respuesta que el sistema escribe. El ranking premia autoridad acumulada en el tiempo; la citación premia extractabilidad ahora. Una página puede ser excelente en uno e invisible en el otro."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Por qué un sitio rankea en Google pero nunca aparece en respuestas de IA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Normalmente porque su contenido está estructurado para navegar y no para extraer: la respuesta está enterrada bajo contexto, las entidades se describen en prosa en vez de declararse en datos estructurados, o las secciones dependen de las anteriores y pierden sentido al recuperarse solas."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué se puede medir realmente y qué no?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Medible: si tu entidad está declarada en datos estructurados, si los encabezados responden preguntas reales, si las secciones se sostienen solas, si las afirmaciones son texto y no imágenes, si el contenido está vigente. No medible: la ponderación interna de cualquier modelo, o por qué una fuente fue elegida sobre otra en una respuesta específica."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué deberías implementar primero?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Declara la entidad — organización, ubicación, área de servicio, credenciales — en datos estructurados, porque sin eso nada más puede clasificarse. Luego haz que cada sección sea autocontenida y empiece por la respuesta. Esos dos cambios resuelven la mayoría de los casos donde un negocio real simplemente es ilegible."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Esto reemplaza al SEO?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. El trabajo de fondo se traslapa fuertemente con el SEO técnico: semántica limpia, estructura de encabezados sólida, datos estructurados, páginas rápidas. Lo que cambia es el objetivo — ser extraíble y no solo estar rankeado — y eso desplaza el énfasis hacia la ubicación de la respuesta y la claridad de entidad."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { 'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500 });
+    try { if (localStorage.getItem('datrum_consent') === 'granted') gtag('consent','update',{ 'analytics_storage':'granted' }); } catch(e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/legal.css">
+  <link rel="stylesheet" href="/css/viz.css">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="/assets/manifest.json">
+</head>
+<body>
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
+  <a href="/es/work/#services" onclick="closeDrawer()">Servicios</a>
+  <a href="/es/work/" onclick="closeDrawer()">Casos de estudio</a>
+  <a href="/es/resources/" onclick="closeDrawer()">Recursos</a>
+  <a href="/es/bio/" onclick="closeDrawer()">Bio</a>
+  <a href="/resources/guides/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
+  <a href="/es/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audita tu marca &rarr;</a>
+</div>
+
+<div class="cs-topbar">
+  <a href="/es/" class="cs-wordmark">DATRUM</a>
+  <div class="cs-topbar-right">
+    <a href="/es/resources/" class="back-link">&larr; Todos los recursos</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="eyebrow">Gu&iacute;a 03 &middot; Recuperaci&oacute;n</div>
+  <h1>&iquest;C&oacute;mo deciden los motores de IA qu&eacute; negocios recomendar?</h1>
+
+  <div class="gd-answer"><p>Los motores de respuesta ensamblan recomendaciones desde fuentes recuperadas y no desde un ranking. La selecci&oacute;n favorece contenido que responde la consulta directamente en sus primeras oraciones, declara entidades en datos estructurados y fue actualizado recientemente. Un negocio ausente de las recomendaciones de IA normalmente no est&aacute; penalizado &mdash; est&aacute; sin interpretar.</p></div>
+  <p class="gd-updated">Actualizado el 25 de julio de 2026</p>
+
+  <div class="gd-body">
+    <h2>&iquest;C&oacute;mo eligen los motores de respuesta qu&eacute; fuentes citar?</h2>
+    <div class="gd-answer"><p>Recuperan pasajes candidatos relevantes a la consulta y luego componen una respuesta con los que la abordan m&aacute;s directamente. La recuperaci&oacute;n opera sobre bloques y no sobre p&aacute;ginas completas, as&iacute; que una secci&oacute;n que responde en sus dos primeras oraciones es mucho m&aacute;s citable que una que construye hacia el punto.</p></div>
+    <p>La consecuencia pr&aacute;ctica es que enterrar una conclusi&oacute;n bajo tres p&aacute;rrafos de contexto, que se lee bien para una persona, aqu&iacute; te cuesta activamente.</p>
+    <h2>&iquest;Cu&aacute;l es la diferencia entre ranking y citaci&oacute;n?</h2>
+    <div class="gd-answer"><p>El ranking ordena una lista de enlaces para que una persona elija. La citaci&oacute;n selecciona material fuente para una respuesta que el sistema escribe. El ranking premia autoridad acumulada en el tiempo; la citaci&oacute;n premia extractabilidad ahora. Una p&aacute;gina puede ser excelente en uno e invisible en el otro.</p></div>
+    <p>Los dos no est&aacute;n en conflicto. Una p&aacute;gina construida para extracci&oacute;n suele leerse m&aacute;s claro tambi&eacute;n para las personas, porque declara su punto antes de elaborarlo.</p>
+    <h2>&iquest;Por qu&eacute; un sitio rankea en Google pero nunca aparece en respuestas de IA?</h2>
+    <div class="gd-answer"><p>Normalmente porque su contenido est&aacute; estructurado para navegar y no para extraer: la respuesta est&aacute; enterrada bajo contexto, las entidades se describen en prosa en vez de declararse en datos estructurados, o las secciones dependen de las anteriores y pierden sentido al recuperarse solas.</p></div>
+    <p>La causa individual m&aacute;s com&uacute;n son credenciales renderizadas como im&aacute;genes de logo. Para un sistema de recuperaci&oacute;n son decorativas, as&iacute; que el diferenciador m&aacute;s fuerte de la p&aacute;gina no aporta nada.</p>
+    <h2>&iquest;Qu&eacute; se puede medir realmente y qu&eacute; no?</h2>
+    <div class="gd-answer"><p>Medible: si tu entidad est&aacute; declarada en datos estructurados, si los encabezados responden preguntas reales, si las secciones se sostienen solas, si las afirmaciones son texto y no im&aacute;genes, si el contenido est&aacute; vigente. No medible: la ponderaci&oacute;n interna de cualquier modelo, o por qu&eacute; una fuente fue elegida sobre otra en una respuesta espec&iacute;fica.</p></div>
+    <div class="gd-note"><b>Sobre las estad&iacute;sticas.</b> Circulan ampliamente proyecciones sobre el cambio de tr&aacute;fico por IA y la mayor&iacute;a rastrea a reportes de proveedores con metodolog&iacute;a no divulgada. Ninguna se cita aqu&iacute;. El mecanismo se argumenta solo sin ellas.</div>
+    <h2>&iquest;Qu&eacute; deber&iacute;as implementar primero?</h2>
+    <div class="gd-answer"><p>Declara la entidad &mdash; organizaci&oacute;n, ubicaci&oacute;n, &aacute;rea de servicio, credenciales &mdash; en datos estructurados, porque sin eso nada m&aacute;s puede clasificarse. Luego haz que cada secci&oacute;n sea autocontenida y empiece por la respuesta. Esos dos cambios resuelven la mayor&iacute;a de los casos donde un negocio real simplemente es ilegible.</p></div>
+    <p>Ambos son trabajo estructural &uacute;nico y no gasto recurrente, que es lo que los hace valer antes que cualquier cosa m&aacute;s especulativa.</p>
+    <h2>&iquest;Esto reemplaza al SEO?</h2>
+    <div class="gd-answer"><p>No. El trabajo de fondo se traslapa fuertemente con el SEO t&eacute;cnico: sem&aacute;ntica limpia, estructura de encabezados s&oacute;lida, datos estructurados, p&aacute;ginas r&aacute;pidas. Lo que cambia es el objetivo &mdash; ser extra&iacute;ble y no solo estar rankeado &mdash; y eso desplaza el &eacute;nfasis hacia la ubicaci&oacute;n de la respuesta y la claridad de entidad.</p></div>
+    <p>El encuadre honesto es que esto es un objetivo nuevo para disciplinas existentes, no una disciplina nueva &mdash; y tratarlo como lo segundo es c&oacute;mo la categor&iacute;a termin&oacute; llena de afirmaciones infalsificables.</p>
+  </div>
+
+  <div class="gd-cta">
+    <p>El autodiagn&oacute;stico de visibilidad puntúa tu sitio en cinco partes de legibilidad de m&aacute;quina, sobre veinticinco.</p>
+    <a href="/es/resources/visibility/" class="cs-btn-primary">Correr el diagn&oacute;stico &rarr;</a>
+  </div>
+
+  <div class="footer-note">&copy; 2026 DATRUM &middot; <a href="/es/">Inicio</a> &middot; <a href="/es/resources/">Todos los recursos</a></div>
+</div>
+
+<div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <p class="cookie-text">Usamos anal&iacute;tica que respeta la privacidad (Google Analytics 4 con IP anonimizada) para entender c&oacute;mo los visitantes encuentran DATRUM. Nada personal, sin tracking publicitario. Puedes rechazar y el sitio funciona igual. <a href="/es/privacy">Pol&iacute;tica de privacidad</a>.</p>
+  <div class="cookie-actions">
+    <button class="cookie-btn primary" onclick="acceptCookies()">Aceptar anal&iacute;tica</button>
+    <button class="cookie-btn" onclick="declineCookies()">Rechazar</button>
+  </div>
+</div>
+
+<script defer src="/js/nav.js"></script>
+</body>
+</html>

@@ -21,8 +21,26 @@
   <link rel="stylesheet" href="/css/viz.css">
 </head>
 <body>
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
+  <a href="/es/work/#services" onclick="closeDrawer()">Servicios</a>
+  <a href="/es/work/" onclick="closeDrawer()">Casos de estudio</a>
+  <a href="/es/resources/" onclick="closeDrawer()">Recursos</a>
+  <a href="/es/bio/" onclick="closeDrawer()">Bio</a>
+  <a href="/resources/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
+  <a href="/es/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audita tu marca &rarr;</a>
+</div>
+<div class="cs-topbar">
+  <a href="/es/" class="cs-wordmark">DATRUM</a>
+  <div class="cs-topbar-right">
+    <a href="/es/" class="back-link">← Volver a DATRUM</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</div>
+
 <div class="wrap">
-  <a href="/es/" class="back-link">← Volver a DATRUM</a>
   <div class="eyebrow">// Legal</div>
   <h1>Política de Privacidad &amp; Términos de Servicio</h1>
   <p class="lede">
@@ -289,5 +307,6 @@
   </div>
 </div>
 <script defer src="/js/viz.js"></script>
+<script defer src="/js/nav.js"></script>
 </body>
 </html>

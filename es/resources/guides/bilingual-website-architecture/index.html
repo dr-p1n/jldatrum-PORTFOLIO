@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arquitectura de sitio biling&uuml;e: por qu&eacute; traducir no es localizar · DATRUM</title>
+  <meta name="description" content="Un sitio traducido sirve una estructura en dos idiomas. Una arquitectura biling&uuml;e sirve dos estructuras, conectadas por hreflang. Traducir preserva las palabras; la arquitectura preserva la intenci&oacute;n.">
+  <meta property="og:title" content="Arquitectura de sitio biling&uuml;e: por qu&eacute; traducir no es localizar">
+  <meta property="og:description" content="Un sitio traducido sirve una estructura en dos idiomas. Una arquitectura biling&uuml;e sirve dos estructuras, conectadas por hreflang. Traducir preserva las palabras; la arquitectura preserva la intenci&oacute;n.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://jldatrum.com/es/resources/guides/bilingual-website-architecture/">
+  <meta property="og:image" content="https://jldatrum.com/assets/og-image-es.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Arquitectura de sitio biling&uuml;e: por qu&eacute; traducir no es localizar">
+  <meta name="twitter:description" content="Un sitio traducido sirve una estructura en dos idiomas. Una arquitectura biling&uuml;e sirve dos estructuras, conectadas por hreflang. Traducir preserva las palabras; la arquitectura preserva la intenci&oacute;n.">
+  <meta name="twitter:image" content="https://jldatrum.com/assets/og-image-es.png">
+
+  <link rel="canonical" href="https://jldatrum.com/es/resources/guides/bilingual-website-architecture/">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/bilingual-website-architecture/">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/bilingual-website-architecture/">
+  <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/bilingual-website-architecture/">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "¿Cuál es la diferencia entre un sitio traducido y uno bilingüe?",
+      "description": "Un sitio traducido sirve una estructura en dos idiomas. Una arquitectura bilingüe sirve dos estructuras, conectadas por hreflang. Traducir preserva las palabras; la arquitectura preserva la intención.",
+      "datePublished": "2026-07-25",
+      "dateModified": "2026-07-25",
+      "inLanguage": "es",
+      "author": {
+        "@type": "Person",
+        "name": "Julio Luque Valdés"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "DATRUM",
+        "url": "https://jldatrum.com"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://jldatrum.com/es/resources/guides/bilingual-website-architecture/"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cuál es la diferencia entre un sitio traducido y uno bilingüe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un sitio traducido mantiene una arquitectura de información y cambia las palabras. Un sitio bilingüe le da a cada idioma sus propias URLs, encabezados, datos estructurados y vocabulario. La diferencia aparece cuando las dos audiencias buscan distinto — que, en la mayoría de los mercados B2B, es lo que ocurre."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo deben estructurarse las URLs bilingües?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Dale a cada idioma una URL distinta y direccionable de forma permanente — lo más común es un prefijo de ruta como /es/. Evita cambiar de idioma por cookie, sesión o redirección automática en la misma URL, porque entonces un rastreador o sistema de recuperación no puede indexar ambas versiones de forma independiente."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo se implementa hreflang correctamente?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cada página declara el conjunto completo: a sí misma, cada idioma alterno y un x-default. Las declaraciones deben ser recíprocas — si la página en inglés apunta a la de español, la de español debe apuntar de vuelta. Las declaraciones unidireccionales son el error de implementación más común."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Deben duplicarse los datos estructurados por idioma?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, y deben ser genuinamente por idioma en vez de copiados. La entidad es la misma organización, pero los campos descriptivos, nombres de servicio y cualquier propiedad de texto pertenecen al idioma de esa página. Reutilizar un bloque en ambas versiones vuelve una de ellas inclasificable."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuáles son los errores más comunes de SEO bilingüe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Redirigir automáticamente por IP, lo que impide indexar la alterna. Hreflang no recíproco. Traducir palabras clave literalmente en vez de usar el vocabulario real de cada mercado. Y traducción automática, que produce texto que se lee como baja calidad tanto para personas como para sistemas de recuperación."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuándo basta con un solo idioma?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cuando una audiencia realmente domina y la segunda sería una cortesía y no un canal. Un segundo idioma mal mantenido es peor que ninguno — divide autoridad, crea ambigüedad de contenido duplicado y señala descuido justo al comprador que pretendía alcanzar."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { 'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500 });
+    try { if (localStorage.getItem('datrum_consent') === 'granted') gtag('consent','update',{ 'analytics_storage':'granted' }); } catch(e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/legal.css">
+  <link rel="stylesheet" href="/css/viz.css">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="/assets/manifest.json">
+</head>
+<body>
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
+  <a href="/es/work/#services" onclick="closeDrawer()">Servicios</a>
+  <a href="/es/work/" onclick="closeDrawer()">Casos de estudio</a>
+  <a href="/es/resources/" onclick="closeDrawer()">Recursos</a>
+  <a href="/es/bio/" onclick="closeDrawer()">Bio</a>
+  <a href="/resources/guides/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
+  <a href="/es/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audita tu marca &rarr;</a>
+</div>
+
+<div class="cs-topbar">
+  <a href="/es/" class="cs-wordmark">DATRUM</a>
+  <div class="cs-topbar-right">
+    <a href="/es/resources/" class="back-link">&larr; Todos los recursos</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="eyebrow">Gu&iacute;a 04 &middot; Arquitectura</div>
+  <h1>&iquest;Cu&aacute;l es la diferencia entre un sitio traducido y uno biling&uuml;e?</h1>
+
+  <div class="gd-answer"><p>Un sitio traducido sirve una estructura en dos idiomas. Una arquitectura biling&uuml;e sirve dos estructuras &mdash; URLs separadas, jerarqu&iacute;a sem&aacute;ntica separada, datos estructurados separados y vocabulario separado por idioma, conectados por hreflang. Traducir preserva las palabras. La arquitectura preserva la intenci&oacute;n, que es lo que leen la b&uacute;squeda y la recuperaci&oacute;n por IA.</p></div>
+  <p class="gd-updated">Actualizado el 25 de julio de 2026</p>
+
+  <div class="gd-body">
+    <h2>&iquest;Cu&aacute;l es la diferencia entre un sitio traducido y uno biling&uuml;e?</h2>
+    <div class="gd-answer"><p>Un sitio traducido mantiene una arquitectura de informaci&oacute;n y cambia las palabras. Un sitio biling&uuml;e le da a cada idioma sus propias URLs, encabezados, datos estructurados y vocabulario. La diferencia aparece cuando las dos audiencias buscan distinto &mdash; que, en la mayor&iacute;a de los mercados B2B, es lo que ocurre.</p></div>
+    <p>El caso concreto en la mayor&iacute;a de los mercados B2B de LATAM: un comprador es un cliente comercial local buscando en espa&ntilde;ol, el otro es una multinacional o expatriado buscando en ingl&eacute;s. Mismo servicio, dos vocabularios, dos intenciones.</p>
+    <h2>&iquest;C&oacute;mo deben estructurarse las URLs biling&uuml;es?</h2>
+    <div class="gd-answer"><p>Dale a cada idioma una URL distinta y direccionable de forma permanente &mdash; lo m&aacute;s com&uacute;n es un prefijo de ruta como /es/. Evita cambiar de idioma por cookie, sesi&oacute;n o redirecci&oacute;n autom&aacute;tica en la misma URL, porque entonces un rastreador o sistema de recuperaci&oacute;n no puede indexar ambas versiones de forma independiente.</p></div>
+    <p>Los subdominios y dominios por pa&iacute;s tambi&eacute;n funcionan. Lo que importa es que la URL sea estable y espec&iacute;fica por idioma, no cu&aacute;l de los tres patrones elijas.</p>
+    <h2>&iquest;C&oacute;mo se implementa hreflang correctamente?</h2>
+    <div class="gd-answer"><p>Cada p&aacute;gina declara el conjunto completo: a s&iacute; misma, cada idioma alterno y un x-default. Las declaraciones deben ser rec&iacute;procas &mdash; si la p&aacute;gina en ingl&eacute;s apunta a la de espa&ntilde;ol, la de espa&ntilde;ol debe apuntar de vuelta. Las declaraciones unidireccionales son el error de implementaci&oacute;n m&aacute;s com&uacute;n.</p></div>
+    <div class="gd-note"><b>Verifica.</b> Solicita cada versi&oacute;n y confirma que las alternas coinciden en ambas direcciones. Un solo enlace rec&iacute;proco faltante basta para que el par sea tratado como p&aacute;ginas no relacionadas.</div>
+    <h2>&iquest;Deben duplicarse los datos estructurados por idioma?</h2>
+    <div class="gd-answer"><p>S&iacute;, y deben ser genuinamente por idioma en vez de copiados. La entidad es la misma organizaci&oacute;n, pero los campos descriptivos, nombres de servicio y cualquier propiedad de texto pertenecen al idioma de esa p&aacute;gina. Reutilizar un bloque en ambas versiones vuelve una de ellas inclasificable.</p></div>
+    <p>El identificador de la organizaci&oacute;n se mantiene constante entre versiones para que la entidad resuelva como un solo negocio y no como dos.</p>
+    <h2>&iquest;Cu&aacute;les son los errores m&aacute;s comunes de SEO biling&uuml;e?</h2>
+    <div class="gd-answer"><p>Redirigir autom&aacute;ticamente por IP, lo que impide indexar la alterna. Hreflang no rec&iacute;proco. Traducir palabras clave literalmente en vez de usar el vocabulario real de cada mercado. Y traducci&oacute;n autom&aacute;tica, que produce texto que se lee como baja calidad tanto para personas como para sistemas de recuperaci&oacute;n.</p></div>
+    <p>La traducci&oacute;n autom&aacute;tica es la cara, porque falla en silencio &mdash; la p&aacute;gina existe, indexa y rinde por debajo sin verse rota nunca.</p>
+    <h2>&iquest;Cu&aacute;ndo basta con un solo idioma?</h2>
+    <div class="gd-answer"><p>Cuando una audiencia realmente domina y la segunda ser&iacute;a una cortes&iacute;a y no un canal. Un segundo idioma mal mantenido es peor que ninguno &mdash; divide autoridad, crea ambig&uuml;edad de contenido duplicado y se&ntilde;ala descuido justo al comprador que pretend&iacute;a alcanzar.</p></div>
+    <p>La prueba honesta es si alguien va a mantener el segundo idioma al mismo est&aacute;ndar que el primero. Si no, la mejor decisi&oacute;n es un idioma bien hecho.</p>
+  </div>
+
+  <div class="gd-cta">
+    <p>Esta p&aacute;gina es la demostraci&oacute;n: existe en su propia URL en ambos idiomas, con hreflang rec&iacute;proco y datos estructurados independientes.</p>
+    <a href="/resources/guides/bilingual-website-architecture/" class="cs-btn-primary">View this guide in English &rarr;</a>
+  </div>
+
+  <div class="footer-note">&copy; 2026 DATRUM &middot; <a href="/es/">Inicio</a> &middot; <a href="/es/resources/">Todos los recursos</a></div>
+</div>
+
+<div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <p class="cookie-text">Usamos anal&iacute;tica que respeta la privacidad (Google Analytics 4 con IP anonimizada) para entender c&oacute;mo los visitantes encuentran DATRUM. Nada personal, sin tracking publicitario. Puedes rechazar y el sitio funciona igual. <a href="/es/privacy">Pol&iacute;tica de privacidad</a>.</p>
+  <div class="cookie-actions">
+    <button class="cookie-btn primary" onclick="acceptCookies()">Aceptar anal&iacute;tica</button>
+    <button class="cookie-btn" onclick="declineCookies()">Rechazar</button>
+  </div>
+</div>
+
+<script defer src="/js/nav.js"></script>
+</body>
+</html>
