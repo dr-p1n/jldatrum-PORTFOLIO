@@ -178,13 +178,13 @@ nav {
   letter-spacing: 0.14em;
   margin-bottom: 32px;
 }
-.eyebrow .pulse-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--lemon);
-  animation: pulse-dot 2s ease-in-out infinite;
-  flex-shrink: 0;
+/* Pulse lives on the inner span: .eyebrow is also .fade-up, whose
+   `animation: fadeUp` would otherwise win the single animation slot. */
+.eyebrow .eyebrow-pulse {
+  animation: pulse-eyebrow 2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .eyebrow .eyebrow-pulse { animation: none; }
 }
 
 .hero-title {
@@ -193,12 +193,10 @@ nav {
   font-weight: 300;
   line-height: 1.16;
   letter-spacing: -0.02em;
-  color: var(--text);
+  color: var(--teal);
   max-width: 820px;
   margin-bottom: 32px;
 }
-.hero-title em  { font-style: normal; color: var(--teal); font-weight: 300; }
-.hero-title .lemon { color: var(--lemon); font-style: normal; }
 
 @media (max-width: 639px) {
   .hero-title { font-size: clamp(28px, 8vw, 44px); }

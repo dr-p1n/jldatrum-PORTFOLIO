@@ -53,9 +53,9 @@ body > section:first-of-type:not(#home) > .section-inner {
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(0.7); }
+@keyframes pulse-eyebrow {
+  0%, 100% { color: var(--muted); }
+  50%      { color: var(--lemon); }
 }
 
 .fade-up { opacity: 0; }
