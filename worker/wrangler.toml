@@ -1,0 +1,12 @@
+name = "ai-visibility"
+main = "ai-visibility-scanner.js"
+compatibility_date = "2026-08-01"
+
+# Rate limiting: 10 scans per IP per hour. Without this binding the endpoint
+# would scan anything, for anyone, as fast as it is asked.
+[[kv_namespaces]]
+binding = "RATE"
+id = "1361a8801c4f4c8ca804168b8c93a3d6"
+
+[observability]
+enabled = true

@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://jldatrum.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/audit/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/audit/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/audit/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/audit/"/>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/audit/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/audit/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/audit/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/audit/"/>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/bio/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/bio/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/bio/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/bio/"/>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/bio/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/bio/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/bio/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/bio/"/>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/privacy"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/privacy"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/privacy"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/privacy"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/guides/bilingual-website-architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/bilingual-website-architecture/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/bilingual-website-architecture/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/bilingual-website-architecture/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/guides/bilingual-website-architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/bilingual-website-architecture/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/bilingual-website-architecture/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/bilingual-website-architecture/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/guides/how-ai-engines-recommend-businesses/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/how-ai-engines-recommend-businesses/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/how-ai-engines-recommend-businesses/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/how-ai-engines-recommend-businesses/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/guides/how-ai-engines-recommend-businesses/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/how-ai-engines-recommend-businesses/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/how-ai-engines-recommend-businesses/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/how-ai-engines-recommend-businesses/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/guides/ley-81-website-compliance/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/ley-81-website-compliance/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/ley-81-website-compliance/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/ley-81-website-compliance/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/guides/ley-81-website-compliance/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/ley-81-website-compliance/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/ley-81-website-compliance/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/ley-81-website-compliance/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/guides/security-headers-vendor-review/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/security-headers-vendor-review/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/security-headers-vendor-review/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/security-headers-vendor-review/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/guides/security-headers-vendor-review/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/security-headers-vendor-review/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/security-headers-vendor-review/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/security-headers-vendor-review/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/guides/structured-data-high-value-inventory/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/structured-data-high-value-inventory/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/structured-data-high-value-inventory/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/structured-data-high-value-inventory/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/guides/structured-data-high-value-inventory/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/guides/structured-data-high-value-inventory/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/guides/structured-data-high-value-inventory/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/guides/structured-data-high-value-inventory/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/ley81/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/ley81/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/ley81/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/ley81/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/ley81/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/ley81/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/ley81/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/ley81/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/research/certifications-are-decoration/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/certifications-are-decoration/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/certifications-are-decoration/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/certifications-are-decoration/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/research/certifications-are-decoration/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/certifications-are-decoration/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/certifications-are-decoration/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/certifications-are-decoration/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/research/instruments-beat-pitches/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/instruments-beat-pitches/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/instruments-beat-pitches/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/instruments-beat-pitches/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/research/instruments-beat-pitches/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/instruments-beat-pitches/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/instruments-beat-pitches/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/instruments-beat-pitches/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/research/most-ai-seo-is-a-bluff/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/most-ai-seo-is-a-bluff/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/most-ai-seo-is-a-bluff/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/most-ai-seo-is-a-bluff/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/research/most-ai-seo-is-a-bluff/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/most-ai-seo-is-a-bluff/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/most-ai-seo-is-a-bluff/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/most-ai-seo-is-a-bluff/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/research/the-credibility-trap/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/the-credibility-trap/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/the-credibility-trap/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/the-credibility-trap/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/research/the-credibility-trap/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/the-credibility-trap/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/the-credibility-trap/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/the-credibility-trap/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/research/the-spreadsheet-is-the-cms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/the-spreadsheet-is-the-cms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/the-spreadsheet-is-the-cms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/the-spreadsheet-is-the-cms/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/research/the-spreadsheet-is-the-cms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/the-spreadsheet-is-the-cms/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/the-spreadsheet-is-the-cms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/the-spreadsheet-is-the-cms/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/research/the-trade-already-has-structured-data/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/the-trade-already-has-structured-data/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/the-trade-already-has-structured-data/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/the-trade-already-has-structured-data/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/research/the-trade-already-has-structured-data/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/the-trade-already-has-structured-data/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/the-trade-already-has-structured-data/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/the-trade-already-has-structured-data/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/security-headers/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/security-headers/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/security-headers/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/security-headers/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/security-headers/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/security-headers/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/security-headers/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/security-headers/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/resources/visibility/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/visibility/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/visibility/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/visibility/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/resources/visibility/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/visibility/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/visibility/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/visibility/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/security</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/security"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/security"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/security"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/security</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/security"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/security"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/security"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/subprocessors</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/subprocessors"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/subprocessors"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/subprocessors"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/subprocessors</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/subprocessors"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/subprocessors"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/subprocessors"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/work/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/"/>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/work/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/"/>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/work/ag-law/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/ag-law/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/ag-law/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/ag-law/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/work/ag-law/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/ag-law/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/ag-law/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/ag-law/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/work/go-clean/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/go-clean/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/go-clean/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/go-clean/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/work/go-clean/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/go-clean/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/go-clean/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/go-clean/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/work/obstacle-race/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/obstacle-race/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/obstacle-race/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/obstacle-race/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/work/obstacle-race/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/obstacle-race/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/obstacle-race/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/obstacle-race/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/work/panama-treasures/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/panama-treasures/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/panama-treasures/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/panama-treasures/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/work/panama-treasures/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/panama-treasures/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/panama-treasures/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/panama-treasures/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/work/seguros/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/seguros/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/seguros/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/seguros/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/work/seguros/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/seguros/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/seguros/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/seguros/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/work/ucc/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/ucc/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/ucc/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/ucc/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/work/ucc/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/ucc/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/ucc/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/ucc/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/work/verite/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/verite/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/verite/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/verite/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jldatrum.com/es/work/verite/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/verite/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/verite/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/verite/"/>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

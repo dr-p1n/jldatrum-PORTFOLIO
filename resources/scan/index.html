@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Visibility Scanner — free, no forms · DATRUM</title>
+  <meta name="description" content="Enter a URL and get a graded report on whether answer engines can read, parse and cite it. Every deduction is a mechanical fact about the fetched page. Free, no forms.">
+  <meta property="og:title" content="AI Visibility Scanner · DATRUM">
+  <meta property="og:description" content="Enter a URL and get a graded report on whether answer engines can read, parse and cite it. Every deduction is a mechanical fact about the fetched page. Free, no forms.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://jldatrum.com/resources/scan/">
+  <meta property="og:image" content="https://jldatrum.com/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI Visibility Scanner · DATRUM">
+  <meta name="twitter:description" content="Enter a URL and get a graded report on whether answer engines can read, parse and cite it. Every deduction is a mechanical fact about the fetched page. Free, no forms.">
+  <meta name="twitter:image" content="https://jldatrum.com/assets/og-image.png">
+
+  <link rel="canonical" href="https://jldatrum.com/resources/scan/">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/scan/">
+  <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/scan/">
+  <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/scan/">
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { 'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500 });
+    try { if (localStorage.getItem('datrum_consent') === 'granted') gtag('consent','update',{ 'analytics_storage':'granted' }); } catch(e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/legal.css">
+  <link rel="stylesheet" href="/css/viz.css">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="/assets/manifest.json">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[{"@type":"WebApplication","@id":"https://jldatrum.com/resources/scan/#app","url":"https://jldatrum.com/resources/scan/","name":"AI Visibility Scanner","applicationCategory":"BusinessApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://jldatrum.com/#organization"},"isPartOf":{"@id":"https://jldatrum.com/#website"},"inLanguage":"en","description":"Enter a URL and get a graded report on whether answer engines can read, parse and cite it. Every deduction is a mechanical fact about the fetched page. Free, no forms."}]}
+  </script>
+</head>
+<body>
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
+  <a href="/work/#services" onclick="closeDrawer()">Services</a>
+  <a href="/work/" onclick="closeDrawer()">Case studies</a>
+  <a href="/resources/" onclick="closeDrawer()">Resources</a>
+  <a href="/bio/" onclick="closeDrawer()">Bio</a>
+  <a href="/es/resources/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
+  <a href="/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audit Your Brand &rarr;</a>
+</div>
+<div class="cs-topbar">
+  <a href="/" class="cs-wordmark">DATRUM</a>
+  <div class="cs-topbar-right">
+    <a href="/resources/" class="back-link">← All resources</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</div>
+
+<div class="wrap" id="scan"
+     data-endpoint="https://ai-visibility.julioernestolv.workers.dev/scan"
+     data-groups="entity|Entity layer|Whether a machine can tell what business this is.~access|Crawler access|Whether the engines are permitted to read the page at all.~retrieval|Retrievability|Whether the content survives being fetched without a browser."
+     data-scanning="Fetching and parsing…"
+     data-score-label="Score"
+     data-passed-label="checks passed"
+     data-generic-error="The scan failed."
+     data-pass-a11y="Passed"
+     data-fail-a11y="Failed">
+
+  <span class="dx-icon dx-icon--lg dx-icon--hero" data-icon="mesh" aria-hidden="true"></span>
+  <div class="eyebrow">Instrument 04</div>
+  <h1>AI Visibility Scanner</h1>
+  <p class="cs-deck">Can an answer engine actually read your site?</p>
+  <p class="rc-runmeta">Runs in about ten seconds · Scans one URL · Free, no forms, no email</p>
+
+  <form class="scan-form" id="scanForm">
+    <label class="sr-only" for="scanUrl">URL to scan</label>
+    <input class="scan-input" id="scanUrl" type="url" inputmode="url"
+           autocomplete="url" spellcheck="false" placeholder="https://yourcompany.com" required>
+    <button class="scan-btn" id="scanBtn" type="submit">Scan</button>
+  </form>
+  <p class="scan-legal">Scans one public URL plus its <code>/robots.txt</code>, <code>/sitemap.xml</code> and <code>/llms.txt</code>. Nothing is stored and no report is published. Ten scans per hour.</p>
+
+  <p class="scan-status" id="scanStatus" role="status" aria-live="polite" hidden></p>
+  <div class="scan-error" id="scanError" role="alert" hidden></div>
+  <div class="scan-result" id="scanResult" hidden></div>
+
+  <noscript><div class="callout"><p>This instrument needs JavaScript to call the scanner. The 25-point self-diagnostic works without it.</p></div></noscript>
+
+  <h3 class="rc-subhead">Why this exists</h3>
+    <p>The <a href="/resources/visibility/">Visibility Self-Diagnostic</a> asks you twenty-five questions about your own site. It is useful, and it has one structural weakness: you are the one answering. A self-report is only ever as honest as the person filling it in, and the failures that matter most are the ones nobody knows they have.</p>
+    <p>This instrument does not ask. It fetches the URL, parses what came back, and grades it.</p>
+    <p>Every deduction below is a mechanical fact about a document — the structured data parsed or it did not, the crawler is permitted or it is blocked, the text was in the HTML or it was not. Nothing here is a projection, and no number comes from a vendor. You can reproduce the entire report with <code>curl</code>.</p>
+
+  <h3 class="rc-subhead">How the grade works</h3>
+    <p>The page starts at 100 and loses points for each failure, weighted by what the failure actually costs. A blocked <code>GPTBot</code> is not a ranking penalty — it is total absence from that engine, so it costs more than a missing meta description. Grades run A+ through F on the same bands the Mozilla Observatory uses, for the same reason: a letter is legible to someone who will never read the detail.</p>
+
+  <h3 class="rc-subhead">What a bad grade means</h3>
+    <p>A low score is not a verdict on the business. It is the gap between what the business is and what a machine can determine about it — and that gap is a build problem, not a marketing one. Most of the deductions here are fixed once and stay fixed.</p>
+
+  <div class="cs-cta">
+    <a href="/audit/" class="cs-btn-primary">Audit Your Brand →</a>
+    <a href="https://calendly.com/julio-jldatrum" target="_blank" rel="noopener" class="cs-btn-ghost">Schedule a Strategy Session →</a>
+  </div>
+
+  <div class="footer-note">© 2026 DATRUM · <a href="/">Home</a> · <a href="/resources/">All resources</a></div>
+</div>
+
+<div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <p class="cookie-text">We use a privacy-respecting analytics setup (Google Analytics 4 with IP anonymization) to understand how visitors find DATRUM. Nothing personal, no ad tracking. You can decline and the site works the same. <a href="/privacy">Privacy policy</a>.</p>
+  <div class="cookie-actions">
+    <button class="cookie-btn primary" onclick="acceptCookies()">Accept analytics</button>
+    <button class="cookie-btn" onclick="declineCookies()">Decline</button>
+  </div>
+</div>
+
+<script defer src="/js/nav.js"></script>
+<script defer src="/js/scan.js"></script>
+<script defer src="/js/viz.js"></script>
+</body>
+</html>

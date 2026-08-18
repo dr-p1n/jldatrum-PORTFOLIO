@@ -977,3 +977,92 @@ nav {
   padding: 26px 30px; margin: 48px 0 0;
 }
 .gd-cta p { color: var(--text); font-size: 15px; margin-bottom: 16px; }
+
+/* ─────────────────────────────────────────────────────────
+   AI Visibility Scanner — /resources/scan/
+   Uses legal.css tokens only. No :root here (two already exist),
+   and every font goes through var(--x, literal) because
+   --font-display / --font-body do not exist under this sheet.
+   ───────────────────────────────────────────────────────── */
+.scan-form { display: flex; gap: 8px; flex-wrap: wrap; margin: 32px 0 8px; }
+.scan-input {
+  flex: 1 1 320px; min-width: 0; padding: 14px 16px;
+  background: #0E2329; color: #E8EDED;
+  border: 1px solid #1A3A40; border-radius: 4px;
+  font-family: var(--font-body, 'DM Sans', sans-serif); font-size: 16px;
+}
+.scan-input:focus { outline: 2px solid #1E7F98; outline-offset: 1px; border-color: #1E7F98; }
+.scan-input::placeholder { color: #9AABAF; }
+.scan-btn {
+  padding: 14px 24px; border: 0; border-radius: 4px; cursor: pointer;
+  background: #F2D24B; color: #0C1B1F;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: 15px; font-weight: 600; white-space: nowrap;
+}
+.scan-btn:hover  { filter: brightness(1.08); }
+.scan-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.scan-legal { font-size: 13px; color: #9AABAF; margin: 0 0 40px; }
+
+.scan-status { margin: 24px 0; color: #9AABAF; font-size: 15px; }
+.scan-error {
+  margin: 24px 0; padding: 16px; border-radius: 4px;
+  border: 1px solid #7A3B3B; background: rgba(122,59,59,0.14); color: #E8EDED;
+}
+
+.scan-result[hidden] { display: none; }
+.scan-head {
+  display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+  padding: 28px; margin: 32px 0;
+  border: 1px solid #1A3A40; border-radius: 6px; background: #0E2329;
+}
+.scan-grade {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 72px; line-height: 1; font-weight: 300; letter-spacing: -0.03em;
+  min-width: 110px; text-align: center;
+}
+.scan-grade[data-band="good"]  { color: #6FCF97; }
+.scan-grade[data-band="mid"]   { color: #F2D24B; }
+.scan-grade[data-band="bad"]   { color: #E88B6A; }
+.scan-headmeta { flex: 1 1 260px; }
+.scan-score { font-size: 22px; color: #E8EDED; margin: 0 0 4px; }
+.scan-target {
+  font-family: var(--font-mono, ui-monospace, 'SF Mono', Menlo, monospace);
+  font-size: 13px; color: #9AABAF; word-break: break-all; margin: 0;
+}
+
+.scan-group { margin: 40px 0 0; }
+.scan-group h2 {
+  font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #9AABAF; font-weight: 500; margin: 0 0 4px;
+}
+.scan-grouplede { color: #9AABAF; font-size: 14px; margin: 0 0 16px; }
+
+.scan-check {
+  display: grid; grid-template-columns: 24px 1fr auto; gap: 12px;
+  align-items: start; padding: 14px 0; border-top: 1px solid #1A3A40;
+}
+.scan-check:last-child { border-bottom: 1px solid #1A3A40; }
+.scan-mark { font-size: 15px; line-height: 1.5; }
+.scan-check[data-pass="true"]  .scan-mark { color: #6FCF97; }
+.scan-check[data-pass="false"] .scan-mark { color: #E88B6A; }
+.scan-title  { color: #E8EDED; font-size: 15px; margin: 0 0 2px; }
+.scan-detail { color: #9AABAF; font-size: 14px; margin: 0; line-height: 1.5; }
+.scan-cost {
+  font-size: 13px; color: #E88B6A; white-space: nowrap;
+  font-family: var(--font-mono, ui-monospace, 'SF Mono', Menlo, monospace);
+}
+.scan-check[data-pass="true"] .scan-cost { color: #1A3A40; }
+
+@media (max-width: 560px) {
+  .scan-head  { gap: 16px; padding: 20px; }
+  .scan-grade { font-size: 56px; min-width: 0; }
+  .scan-check { grid-template-columns: 20px 1fr; }
+  .scan-cost  { grid-column: 2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scan-status { animation: none; }
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
+}
