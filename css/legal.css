@@ -572,6 +572,9 @@ pre code {
   letter-spacing: -0.01em;
   color: var(--text);
   transition: color 0.2s;
+  /* It is an <h2> inside <summary> — the generic h2 rule above would
+     otherwise inject 56px/16px and break the flex row. */
+  margin: 0;
 }
 .rc-square-sub {
   font-family: 'DM Sans', sans-serif;

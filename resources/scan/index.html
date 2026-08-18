@@ -93,15 +93,15 @@
 
   <noscript><div class="callout"><p>This instrument needs JavaScript to call the scanner. The 25-point self-diagnostic works without it.</p></div></noscript>
 
-  <h3 class="rc-subhead">Why this exists</h3>
+  <h2 class="rc-subhead">Why this exists</h2>
     <p>The <a href="/resources/visibility/">Visibility Self-Diagnostic</a> asks you twenty-five questions about your own site. It is useful, and it has one structural weakness: you are the one answering. A self-report is only ever as honest as the person filling it in, and the failures that matter most are the ones nobody knows they have.</p>
     <p>This instrument does not ask. It fetches the URL, parses what came back, and grades it.</p>
     <p>Every deduction below is a mechanical fact about a document — the structured data parsed or it did not, the crawler is permitted or it is blocked, the text was in the HTML or it was not. Nothing here is a projection, and no number comes from a vendor. You can reproduce the entire report with <code>curl</code>.</p>
 
-  <h3 class="rc-subhead">How the grade works</h3>
+  <h2 class="rc-subhead">How the grade works</h2>
     <p>The page starts at 100 and loses points for each failure, weighted by what the failure actually costs. A blocked <code>GPTBot</code> is not a ranking penalty — it is total absence from that engine, so it costs more than a missing meta description. Grades run A+ through F on the same bands the Mozilla Observatory uses, for the same reason: a letter is legible to someone who will never read the detail.</p>
 
-  <h3 class="rc-subhead">What a bad grade means</h3>
+  <h2 class="rc-subhead">What a bad grade means</h2>
     <p>A low score is not a verdict on the business. It is the gap between what the business is and what a machine can determine about it — and that gap is a build problem, not a marketing one. Most of the deductions here are fixed once and stay fixed.</p>
 
   <div class="cs-cta">

@@ -70,44 +70,44 @@
   <p class="cs-deck">La revisión de proveedor que estás reprobando sin saberlo.</p>
   <p class="rc-runmeta">Tiempo ~5 min para escanear, ~1 hora para corregir · Requiere acceso a tu configuración de hosting · Gratis, sin formularios</p>
 
-  <h3 class="rc-subhead">Por qué importa más allá del hardening</h3>
+  <h2 class="rc-subhead">Por qué importa más allá del hardening</h2>
     <p>Los encabezados de seguridad son instrucciones que tu servidor envía a los navegadores antes de que cargue una sola palabra de contenido. Son trivialmente verificables por cualquiera, desde cualquier lugar, en segundos, sin permiso.</p>
     <p>Ese último punto es el que los negocios pasan por alto. <strong>Un prospecto, un competidor, un oficial de compras o un auditor puede calificar tu postura de seguridad sin preguntarte y sin avisarte.</strong></p>
     <p>La consecuencia de distribución: los compradores empresariales e institucionales cada vez más corren un escaneo automatizado como paso de precalificación. No les cuesta nada. Una calificación reprobatoria no produce una conversación sobre remediación — produce una remoción silenciosa de la lista de proveedores.</p>
     <p>Nunca recibirás ese correo. Ese es todo el problema.</p>
 
-  <h3 class="rc-subhead">Corre el escaneo primero</h3>
+  <h2 class="rc-subhead">Corre el escaneo primero</h2>
     <p>Escanea tu dominio en <strong>Mozilla Observatory</strong> (<a href="https://developer.mozilla.org/en-US/observatory" target="_blank" rel="noopener">developer.mozilla.org/observatory</a>). Anota tu calificación antes de seguir leyendo. La mayoría de los sitios de negocios panameños sacan <strong>F</strong>.</p>
     <p>Si sacaste F, no hay nada mal con tu negocio. Tu servidor simplemente nunca fue configurado para decir nada — y el default es el silencio.</p>
 
-  <h3 class="rc-subhead">Los encabezados</h3>
-    <h3 class="rc-subhead">Strict-Transport-Security (HSTS)</h3>
+  <h2 class="rc-subhead">Los encabezados</h2>
+    <h2 class="rc-subhead">Strict-Transport-Security (HSTS)</h2>
     <pre><code>Strict-Transport-Security: max-age=31536000; includeSubDomains; preload</code></pre>
     <p>Fuerza a los navegadores a usar HTTPS exclusivamente por un año, incluyendo subdominios.</p>
     <p class="rc-fail"><b>Sin él:</b> Un navegador intentará primero una conexión sin cifrar. En redes no confiables — wifi de hotel, aeropuerto, café — esa petición inicial es interceptable. Los ataques de degradación de sesión dependen de esa brecha.</p>
-    <h3 class="rc-subhead">Content-Security-Policy (CSP)</h3>
+    <h2 class="rc-subhead">Content-Security-Policy (CSP)</h2>
     <pre><code>Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self'</code></pre>
     <p>Declara qué fuentes pueden cargar scripts, estilos, imágenes y otros recursos.</p>
     <p class="rc-fail"><b>Sin él:</b> Cualquier script inyectado se ejecuta con acceso completo a la página — incluyendo acceso a los campos de tu formulario. Este es el encabezado que convierte una vulnerabilidad menor en una brecha de datos.</p>
     <p class="rc-note"><b>Nota:</b> Agrega tus dominios de terceros reales a las directivas relevantes. Analítica, procesadores de pago y proveedores de fuentes necesitan permiso explícito cada uno.</p>
-    <h3 class="rc-subhead">X-Frame-Options</h3>
+    <h2 class="rc-subhead">X-Frame-Options</h2>
     <pre><code>X-Frame-Options: DENY</code></pre>
     <p>Evita que tu sitio sea embebido en un frame en otro dominio.</p>
     <p class="rc-fail"><b>Sin él:</b> Clickjacking. Tu sitio renderizado invisiblemente sobre la página de un atacante, para que los usuarios interactúen con tu interfaz creyendo que están en otro lado.</p>
-    <h3 class="rc-subhead">X-Content-Type-Options</h3>
+    <h2 class="rc-subhead">X-Content-Type-Options</h2>
     <pre><code>X-Content-Type-Options: nosniff</code></pre>
     <p>Impide que los navegadores adivinen los tipos de archivo.</p>
     <p class="rc-fail"><b>Sin él:</b> Un archivo subido que el servidor etiqueta como imagen puede ser interpretado y ejecutado como un script.</p>
-    <h3 class="rc-subhead">Referrer-Policy</h3>
+    <h2 class="rc-subhead">Referrer-Policy</h2>
     <pre><code>Referrer-Policy: strict-origin-when-cross-origin</code></pre>
     <p>Controla cuánta información de URL viaja con los enlaces salientes.</p>
     <p class="rc-fail"><b>Sin él:</b> Las URLs completas — incluyendo cualquier parámetro — se filtran a cada sitio externo que tus usuarios visitan desde el tuyo. Esto también es una exposición de Ley 81 si esas URLs cargan datos personales.</p>
-    <h3 class="rc-subhead">Permissions-Policy</h3>
+    <h2 class="rc-subhead">Permissions-Policy</h2>
     <pre><code>Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()</code></pre>
     <p>Deshabilita las APIs de navegador que tu sitio no usa.</p>
     <p class="rc-fail"><b>Sin él:</b> Cualquier script en tu página puede solicitar acceso a cámara, micrófono o ubicación. Quita <code>payment=()</code> si usas un procesador de pago que requiere la Payment Request API.</p>
 
-  <h3 class="rc-subhead">Implementación</h3>
+  <h2 class="rc-subhead">Implementación</h2>
     <p><strong>Cloudflare Pages</strong> — crea un archivo llamado <code>_headers</code> en la raíz de tu sitio:</p>
   <pre><code>/*
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
@@ -119,7 +119,7 @@
     <p>Otras plataformas usan mecanismos distintos — Netlify usa el mismo formato <code>_headers</code>, Apache usa <code>.htaccess</code>, nginx usa el bloque de servidor. Los valores de los encabezados son idénticos en todos los casos.</p>
     <p><strong>Verifica reescaneando.</strong> De F a A suele ser un solo despliegue.</p>
 
-  <h3 class="rc-subhead">¿Cuáles tienes?</h3>
+  <h2 class="rc-subhead">¿Cuáles tienes?</h2>
     <p>Seis encabezados, pasa o falla. Marca los que tu escaneo ya devuelve — aquí no hay puntaje, solo una lista de brechas. Cada fila sin marcar es una línea más en tu archivo <code>_headers</code>.</p>
     <div class="rc-headercheck">
       <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label"><code>Strict-Transport-Security</code></span></label>
@@ -130,7 +130,7 @@
       <label class="rc-check"><input type="checkbox"><span class="rc-box"></span><span class="rc-label"><code>Permissions-Policy</code></span></label>
     </div>
 
-  <h3 class="rc-subhead">Qué visibilidad desbloquea</h3>
+  <h2 class="rc-subhead">Qué visibilidad desbloquea</h2>
     <ul>
       <li><strong>Pasar la precalificación automatizada</strong> en compradores institucionales que escanean antes de armar el shortlist</li>
       <li><strong>Sobrevivir cuestionarios de seguridad de proveedores</strong> sin una demora de remediación que te cuesta el cronograma</li>
