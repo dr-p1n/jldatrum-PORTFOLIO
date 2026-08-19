@@ -286,10 +286,24 @@ function runChecks(ctx) {
   add("title", "retrieval", doc.title.trim().length > 0, 5,
       "A title element is present", doc.title.trim() || "Missing.");
 
+  // A description is judged on whether a retrieval engine can use it, not on
+  // whether Google truncates its display. 160 is a SERP rendering limit; the
+  // crawler ingests the whole string either way, so charging retrieval points
+  // for exceeding it measures the wrong thing. Penalise absent, uselessly
+  // thin, or so long it has stopped being a summary.
   const dlen = doc.description.trim().length;
-  add("description", "retrieval", dlen > 0 && dlen <= 160, 5,
-      "Meta description present and under 160 characters",
-      dlen === 0 ? "Missing." : `${dlen} characters.`);
+  add("description", "retrieval", dlen > 0, 5,
+      "A meta description is present",
+      dlen === 0 ? "Missing. Engines fall back to guessing a summary from the body."
+                 : `${dlen} characters.`);
+
+  add("description-length", "retrieval", dlen === 0 || (dlen >= 50 && dlen <= 320), 3,
+      "The description works as a standalone summary",
+      dlen === 0 ? "No description to assess."
+        : dlen < 50 ? `${dlen} characters — too thin to summarise the page.`
+        : dlen > 320 ? `${dlen} characters — past the point where it reads as a summary.`
+        : `${dlen} characters. Usable in full by a retrieval engine.`
+          + (dlen > 160 ? " Google will truncate the visible snippet at roughly 160, which costs nothing here." : ""));
 
   add("h1", "retrieval", doc.h1.length === 1, 5,
       "Exactly one H1",
