@@ -1,0 +1,23 @@
+# Retired URLs -> their successor. 301, so any inbound link or search result
+# that still points at a deleted page carries its equity to the replacement
+# instead of landing on a soft 404.
+
+# The two self-report quizzes were superseded by the automated scanner.
+/audit/                                            /resources/scan/               301
+/es/audit/                                         /es/resources/scan/            301
+/resources/visibility/                             /resources/scan/               301
+/es/resources/visibility/                          /es/resources/scan/            301
+
+# Guides folded back into the instruments they described.
+/resources/guides/ley-81-website-compliance/       /resources/ley81/              301
+/es/resources/guides/ley-81-website-compliance/    /es/resources/ley81/           301
+/resources/guides/security-headers-vendor-review/  /resources/security-headers/   301
+/es/resources/guides/security-headers-vendor-review/ /es/resources/security-headers/ 301
+
+# Retired research. No single successor, so they land on the library.
+/resources/research/the-credibility-trap/          /resources/                    301
+/es/resources/research/the-credibility-trap/       /es/resources/                 301
+/resources/research/certifications-are-decoration/ /resources/                    301
+/es/resources/research/certifications-are-decoration/ /es/resources/              301
+/resources/research/most-ai-seo-is-a-bluff/        /resources/                    301
+/es/resources/research/most-ai-seo-is-a-bluff/     /es/resources/                 301
