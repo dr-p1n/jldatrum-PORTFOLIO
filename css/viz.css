@@ -110,54 +110,9 @@ a:hover .dx-icon,
 }
 @keyframes dx-rot { to { transform: rotate(360deg); } }
 
-/* ── Hero ambient line-graph ────────────────────────── */
-#home .section-inner { position: relative; }
-/* keep the copy above the motif without touching its own stacking */
-#home .section-inner > *:not(.dx-hero) { position: relative; z-index: 1; }
-
-.dx-hero {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: min(46%, 520px);
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.3;
-  margin: 0;
-}
-/* Below the two-column breakpoint the motif would sit under the headline —
-   it is ambient, so drop it rather than fight the text for contrast. */
-@media (max-width: 900px) { .dx-hero { display: none; } }
-
-/* The "renting attention" line — flat, dashed, muted. Needs its own class:
-   a CSS class beats inline stroke/stroke-dasharray presentation attributes. */
-.dx-hero-flat {
-  fill: none;
-  stroke: var(--muted, #9AABAF);
-  stroke-width: 1.2;
-  stroke-dasharray: 4 5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0.8;
-}
-
-/* ── Flywheel placement ─────────────────────────────── */
-/* Centred in its pillar, with the labels carried inside the graphic. */
-.dx-viz--flywheel { margin: 24px auto 0; }
-.dx-viz--flywheel > svg {
-  max-width: 420px;
-  margin: 0 auto;
-  display: block;
-  overflow: visible;
-}
-
-/* Security Headers uses the existing .rc-check tick from legal.css — pass/fail,
-   deliberately unscored, so it needs no component here. */
-
 /* ── Reduced motion ─────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .dx-viz, .dx-viz *, .dx-icon, .dx-hero, .dx-hero * {
+  .dx-viz, .dx-viz *, .dx-icon {
     animation: none !important;
     transition: none !important;
   }

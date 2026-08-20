@@ -315,22 +315,6 @@
     el.innerHTML = svgWrap('0 0 360 244', inner);
   };
 
-  // Hero ambient line-graph — rising asset vs flat rented attention.
-  R.herograph = function (el) {
-    var rise = 'M10 190 C 120 186, 210 168, 300 132 S 440 54, 510 22';
-    var flat = 'M10 150 L 80 146 L 120 158 L 190 148 L 250 160 L 320 146 L 390 158 L 460 148 L 510 156';
-    // The flat line stays static: .dx-draw sets stroke-dasharray from CSS, which would
-    // override the dashed presentation attribute. Ambient background — it needs no draw.
-    // dx-hero-flat carries its own colour/dash: a CSS class beats the inline
-    // stroke and stroke-dasharray presentation attributes, so those cannot be
-    // set on the element when .dx-line is applied.
-    var inner =
-      '<path class="dx-hero-flat" d="' + flat + '"/>' +
-      '<path class="dx-accent dx-draw" d="' + rise + '" style="--dx-len:600;--dx-d:0ms;stroke-width:2"/>';
-    el.innerHTML = svgWrap('0 0 520 220', inner);
-    el.setAttribute('aria-hidden', 'true');
-  };
-
   // ── Observer (one pass, never replays) ───────────────
   var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {

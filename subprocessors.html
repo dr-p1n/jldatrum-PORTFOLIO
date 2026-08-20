@@ -30,8 +30,8 @@
   <a href="/work/" onclick="closeDrawer()">Case studies</a>
   <a href="/resources/" onclick="closeDrawer()">Resources</a>
   <a href="/bio/" onclick="closeDrawer()">Bio</a>
-  <a href="/es/resources/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
-  <a href="/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audit Your Brand &rarr;</a>
+  <a href="/es/subprocessors.html" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
+  <a href="/resources/scan/" class="btn-diagnose-drawer" onclick="closeDrawer()">Scan your site &rarr;</a>
 </div>
 <div class="cs-topbar">
   <a href="/" class="cs-wordmark">DATRUM</a>
@@ -76,18 +76,6 @@
         <td>US · <a href="https://docs.github.com/en/site-policy/privacy-policies">privacy</a></td>
       </tr>
       <tr>
-        <td>thum.io</td>
-        <td>Generating thumbnail previews of client websites</td>
-        <td>Public URL strings of client sites (no visitor data)</td>
-        <td>US · <a href="https://www.thum.io/legal/privacy">privacy</a></td>
-      </tr>
-      <tr>
-        <td>jsPDF (CDNJS)</td>
-        <td>Client-side PDF generation for the diagnostic report</td>
-        <td>Library file served from CDN. No data leaves your browser.</td>
-        <td>CDN · <a href="https://cdnjs.com/privacy">privacy</a></td>
-      </tr>
-      <tr>
         <td>Calendly</td>
         <td>Strategy session scheduling (only if you click "Schedule")</td>
         <td>Name, email, meeting time you provide on their form</td>
@@ -95,8 +83,8 @@
       </tr>
       <tr>
         <td>Cloudflare Workers (DATRUM)</td>
-        <td>Storing diagnostic responses + emailing PDF reports</td>
-        <td>Email + URL you submitted, diagnostic scores</td>
+        <td>Running the AI Visibility Scanner</td>
+        <td>The URL you submit, plus a rate-limit counter keyed to your IP address for one hour. Scan results are returned to your browser and are not stored.</td>
         <td>Cloudflare edge · operated by DATRUM</td>
       </tr>
     </tbody>

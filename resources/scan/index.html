@@ -50,8 +50,8 @@
   <a href="/work/" onclick="closeDrawer()">Case studies</a>
   <a href="/resources/" onclick="closeDrawer()">Resources</a>
   <a href="/bio/" onclick="closeDrawer()">Bio</a>
-  <a href="/es/resources/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
-  <a href="/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audit Your Brand &rarr;</a>
+  <a href="/es/resources/scan/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
+  <a href="/resources/scan/" class="btn-diagnose-drawer" onclick="closeDrawer()">Scan your site &rarr;</a>
 </div>
 <div class="cs-topbar">
   <a href="/" class="cs-wordmark">DATRUM</a>
@@ -74,7 +74,6 @@
      data-fail-a11y="Failed">
 
   <span class="dx-icon dx-icon--lg dx-icon--hero" data-icon="mesh" aria-hidden="true"></span>
-  <div class="eyebrow">Instrument 04</div>
   <h1>AI Visibility Scanner</h1>
   <p class="cs-deck">Can an answer engine actually read your site?</p>
   <p class="rc-runmeta">Runs in about ten seconds · Scans one URL · Free, no forms, no email</p>
@@ -91,12 +90,12 @@
   <div class="scan-error" id="scanError" role="alert" hidden></div>
   <div class="scan-result" id="scanResult" hidden></div>
 
-  <noscript><div class="callout"><p>This instrument needs JavaScript to call the scanner. The 25-point self-diagnostic works without it.</p></div></noscript>
+  <noscript><div class="callout"><p>This instrument needs JavaScript to call the scanner.</p></div></noscript>
 
   <h2 class="rc-subhead">Why this exists</h2>
-    <p>The <a href="/resources/visibility/">Visibility Self-Diagnostic</a> asks you twenty-five questions about your own site. It is useful, and it has one structural weakness: you are the one answering. A self-report is only ever as honest as the person filling it in, and the failures that matter most are the ones nobody knows they have.</p>
+    <p>Most site assessments are self-reports. Someone hands you a checklist, you tick the boxes about your own property, and the result carries exactly as much authority as your own optimism. The failures that matter most are the ones nobody knows they have, so the boxes get ticked and the problem survives the assessment.</p>
     <p>This instrument does not ask. It fetches the URL, parses what came back, and grades it.</p>
-    <p>Every deduction below is a mechanical fact about a document — the structured data parsed or it did not, the crawler is permitted or it is blocked, the text was in the HTML or it was not. Nothing here is a projection, and no number comes from a vendor. You can reproduce the entire report with <code>curl</code>.</p>
+    <p>Every deduction below is a mechanical fact about a document &mdash; the structured data parsed or it did not, the crawler is permitted or it is blocked, the text was in the HTML or it was not. Nothing here is a projection, and no number comes from a vendor. You can reproduce the entire report with <code>curl</code>.</p>
 
   <h2 class="rc-subhead">How the grade works</h2>
     <p>The page starts at 100 and loses points for each failure, weighted by what the failure actually costs. A blocked <code>GPTBot</code> is not a ranking penalty — it is total absence from that engine, so it costs more than a missing meta description. Grades run A+ through F on the same bands the Mozilla Observatory uses, for the same reason: a letter is legible to someone who will never read the detail.</p>
@@ -105,7 +104,7 @@
     <p>A low score is not a verdict on the business. It is the gap between what the business is and what a machine can determine about it — and that gap is a build problem, not a marketing one. Most of the deductions here are fixed once and stay fixed.</p>
 
   <div class="cs-cta">
-    <a href="/audit/" class="cs-btn-primary">Audit Your Brand →</a>
+    <a href="/resources/ley81/" class="cs-btn-primary">Open the Ley 81 Checklist &rarr;</a>
     <a href="https://calendly.com/julio-jldatrum" target="_blank" rel="noopener" class="cs-btn-ghost">Schedule a Strategy Session →</a>
   </div>
 

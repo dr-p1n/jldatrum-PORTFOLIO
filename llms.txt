@@ -26,28 +26,23 @@ path prefixed with `/es/`.
 
 ## Instruments (free, no forms)
 
-- [AI Visibility Self-Diagnostic](https://jldatrum.com/resources/visibility/): 25-point assessment of whether a machine can parse, classify and cite a business.
+- [AI Visibility Scanner](https://jldatrum.com/resources/scan/): fetches a URL and grades how legible it is to answer engines. Automated, not self-reported.
+
 - [Ley 81 Compliance Checklist](https://jldatrum.com/resources/ley81/): six-principle self-assessment against Panama's data protection law.
 - [Security Header Reference](https://jldatrum.com/resources/security-headers/): the six headers institutional buyers scan for, with deployable config.
-- [Brand Audit Scorecard](https://jldatrum.com/audit/): five-question diagnostic with a generated report.
 
 ## Research
 
 Argued, first-person diagnostic essays anchored to real engagements.
 
-- [The Credibility Trap](https://jldatrum.com/resources/research/the-credibility-trap/)
-- [Certifications Are Decoration](https://jldatrum.com/resources/research/certifications-are-decoration/)
 - [The Spreadsheet Is the CMS](https://jldatrum.com/resources/research/the-spreadsheet-is-the-cms/)
 - [The Trade Already Has Structured Data](https://jldatrum.com/resources/research/the-trade-already-has-structured-data/)
 - [Instruments Beat Pitches](https://jldatrum.com/resources/research/instruments-beat-pitches/)
-- [Most AI SEO Is a Bluff](https://jldatrum.com/resources/research/most-ai-seo-is-a-bluff/)
 
 ## Guides
 
 Neutral, answer-first reference pages. Each section answers one buyer question.
 
-- [Ley 81 Website Compliance](https://jldatrum.com/resources/guides/ley-81-website-compliance/)
-- [Security Headers Vendor Review](https://jldatrum.com/resources/guides/security-headers-vendor-review/)
 - [How AI Engines Recommend Businesses](https://jldatrum.com/resources/guides/how-ai-engines-recommend-businesses/)
 - [Bilingual Website Architecture](https://jldatrum.com/resources/guides/bilingual-website-architecture/)
 - [Structured Data for High-Value Inventory](https://jldatrum.com/resources/guides/structured-data-high-value-inventory/)

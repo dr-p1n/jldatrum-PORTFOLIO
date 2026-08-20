@@ -1069,3 +1069,14 @@ nav {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
 }
+
+/* Hand-off line above the CTA buttons: every article and guide ends by
+   pointing at the instrument that lets you test its claim on your own site. */
+.cs-cta .cs-handoff {
+  flex: 1 1 100%;
+  margin: 0 0 6px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 64ch;
+}

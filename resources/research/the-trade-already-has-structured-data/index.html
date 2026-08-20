@@ -51,8 +51,8 @@
   <a href="/work/" onclick="closeDrawer()">Case studies</a>
   <a href="/resources/" onclick="closeDrawer()">Resources</a>
   <a href="/bio/" onclick="closeDrawer()">Bio</a>
-  <a href="/es/resources/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
-  <a href="/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audit Your Brand &rarr;</a>
+  <a href="/es/resources/research/the-trade-already-has-structured-data/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
+  <a href="/resources/scan/" class="btn-diagnose-drawer" onclick="closeDrawer()">Scan your site &rarr;</a>
 </div>
 <div class="cs-topbar">
   <a href="/" class="cs-wordmark">DATRUM</a>
@@ -65,41 +65,14 @@
 </div>
 
 <div class="wrap">
-  <div class="eyebrow">Research 04</div>
   <h1>The Trade Already Has Structured Data</h1>
   <p class="cs-deck">Specialist trades spent a century standardising identification. Most projects ignore it and invent a taxonomy from scratch.</p>
   <p class="rs-meta">Published 25 July 2026 &middot; 5 min read &middot; Anchored to Panama Treasures</p>
 
   <div class="rs-body">
-    <p>Watches. Gemstones. Art. Marine. Aviation. Rare books. What these have in common is not price. It is that each one long ago had to solve the same problem: proving that this specific object is what someone claims it is.</p>
-    <p>Solving that produced identification standards of real rigour &mdash; reference numbers, serials, hallmarks, certificates, provenance chains, condition grading. These are, in every meaningful sense, structured data. They predate the web by decades.</p>
-    <p>And then a digital project starts, and somebody opens a blank document to design a taxonomy.</p>
-
-    <h2>The mechanism</h2>
-    <p>Structured data needs three things: stable identifiers, defined attributes, and controlled vocabulary. Most businesses genuinely lack all three, which is why the usual advice is to build them.</p>
-    <p>Specialist trades are the exception. They have all three already, enforced by a stricter mechanism than any style guide &mdash; if the identifiers are wrong, the transaction does not clear. Authentication is not a nice-to-have in these categories; it is the market&rsquo;s entry condition.</p>
-    <p class="rs-pull">The task is not inventing a taxonomy. It is mapping one that already exists, is already maintained, and is already agreed across the whole trade.</p>
-    <p>That is a substantially smaller job, and a substantially better outcome, because the resulting vocabulary matches what buyers actually search with. A collector does not search for &ldquo;luxury timepiece.&rdquo; They search a reference number.</p>
-
-    <h2>Where generic advice goes wrong</h2>
-    <p>Most schema documentation is written for catalogue retail, and its examples assume a product line: one item, many identical units, variants in size and colour.</p>
-    <p>Specialist inventory inverts nearly all of that. Each item is one-of-one. Condition is an attribute of <em>this</em> object rather than the model. Provenance is part of the identity. Two items with the same reference can differ substantially in value based on history and state.</p>
-    <p>Applied naively, catalogue-shaped markup describes the model and quietly discards everything that makes the individual object worth its price. The markup validates. It just describes the wrong thing.</p>
-    <p>The correct treatment is per-item, with the trade&rsquo;s own identifiers carried through into identifier properties rather than flattened into a description string.</p>
-
-    <h2>What it actually looks like</h2>
-    <p>A dealer in high-value watches and precious metals had exactly this. The inventory carried references, provenance, specifications and condition &mdash; maintained properly, because the trade does not permit otherwise.</p>
-    <p>Nothing about that vocabulary needed design work. It needed mapping: each existing column to the property that expresses it, each item published as its own addressable record rather than as a row in a private file.</p>
-    <p>The advantage of doing it this way is that it survives. A taxonomy invented for a website is maintained only as long as someone remembers why it exists. A taxonomy inherited from the trade is maintained because the business would collapse without it.</p>
-
-    <h2>What not to publish</h2>
-    <p>One caution, because in these categories more disclosure is not automatically better.</p>
-    <p>Provenance can carry information that is confidential, security-sensitive, or simply nobody&rsquo;s business &mdash; prior owners, storage location, acquisition price. The discipline is to publish the attributes that establish <em>authenticity and specification</em>, and to withhold the ones that establish <em>custody</em>. A reference number is a public fact about an object. A safe location is not.</p>
-
-    <h2>The diagnostic</h2>
-    <p>Take the field your trade uses to identify a single object &mdash; the reference, the serial, the certificate number. Search your own site for one real value.</p>
-    <p class="rs-pull">If a buyer who knows exactly what they are looking for cannot find it on your site by its identifier, you are invisible to the most qualified buyer in your market.</p>
-    <p>That buyer is not browsing. They know the reference. They are the easiest customer you will ever serve, and the only reason they cannot find you is that the vocabulary you already maintain was never published.</p>
+    <p>Watches. Gemstones. Art. Marine. Aviation. Rare books. What these categories share is not price but a problem each solved long ago: proving that this specific object is what someone claims it is. Solving it produced identification standards of real rigour &mdash; reference numbers, serials, hallmarks, certificates, provenance chains, condition grading. That is structured data, and it predates the web by decades.</p>
+    <p>Structured data needs stable identifiers, defined attributes and controlled vocabulary. Most businesses lack all three, which is why the standard advice is to build them. Specialist trades are the exception, and theirs is enforced by a stricter mechanism than any style guide: if the identifiers are wrong, the transaction does not clear. The task is not inventing a taxonomy but mapping one that is already maintained and already agreed across the whole trade.</p>
+    <p>That is a smaller job and a better outcome, because the resulting vocabulary matches what buyers actually search with. A collector does not search for &ldquo;luxury timepiece&rdquo; &mdash; they search a reference number. Generic schema advice is written for catalogue retail and assumes one model with many identical units; applied to one-of-one inventory it describes the model and quietly discards everything that makes the individual object worth its price. The markup validates. It describes the wrong thing.</p>
   </div>
 
   <div class="rs-close">
@@ -108,7 +81,8 @@
   </div>
 
   <div class="cs-cta">
-    <a href="/audit/" class="cs-btn-primary">Audit your brand &rarr;</a>
+    <p class="cs-handoff">The argument only pays off if the mapping actually reaches the page. The scanner parses whatever structured data your site serves and reports what a retrieval engine can read from it &mdash; including whether it parses at all.</p>
+    <a href="/resources/scan/" class="cs-btn-primary">Run the AI Visibility Scanner &rarr;</a>
     <a href="https://calendly.com/julio-jldatrum" target="_blank" rel="noopener" class="cs-btn-ghost">Schedule a Strategy Session &rarr;</a>
   </div>
 

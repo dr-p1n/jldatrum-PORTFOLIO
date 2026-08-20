@@ -30,8 +30,8 @@
   <a href="/es/work/" onclick="closeDrawer()">Casos de estudio</a>
   <a href="/es/resources/" onclick="closeDrawer()">Recursos</a>
   <a href="/es/bio/" onclick="closeDrawer()">Bio</a>
-  <a href="/resources/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
-  <a href="/es/audit/" class="btn-diagnose-drawer" onclick="closeDrawer()">Audita tu marca &rarr;</a>
+  <a href="/security.html" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
+  <a href="/es/resources/scan/" class="btn-diagnose-drawer" onclick="closeDrawer()">Escanea tu sitio &rarr;</a>
 </div>
 <div class="cs-topbar">
   <a href="/es/" class="cs-wordmark">DATRUM</a>
@@ -142,7 +142,7 @@
       <li>La retención se limita al periodo necesario para el propósito declarado (Artículo 6).</li>
       <li>La autoridad supervisora panameña (ANTAI) es nuestra autoridad. Las quejas pueden presentarse en <a href="https://www.antai.gob.pa/">antai.gob.pa</a>.</li>
     </ul>
-    <p>La Ley 81 de 2019 de Panam&aacute; est&aacute; integrada en cada sitio que entregamos. <a href="/es/resources/guides/ley-81-website-compliance/">La gu&iacute;a de implementaci&oacute;n &rarr;</a></p>
+    <p>La Ley 81 de 2019 de Panam&aacute; est&aacute; integrada en cada sitio que entregamos. <a href="/es/resources/ley81/">La gu&iacute;a de implementaci&oacute;n &rarr;</a></p>
 </section>
 
   <section id="data">
@@ -189,7 +189,7 @@
     <h2>Cómo DATRUM asegura sus propios sistemas</h2>
     <ul>
       <li><strong style="color:var(--text)">Hosting</strong> — Cloudflare Pages (desplegado en el borde, protegido contra DDoS, TLS 1.3 automático).</li>
-      <li><strong style="color:var(--text)">Seguridad de dominio y email</strong> — DKIM, SPF, DMARC aplicados para jldatrum.com. HSTS preload, CSP, X-Frame-Options configurados en cada respuesta. DNSSEC habilitado.</li>
+      <li><strong style="color:var(--text)">Seguridad de dominio y email</strong> — DKIM, SPF, DMARC aplicados para jldatrum.com. HSTS preload, CSP, X-Frame-Options configurados en cada respuesta. DNSSEC habilitado. El conjunto exacto de encabezados est&aacute; documentado en la <a href="/es/resources/security-headers/">Referencia de Encabezados de Seguridad</a>, con la configuraci&oacute;n para desplegarlo.</li>
       <li><strong style="color:var(--text)">Código fuente</strong> — repositorio privado de GitHub con commits firmados requeridos y 2FA obligatorio para cualquier contribuidor.</li>
       <li><strong style="color:var(--text)">Secretos</strong> — almacenados como secretos de Cloudflare Worker, nunca commiteados al código. Rotados ante cambios de personal.</li>
       <li><strong style="color:var(--text)">Postura de backup</strong> — sitio estático (el historial de Git es el backup), el estado del worker se replica en el borde por Cloudflare.</li>
