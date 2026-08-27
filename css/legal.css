@@ -547,9 +547,11 @@ pre code {
 /* Negative side margin lets the highlight bleed into the panel padding, so the
    pointed-at option reads as a band rather than a boxed-in chip. */
 .rc-panel-list li {
+  position: relative;            /* anchors the stretched hit area below */
   margin: 0 -16px;
   padding: 15px 16px;
   border-radius: 10px;
+  cursor: pointer;
   transition: background 0.18s ease, box-shadow 0.18s ease;
 }
 .rc-panel-list li + li { margin-top: 2px; }
@@ -570,6 +572,14 @@ pre code {
   margin: 0 0 7px;               /* beats `section h3` */
 }
 .rc-panel-item a { color: var(--on); text-decoration: none; transition: color 0.2s ease; }
+/* The highlight band covers the whole row, so the whole row has to be the
+   target — otherwise the affordance promises a hit area that only the title
+   text actually honours, which is how this shipped and why clicks on the
+   summary did nothing. Stretching the anchor over the row keeps the link
+   itself on the title, so its accessible name stays the resource name and the
+   heading stays extractable, rather than wrapping the row in an <a> and
+   handing screen readers the whole paragraph as the link text. */
+.rc-panel-item a::after { content: ""; position: absolute; inset: 0; border-radius: 10px; }
 /* The generic `a:hover` sets opacity 0.82; the option being pointed at is the
    one that should stay solid, so state it back. */
 .rc-panel-item a:hover { opacity: 1; }
