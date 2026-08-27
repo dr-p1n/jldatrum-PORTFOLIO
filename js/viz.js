@@ -101,6 +101,44 @@
   // ── Renderers ────────────────────────────────────────
   var R = {};
 
+  // Compounding asset vs rented attention. Deliberately unlabelled on both
+  // axes: this is the shape of the mechanism, not a measurement. Putting
+  // numbers on it would make it a projection, which is the thing the copy
+  // beside it argues against.
+  // Not a growth curve. The hockey stick is a projection, and a projection is
+  // the thing this page argues against — so this states what is left standing
+  // after the same spend, period by period, and nothing else.
+  R.compound = function (el) {
+    var L = labels(el);            // asset | rented | time | accessible description
+    var N = 6, cw = 76, gap = 16, x0 = 8, inner = '';
+
+    if (L[3]) inner += '<title>' + esc(L[3]) + '</title>';
+
+    function row(label, y, cls, fn) {
+      inner += '<text class="' + cls + ' dx-pop" style="--dx-d:0ms" x="' + x0 +
+               '" y="' + y + '">' + esc(label) + '</text>';
+      for (var i = 0; i < N; i++) {
+        inner += '<rect class="' + fn(i) + ' dx-pop" style="--dx-d:' + (160 + i * 70) + 'ms" x="' +
+                 (x0 + i * (cw + gap)) + '" y="' + (y + 14) + '" width="' + cw +
+                 '" height="40" rx="6"/>';
+      }
+    }
+
+    // Everything built is still standing at the end of the run.
+    row(L[0] || '', 18, 'dx-t-accent', function () { return 'dx-node dx-node--hub'; });
+
+    // Only the period currently being paid for is lit. The rest are gone.
+    row(L[1] || '', 116, 'dx-t-strong', function (i) {
+      return i === N - 1 ? 'dx-node' : 'dx-box';
+    });
+
+    var w = N * cw + (N - 1) * gap;
+    inner += '<path class="dx-grid" d="M' + x0 + ' 186H' + (x0 + w) + '"/>';
+    inner += '<text x="' + (x0 + w) + '" y="204" text-anchor="end">' + esc(L[2] || '') + '</text>';
+
+    el.innerHTML = svgWrap('0 0 552 214', inner);
+  };
+
   // Credential node graph — AG Law
   R.nodes = function (el) {
     var L = labels(el), hub = el.getAttribute('data-hub') || '', inner = '';
