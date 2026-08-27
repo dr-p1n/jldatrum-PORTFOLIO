@@ -139,8 +139,12 @@ for (const lang of ["en", "es"]) {
   const cs = run({}, "http://x.com/", lang);
   t(`${lang}: no title names a header`,
     cs.every(c => !/Content-Security-Policy|X-Frame-Options|Strict-Transport|X-Content-Type/i.test(c.title)), true);
-  t(`${lang}: every failure explains the consequence`,
-    cs.every(c => c.detail.length > 80), true);
+  // One line per test, Observatory-style: long enough to name the consequence,
+  // short enough that seven of them read as a table rather than an essay.
+  t(`${lang}: every reason fits one line`,
+    cs.every(c => c.detail.length <= 84), true);
+  t(`${lang}: every reason still names a consequence`,
+    cs.every(c => c.detail.length >= 60 && /—/.test(c.detail)), true);
   t(`${lang}: worst gap is the CSP`,
     cs.slice().sort((a, b) => b.deduction - a.deduction)[0].id, "csp");
 }

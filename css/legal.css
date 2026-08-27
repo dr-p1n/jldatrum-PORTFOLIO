@@ -960,6 +960,12 @@ nav {
   font-size: 17px; color: #E88B6A;
 }
 
+/* Compact rows for the headers test: one verdict per line, no area tag,
+   the density Observatory's results table gets from having one kind of test. */
+.scan-table--compact td { padding: 9px 0; }
+.scan-table--compact .scan-title { font-size: 14.5px; margin: 0 0 1px; }
+.scan-table--compact .scan-detail { font-size: 13.5px; line-height: 1.45; max-width: 68ch; }
+
 .scan-passed {
   list-style: none; margin: 0; padding: 0;
   display: grid; grid-template-columns: 1fr 1fr; gap: 2px 24px;

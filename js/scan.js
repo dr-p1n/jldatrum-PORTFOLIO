@@ -85,7 +85,11 @@
       result.appendChild(el("h2", "scan-subhead",
         t("gapsLabel", "Gaps") + " (" + gaps.length + ")"));
 
-      var table = el("table", "scan-table");
+      // The headers instrument declares data-compact: seven one-line verdicts
+      // read as a table, and the area tag that helps across twenty-six mixed
+      // checks is just a third line of chrome on seven of one kind.
+      var compact = root.dataset.compact === "true";
+      var table = el("table", "scan-table" + (compact ? " scan-table--compact" : ""));
       var thead = document.createElement("thead");
       var hr = document.createElement("tr");
       hr.appendChild(el("th", null, t("gapCol", "What is missing")));
@@ -98,7 +102,7 @@
       gaps.forEach(function (c) {
         var tr = document.createElement("tr");
         var td = document.createElement("td");
-        if (area[c.group]) td.appendChild(el("span", "scan-area", area[c.group]));
+        if (!compact && area[c.group]) td.appendChild(el("span", "scan-area", area[c.group]));
         td.appendChild(el("p", "scan-title", c.title));
         td.appendChild(el("p", "scan-detail", c.detail));
         tr.appendChild(td);
