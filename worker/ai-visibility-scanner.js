@@ -511,6 +511,114 @@ async function scan(target, lang) {
   };
 }
 
+/* ── Security headers, in the words of someone who has to pay for it ──
+   The same shape runChecks returns, so the client renders it with no idea
+   these are headers rather than markup. Weights are modelled on the relative
+   severity Mozilla Observatory assigns — this is not Observatory and does not
+   claim its score, it borrows the grade bands and the ordering of harm. */
+const HDR = {
+  en: {
+    groups: { transport: "The connection", content: "What can run on the page", privacy: "What leaks out" },
+    https:       { t: "The connection is encrypted",
+                   ok: "Served over HTTPS.",
+                   no: "Served over plain HTTP. Anything typed into this site — a contact form, a login — travels readable by anyone on the same network. Browsers also mark it Not Secure in the address bar." },
+    hsts:        { t: "Browsers are told to always use the encrypted version",
+                   ok: v => "Set. " + v,
+                   no: "Missing. The first visit of the day still tries the unencrypted address before being redirected, and that one request can be intercepted. This is one line of configuration." },
+    csp:         { t: "Injected scripts are blocked from running",
+                   ok: "A Content-Security-Policy is set.",
+                   no: "Missing. If anything ever injects a script into a page — a compromised plugin, a hijacked ad, a comment field — it runs with full access, including to whatever your visitors type into your forms. This is the header that keeps a small bug from becoming a data breach." },
+    frame:       { t: "Your pages cannot be loaded inside someone else's site",
+                   ok: "Framing is restricted.",
+                   no: "Missing. Your site can be rendered invisibly on top of an attacker's page so that people click your buttons while believing they are somewhere else. It is called clickjacking and it is cheap to prevent." },
+    nosniff:     { t: "Files cannot be run as code because they were mislabelled",
+                   ok: "X-Content-Type-Options is set.",
+                   no: "Missing. A file uploaded as an image can be re-interpreted and executed by the browser. Relevant to any site that accepts uploads." },
+    referrer:    { t: "The pages people visit do not leak to other sites",
+                   ok: v => "Referrer-Policy: " + v,
+                   no: "Missing. Every link out of your site hands the destination the full address of the page the visitor came from, query strings included. If those addresses carry personal data this is also a Ley 81 exposure." },
+    permissions: { t: "Scripts cannot ask for camera, microphone or location",
+                   ok: "Permissions-Policy is set.",
+                   no: "Missing. Any script on the page — including one you did not write — may prompt your visitors for camera, microphone or location access under your domain's name." },
+  },
+  es: {
+    groups: { transport: "La conexión", content: "Qué puede ejecutarse en la página", privacy: "Qué se filtra" },
+    https:       { t: "La conexión está cifrada",
+                   ok: "Servido por HTTPS.",
+                   no: "Servido por HTTP plano. Todo lo que alguien escriba en este sitio — un formulario, un acceso — viaja legible para cualquiera en la misma red. Los navegadores además lo marcan como No seguro en la barra de direcciones." },
+    hsts:        { t: "Se le indica al navegador usar siempre la versión cifrada",
+                   ok: v => "Configurado. " + v,
+                   no: "Falta. La primera visita del día todavía intenta la dirección sin cifrar antes de ser redirigida, y esa petición se puede interceptar. Es una línea de configuración." },
+    csp:         { t: "Los scripts inyectados no pueden ejecutarse",
+                   ok: "Hay una Content-Security-Policy configurada.",
+                   no: "Falta. Si alguna vez se inyecta un script en una página — un plugin comprometido, un anuncio secuestrado, un campo de comentarios — se ejecuta con acceso completo, incluido lo que tus visitantes escriben en tus formularios. Este es el encabezado que evita que un bug menor se convierta en una fuga de datos." },
+    frame:       { t: "Tus páginas no pueden cargarse dentro del sitio de otro",
+                   ok: "El enmarcado está restringido.",
+                   no: "Falta. Tu sitio puede renderizarse invisible sobre la página de un atacante para que la gente haga clic en tus botones creyendo que está en otro lado. Se llama clickjacking y es barato de prevenir." },
+    nosniff:     { t: "Un archivo no puede ejecutarse como código por estar mal etiquetado",
+                   ok: "X-Content-Type-Options está configurado.",
+                   no: "Falta. Un archivo subido como imagen puede ser reinterpretado y ejecutado por el navegador. Relevante para cualquier sitio que acepte subidas." },
+    referrer:    { t: "Las páginas que visita la gente no se filtran a otros sitios",
+                   ok: v => "Referrer-Policy: " + v,
+                   no: "Falta. Cada enlace que sale de tu sitio le entrega al destino la dirección completa de la página de donde vino el visitante, con parámetros incluidos. Si esas direcciones cargan datos personales, esto también es una exposición de Ley 81." },
+    permissions: { t: "Los scripts no pueden pedir cámara, micrófono o ubicación",
+                   ok: "Permissions-Policy está configurado.",
+                   no: "Falta. Cualquier script en la página — incluido uno que no escribiste — puede pedirle a tus visitantes acceso a cámara, micrófono o ubicación bajo el nombre de tu dominio." },
+  },
+};
+
+function runHeaderChecks(res, target, lang) {
+  const L = HDR[lang === "es" ? "es" : "en"];
+  const c = [];
+  const h = n => res.headers.get(n);
+  const add = (id, group, pass, weight, key, val) => {
+    const S = L[key];
+    const d = pass ? (typeof S.ok === "function" ? S.ok(val) : S.ok) : S.no;
+    c.push({ id, group, pass, deduction: pass ? 0 : weight, title: S.t, detail: d });
+  };
+
+  add("https", "transport", target.protocol === "https:", 15, "https");
+
+  const hsts = h("strict-transport-security");
+  add("hsts", "transport", !!hsts, 20, "hsts", hsts || "");
+
+  const csp = h("content-security-policy");
+  add("csp", "content", !!csp, 25, "csp");
+
+  // frame-ancestors in a CSP supersedes X-Frame-Options; either one closes it.
+  const xfo = h("x-frame-options");
+  add("frame", "content", !!xfo || /frame-ancestors/i.test(csp || ""), 20, "frame");
+
+  add("nosniff", "content", /nosniff/i.test(h("x-content-type-options") || ""), 10, "nosniff");
+
+  const ref = h("referrer-policy");
+  add("referrer", "privacy", !!ref, 5, "referrer", ref || "");
+
+  add("permissions", "privacy", !!h("permissions-policy"), 5, "permissions");
+
+  return c;
+}
+
+async function scanHeaders(target, lang) {
+  const E = errs(lang);
+  const page = await Promise.allSettled([fetchCapped(target.href)]).then(r => r[0]);
+  if (page.status !== "fulfilled") return { error: E.fetch(page.reason?.message || E.failed) };
+  if (!page.value.res.ok)          return { error: E.http(page.value.res.status) };
+
+  const checks = runHeaderChecks(page.value.res, target, lang);
+  const score = Math.max(0, 100 - checks.reduce((s, c) => s + c.deduction, 0));
+  return {
+    url: target.href,
+    lang: lang === "es" ? "es" : "en",
+    mode: "headers",
+    scannedAt: new Date().toISOString(),
+    score, grade: grade(score),
+    passed: checks.filter(c => c.pass).length,
+    total: checks.length,
+    checks,
+  };
+}
+
 function cors(origin) {
   const allow = ALLOWED_ORIGINS.has(origin) ? origin : "https://jldatrum.com";
   return {
@@ -552,7 +660,8 @@ export default {
     if (error) return new Response(JSON.stringify({ error }), { status: 400, headers });
 
     try {
-      const result = await scan(url, lang);
+      const mode = String(body?.mode || "").toLowerCase();
+      const result = mode === "headers" ? await scanHeaders(url, lang) : await scan(url, lang);
       return new Response(JSON.stringify(result), { status: result.error ? 502 : 200, headers });
     } catch (e) {
       return new Response(JSON.stringify({ error: E.crashed(e.message) }), { status: 500, headers });

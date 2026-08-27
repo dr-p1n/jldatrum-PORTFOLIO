@@ -11,7 +11,7 @@ const tmpPath = path.join(here, ".scanner.undertest.mjs");
 
 let src = fs.readFileSync(srcPath, "utf8");
 src = src.slice(0, src.indexOf("export default"));
-src += "\nexport { parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR };";
+src += "\nexport { parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR };";
 fs.writeFileSync(tmpPath, src);
 const M = await import(tmpPath);
 fs.unlinkSync(tmpPath);
@@ -103,6 +103,48 @@ t("es 403 differs from en 403", M.ERR.es.http(403) === M.ERR.en.http(403), false
 t("no voseo left in es errors",
   Object.values(M.ERR.es).map(v => typeof v === "function" ? v(403) : v)
     .some(x => /\b(Prob\u00e1|Ingres\u00e1|Apunt\u00e1)\b/.test(x)), false);
+
+console.log("\nsecurity headers test");
+const res = hs => ({ headers: { get: n => hs[n.toLowerCase()] ?? null } });
+const tgt = u => new URL(u);
+const run = (hs, url = "https://x.com/", lang = "en") => M.runHeaderChecks(res(hs), tgt(url), lang);
+const score = cs => Math.max(0, 100 - cs.reduce((s, c) => s + c.deduction, 0));
+const by = (cs, id) => cs.find(c => c.id === id);
+
+const ALL = {
+  "strict-transport-security": "max-age=63072000",
+  "content-security-policy": "default-src 'self'",
+  "x-frame-options": "DENY",
+  "x-content-type-options": "nosniff",
+  "referrer-policy": "strict-origin-when-cross-origin",
+  "permissions-policy": "camera=()",
+};
+t("everything set scores 100",        score(run(ALL)), 100);
+t("everything set grades A+",         M.grade(score(run(ALL))), "A+");
+t("nothing set over http scores 0",   score(run({}, "http://x.com/")), 0);
+t("nothing set over http grades F",   M.grade(score(run({}, "http://x.com/"))), "F");
+t("https alone is not enough",        score(run({})) < 50, true);
+t("7 checks, no more",                run(ALL).length, 7);
+
+t("plain http fails the https check", by(run({}, "http://x.com/"), "https").pass, false);
+t("https passes it",                  by(run({}), "https").pass, true);
+t("nosniff must say nosniff",         by(run({ "x-content-type-options": "yes" }), "nosniff").pass, false);
+t("frame-ancestors substitutes XFO",
+  by(run({ "content-security-policy": "frame-ancestors 'none'" }), "frame").pass, true);
+t("a CSP without it does not",
+  by(run({ "content-security-policy": "default-src 'self'" }), "frame").pass, false);
+
+console.log("\n...and explains itself without naming the header");
+for (const lang of ["en", "es"]) {
+  const cs = run({}, "http://x.com/", lang);
+  t(`${lang}: no title names a header`,
+    cs.every(c => !/Content-Security-Policy|X-Frame-Options|Strict-Transport|X-Content-Type/i.test(c.title)), true);
+  t(`${lang}: every failure explains the consequence`,
+    cs.every(c => c.detail.length > 80), true);
+  t(`${lang}: worst gap is the CSP`,
+    cs.slice().sort((a, b) => b.deduction - a.deduction)[0].id, "csp");
+}
+t("es differs from en", M.HDR.es.csp.t === M.HDR.en.csp.t, false);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

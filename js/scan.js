@@ -143,7 +143,9 @@
     fetch(ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: url, lang: LANG })
+      // One client, two instruments. The page declares which via data-mode;
+      // the response shape is identical either way, so nothing below branches.
+      body: JSON.stringify({ url: url, lang: LANG, mode: root.dataset.mode || "" })
     })
       .then(function (r) {
         return r.json().then(function (d) { return { ok: r.ok, data: d }; });
