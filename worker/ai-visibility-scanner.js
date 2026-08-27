@@ -21,12 +21,12 @@ const MAX_REDIRECTS    = 5;
 
 /* ── Crawlers that matter, and what it costs to block them ─────────── */
 const AI_CRAWLERS = [
-  { ua: "GPTBot",          label: "ChatGPT (training + retrieval)", weight: 15 },
-  { ua: "OAI-SearchBot",   label: "ChatGPT Search",                 weight: 10 },
-  { ua: "ClaudeBot",       label: "Claude",                         weight: 10 },
-  { ua: "PerplexityBot",   label: "Perplexity",                     weight: 10 },
-  { ua: "Google-Extended", label: "Google AI Overviews / Gemini",   weight: 10 },
-  { ua: "CCBot",           label: "Common Crawl (feeds many)",      weight:  5 },
+  { ua: "GPTBot",          weight: 15, label: "ChatGPT (training + retrieval)", labelEs: "ChatGPT (entrenamiento + recuperaci\u00f3n)" },
+  { ua: "OAI-SearchBot",   weight: 10, label: "ChatGPT Search",                 labelEs: "ChatGPT Search" },
+  { ua: "ClaudeBot",       weight: 10, label: "Claude",                         labelEs: "Claude" },
+  { ua: "PerplexityBot",   weight: 10, label: "Perplexity",                     labelEs: "Perplexity" },
+  { ua: "Google-Extended", weight: 10, label: "Google AI Overviews / Gemini",   labelEs: "Google AI Overviews / Gemini" },
+  { ua: "CCBot",           weight:  5, label: "Common Crawl (feeds many)",      labelEs: "Common Crawl (alimenta a muchos)" },
 ];
 
 /* ── Guardrails: this endpoint fetches attacker-supplied URLs ─────────
@@ -60,17 +60,52 @@ function isPrivateHost(host) {
   return false;
 }
 
-function validateTarget(raw) {
+const ERR = {
+  en: {
+    parse:    "That doesn't parse as a URL.",
+    scheme:   "Only http and https URLs can be scanned.",
+    creds:    "URLs with embedded credentials are not accepted.",
+    private:  "Private, loopback and link-local addresses cannot be scanned.",
+    public:   "That hostname doesn't look public.",
+    json:     "Expected JSON.",
+    method:   "POST only.",
+    rate:     "Scan limit reached \u2014 10 per hour. Try again shortly.",
+    fetch:    r => `Could not fetch that URL: ${r}`,
+    failed:   "request failed",
+    http:     n => `The target returned HTTP ${n}.`,
+    notHtml:  ct => `That URL returned ${ct || "an unknown content type"}, not HTML.`,
+    crashed:  m => `Scan failed: ${m}`,
+  },
+  es: {
+    parse:    "Eso no se puede leer como una URL.",
+    scheme:   "Solo se pueden escanear URLs http y https.",
+    creds:    "No se aceptan URLs con credenciales incrustadas.",
+    private:  "No se pueden escanear direcciones privadas, de loopback ni link-local.",
+    public:   "Ese nombre de host no parece p\u00fablico.",
+    json:     "Se esperaba JSON.",
+    method:   "Solo POST.",
+    rate:     "L\u00edmite de escaneos alcanzado \u2014 10 por hora. Prob\u00e1 de nuevo en un rato.",
+    fetch:    r => `No se pudo obtener esa URL: ${r}`,
+    failed:   "la petici\u00f3n fall\u00f3",
+    http:     n => `El destino devolvi\u00f3 HTTP ${n}.`,
+    notHtml:  ct => `Esa URL devolvi\u00f3 ${ct || "un tipo de contenido desconocido"}, no HTML.`,
+    crashed:  m => `El escaneo fall\u00f3: ${m}`,
+  },
+};
+const errs = lang => ERR[lang === "es" ? "es" : "en"];
+
+function validateTarget(raw, lang) {
+  const E = errs(lang);
   let u;
-  try { u = new URL(String(raw).trim()); } catch { return { error: "That doesn't parse as a URL." }; }
+  try { u = new URL(String(raw).trim()); } catch { return { error: E.parse }; }
   if (u.protocol !== "https:" && u.protocol !== "http:")
-    return { error: "Only http and https URLs can be scanned." };
+    return { error: E.scheme };
   if (u.username || u.password)
-    return { error: "URLs with embedded credentials are not accepted." };
+    return { error: E.creds };
   if (isPrivateHost(u.hostname))
-    return { error: "Private, loopback and link-local addresses cannot be scanned." };
+    return { error: E.private };
   if (!u.hostname.includes("."))
-    return { error: "That hostname doesn't look public." };
+    return { error: E.public };
   u.hash = "";
   return { url: u };
 }
@@ -188,11 +223,143 @@ async function extractHtml(html) {
   return out;
 }
 
+/* ── Result strings, both languages ──────────────────────────────────
+   One table, never a forked worker. Titles are flat strings; details are
+   functions because most interpolate a value the scan actually found.
+   runChecks passes structured vars, so the pass/fail logic below stays the
+   single source of truth and only the wording is per-language.          */
+const STR = {
+  en: {
+    "ld-present": { t: "Structured data is present",
+      d: v => v.n === 0
+        ? "No JSON-LD on this page. To an answer engine it describes no entity — prose with no claims it can attribute, no name, no address, no services. Everything below in this section is unmeasurable until there is a block to read."
+        : `${v.n} JSON-LD block(s) found.` },
+    "ld-valid": { t: "Structured data parses as valid JSON",
+      d: v => v.malformed === 0 ? "All blocks parse."
+        : v.entityBug
+          ? `${v.malformed} block(s) fail to parse. An HTML entity (${v.entityBug}) leaked into the JSON — the page looks correct to a human and is silently invisible to every parser.`
+          : `${v.malformed} block(s) are malformed JSON and are discarded silently by every consumer.` },
+    "ld-org": { t: "An Organization entity is declared",
+      d: v => v.type ? `Declared as ${v.type}.`
+        : "No Organization, LocalBusiness or ProfessionalService node. Nothing here states what business this is." },
+    "ld-name": { t: "The entity has a machine-readable name",
+      d: v => v.name ? `name: ${v.name}` : "No name field on the entity." },
+    "ld-address": { t: "A postal address is structured",
+      d: v => v.ok ? "PostalAddress present."
+        : "No structured address — geographic queries cannot resolve to this business." },
+    "ld-sameas": { t: "sameAs links disambiguate the entity",
+      d: v => v.n ? `${v.n} sameAs link(s).`
+        : "No sameAs. Engines cannot reconcile this business with its LinkedIn, Wikidata or directory records, so it stays an unlinked string rather than a known entity." },
+    "ld-services": { t: "Services or products are enumerated",
+      d: v => v.catalog ? "Catalog declared."
+        : "No offer catalog. A machine can only recommend what it can list." },
+    "robots-exists": { t: "robots.txt is reachable",
+      d: v => v.ok ? "Served." : "No robots.txt. Not fatal, but you have published no crawl policy at all." },
+    bot: { t: v => `${v.ua} is allowed`,
+      d: v => v.blocked
+        ? `Blocked by robots.txt. ${v.label} cannot read this page — not ranked lower, absent.`
+        : `Allowed. ${v.label} can retrieve this page.` },
+    sitemap: { t: "A sitemap is published",
+      d: v => v.ok ? "sitemap.xml served." : "No sitemap.xml — discovery depends entirely on internal linking." },
+    ssr: { t: "Content is in the served HTML",
+      d: v => v.ok ? `${v.len} characters of text in the raw response.`
+        : `Only ${v.len} characters of text in the raw HTML. This page renders client-side. Most retrieval crawlers do not execute JavaScript, so they see an empty shell.` },
+    title: { t: "A title element is present", d: v => v.title || "Missing." },
+    description: { t: "A meta description is present",
+      d: v => v.len === 0 ? "Missing. Engines fall back to guessing a summary from the body." : `${v.len} characters.` },
+    "description-length": { t: "The description works as a standalone summary",
+      d: v => v.len === 0 ? "No description to assess."
+        : v.len < 50  ? `${v.len} characters — too thin to summarise the page.`
+        : v.len > 320 ? `${v.len} characters — past the point where it reads as a summary.`
+        : `${v.len} characters. Usable in full by a retrieval engine.`
+          + (v.len > 160 ? " Google will truncate the visible snippet at roughly 160, which costs nothing here." : "") },
+    h1: { t: "Exactly one H1", d: v => v.n === 1 ? `"${v.text}"` : `Found ${v.n}.` },
+    "heading-order": { t: "Heading hierarchy is sequential",
+      d: v => v.skip ? `H${v.skip.from} followed directly by H${v.skip.to}` : "No skipped levels." },
+    canonical: { t: "A canonical URL is declared", d: v => v.canonical || "Missing." },
+    alt: { t: "Images carry alt text",
+      d: v => v.total === 0 ? "No images." : `${v.noAlt} of ${v.total} images have no alt text.` },
+    hreflang: { t: "Language alternates are declared coherently",
+      d: v => v.n ? `${v.n} hreflang declarations.` : "Single-language site — not applicable." },
+    llms: { t: "An llms.txt summary is published",
+      d: v => v.ok ? "Served." : "No llms.txt. Emerging convention, not yet load-bearing — cheap to add." },
+    hsts: { t: "HTTPS is enforced with HSTS", d: v => v.hsts || "No Strict-Transport-Security header." },
+  },
+
+  es: {
+    "ld-present": { t: "Hay datos estructurados",
+      d: v => v.n === 0
+        ? "No hay JSON-LD en esta página. Para un motor de respuesta no describe ninguna entidad — prosa sin afirmaciones que pueda atribuir, sin nombre, sin dirección, sin servicios. Nada más de esta sección se puede medir hasta que haya un bloque que leer."
+        : `${v.n} bloque(s) JSON-LD encontrados.` },
+    "ld-valid": { t: "Los datos estructurados son JSON válido",
+      d: v => v.malformed === 0 ? "Todos los bloques parsean."
+        : v.entityBug
+          ? `${v.malformed} bloque(s) no parsean. Una entidad HTML (${v.entityBug}) se filtró dentro del JSON — la página se ve correcta para una persona y es invisible para cualquier parser.`
+          : `${v.malformed} bloque(s) son JSON mal formado y todo consumidor los descarta en silencio.` },
+    "ld-org": { t: "Se declara una entidad Organization",
+      d: v => v.type ? `Declarada como ${v.type}.`
+        : "No hay nodo Organization, LocalBusiness ni ProfessionalService. Nada aquí dice qué negocio es este." },
+    "ld-name": { t: "La entidad tiene un nombre legible por máquina",
+      d: v => v.name ? `name: ${v.name}` : "La entidad no tiene campo name." },
+    "ld-address": { t: "Hay una dirección postal estructurada",
+      d: v => v.ok ? "PostalAddress presente."
+        : "No hay dirección estructurada — las búsquedas por ubicación no pueden resolver a este negocio." },
+    "ld-sameas": { t: "Los enlaces sameAs desambiguan la entidad",
+      d: v => v.n ? `${v.n} enlace(s) sameAs.`
+        : "No hay sameAs. Los motores no pueden reconciliar este negocio con su LinkedIn, Wikidata o registros de directorios, así que queda como un texto suelto y no como una entidad conocida." },
+    "ld-services": { t: "Los servicios o productos están enumerados",
+      d: v => v.catalog ? "Catálogo declarado."
+        : "No hay catálogo de oferta. Una máquina solo puede recomendar lo que puede listar." },
+    "robots-exists": { t: "robots.txt es alcanzable",
+      d: v => v.ok ? "Servido." : "No hay robots.txt. No es fatal, pero no has publicado ninguna política de rastreo." },
+    bot: { t: v => `${v.ua} tiene permiso`,
+      d: v => v.blocked
+        ? `Bloqueado por robots.txt. ${v.label} no puede leer esta página — no queda más abajo, queda ausente.`
+        : `Permitido. ${v.label} puede recuperar esta página.` },
+    sitemap: { t: "Hay un sitemap publicado",
+      d: v => v.ok ? "sitemap.xml servido." : "No hay sitemap.xml — el descubrimiento depende por completo del enlazado interno." },
+    ssr: { t: "El contenido viene en el HTML servido",
+      d: v => v.ok ? `${v.len} caracteres de texto en la respuesta cruda.`
+        : `Solo ${v.len} caracteres de texto en el HTML crudo. Esta página se renderiza en el cliente. La mayoría de los crawlers de recuperación no ejecutan JavaScript, así que ven un cascarón vacío.` },
+    title: { t: "Hay un elemento title", d: v => v.title || "Falta." },
+    description: { t: "Hay una meta description",
+      d: v => v.len === 0 ? "Falta. Los motores terminan adivinando un resumen a partir del cuerpo." : `${v.len} caracteres.` },
+    "description-length": { t: "La description funciona como resumen autónomo",
+      d: v => v.len === 0 ? "No hay description que evaluar."
+        : v.len < 50  ? `${v.len} caracteres — demasiado delgada para resumir la página.`
+        : v.len > 320 ? `${v.len} caracteres — pasada del punto en que se lee como un resumen.`
+        : `${v.len} caracteres. Utilizable completa por un motor de recuperación.`
+          + (v.len > 160 ? " Google va a truncar el fragmento visible cerca de los 160, y eso aquí no cuesta nada." : "") },
+    h1: { t: "Exactamente un H1", d: v => v.n === 1 ? `"${v.text}"` : `Se encontraron ${v.n}.` },
+    "heading-order": { t: "La jerarquía de encabezados es secuencial",
+      d: v => v.skip ? `H${v.skip.from} seguido directamente de H${v.skip.to}` : "No hay niveles saltados." },
+    canonical: { t: "Hay una URL canónica declarada", d: v => v.canonical || "Falta." },
+    alt: { t: "Las imágenes llevan texto alt",
+      d: v => v.total === 0 ? "No hay imágenes." : `${v.noAlt} de ${v.total} imágenes no tienen texto alt.` },
+    hreflang: { t: "Las alternativas de idioma están declaradas de forma coherente",
+      d: v => v.n ? `${v.n} declaraciones hreflang.` : "Sitio de un solo idioma — no aplica." },
+    llms: { t: "Hay un resumen llms.txt publicado",
+      d: v => v.ok ? "Servido." : "No hay llms.txt. Convención emergente, todavía no decisiva — barata de agregar." },
+    hsts: { t: "HTTPS se fuerza con HSTS", d: v => v.hsts || "No hay encabezado Strict-Transport-Security." },
+  },
+};
+
 /* ── The checks ─────────────────────────────────────────────────────── */
 function runChecks(ctx) {
   const c = [];
-  const add = (id, group, pass, weight, title, detail) =>
-    c.push({ id, group, pass, deduction: pass ? 0 : weight, title, detail });
+  const L = STR[ctx.lang === "es" ? "es" : "en"];
+
+  // key defaults to id; the per-crawler checks share one "bot" entry because
+  // their ids are dynamic (`bot-GPTBot`).
+  const add = (id, group, pass, weight, vars, key) => {
+    const s = L[key || id] || STR.en[key || id];
+    const v = vars || {};
+    c.push({
+      id, group, pass, deduction: pass ? 0 : weight,
+      title:  typeof s.t === "function" ? s.t(v) : s.t,
+      detail: s.d(v),
+    });
+  };
 
   const { doc, robots, sitemap, llms, headers } = ctx;
 
@@ -215,76 +382,41 @@ function runChecks(ctx) {
   // single root cause and printing seven separate accusations for one problem.
   // Price the absence once, and skip what cannot be inspected.
   if (blocks.length === 0) {
-    add("ld-present", "entity", false, 40,
-        "Structured data is present",
-        "No JSON-LD on this page. To an answer engine it describes no entity — prose with no claims it can attribute, no name, no address, no services. Everything below in this section is unmeasurable until there is a block to read.");
+    add("ld-present", "entity", false, 40, { n: 0 });
   } else {
-    add("ld-present", "entity", true, 40,
-        "Structured data is present", `${blocks.length} JSON-LD block(s) found.`);
-
-    add("ld-valid", "entity", malformed === 0, 25,
-        "Structured data parses as valid JSON",
-        malformed === 0 ? "All blocks parse."
-          : entityBug
-            ? `${malformed} block(s) fail to parse. An HTML entity (${entityBug}) leaked into the JSON — the page looks correct to a human and is silently invisible to every parser.`
-            : `${malformed} block(s) are malformed JSON and are discarded silently by every consumer.`);
-
-    add("ld-org", "entity", !!org, 15,
-        "An Organization entity is declared",
-        org ? `Declared as ${typeOf(org)}.`
-            : "No Organization, LocalBusiness or ProfessionalService node. Nothing here states what business this is.");
+    add("ld-present", "entity", true, 40, { n: blocks.length });
+    add("ld-valid", "entity", malformed === 0, 25, { malformed, entityBug });
+    add("ld-org", "entity", !!org, 15, { type: org ? typeOf(org) : null });
 
     // The property checks only mean something once an entity exists to carry them.
     if (org) {
-      add("ld-name", "entity", !!org.name, 5,
-          "The entity has a machine-readable name",
-          org.name ? `name: ${org.name}` : "No name field on the entity.");
-
-      add("ld-address", "entity", !!org.address, 5,
-          "A postal address is structured",
-          org.address ? "PostalAddress present."
-                      : "No structured address — geographic queries cannot resolve to this business.");
-
+      add("ld-name", "entity", !!org.name, 5, { name: org.name });
+      add("ld-address", "entity", !!org.address, 5, { ok: !!org.address });
       const sameAs = [].concat(org.sameAs || []);
-      add("ld-sameas", "entity", sameAs.length > 0, 10,
-          "sameAs links disambiguate the entity",
-          sameAs.length ? `${sameAs.length} sameAs link(s).`
-            : "No sameAs. Engines cannot reconcile this business with its LinkedIn, Wikidata or directory records, so it stays an unlinked string rather than a known entity.");
-
+      add("ld-sameas", "entity", sameAs.length > 0, 10, { n: sameAs.length });
+      const catalog = !!(org.hasOfferCatalog || org.makesOffer);
       add("ld-services", "entity",
-          !!(org.hasOfferCatalog || org.makesOffer || nodes.some(n => /Service|Product/.test(typeOf(n)))), 5,
-          "Services or products are enumerated",
-          org.hasOfferCatalog || org.makesOffer ? "Catalog declared."
-            : "No offer catalog. A machine can only recommend what it can list.");
+          catalog || nodes.some(n => /Service|Product/.test(typeOf(n))), 5, { catalog });
     }
   }
 
   /* — Crawler access — */
-  add("robots-exists", "access", robots.ok, 5,
-      "robots.txt is reachable",
-      robots.ok ? "Served." : "No robots.txt. Not fatal, but you have published no crawl policy at all.");
+  add("robots-exists", "access", robots.ok, 5, { ok: robots.ok });
 
   for (const bot of AI_CRAWLERS) {
     const blocked = robots.ok && blocksAgent(robots.groups, bot.ua, ctx.path);
     add(`bot-${bot.ua}`, "access", !blocked, bot.weight,
-        `${bot.ua} is allowed`,
-        blocked ? `Blocked by robots.txt. ${bot.label} cannot read this page — not ranked lower, absent.`
-                : `Allowed. ${bot.label} can retrieve this page.`);
+        { ua: bot.ua, label: ctx.lang === "es" ? bot.labelEs : bot.label, blocked },
+        "bot");
   }
 
-  add("sitemap", "access", sitemap.ok, 5,
-      "A sitemap is published",
-      sitemap.ok ? "sitemap.xml served." : "No sitemap.xml — discovery depends entirely on internal linking.");
+  add("sitemap", "access", sitemap.ok, 5, { ok: sitemap.ok });
 
   /* — Retrievability — */
-  add("ssr", "retrieval", doc.textLen >= 500, 25,
-      "Content is in the served HTML",
-      doc.textLen >= 500
-        ? `${doc.textLen} characters of text in the raw response.`
-        : `Only ${doc.textLen} characters of text in the raw HTML. This page renders client-side. Most retrieval crawlers do not execute JavaScript, so they see an empty shell.`);
+  const ssrOk = doc.textLen >= 500;
+  add("ssr", "retrieval", ssrOk, 25, { ok: ssrOk, len: doc.textLen });
 
-  add("title", "retrieval", doc.title.trim().length > 0, 5,
-      "A title element is present", doc.title.trim() || "Missing.");
+  add("title", "retrieval", doc.title.trim().length > 0, 5, { title: doc.title.trim() });
 
   // A description is judged on whether a retrieval engine can use it, not on
   // whether Google truncates its display. 160 is a SERP rendering limit; the
@@ -292,48 +424,31 @@ function runChecks(ctx) {
   // for exceeding it measures the wrong thing. Penalise absent, uselessly
   // thin, or so long it has stopped being a summary.
   const dlen = doc.description.trim().length;
-  add("description", "retrieval", dlen > 0, 5,
-      "A meta description is present",
-      dlen === 0 ? "Missing. Engines fall back to guessing a summary from the body."
-                 : `${dlen} characters.`);
-
-  add("description-length", "retrieval", dlen === 0 || (dlen >= 50 && dlen <= 320), 3,
-      "The description works as a standalone summary",
-      dlen === 0 ? "No description to assess."
-        : dlen < 50 ? `${dlen} characters — too thin to summarise the page.`
-        : dlen > 320 ? `${dlen} characters — past the point where it reads as a summary.`
-        : `${dlen} characters. Usable in full by a retrieval engine.`
-          + (dlen > 160 ? " Google will truncate the visible snippet at roughly 160, which costs nothing here." : ""));
+  add("description", "retrieval", dlen > 0, 5, { len: dlen });
+  add("description-length", "retrieval",
+      dlen === 0 || (dlen >= 50 && dlen <= 320), 3, { len: dlen });
 
   add("h1", "retrieval", doc.h1.length === 1, 5,
-      "Exactly one H1",
-      doc.h1.length === 1 ? `"${doc.h1[0].text.trim().slice(0, 60)}"` : `Found ${doc.h1.length}.`);
+      { n: doc.h1.length, text: doc.h1.length === 1 ? doc.h1[0].text.trim().slice(0, 60) : "" });
 
   let skip = null;
   for (let i = 1; i < doc.headings.length; i++) {
     const d = doc.headings[i].level - doc.headings[i - 1].level;
-    if (d > 1) { skip = `H${doc.headings[i - 1].level} followed directly by H${doc.headings[i].level}`; break; }
+    if (d > 1) { skip = { from: doc.headings[i - 1].level, to: doc.headings[i].level }; break; }
   }
-  add("heading-order", "retrieval", !skip, 5,
-      "Heading hierarchy is sequential", skip || "No skipped levels.");
+  add("heading-order", "retrieval", !skip, 5, { skip });
 
-  add("canonical", "retrieval", !!doc.canonical, 5,
-      "A canonical URL is declared", doc.canonical || "Missing.");
+  add("canonical", "retrieval", !!doc.canonical, 5, { canonical: doc.canonical });
 
   add("alt", "retrieval", doc.imgTotal === 0 || doc.imgNoAlt === 0, 5,
-      "Images carry alt text",
-      doc.imgTotal === 0 ? "No images." : `${doc.imgNoAlt} of ${doc.imgTotal} images have no alt text.`);
+      { total: doc.imgTotal, noAlt: doc.imgNoAlt });
 
   add("hreflang", "retrieval", doc.hreflang.length === 0 || doc.hreflang.length >= 2, 3,
-      "Language alternates are declared coherently",
-      doc.hreflang.length ? `${doc.hreflang.length} hreflang declarations.` : "Single-language site — not applicable.");
+      { n: doc.hreflang.length });
 
-  add("llms", "retrieval", llms.ok, 3,
-      "An llms.txt summary is published",
-      llms.ok ? "Served." : "No llms.txt. Emerging convention, not yet load-bearing — cheap to add.");
+  add("llms", "retrieval", llms.ok, 3, { ok: llms.ok });
 
-  add("hsts", "retrieval", !!headers.hsts, 2,
-      "HTTPS is enforced with HSTS", headers.hsts || "No Strict-Transport-Security header.");
+  add("hsts", "retrieval", !!headers.hsts, 2, { hsts: headers.hsts });
 
   return c;
 }
@@ -344,7 +459,8 @@ function grade(score) {
   return (bands.find(([min]) => score >= min) || [0,"F"])[1];
 }
 
-async function scan(target) {
+async function scan(target, lang) {
+  const E = errs(lang);
   const origin = target.origin;
   const [page, robotsRes, sitemapRes, llmsRes] = await Promise.allSettled([
     fetchCapped(target.href),
@@ -354,13 +470,13 @@ async function scan(target) {
   ]);
 
   if (page.status !== "fulfilled")
-    return { error: `Could not fetch that URL: ${page.reason?.message || "request failed"}` };
+    return { error: E.fetch(page.reason?.message || E.failed) };
   if (!page.value.res.ok)
-    return { error: `The target returned HTTP ${page.value.res.status}.` };
+    return { error: E.http(page.value.res.status) };
 
   const ct = page.value.res.headers.get("content-type") || "";
   if (!/text\/html/i.test(ct))
-    return { error: `That URL returned ${ct || "an unknown content type"}, not HTML.` };
+    return { error: E.notHtml(ct) };
 
   const doc = await extractHtml(page.value.body);
 
@@ -372,12 +488,13 @@ async function scan(target) {
                         && !/<html/i.test(llmsRes.value.body.slice(0, 200)) };
   const headers = { hsts: page.value.res.headers.get("strict-transport-security") };
 
-  const checks = runChecks({ doc, robots, sitemap, llms, headers, path: target.pathname });
+  const checks = runChecks({ doc, robots, sitemap, llms, headers, path: target.pathname, lang });
   const deducted = checks.reduce((s, c) => s + c.deduction, 0);
   const score = Math.max(0, 100 - deducted);
 
   return {
     url: target.href,
+    lang: lang === "es" ? "es" : "en",
     scannedAt: new Date().toISOString(),
     score, grade: grade(score),
     passed: checks.filter(c => c.pass).length,
@@ -402,7 +519,14 @@ export default {
     const headers = { ...cors(origin), "Content-Type": "application/json; charset=utf-8" };
 
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(origin) });
-    if (request.method !== "POST")    return new Response(JSON.stringify({ error: "POST only." }), { status: 405, headers });
+    if (request.method !== "POST")    return new Response(JSON.stringify({ error: errs().method }), { status: 405, headers });
+
+    let body = null;
+    try { body = await request.json(); } catch { /* handled below */ }
+    // Read the language before anything can reply, so even the rate-limit and
+    // parse errors come back in the language of the page that called.
+    const lang = String(body?.lang || "").toLowerCase() === "es" ? "es" : "en";
+    const E = errs(lang);
 
     // Rate limit: 10 scans per IP per hour. Requires a KV namespace bound as RATE.
     const ip = request.headers.get("CF-Connecting-IP") || "anon";
@@ -410,22 +534,20 @@ export default {
       const key = `scan:${ip}:${Math.floor(Date.now() / 3600000)}`;
       const n = Number(await env.RATE.get(key)) || 0;
       if (n >= 10)
-        return new Response(JSON.stringify({ error: "Scan limit reached — 10 per hour. Try again shortly." }), { status: 429, headers });
+        return new Response(JSON.stringify({ error: E.rate }), { status: 429, headers });
       await env.RATE.put(key, String(n + 1), { expirationTtl: 3700 });
     }
 
-    let body;
-    try { body = await request.json(); }
-    catch { return new Response(JSON.stringify({ error: "Expected JSON." }), { status: 400, headers }); }
+    if (body === null) return new Response(JSON.stringify({ error: E.json }), { status: 400, headers });
 
-    const { url, error } = validateTarget(String(body?.url || ""));
+    const { url, error } = validateTarget(String(body?.url || ""), lang);
     if (error) return new Response(JSON.stringify({ error }), { status: 400, headers });
 
     try {
-      const result = await scan(url);
+      const result = await scan(url, lang);
       return new Response(JSON.stringify(result), { status: result.error ? 502 : 200, headers });
     } catch (e) {
-      return new Response(JSON.stringify({ error: `Scan failed: ${e.message}` }), { status: 500, headers });
+      return new Response(JSON.stringify({ error: E.crashed(e.message) }), { status: 500, headers });
     }
   },
 };

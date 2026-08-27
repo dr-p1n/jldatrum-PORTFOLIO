@@ -11,7 +11,7 @@ const tmpPath = path.join(here, ".scanner.undertest.mjs");
 
 let src = fs.readFileSync(srcPath, "utf8");
 src = src.slice(0, src.indexOf("export default"));
-src += "\nexport { parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS };";
+src += "\nexport { parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR };";
 fs.writeFileSync(tmpPath, src);
 const M = await import(tmpPath);
 fs.unlinkSync(tmpPath);
@@ -58,6 +58,37 @@ console.log("\nSSRF: must accept");
 for (const u of ["https://jldatrum.com/","https://example.com/a/b?c=1","http://sub.domain.co.uk/",
                  "https://172.15.0.1/","https://172.32.0.1/","https://8.8.8.8/","https://100.63.0.1/"])
   t(u, !!M.validateTarget(u).error, false);
+
+/* ── Localisation ──────────────────────────────────────────────────────
+   The worker writes every check title and detail, so an untranslated key
+   ships English into the Spanish report — exactly the bug this fixes.
+   These assert parity rather than wording.                             */
+console.log("\nlocalisation: every English key has a Spanish twin");
+const enKeys = Object.keys(M.STR.en).sort();
+const esKeys = Object.keys(M.STR.es).sort();
+t("STR key sets match", esKeys, enKeys);
+t("ERR key sets match", Object.keys(M.ERR.es).sort(), Object.keys(M.ERR.en).sort());
+for (const b of M.AI_CRAWLERS) t(`${b.ua} has labelEs`, typeof b.labelEs, "string");
+
+console.log("\nrunChecks renders in the requested language");
+const emptyDoc = { jsonld: [], headings: [], h1: [], title: "", description: "",
+                   canonical: "", hreflang: [], imgTotal: 0, imgNoAlt: 0, textLen: 0 };
+const ctx = lang => ({ doc: emptyDoc, robots: { ok: false, groups: [] }, sitemap: { ok: false },
+                       llms: { ok: false }, headers: {}, path: "/", lang });
+const en = M.runChecks(ctx("en"));
+const es = M.runChecks(ctx("es"));
+
+t("same checks in both languages", es.map(c => c.id), en.map(c => c.id));
+t("same deductions in both languages", es.map(c => c.deduction), en.map(c => c.deduction));
+t("same pass/fail in both languages", es.map(c => c.pass), en.map(c => c.pass));
+t("no check is left in English", es.filter(c => {
+  const twin = en.find(e => e.id === c.id);
+  return c.title === twin.title && c.detail === twin.detail;
+}).map(c => c.id), []);
+t("unknown lang falls back to English", M.runChecks(ctx("fr")).map(c => c.title), en.map(c => c.title));
+t("ES prices the missing-JSON-LD root cause once", es.filter(c => c.id.startsWith("ld-")).length, 1);
+t("ES blocked-crawler line names the crawler",
+  /GPTBot/.test(es.find(c => c.id === "bot-GPTBot").title), true);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

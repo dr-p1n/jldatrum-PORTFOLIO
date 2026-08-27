@@ -14,6 +14,11 @@
   if (!root) return;
 
   var ENDPOINT = root.dataset.endpoint;
+  // The worker renders every check title and detail itself, so it has to be
+  // told which language to answer in — otherwise the Spanish page frames
+  // English findings. <html lang> already carries this on every page, so
+  // there is no fourth place to keep in sync.
+  var LANG = (document.documentElement.lang || "en").slice(0, 2).toLowerCase();
   var form     = document.getElementById("scanForm");
   var input    = document.getElementById("scanUrl");
   var btn      = document.getElementById("scanBtn");
@@ -120,7 +125,7 @@
     fetch(ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: url })
+      body: JSON.stringify({ url: url, lang: LANG })
     })
       .then(function (r) {
         return r.json().then(function (d) { return { ok: r.ok, data: d }; });
