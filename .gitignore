@@ -1,5 +1,11 @@
 .DS_Store
 node_modules
 .idea
-package-lock.json.claude/
+package-lock.json
 .firecrawl/
+
+# Throwaway generator and check scripts. They are meant to be written into the
+# project root and deleted in the same command; one survived a failed run and
+# shipped, so the pattern is enforced here too.
+_*.py
+_*.mjs
