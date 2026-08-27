@@ -286,7 +286,6 @@ td:first-child { font-weight: 500; color: var(--text); }
   text-decoration: none;
 }
 .cs-wordmark:hover { opacity: 0.85; }
-.cs-topbar .back-link { margin-bottom: 0; }
 
 .cs-deck {
   font-family: 'Space Grotesk', sans-serif;
@@ -806,7 +805,6 @@ nav {
    no .nav-links row, so it is the only way out. */
 .cs-topbar-right { display: flex; align-items: center; gap: 20px; }
 .cs-topbar .hamburger { display: flex; }
-.cs-topbar .back-link { margin-bottom: 0; white-space: nowrap; }
 
 /* The language toggle used to live only inside the drawer, so switching
    language on a deep page took two taps and a guess. Same chip treatment as
@@ -829,7 +827,6 @@ nav {
 
 @media (max-width: 480px) {
   .cs-topbar-right { gap: 10px; }
-  .cs-topbar .back-link { font-size: 10px; letter-spacing: 0.1em; }
   .cs-topbar .cs-lang { padding: 5px 8px; letter-spacing: 0.08em; }
 }
 
