@@ -72,7 +72,11 @@ const ERR = {
     rate:     "Scan limit reached \u2014 10 per hour. Try again shortly.",
     fetch:    r => `Could not fetch that URL: ${r}`,
     failed:   "request failed",
-    http:     n => `The target returned HTTP ${n}.`,
+    http: n =>
+      n === 429 ? "The target returned HTTP 429 — it is rate-limiting requests rather than refusing them. Try again in a minute."
+      : (n === 401 || n === 403)
+        ? `The target returned HTTP ${n} — it refused an identified crawler. That is bot protection, not a markup problem, and this scan cannot see the page at all. It is worth knowing that the same rule frequently blocks GPTBot and the other AI crawlers: where it does, the page is invisible to answer engines however good its structured data is. Confirm that against the site's own WAF and robots rules rather than inferring it from this one refusal.`
+      : `The target returned HTTP ${n}.`,
     notHtml:  ct => `That URL returned ${ct || "an unknown content type"}, not HTML.`,
     crashed:  m => `Scan failed: ${m}`,
   },
@@ -84,10 +88,14 @@ const ERR = {
     public:   "Ese nombre de host no parece p\u00fablico.",
     json:     "Se esperaba JSON.",
     method:   "Solo POST.",
-    rate:     "L\u00edmite de escaneos alcanzado \u2014 10 por hora. Prob\u00e1 de nuevo en un rato.",
+    rate:     "L\u00edmite de escaneos alcanzado \u2014 10 por hora. Prueba de nuevo en un rato.",
     fetch:    r => `No se pudo obtener esa URL: ${r}`,
     failed:   "la petici\u00f3n fall\u00f3",
-    http:     n => `El destino devolvi\u00f3 HTTP ${n}.`,
+    http: n =>
+      n === 429 ? "El destino devolvi\u00f3 HTTP 429 — est\u00e1 limitando peticiones, no rechaz\u00e1ndolas. Prueba de nuevo en un minuto."
+      : (n === 401 || n === 403)
+        ? `El destino devolvi\u00f3 HTTP ${n} — rechaz\u00f3 a un crawler identificado. Eso es protecci\u00f3n anti-bots, no un problema de marcado, y este escaneo no alcanza a ver la p\u00e1gina. Vale saber que esa misma regla suele bloquear a GPTBot y a los dem\u00e1s crawlers de IA: donde lo hace, la p\u00e1gina es invisible para los motores de respuesta por bueno que sea su marcado. Conf\u00edrmalo contra las reglas de WAF y robots del sitio, no lo infieras de este solo rechazo.`
+      : `El destino devolvi\u00f3 HTTP ${n}.`,
     notHtml:  ct => `Esa URL devolvi\u00f3 ${ct || "un tipo de contenido desconocido"}, no HTML.`,
     crashed:  m => `El escaneo fall\u00f3: ${m}`,
   },

@@ -90,5 +90,19 @@ t("ES prices the missing-JSON-LD root cause once", es.filter(c => c.id.startsWit
 t("ES blocked-crawler line names the crawler",
   /GPTBot/.test(es.find(c => c.id === "bot-GPTBot").title), true);
 
+console.log("\nrefusals are explained, not just reported");
+for (const lang of ["en", "es"]) {
+  const E = M.ERR[lang];
+  t(`${lang}: 403 names bot protection`, /bot protection|protecci/i.test(E.http(403)), true);
+  t(`${lang}: 403 names GPTBot`,         /GPTBot/.test(E.http(403)), true);
+  t(`${lang}: 401 treated like 403`,     E.http(401).length > 100, true);
+  t(`${lang}: 429 is not a refusal`,     /429/.test(E.http(429)) && !/GPTBot/.test(E.http(429)), true);
+  t(`${lang}: 500 stays terse`,          E.http(500).length < 60, true);
+}
+t("es 403 differs from en 403", M.ERR.es.http(403) === M.ERR.en.http(403), false);
+t("no voseo left in es errors",
+  Object.values(M.ERR.es).map(v => typeof v === "function" ? v(403) : v)
+    .some(x => /\b(Prob\u00e1|Ingres\u00e1|Apunt\u00e1)\b/.test(x)), false);
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

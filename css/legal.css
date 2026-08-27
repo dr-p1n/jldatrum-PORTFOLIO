@@ -1008,8 +1008,11 @@ nav {
 
 .scan-status { margin: 24px 0; color: #9AABAF; font-size: 15px; }
 .scan-error {
-  margin: 24px 0; padding: 16px; border-radius: 4px;
+  margin: 24px 0; padding: 16px 18px; border-radius: 4px;
   border: 1px solid #7A3B3B; background: rgba(122,59,59,0.14); color: #E8EDED;
+  /* A refusal explains itself now, so this box holds a paragraph rather than
+     a status line — it needs body leading, not default. */
+  font-size: 15px; line-height: 1.62; max-width: 70ch;
 }
 
 .scan-result[hidden] { display: none; }
