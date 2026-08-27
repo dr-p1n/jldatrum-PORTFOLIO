@@ -941,9 +941,30 @@ nav {
 .cs-topbar-right { display: flex; align-items: center; gap: 20px; }
 .cs-topbar .hamburger { display: flex; }
 .cs-topbar .back-link { margin-bottom: 0; white-space: nowrap; }
+
+/* The language toggle used to live only inside the drawer, so switching
+   language on a deep page took two taps and a guess. Same chip treatment as
+   .nav-lang on the hub pages, so it reads as the same control. */
+.cs-topbar .cs-lang {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  border-radius: 4px;
+  color: var(--muted);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: border-color 0.2s, color 0.2s;
+}
+.cs-topbar .cs-lang:hover,
+.cs-topbar .cs-lang:focus-visible { border-color: var(--text); color: var(--text); opacity: 1; }
+
 @media (max-width: 480px) {
   .cs-topbar-right { gap: 10px; }
   .cs-topbar .back-link { font-size: 10px; letter-spacing: 0.1em; }
+  .cs-topbar .cs-lang { padding: 5px 8px; letter-spacing: 0.08em; }
 }
 
 /* ── AEO guides (/resources/guides/) ─────────────────────
