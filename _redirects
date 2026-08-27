@@ -9,8 +9,8 @@
 /es/resources/visibility/                          /es/resources/scan/            301
 
 # Guides folded back into the instruments they described.
-/resources/guides/ley-81-website-compliance/       /resources/ley81/              301
-/es/resources/guides/ley-81-website-compliance/    /es/resources/ley81/           301
+/resources/guides/ley-81-website-compliance/       /security                      301
+/es/resources/guides/ley-81-website-compliance/    /es/security                   301
 /resources/guides/security-headers-vendor-review/  /resources/security-headers/   301
 /es/resources/guides/security-headers-vendor-review/ /es/resources/security-headers/ 301
 
@@ -21,3 +21,16 @@
 /es/resources/research/certifications-are-decoration/ /es/resources/              301
 /resources/research/most-ai-seo-is-a-bluff/        /resources/                    301
 /es/resources/research/most-ai-seo-is-a-bluff/     /es/resources/                 301
+
+# The Ley 81 self-assessment was retired. /security carries the Ley 81 posture
+# it described, so that is the nearest successor rather than the generic hub.
+/resources/ley81/                                  /security                      301
+/es/resources/ley81/                               /es/security                   301
+
+# The literary shelf was retired. No single successor, so they land on the library.
+/resources/research/the-spreadsheet-is-the-cms/    /resources/                    301
+/es/resources/research/the-spreadsheet-is-the-cms/ /es/resources/                 301
+/resources/research/the-trade-already-has-structured-data/ /resources/            301
+/es/resources/research/the-trade-already-has-structured-data/ /es/resources/      301
+/resources/research/instruments-beat-pitches/      /resources/                    301
+/es/resources/research/instruments-beat-pitches/   /es/resources/                 301

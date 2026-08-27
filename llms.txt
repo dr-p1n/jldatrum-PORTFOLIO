@@ -28,16 +28,7 @@ path prefixed with `/es/`.
 
 - [AI Visibility Scanner](https://jldatrum.com/resources/scan/): fetches a URL and grades how legible it is to answer engines. Automated, not self-reported.
 
-- [Ley 81 Compliance Checklist](https://jldatrum.com/resources/ley81/): six-principle self-assessment against Panama's data protection law.
 - [Security Header Reference](https://jldatrum.com/resources/security-headers/): the six headers institutional buyers scan for, with deployable config.
-
-## Research
-
-Argued, first-person diagnostic essays anchored to real engagements.
-
-- [The Spreadsheet Is the CMS](https://jldatrum.com/resources/research/the-spreadsheet-is-the-cms/)
-- [The Trade Already Has Structured Data](https://jldatrum.com/resources/research/the-trade-already-has-structured-data/)
-- [Instruments Beat Pitches](https://jldatrum.com/resources/research/instruments-beat-pitches/)
 
 ## Guides
 

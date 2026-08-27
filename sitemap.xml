@@ -60,7 +60,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/"/>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -69,7 +69,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/"/>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -128,83 +128,11 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jldatrum.com/resources/ley81/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/ley81/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/ley81/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/ley81/"/>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jldatrum.com/es/resources/ley81/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/ley81/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/ley81/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/ley81/"/>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jldatrum.com/resources/research/instruments-beat-pitches/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/instruments-beat-pitches/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/instruments-beat-pitches/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/instruments-beat-pitches/"/>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jldatrum.com/es/resources/research/instruments-beat-pitches/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/instruments-beat-pitches/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/instruments-beat-pitches/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/instruments-beat-pitches/"/>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jldatrum.com/resources/research/the-spreadsheet-is-the-cms/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/the-spreadsheet-is-the-cms/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/the-spreadsheet-is-the-cms/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/the-spreadsheet-is-the-cms/"/>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jldatrum.com/es/resources/research/the-spreadsheet-is-the-cms/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/the-spreadsheet-is-the-cms/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/the-spreadsheet-is-the-cms/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/the-spreadsheet-is-the-cms/"/>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jldatrum.com/resources/research/the-trade-already-has-structured-data/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/the-trade-already-has-structured-data/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/the-trade-already-has-structured-data/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/the-trade-already-has-structured-data/"/>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jldatrum.com/es/resources/research/the-trade-already-has-structured-data/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/research/the-trade-already-has-structured-data/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/research/the-trade-already-has-structured-data/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/research/the-trade-already-has-structured-data/"/>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://jldatrum.com/resources/scan/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/scan/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/scan/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/scan/"/>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -213,7 +141,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/scan/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/scan/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/scan/"/>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -240,7 +168,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/security"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/security"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/security"/>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
@@ -249,7 +177,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/security"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/security"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/security"/>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-08-27</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
