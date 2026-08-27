@@ -633,10 +633,12 @@ pre code {
 .rc-panel--lemon {
   background: var(--lemon);
   --on: #0C1B1F; --on-soft: #3A4028; --rule: rgba(12,27,31,0.20);
+  --off: #736D33;                /* 3.56:1 — dimmed, not erased */
 }
 .rc-panel--dark {
   background: var(--bg2); border: 1px solid var(--border);
   --on: var(--text); --on-soft: var(--muted); --rule: var(--border);
+  --off: #6B7C80;                /* 3.73:1 */
 }
 
 .rc-panel-title {
@@ -660,11 +662,34 @@ pre code {
   color: var(--on);
   margin: 0 0 7px;               /* beats `section h3` */
 }
-.rc-panel-item a { color: var(--on); text-decoration: none; transition: opacity 0.18s, color 0.18s; }
-.rc-panel--lemon .rc-panel-item a:hover { opacity: 0.6; }
-.rc-panel--dark  .rc-panel-item a:hover { opacity: 1; color: var(--lemon); }
+.rc-panel-item a { color: var(--on); text-decoration: none; transition: color 0.2s ease; }
+/* The generic `a:hover` sets opacity 0.82; the option being pointed at is the
+   one that should stay solid, so state it back. */
+.rc-panel-item a:hover { opacity: 1; }
+.rc-panel--dark .rc-panel-item a:hover { color: var(--lemon); }
 
-.rc-panel-sum { color: var(--on-soft); font-size: 14px; line-height: 1.6; margin: 0; }
+.rc-panel-sum {
+  color: var(--on-soft); font-size: 14px; line-height: 1.6; margin: 0;
+  transition: color 0.2s ease;
+}
+
+/* Moving between options greys out the ones you are not on. Scoped to the list
+   being hovered or focused, so at rest every option sits at full contrast —
+   the dimming is a transient de-emphasis, never the state the page loads in,
+   which is what keeps it away from being a contrast failure. */
+.rc-panel-list:hover li:not(:hover) .rc-panel-item a,
+.rc-panel-list:hover li:not(:hover) .rc-panel-sum,
+.rc-panel-list:focus-within li:not(:focus-within) .rc-panel-item a,
+.rc-panel-list:focus-within li:not(:focus-within) .rc-panel-sum { color: var(--off); }
+
+/* Nothing to point with, so nothing to de-emphasise. */
+@media (hover: none), print {
+  .rc-panel-list:hover li:not(:hover) .rc-panel-item a { color: var(--on); }
+  .rc-panel-list:hover li:not(:hover) .rc-panel-sum   { color: var(--on-soft); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rc-panel-item a, .rc-panel-sum { transition: none; }
+}
 
 /* ── Resources hub: 2×2 tool grid ───────────────────── */
 .rc-grid {
