@@ -998,3 +998,18 @@ nav {
   color: var(--muted);
   max-width: 64ch;
 }
+
+/* ── Resources hub: full-bleed shade bands ──────────────
+   The hub alternates like the rest of the site. Scoped to .band so the ~30
+   other legal.css pages, which are a single .wrap column, are untouched.
+   body.has-nav .wrap outranks a bare .band .wrap, hence the body prefix. */
+.band { background: var(--bg); }
+.band--alt { background: var(--bg2); }
+body.has-nav .band .wrap { padding-top: 72px; padding-bottom: 72px; }
+body.has-nav .band--top .wrap { padding-top: 144px; }
+body.has-nav .band--end .wrap { padding-bottom: 120px; }
+@media (max-width: 639px) {
+  body.has-nav .band .wrap { padding-top: 56px; padding-bottom: 56px; }
+  body.has-nav .band--top .wrap { padding-top: 112px; }
+  body.has-nav .band--end .wrap { padding-bottom: 80px; }
+}

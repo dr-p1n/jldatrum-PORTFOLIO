@@ -108,35 +108,43 @@
   // Not a growth curve. The hockey stick is a projection, and a projection is
   // the thing this page argues against — so this states what is left standing
   // after the same spend, period by period, and nothing else.
+  // Owned vs rented, in the same language as the flywheel: nodes, thin
+  // strokes and air — no filled slabs. Six periods of identical spend.
   R.compound = function (el) {
     var L = labels(el);            // asset | rented | time | accessible description
-    var N = 6, cw = 76, gap = 16, x0 = 8, inner = '';
+    var N = 6, x0 = 10, step = 66, r = 7;
+    var yA = 62, yB = 140, inner = '';
+
+    function x(i) { return x0 + i * step; }
 
     if (L[3]) inner += '<title>' + esc(L[3]) + '</title>';
 
-    function row(label, y, cls, fn) {
-      inner += '<text class="' + cls + ' dx-pop" style="--dx-d:0ms" x="' + x0 +
-               '" y="' + y + '">' + esc(label) + '</text>';
-      for (var i = 0; i < N; i++) {
-        inner += '<rect class="' + fn(i) + ' dx-pop" style="--dx-d:' + (160 + i * 70) + 'ms" x="' +
-                 (x0 + i * (cw + gap)) + '" y="' + (y + 14) + '" width="' + cw +
-                 '" height="40" rx="6"/>';
-      }
+    // Owned asset: one unbroken run. Every period is still standing.
+    inner += '<text class="dx-t-accent" x="' + x0 + '" y="30">' + esc(L[0] || '') + '</text>';
+    inner += '<line class="dx-line dx-draw" x1="' + x(0) + '" y1="' + yA + '" x2="' + x(N - 1) +
+             '" y2="' + yA + '" style="--dx-len:' + (step * (N - 1)) + ';--dx-d:120ms"/>';
+
+    // Rented attention: nothing carries. Only the period being paid for is
+    // solid; the five behind it are outlines of what is gone.
+    inner += '<text class="dx-t-strong" x="' + x0 + '" y="108">' + esc(L[1] || '') + '</text>';
+
+    for (var i = 0; i < N; i++) {
+      var d = 200 + i * 90;
+      inner += '<circle class="dx-node dx-node--hub dx-pop" cx="' + x(i) + '" cy="' + yA +
+               '" r="' + r + '" style="--dx-d:' + d + 'ms"/>';
+      inner += (i === N - 1)
+        ? '<circle class="dx-node dx-pop" cx="' + x(i) + '" cy="' + yB + '" r="' + r +
+          '" style="--dx-d:' + d + 'ms"/>'
+        : '<circle class="dx-grid dx-pop" cx="' + x(i) + '" cy="' + yB + '" r="' + r +
+          '" stroke-dasharray="3 4" style="stroke:var(--teal, #1E7F98);stroke-opacity:0.45;--dx-d:' +
+          d + 'ms"/>';
     }
 
-    // Everything built is still standing at the end of the run.
-    row(L[0] || '', 18, 'dx-t-accent', function () { return 'dx-node dx-node--hub'; });
+    inner += '<path class="dx-grid" d="M' + x0 + ' 174H' + x(N - 1) + '"/>';
+    inner += '<text x="' + x(N - 1) + '" y="192" text-anchor="end">' + esc(L[2] || '') + '</text>';
 
-    // Only the period currently being paid for is lit. The rest are gone.
-    row(L[1] || '', 116, 'dx-t-strong', function (i) {
-      return i === N - 1 ? 'dx-node' : 'dx-box';
-    });
-
-    var w = N * cw + (N - 1) * gap;
-    inner += '<path class="dx-grid" d="M' + x0 + ' 186H' + (x0 + w) + '"/>';
-    inner += '<text x="' + (x0 + w) + '" y="204" text-anchor="end">' + esc(L[2] || '') + '</text>';
-
-    el.innerHTML = svgWrap('0 0 552 214', inner);
+    // 360 units wide, like the flywheel, so 11px type reads at the same size.
+    el.innerHTML = svgWrap('0 0 360 200', inner);
   };
 
   // Credential node graph — AG Law
@@ -263,7 +271,9 @@
                ax.toFixed(1) + ' ' + ay.toFixed(1) + ')"/>';
       inner += '<circle class="dx-node dx-node--hub" cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="6"/>';
       if (L[k]) {
-        var s = slots[k], lines = wrapWords(L[k], 15);
+        // 16, not 15: at 15 the Spanish "Ciberseguridad = ventaja competitiva"
+        // breaks with the = starting the second line.
+        var s = slots[k], lines = wrapWords(L[k], 16);
         inner += '<text class="dx-t-strong" x="' + s.x + '" y="' + s.y + '" text-anchor="middle">' +
           lines.map(function (ln, i) {
             return '<tspan x="' + s.x + '" dy="' + (i ? 14 : 0) + '">' + esc(ln) + '</tspan>';

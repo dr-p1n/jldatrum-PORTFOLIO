@@ -220,7 +220,6 @@ nav {
 /* The SVG scales to the column, so 11px type in a 552-unit viewBox lands at
    roughly 8px on screen. Sized in user units to render at about 11. */
 .dx-viz--compound { margin: 40px 0 0; }
-.dx-viz--compound text { font-size: 14px; }
 @media (max-width: 900px) { .dx-viz--compound { margin: 16px 0 32px; } }
 
 @media (max-width: 639px) {
@@ -1031,7 +1030,14 @@ nav {
 }
 
 /* ── SERVICES ───────────────────────────────────────── */
-#services { background: var(--bg); }
+/* The services tab holds two bands that alternate shade like the rest of
+   the site. They cannot be sibling <section>s: tabs.js only hides ids
+   listed in TAB_IDS, so a second section would stay visible under every
+   tab. The section itself carries the LAST band's shade so the tabbed
+   min-height never shows a strip of the wrong colour underneath. */
+#services { background: var(--bg2); }
+.tab-band { background: var(--bg); }
+.tab-band--alt { background: var(--bg2); }
 
 .services-grid {
   display: grid;
@@ -1239,13 +1245,6 @@ nav {
 
 @media (max-width: 639px) {
   .framework-step { padding: 32px 24px; }
-}
-
-.step-num {
-  font-family: var(--font-body);
-  font-size: 11px;
-  color: var(--lemon);
-  letter-spacing: 0.14em;
 }
 
 .step-name {
@@ -1507,14 +1506,6 @@ footer {
               border-color .3s ease;
 }
 
-.router-index {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 12px;
-  letter-spacing: .08em;
-  color: var(--muted);
-  margin-bottom: 16px;
-}
 .router-label {
   font-family: var(--font-display);
   font-weight: 300;
@@ -1528,8 +1519,6 @@ footer {
   line-height: 1.65;
   color: var(--muted);
   margin: 16px 0 0;
-  opacity: 1;                 /* readable without JS — .router-js opts into collapsing */
-  transition: opacity .3s ease .1s;
 }
 .router-foot {
   display: flex;
@@ -1538,19 +1527,10 @@ footer {
   gap: 8px;
   margin-top: 24px;
 }
-.router-count {
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: 40px;      /* the visual anchor when collapsed — do not go below 32px */
-  line-height: 1;
-  color: var(--text);
-}
 .router-cta {
   font-size: 14px;
   color: var(--lemon);
   white-space: nowrap;
-  opacity: 1;                 /* readable without JS — .router-js opts into collapsing */
-  transition: opacity .3s ease .1s;
 }
 
 .router-panel.is-active {
@@ -1559,36 +1539,20 @@ footer {
   border-color: var(--lemon);
 }
 .router-panel.is-dimmed { flex-grow: .7; }
-.router-panel.is-active .router-body,
-.router-panel.is-active .router-cta { opacity: 1; }
 .router-panel:focus-visible { outline: 2px solid var(--lemon); outline-offset: 2px; }
 
-/* Bodies are visible by default; JS adds .router-js to opt into the
-   collapse behaviour. Without JS you get three readable panels. */
-.router-js .router-body,
-.router-js .router-cta { opacity: 0; }
+/* The collapse is gone with the count numerals: they were the anchor a
+   collapsed panel had left, so hiding the body now empties the panel.
+   Every panel reads in full; hover still expands one and dims the rest.
+   js/viz.js still toggles .router-js — the hook if the collapse comes back. */
 
 @media (max-width: 820px) {
   .router { flex-direction: column; min-height: 0; }
   .router-panel { flex: none !important; }
-  .router-body, .router-cta { opacity: 1 !important; }
   .router-foot { margin-top: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .router-panel, .router-body, .router-cta { transition: none; }
-}
-
-/* ── HOME v3: specialization line ───────────────────── */
-#specialization .section-inner { padding-top: 64px; padding-bottom: 64px; }
-.specialization-line {
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: clamp(21px, 2.4vw, 28px);
-  line-height: 1.45;
-  color: var(--text);
-  max-width: 46ch;
-  margin: 0 auto;
-  text-align: center;
 }
 
 /* ── HOME v3: contact ───────────────────────────────── */
@@ -1604,4 +1568,3 @@ footer {
 }
 
 /* ── Merged Services + Method tab: divider between halves ── */
-.tab-rule { height: 1px; background: var(--border); margin: 64px 0 56px; border: 0; }
