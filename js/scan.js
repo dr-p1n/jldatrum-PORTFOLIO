@@ -69,37 +69,55 @@
     head.appendChild(meta);
     result.appendChild(head);
 
-    GROUPS.forEach(function (grp) {
-      var checks = data.checks.filter(function (c) { return c.group === grp.id; });
-      if (!checks.length) return;
+    var area = {};
+    GROUPS.forEach(function (grp) { area[grp.id] = grp.label; });
 
-      var sec = el("section", "scan-group");
-      sec.appendChild(el("h2", null, grp.label));
-      if (grp.lede) sec.appendChild(el("p", "scan-grouplede", grp.lede));
+    // Gaps first, worst first. The passing checks are a tally, not a report:
+    // nobody books a call over what already works, and printing all of them
+    // buried the handful that matter under twenty lines of agreement.
+    var gaps = data.checks.filter(function (c) { return !c.pass; })
+                          .sort(function (a, b) { return b.deduction - a.deduction; });
 
-      // failures first — the report should lead with what is broken
-      checks.sort(function (a, b) {
-        return (a.pass - b.pass) || (b.deduction - a.deduction);
+    if (!gaps.length) {
+      result.appendChild(el("p", "scan-clean",
+        t("cleanLabel", "No gaps found. Every check passed.")));
+    } else {
+      result.appendChild(el("h2", "scan-subhead",
+        t("gapsLabel", "Gaps") + " (" + gaps.length + ")"));
+
+      var table = el("table", "scan-table");
+      var thead = document.createElement("thead");
+      var hr = document.createElement("tr");
+      hr.appendChild(el("th", null, t("gapCol", "What is missing")));
+      var th2 = el("th", "scan-col-cost", t("costCol", "Cost"));
+      hr.appendChild(th2);
+      thead.appendChild(hr);
+      table.appendChild(thead);
+
+      var tbody = document.createElement("tbody");
+      gaps.forEach(function (c) {
+        var tr = document.createElement("tr");
+        var td = document.createElement("td");
+        if (area[c.group]) td.appendChild(el("span", "scan-area", area[c.group]));
+        td.appendChild(el("p", "scan-title", c.title));
+        td.appendChild(el("p", "scan-detail", c.detail));
+        tr.appendChild(td);
+        tr.appendChild(el("td", "scan-col-cost scan-cost", "\u2212" + c.deduction));
+        tbody.appendChild(tr);
       });
+      table.appendChild(tbody);
+      result.appendChild(table);
+    }
 
-      checks.forEach(function (c) {
-        var row = el("div", "scan-check");
-        row.setAttribute("data-pass", String(!!c.pass));
-
-        var mark = el("span", "scan-mark", c.pass ? "✓" : "✕");
-        mark.setAttribute("aria-label", c.pass ? t("passA11y", "Passed") : t("failA11y", "Failed"));
-        row.appendChild(mark);
-
-        var body = el("div");
-        body.appendChild(el("p", "scan-title", c.title));
-        body.appendChild(el("p", "scan-detail", c.detail));
-        row.appendChild(body);
-
-        row.appendChild(el("span", "scan-cost", c.pass ? "—" : "−" + c.deduction));
-        sec.appendChild(row);
-      });
-      result.appendChild(sec);
-    });
+    // Everything that passed, named and nothing more.
+    var ok = data.checks.filter(function (c) { return c.pass; });
+    if (ok.length) {
+      result.appendChild(el("h2", "scan-subhead",
+        t("passedTitle", "Passed") + " (" + ok.length + ")"));
+      var list = el("ul", "scan-passed");
+      ok.forEach(function (c) { list.appendChild(el("li", null, c.title)); });
+      result.appendChild(list);
+    }
 
     show(result, true);
   }

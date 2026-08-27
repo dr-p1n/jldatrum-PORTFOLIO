@@ -923,34 +923,59 @@ nav {
   font-size: 13px; color: #9AABAF; word-break: break-all; margin: 0;
 }
 
-.scan-group { margin: 40px 0 0; }
-.scan-group h2 {
-  font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
-  color: #9AABAF; font-weight: 500; margin: 0 0 4px;
+.scan-subhead {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 400; letter-spacing: 0.01em;
+  color: #E8EDED;
+  margin: 40px 0 12px;
 }
-.scan-grouplede { color: #9AABAF; font-size: 14px; margin: 0 0 16px; }
+.scan-clean {
+  margin: 32px 0 0; padding: 18px 20px; border-radius: 8px;
+  border: 1px solid #2C5A46; background: rgba(111,207,151,0.10); color: #E8EDED;
+}
 
-.scan-check {
-  display: grid; grid-template-columns: 24px 1fr auto; gap: 12px;
-  align-items: start; padding: 14px 0; border-top: 1px solid #1A3A40;
+/* Gaps table. A report nobody reads is the same as no report, so this carries
+   only what is missing — sorted by what it costs — and the passing checks
+   collapse to a tally below. */
+.scan-table { width: 100%; border-collapse: collapse; }
+.scan-table th {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #9AABAF; text-align: left;
+  padding: 0 0 10px; border-bottom: 1px solid #1A3A40;
 }
-.scan-check:last-child { border-bottom: 1px solid #1A3A40; }
-.scan-mark { font-size: 15px; line-height: 1.5; }
-.scan-check[data-pass="true"]  .scan-mark { color: #6FCF97; }
-.scan-check[data-pass="false"] .scan-mark { color: #E88B6A; }
-.scan-title { color: #E8EDED; font-size: 15px; margin: 0 0 2px; }
-.scan-detail { color: #9AABAF; font-size: 14px; margin: 0; line-height: 1.5; }
+.scan-table td { padding: 16px 0; border-bottom: 1px solid #1A3A40; vertical-align: top; }
+.scan-col-cost { text-align: right; width: 5.5em; white-space: nowrap; }
+
+.scan-area {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #9AABAF; margin-bottom: 5px;
+}
+.scan-title { color: #E8EDED; font-size: 15px; margin: 0 0 3px; }
+.scan-detail { color: #9AABAF; font-size: 14px; margin: 0; line-height: 1.55; max-width: 62ch; }
 .scan-cost {
-  font-size: 13px; color: #E88B6A; white-space: nowrap;
-  font-family: var(--font-mono, ui-monospace, 'SF Mono', Menlo, monospace);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px; color: #E88B6A;
 }
-.scan-check[data-pass="true"] .scan-cost { color: #1A3A40; }
+
+.scan-passed {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px 24px;
+}
+@media (max-width: 639px) { .scan-passed { grid-template-columns: 1fr; } }
+.scan-passed li {
+  color: #9AABAF; font-size: 14px; line-height: 1.7;
+  padding-left: 18px; position: relative;
+}
+.scan-passed li::before {
+  content: "\2713"; position: absolute; left: 0; color: #6FCF97; font-size: 12px;
+}
 
 @media (max-width: 560px) {
   .scan-head { gap: 16px; padding: 20px; }
   .scan-grade { font-size: 56px; min-width: 0; }
-  .scan-check { grid-template-columns: 20px 1fr; }
-  .scan-cost { grid-column: 2; }
 }
 @media (prefers-reduced-motion: reduce) {
   .scan-status { animation: none; }
