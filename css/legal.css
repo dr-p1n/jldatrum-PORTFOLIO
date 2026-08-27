@@ -14,6 +14,7 @@
   --lemon:   #F2D24B; /* Lemon Glow — accent/links */
   --text:    #E8EDED; /* Frost */
   --muted:   #9AABAF; /* Muted Frost */
+  --dim:     #7E8F93; /* Muted Frost, recessed — 4.83:1 on --bg2, still AA */
 }
 
 html { scroll-behavior: smooth; }
@@ -643,7 +644,7 @@ pre code {
 
 .rc-items { list-style: none; margin: 0; padding: 0; }
 .rc-items li { margin: 0; padding: 0; }
-.rc-item { display: block; border-top: 1px solid var(--border); padding: 15px 0; text-decoration: none; }
+.rc-item { display: block; border-top: 1px solid var(--border); text-decoration: none; }
 .rc-item:hover { opacity: 1; }
 .rc-item-title {
   font-family: 'Space Grotesk', sans-serif;
@@ -659,27 +660,40 @@ pre code {
   color: var(--muted); margin-top: 7px;
 }
 
-/* The summary is always in the HTML — collapsed by CSS, never injected and
-   never removed — so a retrieval crawler reads it whether or not a pointer is
-   hovering it. Hiding it from machines to reveal it to humans would be exactly
-   the failure this page sells against. */
+/* The summary is always in the HTML AND always occupies its space — collapsed
+   copy would shove the rows below it on hover, and injecting it with script
+   would hide it from the crawlers this page is written for. So it sits there
+   recessed, and hover lifts it rather than creating it. Nothing reflows.
+
+   --dim is 4.83:1 on --bg2: legible on its own for anyone who never hovers or
+   cannot, which rules out the version of this where the real copy is only for
+   people with a mouse. */
 .rc-sum {
   display: block;
-  max-height: 0; opacity: 0; overflow: hidden;
-  color: var(--muted); font-size: 14px; line-height: 1.6;
-  transition: max-height 0.24s ease, opacity 0.18s ease, margin-top 0.24s ease;
+  margin-top: 9px;
+  color: var(--dim);
+  font-size: 14px;
+  line-height: 1.6;
+  transition: color 0.22s ease;
 }
-.rc-item:hover .rc-sum,
-.rc-item:focus-visible .rc-sum,
-.rc-item:focus-within .rc-sum { max-height: 12em; opacity: 1; margin-top: 9px; }
+.rc-item {
+  border-radius: 8px;
+  padding: 15px 12px;
+  margin: 0 -12px;
+  transition: background 0.22s ease;
+}
+.rc-item:hover, .rc-item:focus-visible { background: rgba(0,0,0,0.22); }
+.rc-item:hover .rc-sum, .rc-item:focus-visible .rc-sum { color: var(--muted); }
 
-/* A pointer that cannot hover gets no summary at all, so touch and pen open
-   every one of them. Print has no hover either, and reduced motion keeps the
-   reveal but drops the animation. */
+/* No pointer to hover with — touch, pen and print get the lifted state
+   outright rather than a permanently recessed paragraph. */
 @media (hover: none), print {
-  .rc-sum { max-height: none; opacity: 1; margin-top: 9px; transition: none; }
+  .rc-sum { color: var(--muted); }
+  .rc-item { background: none; }
 }
-@media (prefers-reduced-motion: reduce) { .rc-sum { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .rc-sum, .rc-item, .rc-item-title { transition: none; }
+}
 
 /* ── Resources hub: 2×2 tool grid ───────────────────── */
 .rc-grid {
