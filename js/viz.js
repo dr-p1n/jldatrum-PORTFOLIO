@@ -7,7 +7,6 @@
 //
 // Markup contract:
 //   <span class="dx-icon" data-icon="shield" aria-hidden="true"></span>
-//   <div class="dx-viz" data-viz="radar" data-labels="A|B|C|D|E"></div>
 //   add data-scroll to animate once when scrolled into view
 //
 // Motion contract: the undrawn state is applied ONLY by adding
@@ -101,84 +100,6 @@
 
   // ── Renderers ────────────────────────────────────────
   var R = {};
-
-  // Radar — 5 axes, live-bound to rc:update. /resources/visibility/
-  R.radar = function (el) {
-    var L = labels(el), n = L.length || 5;
-    var cx = 120, cy = 120, R0 = 88, inner = '';
-    function pt(i, f) {
-      var a = -Math.PI / 2 + i * (2 * Math.PI / n);
-      return [cx + Math.cos(a) * R0 * f, cy + Math.sin(a) * R0 * f];
-    }
-    // concentric grid
-    [0.25, 0.5, 0.75, 1].forEach(function (f) {
-      var pts = [];
-      for (var i = 0; i < n; i++) { var p = pt(i, f); pts.push(p[0].toFixed(1) + ',' + p[1].toFixed(1)); }
-      inner += '<polygon class="dx-grid" points="' + pts.join(' ') + '"/>';
-    });
-    // spokes + labels
-    for (var i = 0; i < n; i++) {
-      var e = pt(i, 1), lp = pt(i, 1.17);
-      inner += '<line class="dx-axis" x1="' + cx + '" y1="' + cy + '" x2="' + e[0].toFixed(1) + '" y2="' + e[1].toFixed(1) + '"/>';
-      if (L[i]) {
-        var anchor = Math.abs(lp[0] - cx) < 6 ? 'middle' : (lp[0] > cx ? 'start' : 'end');
-        inner += '<text x="' + lp[0].toFixed(1) + '" y="' + (lp[1] + 3.5).toFixed(1) +
-                 '" text-anchor="' + anchor + '">' + esc(L[i]) + '</text>';
-      }
-    }
-    inner += '<polygon class="dx-fill dx-radar-val" points=""/>';
-    el.innerHTML = svgWrap('0 0 240 240', inner);
-    el._radar = { n: n, cx: cx, cy: cy, R0: R0, pt: pt, raf: null, cur: null };
-    setRadar(el, new Array(n).fill(0), true);
-  };
-
-  function setRadar(el, vals, instant) {
-    var st = el._radar;
-    if (!st) return;
-    var poly = el.querySelector('.dx-radar-val');
-    if (!poly) return;
-    if (st.raf) { cancelAnimationFrame(st.raf); st.raf = null; }
-    var from = st.cur || new Array(st.n).fill(0);
-    function paint(v) {
-      var pts = [];
-      for (var i = 0; i < st.n; i++) {
-        var p = st.pt(i, Math.max(v[i], 0.001));
-        pts.push(p[0].toFixed(1) + ',' + p[1].toFixed(1));
-      }
-      poly.setAttribute('points', pts.join(' '));
-    }
-    // requestAnimationFrame is paused in a hidden tab, so a tween alone would
-    // leave the chart frozen at its start value and contradict the score beside
-    // it. Skip straight to the target whenever frames are not guaranteed.
-    if (instant || REDUCE || document.hidden) { st.cur = vals.slice(); paint(vals); return; }
-    var t0 = null, DUR = 220, done = false;
-    function finish() { done = true; st.raf = null; st.cur = vals.slice(); paint(vals); }
-    function step(ts) {
-      if (t0 === null) t0 = ts;
-      var p = Math.min((ts - t0) / DUR, 1), e = 1 - Math.pow(1 - p, 3), mid = [];
-      for (var i = 0; i < st.n; i++) mid.push(from[i] + (vals[i] - from[i]) * e);
-      paint(mid);
-      if (p < 1) st.raf = requestAnimationFrame(step);
-      else finish();
-    }
-    st.raf = requestAnimationFrame(step);
-    setTimeout(function () { if (!done) finish(); }, DUR + 120);   // belt and braces
-  }
-
-  // Six-segment fill bar — Ley 81. Live-bound to rc:update.
-  R.bar6 = function (el) {
-    var n = parseInt(el.getAttribute('data-segments'), 10) || 6, inner = '';
-    for (var i = 0; i < n; i++) {
-      inner += '<rect class="dx-seg" x="' + (i * 40) + '" y="4" width="36" height="12" rx="2" ' +
-               'fill="var(--border, #1A3A40)"/>';
-    }
-    el.innerHTML = svgWrap('0 0 ' + (n * 40 - 4) + ' 20', inner);
-  };
-  function setBar6(el, flags) {
-    el.querySelectorAll('.dx-seg').forEach(function (r, i) {
-      r.setAttribute('fill', flags[i] ? 'var(--lemon, #F2D24B)' : 'var(--border, #1A3A40)');
-    });
-  }
 
   // Credential node graph — AG Law
   R.nodes = function (el) {
@@ -345,25 +266,6 @@
       }
     });
   }
-
-  // ── Live binding to the Resources scoring engine ─────
-  // js/resources.js owns the data-mode="all"|"each" rules and stays
-  // the single source of truth. We only consume its event.
-  document.addEventListener('rc:update', function (e) {
-    var d = e.detail;
-    if (!d || !d.parts) return;
-    var tool = e.target;
-    var radar = tool.querySelector('[data-viz="radar"]') ||
-                document.querySelector('[data-viz="radar"]');
-    if (radar && radar._radar) {
-      setRadar(radar, d.parts.map(function (p) {
-        return p.max ? Math.max(p.checked / p.max, 0) : 0;
-      }));
-    }
-    var bar = tool.querySelector('[data-viz="bar6"]') ||
-              document.querySelector('[data-viz="bar6"]');
-    if (bar) setBar6(bar, d.parts.map(function (p) { return !!p.complete; }));
-  });
 
   // Re-scan when a tab becomes visible. Inside a display:none subtree
   // IntersectionObserver never fires AND CSS animations do not run —
