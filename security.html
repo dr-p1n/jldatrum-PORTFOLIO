@@ -190,7 +190,7 @@
     <h2>How DATRUM secures its own systems</h2>
     <ul>
       <li><strong style="color:var(--text)">Hosting</strong> — Cloudflare Pages (edge-deployed, DDoS-protected, automatic TLS 1.3).</li>
-      <li><strong style="color:var(--text)">Domain & email security</strong> — DKIM, SPF, DMARC enforced for jldatrum.com. HSTS preload, CSP, X-Frame-Options set on every page response. DNSSEC enabled. The exact header set is documented in the <a href="/resources/security-headers/">Security Header Reference</a>, with the config to deploy it.</li>
+      <li><strong style="color:var(--text)">Domain & email security</strong> — DKIM, SPF, DMARC enforced for jldatrum.com. HSTS preload, CSP, X-Frame-Options set on every page response. DNSSEC enabled. The exact header set is documented in the <a href="/resources/security-headers/">Domain Security &amp; Trust Index</a>, with the config to deploy it.</li>
       <li><strong style="color:var(--text)">Source code</strong> — Private GitHub repo with required signed commits and 2FA-mandated access for any contributor.</li>
       <li><strong style="color:var(--text)">Secrets</strong> — stored as Cloudflare Worker secrets, never committed to source. Rotated on personnel changes.</li>
       <li><strong style="color:var(--text)">Backup posture</strong> — static site (Git history is the backup), worker state is replicated edge-side by Cloudflare.</li>

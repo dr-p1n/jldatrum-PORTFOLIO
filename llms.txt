@@ -26,9 +26,9 @@ path prefixed with `/es/`.
 
 ## Instruments (free, no forms)
 
-- [AI Visibility Scanner](https://jldatrum.com/resources/scan/): fetches a URL and grades how legible it is to answer engines. Automated, not self-reported.
+- [AI Accessibility Scanner](https://jldatrum.com/resources/scan/): fetches a URL and grades how legible it is to answer engines. Automated, not self-reported.
 
-- [Security Header Test](https://jldatrum.com/resources/security-headers/): reads a URL's response headers and grades the seven things a corporate buyer checks. Automated, not self-reported.
+- [Domain Security &amp; Trust Index](https://jldatrum.com/resources/security-headers/): reads a URL's response headers and grades the seven things a corporate buyer checks. Automated, not self-reported.
 
 ## Guides
 
