@@ -807,7 +807,7 @@ nav {
 .btn-download.generating { opacity: 0.6; pointer-events: none; }
 
 /* ── CLIENT WORK ────────────────────────────────────── */
-#work { background: var(--bg2); }
+#work { background: var(--bg); }
 
 .work-grid {
   display: grid;
@@ -926,7 +926,7 @@ nav {
 .work-link:hover { color: var(--text); }
 
 /* ── WHO IT'S FOR ───────────────────────────────────── */
-#who { background: var(--bg2); }
+#who { background: var(--bg); }        /* home alternates: home bg · offer bg2 · who bg · trust bg2 · contact bg · footer bg2 */
 
 .who-formula {
   font-family: var(--font-display);
@@ -1034,10 +1034,11 @@ nav {
    the site. They cannot be sibling <section>s: tabs.js only hides ids
    listed in TAB_IDS, so a second section would stay visible under every
    tab. The section itself carries the LAST band's shade so the tabbed
-   min-height never shows a strip of the wrong colour underneath. */
-#services { background: var(--bg2); }
-.tab-band { background: var(--bg); }
-.tab-band--alt { background: var(--bg2); }
+   min-height never shows a strip of the wrong colour underneath, and the
+   last band is --bg so the --bg2 footer always reads as its own band. */
+#services { background: var(--bg); }
+.tab-band { background: var(--bg2); }
+.tab-band--alt { background: var(--bg); }
 
 .services-grid {
   display: grid;

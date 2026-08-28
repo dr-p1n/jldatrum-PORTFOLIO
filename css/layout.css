@@ -28,23 +28,29 @@ body.tabbed > section {
 /* ── Fixed-nav clearance ────────────────────────────────
    nav is position:fixed at 64px tall, so a section sitting at the top of the
    viewport starts *underneath* it. Without this the heading cleared the nav by
-   only 32px. Add the nav height on top of the section's own spacing so the
-   heading gets a full 80px of air.
-   #home is excluded: it centres itself in the viewport and has its own offset. */
+   only 32px. The nav height is added on top of the band's OWN vertical
+   padding — 96/80/56 — so every band on the site has identical breathing and
+   the clearance is purely additive. Do not fold it into a smaller number.
+   #home is excluded: it centres itself in the viewport and has its own offset.
+   The .tab-band selector is required: banding a tab puts .section-inner one
+   level deeper, and the direct-child rule silently stopped matching. */
 body.tabbed > section > .section-inner,
+body.tabbed > section > .tab-band:first-of-type > .section-inner,
 body > section:first-of-type:not(#home) > .section-inner {
-  padding-top: 144px;                       /* 64 nav + 80 breathing */
+  padding-top: 160px;                       /* 64 nav + the band's own 96 */
 }
 @media (max-width: 639px) {
   body.tabbed > section > .section-inner,
+  body.tabbed > section > .tab-band:first-of-type > .section-inner,
   body > section:first-of-type:not(#home) > .section-inner {
-    padding-top: 112px;                     /* 64 nav + 48 breathing */
+    padding-top: 120px;                     /* 64 nav + the band's own 56 */
   }
 }
 @media (min-width: 640px) and (max-width: 1023px) {
   body.tabbed > section > .section-inner,
+  body.tabbed > section > .tab-band:first-of-type > .section-inner,
   body > section:first-of-type:not(#home) > .section-inner {
-    padding-top: 128px;                     /* 64 nav + 64 breathing */
+    padding-top: 144px;                     /* 64 nav + the band's own 80 */
   }
 }
 
