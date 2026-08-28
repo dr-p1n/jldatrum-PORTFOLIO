@@ -108,45 +108,6 @@
   // Not a growth curve. The hockey stick is a projection, and a projection is
   // the thing this page argues against — so this states what is left standing
   // after the same spend, period by period, and nothing else.
-  // Owned vs rented, in the same language as the flywheel: nodes, thin
-  // strokes and air — no filled slabs. Six periods of identical spend.
-  R.compound = function (el) {
-    var L = labels(el);            // asset | rented | time | accessible description
-    var N = 6, x0 = 10, step = 66, r = 7;
-    var yA = 62, yB = 140, inner = '';
-
-    function x(i) { return x0 + i * step; }
-
-    if (L[3]) inner += '<title>' + esc(L[3]) + '</title>';
-
-    // Owned asset: one unbroken run. Every period is still standing.
-    inner += '<text class="dx-t-accent" x="' + x0 + '" y="30">' + esc(L[0] || '') + '</text>';
-    inner += '<line class="dx-line dx-draw" x1="' + x(0) + '" y1="' + yA + '" x2="' + x(N - 1) +
-             '" y2="' + yA + '" style="--dx-len:' + (step * (N - 1)) + ';--dx-d:120ms"/>';
-
-    // Rented attention: nothing carries. Only the period being paid for is
-    // solid; the five behind it are outlines of what is gone.
-    inner += '<text class="dx-t-strong" x="' + x0 + '" y="108">' + esc(L[1] || '') + '</text>';
-
-    for (var i = 0; i < N; i++) {
-      var d = 200 + i * 90;
-      inner += '<circle class="dx-node dx-node--hub dx-pop" cx="' + x(i) + '" cy="' + yA +
-               '" r="' + r + '" style="--dx-d:' + d + 'ms"/>';
-      inner += (i === N - 1)
-        ? '<circle class="dx-node dx-pop" cx="' + x(i) + '" cy="' + yB + '" r="' + r +
-          '" style="--dx-d:' + d + 'ms"/>'
-        : '<circle class="dx-grid dx-pop" cx="' + x(i) + '" cy="' + yB + '" r="' + r +
-          '" stroke-dasharray="3 4" style="stroke:var(--teal, #1E7F98);stroke-opacity:0.45;--dx-d:' +
-          d + 'ms"/>';
-    }
-
-    inner += '<path class="dx-grid" d="M' + x0 + ' 174H' + x(N - 1) + '"/>';
-    inner += '<text x="' + x(N - 1) + '" y="192" text-anchor="end">' + esc(L[2] || '') + '</text>';
-
-    // 360 units wide, like the flywheel, so 11px type reads at the same size.
-    el.innerHTML = svgWrap('0 0 360 200', inner);
-  };
-
   // Credential node graph — AG Law
   R.nodes = function (el) {
     var L = labels(el), hub = el.getAttribute('data-hub') || '', inner = '';
@@ -320,6 +281,70 @@
   // without this the Method flywheel stays frozen forever.
   document.addEventListener('tab:activate', function () { scan(); });
 
+  // ── Hero mark (#heroMark) ────────────────────────────
+  // Two lanes on the same spend: owned accumulates, rented resets.
+  //
+  // ⚠ The finished state lives in CSS. This only ADDS .mark-anim to opt into
+  // the loop, so with JS off, reduced motion on, in print or in a hidden tab
+  // the mark still renders complete. Never move the final heights in here.
+  function initHeroMark() {
+    var root = document.getElementById('heroMark');
+    if (!root || root.hasAttribute('data-mark-on')) return;
+    root.setAttribute('data-mark-on', '');
+    if (REDUCE) return;                 // CSS already shows the finished state
+
+    var STEP = 1500, HOLD = 3200, REST = 1400;
+    var OWNED = [16, 26, 40, 58, 80, 106];
+    // Flat on purpose. A declining rented lane would claim that the same spend
+    // buys less every month, which is an empirical claim with nothing behind
+    // it. The mechanism is enough: rented attention does not accumulate.
+    // For the erratic version, swap this for a six-value array.
+    var RENT = 22;
+
+    var owned  = [].slice.call(root.querySelectorAll('.mark-lane--owned .mark-slot'));
+    var rented = [].slice.call(root.querySelectorAll('.mark-lane--rented .mark-slot'));
+    if (owned.length !== OWNED.length) return;
+
+    root.classList.add('mark-anim');
+
+    var timers = [], i = 0;
+    function clear() { timers.forEach(clearTimeout); timers = []; }
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+
+    function reset() {
+      owned.forEach(function (s) { s.classList.remove('is-on'); s.style.height = ''; });
+      rented.forEach(function (s) { s.classList.remove('is-on'); s.style.height = ''; });
+      i = 0;
+    }
+
+    function beat() {
+      // owned: lands and stays, each one taller because it inherits the last
+      owned[i].classList.add('is-on');
+      owned[i].style.height = OWNED[i] + 'px';
+      // rented: only the month being paid for is lit
+      rented.forEach(function (s) { s.classList.remove('is-on'); s.style.height = ''; });
+      rented[i].classList.add('is-on');
+      rented[i].style.height = RENT + 'px';
+
+      if (++i < owned.length) { later(beat, STEP); return; }
+      later(function () {
+        // the rent stops and nothing remains
+        rented.forEach(function (s) { s.classList.remove('is-on'); s.style.height = ''; });
+        later(function () { reset(); beat(); }, REST);
+      }, HOLD);
+    }
+
+    // A background tab throttles timers into a pile-up on return, so park the
+    // loop while the page is hidden rather than letting it catch up.
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { clear(); }
+      else { clear(); reset(); beat(); }
+    });
+
+    reset();
+    later(beat, 400);
+  }
+
   // ── Home router (#offer) ─────────────────────────────
   // Hover/focus expands one panel and compresses the other two.
   // Lives here so it needs no extra <script> on any page; it simply
@@ -364,9 +389,9 @@
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { scan(); initRouter(); });
+    document.addEventListener('DOMContentLoaded', function () { scan(); initRouter(); initHeroMark(); });
   } else {
-    scan(); initRouter();
+    scan(); initRouter(); initHeroMark();
   }
 
   window.DXViz = { scan: scan, reduce: REDUCE, icons: ICONS };

@@ -201,7 +201,7 @@ nav {
   .hero-lead { display: contents; }
   .hero-aside { display: contents; }
   .eyebrow { order: 1; } .hero-title { order: 2; }
-  .hero-sub { order: 3; } .dx-viz--compound { order: 4; }
+  .hero-sub { order: 3; } .hero-mark { order: 4; }
   .hero-actions { order: 5; }
 }
 
@@ -217,10 +217,125 @@ nav {
 }
 @media (max-width: 900px) { .hero-title { max-width: 820px; } }
 
-/* The SVG scales to the column, so 11px type in a 552-unit viewBox lands at
-   roughly 8px on screen. Sized in user units to render at about 11. */
-.dx-viz--compound { margin: 40px 0 0; }
-@media (max-width: 900px) { .dx-viz--compound { margin: 16px 0 32px; } }
+/* ── HERO MARK ──────────────────────────────────────────
+   Two lanes on the same spend. Above the rule each digital product lands and
+   STAYS, so every new one starts from what the last one built. Below it,
+   rented attention lights exactly one month: the new one turns on, the old
+   one goes dark, and nothing carries.
+
+   ⚠ MOTION CONTRACT — the same one css/viz.css documents. Everything below
+   the .mark-anim block IS the finished state: accumulated lane, one lit
+   rented month. JS opts into the animation by adding .mark-anim. With JS off,
+   reduced motion on, in print or in a hidden tab the mark renders COMPLETE.
+   Never invert this. */
+.hero-mark { margin: 40px 0 0; max-width: 520px; }
+@media (max-width: 900px) { .hero-mark { margin: 16px 0 32px; max-width: none; } }
+
+.mark-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+.mark-k, .mark-v { display: block; }
+.mark-k { color: var(--lemon); font-weight: 500; }
+.mark-v { color: var(--lemon); opacity: 0.72; letter-spacing: 0.1em; }
+
+/* The rented label is --muted, not --teal: at 11px teal is 3.8:1 and fails AA
+   for body text. Teal stays on the lane blocks, which carry no contrast duty. */
+.mark-label--dim { margin: 14px 0 0; }
+.mark-label--dim .mark-k,
+.mark-label--dim .mark-v { color: var(--muted); opacity: 1; }
+.mark-label--dim .mark-v { font-weight: 400; }
+
+.mark-lane { display: flex; gap: 14px; }
+.mark-lane--owned  { align-items: flex-end;   height: 110px; }
+.mark-lane--rented { align-items: flex-start; height: 46px; }
+
+.mark-slot {
+  flex: 1;
+  min-width: 0;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.07);
+}
+.mark-rule { height: 1px; background: var(--border); margin: 16px 0 14px; }
+
+/* ── finished state ── */
+.mark-lane--owned .mark-slot { background: var(--lemon); }
+.mark-lane--owned .mark-slot:nth-child(1) { height: 16px; }
+.mark-lane--owned .mark-slot:nth-child(2) { height: 26px; }
+.mark-lane--owned .mark-slot:nth-child(3) { height: 40px; }
+.mark-lane--owned .mark-slot:nth-child(4) { height: 58px; }
+.mark-lane--owned .mark-slot:nth-child(5) { height: 80px; }
+.mark-lane--owned .mark-slot:nth-child(6) { height: 106px; }
+
+.mark-lane--rented .mark-slot { height: 10px; opacity: 0.45; }
+.mark-lane--rented .mark-slot:last-child {
+  height: 22px;
+  background: var(--teal);
+  opacity: 1;
+}
+
+.mark-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-top: 26px;
+}
+.mark-asym {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lemon);
+}
+.mark-time { font-family: var(--font-body); font-size: 12px; color: var(--muted); letter-spacing: 0.06em; }
+
+@media (max-width: 639px) {
+  .mark-lane { gap: 8px; }
+  .mark-lane--owned { height: 92px; }
+  /* Keep the row: "Time" belongs at the right end of the axis, not stranded
+     on its own line. Tracking comes down so both fit at 375. */
+  .mark-asym { font-size: 11px; letter-spacing: 0.08em; }
+  .mark-time { font-size: 11px; }
+  .mark-foot { margin-top: 20px; }
+}
+
+/* ── the animated state, applied ONLY by js/viz.js ── */
+.mark-anim .mark-slot {
+  transition: height 620ms cubic-bezier(0.2, 0.75, 0.25, 1),
+              background-color 450ms ease,
+              opacity 450ms ease;
+}
+.mark-anim .mark-lane--owned .mark-slot {
+  height: 14px;
+  background: rgba(255, 255, 255, 0.07);
+  opacity: 0.5;
+}
+.mark-anim .mark-lane--owned .mark-slot.is-on { background: var(--lemon); opacity: 1; }
+.mark-anim .mark-lane--rented .mark-slot {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.07);
+  opacity: 0.45;
+}
+.mark-anim .mark-lane--rented .mark-slot.is-on { background: var(--teal); opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mark-anim .mark-slot { transition: none; }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 @media (max-width: 639px) {
   .hero-title { font-size: clamp(28px, 8vw, 44px); }
