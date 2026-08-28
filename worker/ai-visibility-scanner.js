@@ -60,6 +60,10 @@ function isPrivateHost(host) {
   return false;
 }
 
+// A title shorter than this names nothing. "Home", "Inicio", "|" all clear a
+// presence test and identify no business.
+const MIN_TITLE = 15;
+
 const ERR = {
   en: {
     parse:    "That doesn't parse as a URL.",
@@ -268,17 +272,24 @@ const STR = {
       d: v => v.catalog ? "Catalog declared."
         : "No offer catalog. A machine can only recommend what it can list." },
     "robots-exists": { t: "robots.txt is reachable",
-      d: v => v.ok ? "Served." : "No robots.txt. Not fatal, but you have published no crawl policy at all." },
+      d: v => v.ok ? "Served."
+        : v.served ? "That URL answers, but what it returns is not robots.txt — no crawl policy is being published."
+        : "No robots.txt. Not fatal, but you have published no crawl policy at all." },
     bot: { t: v => `${v.ua} is allowed`,
       d: v => v.blocked
         ? `Blocked by robots.txt. ${v.label} cannot read this page — not ranked lower, absent.`
         : `Allowed. ${v.label} can retrieve this page.` },
     sitemap: { t: "A sitemap is published",
-      d: v => v.ok ? "sitemap.xml served." : "No sitemap.xml — discovery depends entirely on internal linking." },
+      d: v => v.ok ? (v.declared ? "Declared in robots.txt." : "sitemap.xml served.")
+        : v.served ? "That URL answers, but it holds no URLs a crawler can follow — an empty sitemap discovers nothing."
+        : "No sitemap.xml — discovery depends entirely on internal linking." },
     ssr: { t: "Content is in the served HTML",
       d: v => v.ok ? `${v.len} characters of text in the raw response.`
         : `Only ${v.len} characters of text in the raw HTML. This page renders client-side. Most retrieval crawlers do not execute JavaScript, so they see an empty shell.` },
-    title: { t: "A title element is present", d: v => v.title || "Missing." },
+    title: { t: "The page states what it is, in the title",
+      d: v => !v.title ? "Missing."
+        : v.ok ? v.title
+        : `"${v.title}" — too thin to identify anything. This is the label an engine repeats when it names you.` },
     description: { t: "A meta description is present",
       d: v => v.len === 0 ? "Missing. Engines fall back to guessing a summary from the body." : `${v.len} characters.` },
     "description-length": { t: "The description works as a standalone summary",
@@ -290,14 +301,20 @@ const STR = {
     h1: { t: "Exactly one H1", d: v => v.n === 1 ? `"${v.text}"` : `Found ${v.n}.` },
     "heading-order": { t: "Heading hierarchy is sequential",
       d: v => v.skip ? `H${v.skip.from} followed directly by H${v.skip.to}` : "No skipped levels." },
-    canonical: { t: "A canonical URL is declared", d: v => v.canonical || "Missing." },
+    canonical: { t: "A canonical URL is declared",
+      d: v => !v.canonical ? "Missing."
+        : v.ok ? v.canonical
+        : `"${v.canonical}" is not an absolute URL. A canonical that does not resolve is worse than none: it points nowhere.` },
     alt: { t: "Images carry alt text",
       d: v => v.total === 0 ? "No images." : `${v.noAlt} of ${v.total} images have no alt text.` },
     hreflang: { t: "Language alternates are declared coherently",
       d: v => v.n ? `${v.n} hreflang declarations.` : "Single-language site — not applicable." },
     llms: { t: "An llms.txt summary is published",
       d: v => v.ok ? "Served." : "No llms.txt. Emerging convention, not yet load-bearing — cheap to add." },
-    hsts: { t: "HTTPS is enforced with HSTS", d: v => v.hsts || "No Strict-Transport-Security header." },
+    hsts: { t: "HTTPS is enforced with HSTS",
+      d: v => !v.hsts ? "No Strict-Transport-Security header."
+        : v.ok ? v.hsts
+        : `${v.hsts} — under six months. A browser that has not visited in a while goes back to plain HTTP first.` },
   },
 
   es: {
@@ -325,17 +342,24 @@ const STR = {
       d: v => v.catalog ? "Catálogo declarado."
         : "No hay catálogo de oferta. Una máquina solo puede recomendar lo que puede listar." },
     "robots-exists": { t: "robots.txt es alcanzable",
-      d: v => v.ok ? "Servido." : "No hay robots.txt. No es fatal, pero no has publicado ninguna política de rastreo." },
+      d: v => v.ok ? "Servido."
+        : v.served ? "Esa URL responde, pero lo que devuelve no es robots.txt — no estás publicando ninguna política de rastreo."
+        : "No hay robots.txt. No es fatal, pero no has publicado ninguna política de rastreo." },
     bot: { t: v => `${v.ua} tiene permiso`,
       d: v => v.blocked
         ? `Bloqueado por robots.txt. ${v.label} no puede leer esta página — no queda más abajo, queda ausente.`
         : `Permitido. ${v.label} puede recuperar esta página.` },
     sitemap: { t: "Hay un sitemap publicado",
-      d: v => v.ok ? "sitemap.xml servido." : "No hay sitemap.xml — el descubrimiento depende por completo del enlazado interno." },
+      d: v => v.ok ? (v.declared ? "Declarado en robots.txt." : "sitemap.xml servido.")
+        : v.served ? "Esa URL responde, pero no contiene ninguna URL que un crawler pueda seguir — un sitemap vacío no descubre nada."
+        : "No hay sitemap.xml — el descubrimiento depende por completo del enlazado interno." },
     ssr: { t: "El contenido viene en el HTML servido",
       d: v => v.ok ? `${v.len} caracteres de texto en la respuesta cruda.`
         : `Solo ${v.len} caracteres de texto en el HTML crudo. Esta página se renderiza en el cliente. La mayoría de los crawlers de recuperación no ejecutan JavaScript, así que ven un cascarón vacío.` },
-    title: { t: "Hay un elemento title", d: v => v.title || "Falta." },
+    title: { t: "La página dice qué es, en el title",
+      d: v => !v.title ? "Falta."
+        : v.ok ? v.title
+        : `"${v.title}" — demasiado corto para identificar nada. Esta es la etiqueta que un motor repite cuando te nombra.` },
     description: { t: "Hay una meta description",
       d: v => v.len === 0 ? "Falta. Los motores terminan adivinando un resumen a partir del cuerpo." : `${v.len} caracteres.` },
     "description-length": { t: "La description funciona como resumen autónomo",
@@ -347,14 +371,20 @@ const STR = {
     h1: { t: "Exactamente un H1", d: v => v.n === 1 ? `"${v.text}"` : `Se encontraron ${v.n}.` },
     "heading-order": { t: "La jerarquía de encabezados es secuencial",
       d: v => v.skip ? `H${v.skip.from} seguido directamente de H${v.skip.to}` : "No hay niveles saltados." },
-    canonical: { t: "Hay una URL canónica declarada", d: v => v.canonical || "Falta." },
+    canonical: { t: "Hay una URL canónica declarada",
+      d: v => !v.canonical ? "Falta."
+        : v.ok ? v.canonical
+        : `"${v.canonical}" no es una URL absoluta. Una canónica que no resuelve es peor que ninguna: apunta a la nada.` },
     alt: { t: "Las imágenes llevan texto alt",
       d: v => v.total === 0 ? "No hay imágenes." : `${v.noAlt} de ${v.total} imágenes no tienen texto alt.` },
     hreflang: { t: "Las alternativas de idioma están declaradas de forma coherente",
       d: v => v.n ? `${v.n} declaraciones hreflang.` : "Sitio de un solo idioma — no aplica." },
     llms: { t: "Hay un resumen llms.txt publicado",
       d: v => v.ok ? "Servido." : "No hay llms.txt. Convención emergente, todavía no decisiva — barata de agregar." },
-    hsts: { t: "HTTPS se fuerza con HSTS", d: v => v.hsts || "No hay encabezado Strict-Transport-Security." },
+    hsts: { t: "HTTPS se fuerza con HSTS",
+      d: v => !v.hsts ? "No hay encabezado Strict-Transport-Security."
+        : v.ok ? v.hsts
+        : `${v.hsts} — bajo seis meses. Un navegador que no te visita hace rato vuelve a intentar HTTP plano primero.` },
   },
 };
 
@@ -415,7 +445,7 @@ function runChecks(ctx) {
   }
 
   /* — Crawler access — */
-  add("robots-exists", "access", robots.ok, 5, { ok: robots.ok });
+  add("robots-exists", "access", robots.ok, 5, { ok: robots.ok, served: robots.served });
 
   for (const bot of AI_CRAWLERS) {
     const blocked = robots.ok && blocksAgent(robots.groups, bot.ua, ctx.path);
@@ -424,13 +454,18 @@ function runChecks(ctx) {
         "bot");
   }
 
-  add("sitemap", "access", sitemap.ok, 5, { ok: sitemap.ok });
+  add("sitemap", "access", sitemap.ok, 5,
+      { ok: sitemap.ok, served: sitemap.served, declared: sitemap.declared });
 
   /* — Retrievability — */
   const ssrOk = doc.textLen >= 500;
   add("ssr", "retrieval", ssrOk, 25, { ok: ssrOk, len: doc.textLen });
 
-  add("title", "retrieval", doc.title.trim().length > 0, 5, { title: doc.title.trim() });
+  // A title is the label an engine repeats when it names the business. "Home"
+  // is a title element and identifies nothing, so presence is not the test.
+  const title = doc.title.trim();
+  const titleOk = title.length >= MIN_TITLE;
+  add("title", "retrieval", titleOk, 5, { title, ok: titleOk });
 
   // A description is judged on whether a retrieval engine can use it, not on
   // whether Google truncates its display. 160 is a SERP rendering limit; the
@@ -452,7 +487,10 @@ function runChecks(ctx) {
   }
   add("heading-order", "retrieval", !skip, 5, { skip });
 
-  add("canonical", "retrieval", !!doc.canonical, 5, { canonical: doc.canonical });
+  // Google resolves a relative canonical, but it is a declaration about
+  // identity and half the crawlers that matter here take it literally.
+  const canonOk = /^https?:\/\/\S+$/i.test(String(doc.canonical || "").trim());
+  add("canonical", "retrieval", canonOk, 5, { canonical: doc.canonical, ok: canonOk });
 
   add("alt", "retrieval", doc.imgTotal === 0 || doc.imgNoAlt === 0, 5,
       { total: doc.imgTotal, noAlt: doc.imgNoAlt });
@@ -462,7 +500,11 @@ function runChecks(ctx) {
 
   add("llms", "retrieval", llms.ok, 3, { ok: llms.ok });
 
-  add("hsts", "retrieval", !!headers.hsts, 2, { hsts: headers.hsts });
+  // Same six-month floor the security instrument uses. Two instruments that
+  // disagree about the same header teach a prospect not to trust either.
+  const hstsAge = Number((/max-age\s*=\s*"?(\d+)/i.exec(headers.hsts || "") || [])[1] || 0);
+  const hstsOk = hstsAge >= HSTS_MIN_AGE;
+  add("hsts", "retrieval", hstsOk, 2, { hsts: headers.hsts, ok: hstsOk });
 
   return c;
 }
@@ -494,10 +536,25 @@ async function scan(target, lang) {
 
   const doc = await extractHtml(page.value.body);
 
-  const robotsTxt = robotsRes.status === "fulfilled" && robotsRes.value.res.ok ? robotsRes.value.body : null;
-  const robots = { ok: !!robotsTxt, groups: robotsTxt ? parseRobots(robotsTxt) : [],
+  // A host that answers 200 with its HTML 404 page for every unknown path is
+  // the common case, not the exception. Checking the status alone credits a
+  // site for files it does not have.
+  const robotsServed = robotsRes.status === "fulfilled" && robotsRes.value.res.ok;
+  const robotsBody = robotsServed ? robotsRes.value.body : null;
+  const robotsReal = !!robotsBody && /^\s*user-agent\s*:/im.test(robotsBody) && !/<html/i.test(robotsBody.slice(0, 200));
+  const robotsTxt = robotsReal ? robotsBody : null;
+  const robots = { ok: robotsReal, served: robotsServed,
+                   groups: robotsTxt ? parseRobots(robotsTxt) : [],
                    declaresSitemap: !!robotsTxt && /sitemap:/i.test(robotsTxt) };
-  const sitemap = { ok: (sitemapRes.status === "fulfilled" && sitemapRes.value.res.ok) || robots.declaresSitemap };
+
+  const sitemapServed = sitemapRes.status === "fulfilled" && sitemapRes.value.res.ok;
+  const sitemapBody = sitemapServed ? sitemapRes.value.body : "";
+  // A sitemap with no <loc> discovers nothing. A sitemap index counts: it is
+  // one hop from the URLs. A sitemap declared in robots.txt but living
+  // elsewhere is legitimate and is not a finding — this only fetches /sitemap.xml.
+  const sitemapReal = /<loc\b/i.test(sitemapBody) || /<sitemapindex\b/i.test(sitemapBody);
+  const sitemap = { ok: sitemapReal || robots.declaresSitemap,
+                    served: sitemapServed, declared: !sitemapReal && robots.declaresSitemap };
   const llms    = { ok: llmsRes.status === "fulfilled" && llmsRes.value.res.ok
                         && !/<html/i.test(llmsRes.value.body.slice(0, 200)) };
   const headers = { hsts: page.value.res.headers.get("strict-transport-security") };
@@ -546,6 +603,16 @@ const HDR = {
     permissions: { t: "Nothing prompts for camera or mic in your name",
                    ok: "Set.",
                    no: "Missing — any script on the page can prompt visitors under your domain's name." },
+    // Present-but-useless is its own verdict. A header that exists and does not
+    // hold reads as a pass on a presence test and is why most sites score well
+    // on one; it is not a pass here.
+    weak: {
+      hsts:        "Set but expires too soon — under six months, browsers forget between visits.",
+      csp:         "Set but allows inline scripts — an injected one runs anyway, and still costs.",
+      frame:       "Set to a value browsers ignore — your pages can still be framed elsewhere.",
+      referrer:    "Set to a policy that still leaks — full URLs go out cross-site or on downgrade.",
+      permissions: "Set but restricts nothing — scripts can still prompt under your domain's name.",
+    },
   },
   es: {
     groups: { transport: "La conexión", content: "Qué puede ejecutarse en la página", privacy: "Qué se filtra" },
@@ -570,37 +637,102 @@ const HDR = {
     permissions: { t: "Nada pide cámara o micrófono en tu nombre",
                    ok: "Configurado.",
                    no: "Falta — cualquier script puede pedírselo a tus visitantes bajo tu dominio." },
+    weak: {
+      hsts:        "Configurado pero vence muy pronto — bajo seis meses el navegador lo olvida.",
+      csp:         "Configurado pero permite scripts inline — uno inyectado corre y cuesta igual.",
+      frame:       "Con un valor que el navegador ignora — te pueden seguir enmarcando afuera.",
+      referrer:    "Con una política que igual filtra — la URL completa sale al bajar de HTTPS.",
+      permissions: "Configurado pero no restringe nada — los scripts pueden pedir en tu nombre.",
+    },
   },
 };
+
+// Six months. Below it a browser that has not seen the site in a while goes
+// back to trying the unencrypted address, which is the whole thing HSTS exists
+// to stop. Same floor Observatory uses.
+const HSTS_MIN_AGE = 15552000;
+
+// A referrer policy either stops the full URL leaving the origin or it does
+// not. These are the values that do; everything else — unsafe-url,
+// no-referrer-when-downgrade, origin-when-cross-origin — still sends the path.
+const SAFE_REFERRER = new Set([
+  "no-referrer", "same-origin", "strict-origin", "strict-origin-when-cross-origin",
+]);
+
+function cspDirective(csp, name) {
+  for (const part of String(csp).split(";")) {
+    const t = part.trim();
+    if (!t) continue;
+    const sp = t.indexOf(" ");
+    const dir = (sp === -1 ? t : t.slice(0, sp)).toLowerCase();
+    if (dir === name) return sp === -1 ? "" : t.slice(sp + 1).trim();
+  }
+  return null;
+}
+
+// A CSP that permits arbitrary inline script does not stop an injected one.
+// 'unsafe-inline' ALONGSIDE a nonce or hash is not that: modern browsers ignore
+// it there, and it is the correct fallback for old ones. Flagging that would be
+// inventing a finding, which is the one thing this instrument must never do.
+function cspStopsInlineScript(csp) {
+  const src = cspDirective(csp, "script-src") ?? cspDirective(csp, "default-src");
+  if (src === null || src === "") return false;         // nothing constrains script at all
+  const v = src.toLowerCase();
+  if (/(^|\s)\*(\s|$)/.test(v)) return false;           // wildcard origin
+  if (/(^|\s)'unsafe-eval'/.test(v)) return false;
+  if (/(^|\s)'unsafe-inline'/.test(v))
+    return /'nonce-|'sha(256|384|512)-|'strict-dynamic'/.test(v);
+  return true;
+}
+
+function frameIsClosed(csp, xfo) {
+  const fa = cspDirective(csp || "", "frame-ancestors");
+  if (fa !== null) return fa !== "" && !/(^|\s)\*(\s|$)/.test(fa);
+  // ALLOW-FROM was dropped by every browser; only DENY and SAMEORIGIN are honoured.
+  return /^\s*(deny|sameorigin)\s*$/i.test(xfo || "");
+}
 
 function runHeaderChecks(res, target, lang) {
   const L = HDR[lang === "es" ? "es" : "en"];
   const c = [];
   const h = n => res.headers.get(n);
-  const add = (id, group, pass, weight, key, val) => {
+  // state: "ok" | "weak" | "no". Weak is a failure with its own reason — the
+  // header is there, and it is not doing the job its presence implies.
+  const add = (id, group, state, weight, key, val) => {
     const S = L[key];
-    const d = pass ? (typeof S.ok === "function" ? S.ok(val) : S.ok) : S.no;
+    const pass = state === "ok";
+    const d = pass ? (typeof S.ok === "function" ? S.ok(val) : S.ok)
+            : state === "weak" ? L.weak[key]
+            : S.no;
     c.push({ id, group, pass, deduction: pass ? 0 : weight, title: S.t, detail: d });
   };
+  const grade3 = (present, good) => !present ? "no" : good ? "ok" : "weak";
 
-  add("https", "transport", target.protocol === "https:", 15, "https");
+  add("https", "transport", target.protocol === "https:" ? "ok" : "no", 15, "https");
 
   const hsts = h("strict-transport-security");
-  add("hsts", "transport", !!hsts, 20, "hsts", hsts || "");
+  const age = Number((/max-age\s*=\s*"?(\d+)/i.exec(hsts || "") || [])[1] || 0);
+  add("hsts", "transport", grade3(!!hsts, age >= HSTS_MIN_AGE), 20, "hsts", hsts || "");
 
   const csp = h("content-security-policy");
-  add("csp", "content", !!csp, 25, "csp");
+  add("csp", "content", grade3(!!csp, cspStopsInlineScript(csp || "")), 25, "csp");
 
   // frame-ancestors in a CSP supersedes X-Frame-Options; either one closes it.
   const xfo = h("x-frame-options");
-  add("frame", "content", !!xfo || /frame-ancestors/i.test(csp || ""), 20, "frame");
+  add("frame", "content",
+      grade3(!!xfo || /frame-ancestors/i.test(csp || ""), frameIsClosed(csp, xfo)), 20, "frame");
 
-  add("nosniff", "content", /nosniff/i.test(h("x-content-type-options") || ""), 10, "nosniff");
+  add("nosniff", "content",
+      /nosniff/i.test(h("x-content-type-options") || "") ? "ok" : "no", 10, "nosniff");
 
   const ref = h("referrer-policy");
-  add("referrer", "privacy", !!ref, 5, "referrer", ref || "");
+  // A list is legal; the last token a browser understands wins, so judge that one.
+  const refLast = String(ref || "").split(",").map(x => x.trim().toLowerCase())
+                    .filter(Boolean).pop() || "";
+  add("referrer", "privacy", grade3(!!ref, SAFE_REFERRER.has(refLast)), 5, "referrer", ref || "");
 
-  add("permissions", "privacy", !!h("permissions-policy"), 5, "permissions");
+  const perm = h("permissions-policy");
+  add("permissions", "privacy", grade3(!!perm, /=/.test(perm || "")), 5, "permissions");
 
   return c;
 }

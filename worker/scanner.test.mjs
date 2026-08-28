@@ -150,6 +150,117 @@ for (const lang of ["en", "es"]) {
 }
 t("es differs from en", M.HDR.es.csp.t === M.HDR.en.csp.t, false);
 
+console.log("\npresent-but-useless is a failure, not a pass");
+const hh = h => run(h);
+const P  = (h, id) => by(run(h), id).pass;
+
+// HSTS under six months is forgotten between visits.
+t("hsts two years passes",   P({ "strict-transport-security": "max-age=63072000" }, "hsts"), true);
+t("hsts five minutes fails", P({ "strict-transport-security": "max-age=300" }, "hsts"), false);
+t("hsts with no max-age fails", P({ "strict-transport-security": "includeSubDomains" }, "hsts"), false);
+t("...and says why it is weak",
+  by(run({ "strict-transport-security": "max-age=300" }), "hsts").detail, M.HDR.en.weak.hsts);
+
+// A CSP that still permits arbitrary inline script does not stop an injected one.
+t("csp with a real script-src passes",
+  P({ "content-security-policy": "default-src 'self'; script-src 'self'" }, "csp"), true);
+t("csp with unsafe-inline fails",
+  P({ "content-security-policy": "script-src 'self' 'unsafe-inline'" }, "csp"), false);
+t("csp with unsafe-eval fails",
+  P({ "content-security-policy": "script-src 'self' 'unsafe-eval'" }, "csp"), false);
+t("wildcard script-src fails",
+  P({ "content-security-policy": "script-src *" }, "csp"), false);
+t("a CSP with no script rule at all fails",
+  P({ "content-security-policy": "img-src 'self'" }, "csp"), false);
+t("default-src stands in for script-src",
+  P({ "content-security-policy": "default-src 'self'" }, "csp"), true);
+// The one case that must NOT be flagged: unsafe-inline as a fallback beside a
+// nonce is correct practice, and calling it a gap would be inventing a finding.
+t("unsafe-inline beside a nonce passes",
+  P({ "content-security-policy": "script-src 'nonce-r4nd0m' 'unsafe-inline'" }, "csp"), true);
+t("unsafe-inline beside strict-dynamic passes",
+  P({ "content-security-policy": "script-src 'strict-dynamic' 'unsafe-inline' 'nonce-x'" }, "csp"), true);
+
+// X-Frame-Options values browsers no longer honour.
+t("XFO DENY passes",        P({ "x-frame-options": "DENY" }, "frame"), true);
+t("XFO SAMEORIGIN passes",  P({ "x-frame-options": "SAMEORIGIN" }, "frame"), true);
+t("XFO ALLOW-FROM fails",   P({ "x-frame-options": "ALLOW-FROM https://x.com" }, "frame"), false);
+t("frame-ancestors * fails",
+  P({ "content-security-policy": "frame-ancestors *" }, "frame"), false);
+t("frame-ancestors 'self' passes",
+  P({ "content-security-policy": "frame-ancestors 'self'" }, "frame"), true);
+
+// A referrer policy either keeps the path at home or it does not.
+t("strict-origin-when-cross-origin passes",
+  P({ "referrer-policy": "strict-origin-when-cross-origin" }, "referrer"), true);
+t("unsafe-url fails",       P({ "referrer-policy": "unsafe-url" }, "referrer"), false);
+t("no-referrer-when-downgrade fails",
+  P({ "referrer-policy": "no-referrer-when-downgrade" }, "referrer"), false);
+t("a list is judged on its last token",
+  P({ "referrer-policy": "no-referrer, strict-origin" }, "referrer"), true);
+
+t("an empty Permissions-Policy fails", P({ "permissions-policy": "" }, "permissions"), false);
+t("one that restricts something passes",
+  P({ "permissions-policy": "camera=(), microphone=()" }, "permissions"), true);
+
+console.log("\n...and every weak reason reads like the others");
+for (const lang of ["en", "es"]) {
+  const w = Object.values(M.HDR[lang].weak);
+  t(`${lang}: weak reasons fit one line`, w.every(x => x.length <= 84), true);
+  t(`${lang}: weak reasons name a consequence`,
+    w.every(x => x.length >= 60 && /—/.test(x)), true);
+  t(`${lang}: weak never names a header`,
+    w.every(x => !/Content-Security-Policy|X-Frame-Options|Strict-Transport|X-Content-Type|Permissions-Policy|Referrer-Policy/i.test(x)), true);
+}
+t("weak es differs from en", M.HDR.es.weak.csp === M.HDR.en.weak.csp, false);
+
+console.log("\nthe AI scanner stops crediting mere presence");
+const doc0 = { jsonld: [], headings: [], h1: [], title: "", description: "",
+               canonical: "", hreflang: [], imgTotal: 0, imgNoAlt: 0, textLen: 0 };
+const rc = (over = {}) => M.runChecks({
+  doc: { ...doc0, ...(over.doc || {}) },
+  robots: { ok: false, groups: [], ...(over.robots || {}) },
+  sitemap: { ok: false, ...(over.sitemap || {}) },
+  llms: { ok: false }, headers: over.headers || {}, path: "/", lang: "en" });
+const K = (over, id) => rc(over).find(c => c.id === id);
+
+// A title element that names nothing is not a title check passed.
+t("a real title passes",
+  K({ doc: { title: "DATRUM — Marketing product design studio" } }, "title").pass, true);
+t("\"Home\" fails",           K({ doc: { title: "Home" } }, "title").pass, false);
+t("...and is quoted back",   /"Home"/.test(K({ doc: { title: "Home" } }, "title").detail), true);
+t("empty still fails",       K({}, "title").pass, false);
+
+// A canonical is a claim about identity; a relative one does not resolve.
+t("absolute canonical passes",
+  K({ doc: { canonical: "https://x.com/a" } }, "canonical").pass, true);
+t("relative canonical fails", K({ doc: { canonical: "/a" } }, "canonical").pass, false);
+t("junk canonical fails",     K({ doc: { canonical: "x.com/a" } }, "canonical").pass, false);
+
+// Both instruments must agree about the same header.
+t("two-year HSTS passes",
+  K({ headers: { hsts: "max-age=63072000" } }, "hsts").pass, true);
+t("five-minute HSTS fails",
+  K({ headers: { hsts: "max-age=300" } }, "hsts").pass, false);
+t("...and the two instruments agree",
+  K({ headers: { hsts: "max-age=300" } }, "hsts").pass,
+  by(run({ "strict-transport-security": "max-age=300" }), "hsts").pass);
+
+// A 200 that returns an HTML 404 page is the common case, not the exception.
+t("a real robots.txt passes",   K({ robots: { ok: true } }, "robots-exists").pass, true);
+t("a served non-robots fails",
+  K({ robots: { ok: false, served: true } }, "robots-exists").pass, false);
+t("...and says the URL answered",
+  /not robots\.txt/.test(K({ robots: { ok: false, served: true } }, "robots-exists").detail), true);
+t("an empty sitemap fails",
+  K({ sitemap: { ok: false, served: true } }, "sitemap").pass, false);
+t("...and says it holds no URLs",
+  /no URLs/.test(K({ sitemap: { ok: false, served: true } }, "sitemap").detail), true);
+t("one declared in robots.txt passes",
+  K({ sitemap: { ok: true, declared: true } }, "sitemap").pass, true);
+t("...and says where it came from",
+  K({ sitemap: { ok: true, declared: true } }, "sitemap").detail, "Declared in robots.txt.");
+
 console.log("\nemail validation");
 const ve = M.validEmail;
 t("plain address",              ve("julio@datrum.com"), "julio@datrum.com");
