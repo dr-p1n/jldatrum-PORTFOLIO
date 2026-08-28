@@ -22,14 +22,7 @@
   <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/obstacle-race/">
   <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/obstacle-race/">
 
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('consent', 'default', { 'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500 });
-    try { if (localStorage.getItem('datrum_consent') === 'granted') gtag('consent','update',{ 'analytics_storage':'granted' }); } catch(e) {}
-    gtag('js', new Date());
-    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
-  </script>
+  <script src="/js/analytics.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,18 +39,18 @@
 <body>
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
-  <a href="/es/work/#services" onclick="closeDrawer()">Servicios</a>
-  <a href="/es/work/" onclick="closeDrawer()">Casos de estudio</a>
-  <a href="/es/resources/" onclick="closeDrawer()">Recursos</a>
-  <a href="/es/bio/" onclick="closeDrawer()">Bio</a>
-  <a href="/work/obstacle-race/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
-  <a href="/es/resources/scan/" class="btn-diagnose-drawer" onclick="closeDrawer()">Escanea tu sitio &rarr;</a>
+  <a href="/es/work/#services" data-action="close-drawer">Servicios</a>
+  <a href="/es/work/" data-action="close-drawer">Casos de estudio</a>
+  <a href="/es/resources/" data-action="close-drawer">Recursos</a>
+  <a href="/es/bio/" data-action="close-drawer">Bio</a>
+  <a href="/work/obstacle-race/" data-action="close-drawer" lang="en" hreflang="en">EN</a>
+  <a href="/es/resources/scan/" class="btn-diagnose-drawer" data-action="close-drawer">Escanea tu sitio &rarr;</a>
 </div>
 <div class="cs-topbar">
   <a href="/es/" class="cs-wordmark">DATRUM</a>
   <div class="cs-topbar-right">
     <a href="/work/obstacle-race/" class="cs-lang" lang="en" hreflang="en">EN</a>
-    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" data-action="toggle-drawer">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -129,8 +122,8 @@
 <div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent">
   <p class="cookie-text">Usamos analítica que respeta la privacidad (Google Analytics 4 con IP anonimizada) para entender cómo los visitantes encuentran DATRUM. Nada personal, sin tracking publicitario. Puedes rechazar y el sitio funciona igual. <a href="/es/privacy">Política de privacidad</a>.</p>
   <div class="cookie-actions">
-    <button class="cookie-btn primary" onclick="acceptCookies()">Aceptar analítica</button>
-    <button class="cookie-btn" onclick="declineCookies()">Rechazar</button>
+    <button class="cookie-btn primary" data-action="accept-cookies">Aceptar analítica</button>
+    <button class="cookie-btn" data-action="decline-cookies">Rechazar</button>
   </div>
 </div>
 

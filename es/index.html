@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DATRUM — Estudio de diseño e ingeniería para marketing B2B de alto rendimiento.</title>
+  <title>DATRUM — Estudio de diseño de productos de marketing</title>
   <meta name="description" content="Estudio de diseño de productos de marketing para empresas B2B de servicios de alto rendimiento. Un activo que se revaloriza, no un costo.">
-  <meta property="og:title" content="DATRUM — Diseño de Productos de Marketing">
+  <meta property="og:title" content="DATRUM — Estudio de diseño de productos de marketing">
   <meta property="og:description" content="Estudio de diseño de productos de marketing B2B. Activos digitales que ganan valor con el tiempo, no atención que alquilas.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jldatrum.com/es/">
   <meta property="og:locale" content="es_ES">
   <meta property="og:locale:alternate" content="en_US">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="DATRUM — Diseño de Productos de Marketing">
+  <meta name="twitter:title" content="DATRUM — Estudio de diseño de productos de marketing">
   <meta name="twitter:description" content="Estudio de diseño de productos de marketing B2B. Activos digitales que ganan valor con el tiempo, no atención que alquilas.">
   <meta property="og:image" content="https://jldatrum.com/assets/og-image-es.png">
   <meta property="og:image:width" content="1200">
@@ -27,27 +27,7 @@
   <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/">
 
   <!-- Google Analytics 4 (Consent Mode v2 — GDPR-compliant) -->
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    // Default: deny analytics until user consents (GDPR Article 6)
-    gtag('consent', 'default', {
-      'ad_storage': 'denied',
-      'ad_user_data': 'denied',
-      'ad_personalization': 'denied',
-      'analytics_storage': 'denied',
-      'wait_for_update': 500
-    });
-    // Restore prior consent if user already chose
-    try {
-      var prior = localStorage.getItem('datrum_consent');
-      if (prior === 'granted') {
-        gtag('consent', 'update', { 'analytics_storage': 'granted' });
-      }
-    } catch(e) {}
-    gtag('js', new Date());
-    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
-  </script>
+  <script src="/js/analytics.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
 
   <!-- Fonts -->
@@ -73,12 +53,12 @@
 
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
-  <a href="/es/work/#services" onclick="closeDrawer()">Servicios</a>
-  <a href="/es/work/" onclick="closeDrawer()">Casos de estudio</a>
-  <a href="/es/resources/" onclick="closeDrawer()">Recursos</a>
-  <a href="/es/bio/" onclick="closeDrawer()">Bio</a>
-  <a href="/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
-  <a href="/es/resources/scan/" class="btn-diagnose-drawer" onclick="closeDrawer()">Escanea tu sitio →</a>
+  <a href="/es/work/#services" data-action="close-drawer">Servicios</a>
+  <a href="/es/work/" data-action="close-drawer">Casos de estudio</a>
+  <a href="/es/resources/" data-action="close-drawer">Recursos</a>
+  <a href="/es/bio/" data-action="close-drawer">Bio</a>
+  <a href="/" data-action="close-drawer" lang="en" hreflang="en">EN</a>
+  <a href="/es/resources/scan/" class="btn-diagnose-drawer" data-action="close-drawer">Escanea tu sitio →</a>
 </div>
 
 <!-- NAV -->
@@ -94,7 +74,7 @@
     <a href="/" lang="en" hreflang="en" class="nav-lang">EN</a>
     <a href="/es/resources/scan/" class="btn-diagnose">Escanea tu sitio →</a>
   </div>
-  <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+  <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" data-action="toggle-drawer">
     <span></span><span></span><span></span>
   </button>
 </nav>
@@ -344,7 +324,7 @@
       <a href="/es/security">Seguridad</a>
       <a href="/es/privacy">Privacidad</a>
       <a href="/es/subprocessors">Subprocesadores</a>
-      <a href="#" onclick="showCookieBanner(); return false;">Cookies</a>
+      <a href="#" data-action="show-cookies">Cookies</a>
     </nav>
     <div class="footer-copy">© 2026 DATRUM</div>
   </div>
@@ -356,8 +336,8 @@
     Usamos analítica que respeta la privacidad (Google Analytics 4 con IP anonimizada) para entender cómo los visitantes encuentran DATRUM. Nada personal, sin tracking publicitario. Puedes rechazar y el sitio funciona igual. <a href="/es/privacy">Política de privacidad</a>.
   </p>
   <div class="cookie-actions">
-    <button class="cookie-btn primary" onclick="acceptCookies()">Aceptar analítica</button>
-    <button class="cookie-btn" onclick="declineCookies()">Rechazar</button>
+    <button class="cookie-btn primary" data-action="accept-cookies">Aceptar analítica</button>
+    <button class="cookie-btn" data-action="decline-cookies">Rechazar</button>
   </div>
 </div>
 

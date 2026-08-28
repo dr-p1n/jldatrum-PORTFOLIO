@@ -9,3 +9,6 @@ package-lock.json
 # shipped, so the pattern is enforced here too.
 _*.py
 _*.mjs
+
+# Wrangler build cache.
+worker/.wrangler/

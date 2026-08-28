@@ -976,6 +976,24 @@ nav {
   content: "\2713"; position: absolute; left: 0; color: #6FCF97; font-size: 12px;
 }
 
+/* ── where that sits ───────────────────────────────────────
+   The scale carries the argument, so it gets room and no border. */
+.scan-scale { margin: 32px 0 8px; }
+.scan-scale svg { display: block; width: 100%; height: auto; max-width: 620px; }
+.scan-scale-cap {
+  font-size: 12px; color: #9AABAF; margin: 4px 0 0; max-width: 620px;
+}
+
+/* The share row belongs to the graphic, not to the page: quieter than the
+   scan button, which is still the one action that matters here. */
+.scan-share { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 16px 0 0; }
+.scan-btn--quiet {
+  background: transparent; color: #E8EDED;
+  border: 1px solid #1A3A40; padding: 9px 16px; font-size: 14px; font-weight: 500;
+}
+.scan-btn--quiet:hover { filter: none; border-color: #F2D24B; color: #F2D24B; }
+.scan-share-say { font-size: 13px; color: #9AABAF; }
+
 /* ── the report offer ──────────────────────────────────────
    Sits UNDER the finished result, never in front of it. A rule and
    whitespace, no card: the instrument is still the page. */

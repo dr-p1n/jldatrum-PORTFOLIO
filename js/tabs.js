@@ -2,10 +2,15 @@
 // Turns the work-page nav links into real tabs: one section
 // visible at a time, no endless scroll.
 (function () {
-  // Page may override the tab set (e.g. the Resources hub) via window.TAB_IDS.
-  const TAB_IDS = (window.TAB_IDS && window.TAB_IDS.length)
-    ? window.TAB_IDS
-    : ['who', 'services', 'framework', 'work'];
+  // A page overrides the tab set with data-tab-ids="a|b" on <body>. It used to
+  // be an inline window.TAB_IDS block, which is one of the reasons script-src
+  // had to allow 'unsafe-inline'. window.TAB_IDS still wins if something sets
+  // it, so nothing external breaks.
+  const declared = (document.body.getAttribute('data-tab-ids') || '')
+    .split('|').map(x => x.trim()).filter(Boolean);
+  const TAB_IDS = (window.TAB_IDS && window.TAB_IDS.length) ? window.TAB_IDS
+                : declared.length ? declared
+                : ['who', 'services', 'framework', 'work'];
 
   const sections = {};
   TAB_IDS.forEach(id => {

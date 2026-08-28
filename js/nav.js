@@ -46,3 +46,33 @@ function showCookieBanner() {
     setTimeout(showCookieBanner, 1200);
   }
 })();
+
+
+/* ── DELEGATION ────────────────────────────────────────
+   These were inline onclick= attributes on 343 elements, which forced
+   script-src to allow 'unsafe-inline'. One listener on the document does the
+   same job and lets the policy say 'self'.
+
+   The functions above stay exported on window: they are the behaviour, this is
+   only how it is reached. */
+document.addEventListener('click', function (e) {
+  const el = e.target.closest('[data-action]');
+  if (!el) return;
+  switch (el.getAttribute('data-action')) {
+    case 'toggle-drawer':   toggleDrawer(); break;
+    case 'close-drawer':    closeDrawer(); break;
+    case 'accept-cookies':  acceptCookies(); break;
+    case 'decline-cookies': declineCookies(); break;
+    case 'show-cookies':    e.preventDefault(); showCookieBanner(); break;
+    default: return;
+  }
+});
+
+// The bio portrait hides itself when the file is missing. `error` does not
+// bubble, so this listens in the capture phase.
+document.addEventListener('error', function (e) {
+  const el = e.target;
+  if (!el || el.tagName !== 'IMG' || el.getAttribute('data-fallback') !== 'hide-portrait') return;
+  el.style.display = 'none';
+  el.parentElement?.classList.add('bio-portrait--empty');
+}, true);

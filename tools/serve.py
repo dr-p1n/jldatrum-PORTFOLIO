@@ -77,13 +77,50 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def end_headers(self):
+        # Send the production security headers, so a CSP that only fails in
+        # production cannot pass here. Without this the preview happily runs
+        # inline script the real site blocks, which is exactly the class of
+        # failure that is silent in a browser and invisible in a screenshot.
+        for k, v in SECURITY_HEADERS.items():
+            self.send_header(k, v)
+        super().end_headers()
+
     def log_message(self, *a):
         pass
+
+
+def load_headers():
+    """Read _headers and keep the wildcard block. HSTS is dropped on purpose:
+    sent over http://localhost it pins the browser to https for the whole port
+    and there is no server there — it breaks the preview until the pin
+    expires."""
+    out, path = {}, os.path.join(ROOT, "_headers")
+    if not os.path.isfile(path):
+        return out
+    inside = False
+    for line in open(path, encoding="utf-8"):
+        if line.startswith("/"):
+            inside = line.strip() == "/*"
+            continue
+        if not inside:
+            continue
+        if ":" in line and line.startswith((" ", "\t")):
+            k, v = line.split(":", 1)
+            k = k.strip()
+            if k.lower() == "strict-transport-security":
+                continue
+            out[k] = v.strip()
+    return out
+
+
+SECURITY_HEADERS = load_headers()
 
 
 if __name__ == "__main__":
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("127.0.0.1", PORT), Handler) as srv:
         print(f"jldatrum preview on http://127.0.0.1:{PORT}  "
-              f"({len(REDIRECTS)} redirects, clean URLs, real 404s)")
+              f"({len(REDIRECTS)} redirects, clean URLs, real 404s, "
+              f"{len(SECURITY_HEADERS)} security headers)")
         srv.serve_forever()

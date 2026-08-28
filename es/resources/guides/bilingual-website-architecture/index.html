@@ -26,14 +26,7 @@
   {"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"\u00bfCu\u00e1l es la diferencia entre un sitio traducido y uno biling\u00fce?","description":"Un sitio traducido sirve una estructura en dos idiomas. Una arquitectura biling\u00fce sirve dos estructuras, conectadas por hreflang. Traducir preserva las palabras; la arquitectura preserva la intenci\u00f3n.","datePublished":"2026-07-25","dateModified":"2026-07-25","inLanguage":"es","author":{"@type":"Person","name":"Julio Luque Vald\u00e9s"},"publisher":{"@type":"Organization","name":"DATRUM","url":"https://jldatrum.com"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jldatrum.com/es/resources/guides/bilingual-website-architecture/"}},{"@type":"Organization","@id":"https://jldatrum.com/#organization","name":"DATRUM","url":"https://jldatrum.com","description":"Estudio de dise\u00f1o de productos de marketing para empresas B2B de servicios de alto rendimiento. Un activo que se revaloriza, no un costo.","email":"julio@jldatrum.com","telephone":"+507-6521-3318","address":{"@type":"PostalAddress","addressLocality":"Panama City","addressCountry":"PA"},"founder":{"@type":"Person","name":"Julio Luque Vald\u00e9s","sameAs":"https://www.linkedin.com/in/julio-luque-valdes-796a3920a/"},"employee":{"@type":"Person","name":"Julio Luque Vald\u00e9s"},"sameAs":["https://www.linkedin.com/in/julio-luque-valdes-796a3920a/"],"areaServed":["Panam\u00e1","Am\u00e9rica Latina","Estados Unidos","Europa"],"knowsAbout":["Marketing B2B","Dise\u00f1o de producto","Datos estructurados","Optimizaci\u00f3n para motores de respuesta","Ley 81 de Panam\u00e1","Cabeceras de seguridad HTTP","Arquitectura de sitios biling\u00fces"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Servicios","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Dise\u00f1o de Producto"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Estrategia de Marketing"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Motores de Generaci\u00f3n de Leads"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Dise\u00f1o Web"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Apps Web y Desarrollo de Aplicaciones"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Visibilidad en B\u00fasqueda con IA"}}]},"contactPoint":{"@type":"ContactPoint","contactType":"sales","email":"julio@jldatrum.com","telephone":"+507-6521-3318","availableLanguage":["en","es"]}}]}
   </script>
 
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('consent', 'default', { 'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500 });
-    try { if (localStorage.getItem('datrum_consent') === 'granted') gtag('consent','update',{ 'analytics_storage':'granted' }); } catch(e) {}
-    gtag('js', new Date());
-    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
-  </script>
+  <script src="/js/analytics.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,19 +40,19 @@
 <body>
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
-  <a href="/es/work/#services" onclick="closeDrawer()">Servicios</a>
-  <a href="/es/work/" onclick="closeDrawer()">Casos de estudio</a>
-  <a href="/es/resources/" onclick="closeDrawer()">Recursos</a>
-  <a href="/es/bio/" onclick="closeDrawer()">Bio</a>
-  <a href="/resources/guides/bilingual-website-architecture/" onclick="closeDrawer()" lang="en" hreflang="en">EN</a>
-  <a href="/es/resources/scan/" class="btn-diagnose-drawer" onclick="closeDrawer()">Escanea tu sitio &rarr;</a>
+  <a href="/es/work/#services" data-action="close-drawer">Servicios</a>
+  <a href="/es/work/" data-action="close-drawer">Casos de estudio</a>
+  <a href="/es/resources/" data-action="close-drawer">Recursos</a>
+  <a href="/es/bio/" data-action="close-drawer">Bio</a>
+  <a href="/resources/guides/bilingual-website-architecture/" data-action="close-drawer" lang="en" hreflang="en">EN</a>
+  <a href="/es/resources/scan/" class="btn-diagnose-drawer" data-action="close-drawer">Escanea tu sitio &rarr;</a>
 </div>
 
 <div class="cs-topbar">
   <a href="/es/" class="cs-wordmark">DATRUM</a>
   <div class="cs-topbar-right">
     <a href="/resources/guides/bilingual-website-architecture/" class="cs-lang" lang="en" hreflang="en">EN</a>
-    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" data-action="toggle-drawer">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -90,8 +83,8 @@
 <div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent">
   <p class="cookie-text">Usamos anal&iacute;tica que respeta la privacidad (Google Analytics 4 con IP anonimizada) para entender c&oacute;mo los visitantes encuentran DATRUM. Nada personal, sin tracking publicitario. Puedes rechazar y el sitio funciona igual. <a href="/es/privacy">Pol&iacute;tica de privacidad</a>.</p>
   <div class="cookie-actions">
-    <button class="cookie-btn primary" onclick="acceptCookies()">Aceptar anal&iacute;tica</button>
-    <button class="cookie-btn" onclick="declineCookies()">Rechazar</button>
+    <button class="cookie-btn primary" data-action="accept-cookies">Aceptar anal&iacute;tica</button>
+    <button class="cookie-btn" data-action="decline-cookies">Rechazar</button>
   </div>
 </div>
 

@@ -22,14 +22,7 @@
   <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/ag-law/">
   <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/ag-law/">
 
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('consent', 'default', { 'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':500 });
-    try { if (localStorage.getItem('datrum_consent') === 'granted') gtag('consent','update',{ 'analytics_storage':'granted' }); } catch(e) {}
-    gtag('js', new Date());
-    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
-  </script>
+  <script src="/js/analytics.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,18 +39,18 @@
 <body>
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
-  <a href="/work/#services" onclick="closeDrawer()">Services</a>
-  <a href="/work/" onclick="closeDrawer()">Case studies</a>
-  <a href="/resources/" onclick="closeDrawer()">Resources</a>
-  <a href="/bio/" onclick="closeDrawer()">Bio</a>
-  <a href="/es/work/ag-law/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
-  <a href="/resources/scan/" class="btn-diagnose-drawer" onclick="closeDrawer()">Scan your site &rarr;</a>
+  <a href="/work/#services" data-action="close-drawer">Services</a>
+  <a href="/work/" data-action="close-drawer">Case studies</a>
+  <a href="/resources/" data-action="close-drawer">Resources</a>
+  <a href="/bio/" data-action="close-drawer">Bio</a>
+  <a href="/es/work/ag-law/" data-action="close-drawer" lang="es" hreflang="es">ES</a>
+  <a href="/resources/scan/" class="btn-diagnose-drawer" data-action="close-drawer">Scan your site &rarr;</a>
 </div>
 <div class="cs-topbar">
   <a href="/" class="cs-wordmark">DATRUM</a>
   <div class="cs-topbar-right">
     <a href="/es/work/ag-law/" class="cs-lang" lang="es" hreflang="es">ES</a>
-    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" data-action="toggle-drawer">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -132,8 +125,8 @@
 <div id="cookieBanner" role="dialog" aria-live="polite" aria-label="Cookie consent">
   <p class="cookie-text">We use a privacy-respecting analytics setup (Google Analytics 4 with IP anonymization) to understand how visitors find DATRUM. Nothing personal, no ad tracking. You can decline and the site works the same. <a href="/privacy">Privacy policy</a>.</p>
   <div class="cookie-actions">
-    <button class="cookie-btn primary" onclick="acceptCookies()">Accept analytics</button>
-    <button class="cookie-btn" onclick="declineCookies()">Decline</button>
+    <button class="cookie-btn primary" data-action="accept-cookies">Accept analytics</button>
+    <button class="cookie-btn" data-action="decline-cookies">Decline</button>
   </div>
 </div>
 

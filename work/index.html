@@ -25,27 +25,7 @@
   <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/">
 
   <!-- Google Analytics 4 (Consent Mode v2 — GDPR-compliant) -->
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    // Default: deny analytics until user consents (GDPR Article 6)
-    gtag('consent', 'default', {
-      'ad_storage': 'denied',
-      'ad_user_data': 'denied',
-      'ad_personalization': 'denied',
-      'analytics_storage': 'denied',
-      'wait_for_update': 500
-    });
-    // Restore prior consent if user already chose
-    try {
-      var prior = localStorage.getItem('datrum_consent');
-      if (prior === 'granted') {
-        gtag('consent', 'update', { 'analytics_storage': 'granted' });
-      }
-    } catch(e) {}
-    gtag('js', new Date());
-    gtag('config', 'G-CL53ZQMZ4P', { 'anonymize_ip': true });
-  </script>
+  <script src="/js/analytics.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
 
   <!-- Fonts -->
@@ -67,16 +47,16 @@
   {"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","@id":"https://jldatrum.com/work/#collection","url":"https://jldatrum.com/work/","name":"Services and case studies","isPartOf":{"@id":"https://jldatrum.com/#website"},"inLanguage":"en","publisher":{"@id":"https://jldatrum.com/#organization"},"description":"The work behind the method \u2014 projects across e-commerce, insurance, legal, sports, and media where secure, search-visible digital systems turned reputation into signed deals."},{"@type":"Organization","@id":"https://jldatrum.com/#organization","name":"DATRUM","url":"https://jldatrum.com","description":"Marketing product design studio for high-performance B2B service businesses. Compounding value \u2014 marketing as an asset, not a cost.","email":"julio@jldatrum.com","telephone":"+507-6521-3318","address":{"@type":"PostalAddress","addressLocality":"Panama City","addressCountry":"PA"},"founder":{"@type":"Person","name":"Julio Luque Vald\u00e9s","sameAs":"https://www.linkedin.com/in/julio-luque-valdes-796a3920a/"},"employee":{"@type":"Person","name":"Julio Luque Vald\u00e9s"},"sameAs":["https://www.linkedin.com/in/julio-luque-valdes-796a3920a/"],"areaServed":["Panama","Latin America","United States","Europe"],"knowsAbout":["B2B marketing","Product design","Structured data","Answer engine optimization","Panama Ley 81","HTTP security headers","Bilingual website architecture"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Services","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Product Design"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Marketing Strategy"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Lead Generation Engines"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Website Design"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Web App & App Development"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI Search Visibility"}}]},"contactPoint":{"@type":"ContactPoint","contactType":"sales","email":"julio@jldatrum.com","telephone":"+507-6521-3318","availableLanguage":["en","es"]}}]}
   </script>
 </head>
-<body class="tabbed">
+<body class="tabbed" data-tab-ids="services|work">
 
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
-  <a href="#services" onclick="closeDrawer()">Services</a>
-  <a href="#work" onclick="closeDrawer()">Case studies</a>
-  <a href="/resources/" onclick="closeDrawer()">Resources</a>
-  <a href="/bio/" onclick="closeDrawer()">Bio</a>
-  <a href="/es/work/" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
-  <a href="/resources/scan/" class="btn-diagnose-drawer" onclick="closeDrawer()">Scan your site →</a>
+  <a href="#services" data-action="close-drawer">Services</a>
+  <a href="#work" data-action="close-drawer">Case studies</a>
+  <a href="/resources/" data-action="close-drawer">Resources</a>
+  <a href="/bio/" data-action="close-drawer">Bio</a>
+  <a href="/es/work/" data-action="close-drawer" lang="es" hreflang="es">ES</a>
+  <a href="/resources/scan/" class="btn-diagnose-drawer" data-action="close-drawer">Scan your site →</a>
 </div>
 
 <!-- NAV -->
@@ -92,7 +72,7 @@
     <a href="/es/work/" lang="es" hreflang="es" class="nav-lang">ES</a>
     <a href="/resources/scan/" class="btn-diagnose">Scan your site →</a>
   </div>
-  <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+  <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" data-action="toggle-drawer">
     <span></span><span></span><span></span>
   </button>
 </nav>
@@ -350,7 +330,7 @@
       <a href="/security">Security</a>
       <a href="/privacy">Privacy</a>
       <a href="/subprocessors">Subprocessors</a>
-      <a href="#" onclick="showCookieBanner(); return false;">Cookies</a>
+      <a href="#" data-action="show-cookies">Cookies</a>
     </nav>
     <div class="footer-copy">© 2026 DATRUM</div>
   </div>
@@ -362,15 +342,14 @@
     We use a privacy-respecting analytics setup (Google Analytics 4 with IP anonymization) to understand how visitors find DATRUM. Nothing personal, no ad tracking. You can decline and the site works the same. <a href="/privacy">Privacy policy</a>.
   </p>
   <div class="cookie-actions">
-    <button class="cookie-btn primary" onclick="acceptCookies()">Accept analytics</button>
-    <button class="cookie-btn" onclick="declineCookies()">Decline</button>
+    <button class="cookie-btn primary" data-action="accept-cookies">Accept analytics</button>
+    <button class="cookie-btn" data-action="decline-cookies">Decline</button>
   </div>
 </div>
 
 <!-- Scripts -->
 <script defer src="/js/scroll-reveal.js"></script>
 <script defer src="/js/nav.js"></script>
-<script>window.TAB_IDS = ['services', 'work'];</script>
 <script defer src="/js/tabs.js"></script>
 
 <script defer src="/js/viz.js"></script>

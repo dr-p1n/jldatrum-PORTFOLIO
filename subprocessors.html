@@ -26,18 +26,18 @@
 <body>
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="navDrawer" aria-hidden="true" role="dialog">
-  <a href="/work/#services" onclick="closeDrawer()">Services</a>
-  <a href="/work/" onclick="closeDrawer()">Case studies</a>
-  <a href="/resources/" onclick="closeDrawer()">Resources</a>
-  <a href="/bio/" onclick="closeDrawer()">Bio</a>
-  <a href="/es/subprocessors" onclick="closeDrawer()" lang="es" hreflang="es">ES</a>
-  <a href="/resources/scan/" class="btn-diagnose-drawer" onclick="closeDrawer()">Scan your site &rarr;</a>
+  <a href="/work/#services" data-action="close-drawer">Services</a>
+  <a href="/work/" data-action="close-drawer">Case studies</a>
+  <a href="/resources/" data-action="close-drawer">Resources</a>
+  <a href="/bio/" data-action="close-drawer">Bio</a>
+  <a href="/es/subprocessors" data-action="close-drawer" lang="es" hreflang="es">ES</a>
+  <a href="/resources/scan/" class="btn-diagnose-drawer" data-action="close-drawer">Scan your site &rarr;</a>
 </div>
 <div class="cs-topbar">
   <a href="/" class="cs-wordmark">DATRUM</a>
   <div class="cs-topbar-right">
     <a href="/es/subprocessors" class="cs-lang" lang="es" hreflang="es">ES</a>
-    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" onclick="toggleDrawer()">
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" data-action="toggle-drawer">
       <span></span><span></span><span></span>
     </button>
   </div>

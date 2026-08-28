@@ -126,8 +126,278 @@
       result.appendChild(list);
     }
 
+    var scale = buildScale(data.score);
+    if (scale) result.insertBefore(scale, result.children[1] || null);
+
     result.appendChild(buildCapture());
     show(result, true);
+  }
+
+  /* ── the bar ───────────────────────────────────────────
+     A score out of 100 has no mental scale attached, and a peer median only
+     works if you have actually measured the peers. A target needs no sample —
+     but it does need a derivation, or it is a number someone felt like.
+
+     Both targets fall out of the weights. Security: the deductions are
+     25/20/20/15/10/5/5, and the only subset summing to 5 is one 5, so 95 means
+     precisely one privacy header missing and nothing else. AI: above 85 the
+     deductions total under 15, so nothing weighing 15 or more can be failing —
+     the entity block is present, valid, names an Organization, and the content
+     is in the served HTML. That is the line every answer engine shares,
+     because none of them reliably run JavaScript and all of them need an
+     entity to attach a recommendation to.
+
+     data-target on the page carries the number. Absent, this renders nothing.
+     ──────────────────────────────────────────────────── */
+
+  var SVGNS = "http://www.w3.org/2000/svg";
+
+  function svg(tag, attrs) {
+    var n = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) if (attrs.hasOwnProperty(k)) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+
+  function buildScale(score) {
+    var target = Number(root.dataset.target);
+    if (!root.dataset.target || !isFinite(target)) return null;
+
+    var box = el("div", "scan-scale");
+    box.appendChild(el("h2", "scan-subhead", t("scaleTitle", "Against the bar")));
+
+    // 360 units wide: at the width this column renders, 10px type here reads
+    // like 10px type. A wider viewBox shrinks it into illegibility.
+    var W = 360, H = 74, X0 = 10, X1 = 350, RAIL = 46;
+    var s = svg("svg", {
+      viewBox: "0 0 " + W + " " + H, width: "100%", role: "img",
+      "aria-label": t("scaleTitle", "Against the bar") + ": " + score + " / " + target
+    });
+    var at = function (n) { return X0 + (Math.max(0, Math.min(100, n)) / 100) * (X1 - X0); };
+    var label = function (x, y, text, fill, size, weight) {
+      var n = svg("text", {
+        x: Math.max(X0 + 28, Math.min(X1 - 28, x)), y: y, fill: fill,
+        "font-size": size, "text-anchor": "middle",
+        "font-family": "DM Sans, sans-serif", "font-weight": weight || 400
+      });
+      n.textContent = text;
+      return n;
+    };
+
+    var xs = at(score), xt = at(target);
+    var made = score >= target;
+
+    s.appendChild(svg("line", {
+      x1: X0, y1: RAIL, x2: X1, y2: RAIL,
+      stroke: "#1A3A40", "stroke-width": 2, "stroke-linecap": "round"
+    }));
+
+    // The distance to the bar is the finding. Drawn either way: short and
+    // lemon when it is cleared, long and grey when it is not.
+    s.appendChild(svg("line", {
+      x1: Math.min(xs, xt), y1: RAIL, x2: Math.max(xs, xt), y2: RAIL,
+      stroke: made ? "#F2D24B" : "#9AABAF", "stroke-width": 2, "stroke-linecap": "round"
+    }));
+
+    // The bar itself: a full-height gate, not a tick, because it is a threshold.
+    s.appendChild(svg("line", {
+      x1: xt, y1: RAIL - 11, x2: xt, y2: RAIL + 11, stroke: "#9AABAF",
+      "stroke-width": 1, "stroke-dasharray": "3 3"
+    }));
+    s.appendChild(label(xt, RAIL + 24, t("targetLabel", "The bar") + " " + target, "#9AABAF", 9));
+
+    s.appendChild(svg("circle", { cx: xs, cy: RAIL, r: 4, fill: "#F2D24B" }));
+    s.appendChild(svg("line", {
+      x1: xs, y1: RAIL - 13, x2: xs, y2: RAIL + 5, stroke: "#F2D24B", "stroke-width": 2
+    }));
+    s.appendChild(label(xs, RAIL - 19, t("scaleYou", "This site") + " " + score,
+                        "#F2D24B", 11, 600));
+
+    box.appendChild(s);
+
+    var note = made ? t("targetMet", "") : t("targetMissed", "");
+    if (note) box.appendChild(el("p", "scan-scale-cap", note.replace("{n}", target - score)));
+    if (lastData) box.appendChild(buildShare(lastData, target));
+    return box;
+  }
+
+  /* ── the share card ────────────────────────────────────
+     Drawn on a canvas rather than by rasterising the SVG above. An SVG loaded
+     through an <img> does not fetch the page's webfonts, so that route ships a
+     card in whatever system sans the viewer happens to have. Canvas 2D uses
+     the fonts already loaded in the document, so this comes out in the real
+     ones — after document.fonts.ready, which is why the handler is async.
+
+     No blob: anywhere. img-src is 'self' data:, and a blob: URL for the image
+     would be refused; the download anchor takes a blob because that is a
+     download, not an image load.
+     ──────────────────────────────────────────────────── */
+
+  var CARD_W = 1200, CARD_H = 630;
+  var BG = "#0C1B1F", TEXT = "#E8EDED", MUTED = "#9AABAF",
+      LEMON = "#F2D24B", BORDER = "#1A3A40";
+
+  function cardFonts(weight, size, family) {
+    return weight + " " + size + "px '" + family + "', system-ui, sans-serif";
+  }
+
+  function drawCard(data, target) {
+    var c = document.createElement("canvas");
+    c.width = CARD_W; c.height = CARD_H;
+    var x = c.getContext("2d");
+
+    x.fillStyle = BG;
+    x.fillRect(0, 0, CARD_W, CARD_H);
+
+    var M = 72;
+
+    x.fillStyle = LEMON;
+    x.font = cardFonts(700, 34, "Space Grotesk");
+    x.letterSpacing = "2px";
+    x.fillText("DATRUM", M, M + 26);
+    x.letterSpacing = "0px";
+
+    // What was measured, and by which instrument.
+    var h1 = document.querySelector("h1");
+    x.fillStyle = MUTED;
+    x.font = cardFonts(500, 20, "DM Sans");
+    x.textAlign = "right";
+    x.fillText(h1 ? h1.textContent.trim() : "", CARD_W - M, M + 24);
+    x.textAlign = "left";
+
+    x.fillStyle = TEXT;
+    x.font = cardFonts(400, 26, "DM Sans");
+    x.fillText(String(data.url).replace(/^https?:\/\//, "").replace(/\/$/, ""), M, 208);
+
+    x.fillStyle = LEMON;
+    x.font = cardFonts(600, 132, "Space Grotesk");
+    x.fillText(data.grade, M, 330);
+    var gw = x.measureText(data.grade).width;
+    x.fillStyle = MUTED;
+    x.font = cardFonts(400, 34, "DM Sans");
+    x.fillText(data.score + "/100", M + gw + 24, 330);
+
+    // The bar, same geometry as the one on the page.
+    // Vertical budget below the rail: bar labels, the verdict, the worst gap and
+    // the footer all have to fit. 396 is what leaves them clear of each other.
+    var X0 = M, X1 = CARD_W - M, RAIL = 396;
+    var at = function (n) { return X0 + (Math.max(0, Math.min(100, n)) / 100) * (X1 - X0); };
+    var xs = at(data.score), xt = at(target), made = data.score >= target;
+
+    x.lineCap = "round";
+    x.strokeStyle = BORDER; x.lineWidth = 4;
+    x.beginPath(); x.moveTo(X0, RAIL); x.lineTo(X1, RAIL); x.stroke();
+
+    x.strokeStyle = made ? LEMON : MUTED; x.lineWidth = 4;
+    x.beginPath(); x.moveTo(Math.min(xs, xt), RAIL); x.lineTo(Math.max(xs, xt), RAIL); x.stroke();
+
+    x.strokeStyle = MUTED; x.lineWidth = 2;
+    x.setLineDash([6, 6]);
+    x.beginPath(); x.moveTo(xt, RAIL - 26); x.lineTo(xt, RAIL + 26); x.stroke();
+    x.setLineDash([]);
+
+    x.fillStyle = LEMON;
+    x.beginPath(); x.arc(xs, RAIL, 9, 0, Math.PI * 2); x.fill();
+
+    x.textAlign = "center";
+    x.fillStyle = MUTED;
+    x.font = cardFonts(400, 20, "DM Sans");
+    x.fillText(t("targetLabel", "The bar") + " " + target,
+               Math.max(X0 + 60, Math.min(X1 - 60, xt)), RAIL + 54);
+    x.textAlign = "left";
+
+    // Canvas has no line breaking, so wrap by hand and return the baseline
+    // reached, because what follows has to start below it.
+    var wrap = function (text, y, size, fill, weight) {
+      x.fillStyle = fill;
+      x.font = cardFonts(weight || 400, size, "DM Sans");
+      var words = String(text).split(" "), line = "", step = Math.round(size * 1.38);
+      for (var i = 0; i < words.length; i++) {
+        var probe = line ? line + " " + words[i] : words[i];
+        if (x.measureText(probe).width > CARD_W - M * 2 && line) {
+          x.fillText(line, M, y); y += step; line = words[i];
+        } else { line = probe; }
+      }
+      if (line) { x.fillText(line, M, y); y += step; }
+      return y;
+    };
+
+    var y = wrap((made ? t("targetMet", "") : t("targetMissed", ""))
+                   .replace("{n}", target - data.score), RAIL + 104, 26, TEXT);
+
+    // The worst single gap, so the card is a diagnosis and not just a number.
+    // This is what makes it usable in an outreach message.
+    var worst = (data.checks || []).filter(function (k) { return !k.pass; })
+                  .sort(function (a, b) { return b.deduction - a.deduction; })[0];
+    if (worst) wrap("\u2212" + worst.deduction + "  " + worst.title, y + 12, 22, MUTED);
+
+    x.fillStyle = MUTED;
+    x.font = cardFonts(400, 20, "DM Sans");
+    x.fillText("jldatrum.com", M, CARD_H - 44);
+
+    return c;
+  }
+
+  function cardBlob(data, target) {
+    return (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve())
+      .then(function () {
+        return new Promise(function (resolve, reject) {
+          drawCard(data, target).toBlob(function (b) {
+            b ? resolve(b) : reject(new Error("canvas"));
+          }, "image/png");
+        });
+      });
+  }
+
+  function cardName(data) {
+    var host;
+    try { host = new URL(data.url).hostname; } catch (e) { host = "site"; }
+    return "datrum-" + host + "-" + data.score + ".png";
+  }
+
+  function buildShare(data, target) {
+    var box = el("div", "scan-share");
+
+    var copy = el("button", "scan-btn scan-btn--quiet", t("copyBtn", "Copy image"));
+    copy.type = "button";
+    var down = el("button", "scan-btn scan-btn--quiet", t("downloadBtn", "Download image"));
+    down.type = "button";
+    var say = el("span", "scan-share-say");
+    say.setAttribute("role", "status");
+    say.setAttribute("aria-live", "polite");
+
+    // Clipboard image write is not universal, and Firefox in particular will
+    // reject it. Offer the button, and say plainly when it will not go.
+    copy.addEventListener("click", function () {
+      copy.disabled = true;
+      cardBlob(data, target)
+        .then(function (b) {
+          if (!navigator.clipboard || !window.ClipboardItem) throw new Error("unsupported");
+          return navigator.clipboard.write([new window.ClipboardItem({ "image/png": b })]);
+        })
+        .then(function () { say.textContent = t("copied", "Copied."); })
+        .catch(function () { say.textContent = t("copyFailed", "This browser will not copy images — download it instead."); })
+        .then(function () { copy.disabled = false; });
+    });
+
+    down.addEventListener("click", function () {
+      down.disabled = true;
+      cardBlob(data, target)
+        .then(function (b) {
+          var href = URL.createObjectURL(b);
+          var a = document.createElement("a");
+          a.href = href; a.download = cardName(data);
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
+          setTimeout(function () { URL.revokeObjectURL(href); }, 30000);
+          say.textContent = t("downloaded", "Saved.");
+        })
+        .catch(function () { say.textContent = t("genericError", "The scan failed."); })
+        .then(function () { down.disabled = false; });
+    });
+
+    box.appendChild(copy);
+    box.appendChild(down);
+    box.appendChild(say);
+    return box;
   }
 
   /* ── the report ────────────────────────────────────────────
