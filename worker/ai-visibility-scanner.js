@@ -685,10 +685,14 @@ async function handleLead(body, env, ip, lang) {
     await env.RATE.put(key, String(n + 1), { expirationTtl: 3700 });
   }
 
-  // Keyed by address, so a second report request updates one record instead
-  // of filing a duplicate. `wrangler kv key list --prefix lead:` is the list.
+  // Keyed by the lowercased address, so a second request updates one record
+  // instead of filing a duplicate. The RFC says the local part is
+  // case-sensitive and validEmail leaves it alone, but no mail provider in
+  // practice treats Julio@ and julio@ as two people — keying on the literal
+  // filed the same person twice.
+  // `wrangler kv key list --binding LEADS --remote --prefix lead:` is the list.
   const now = new Date().toISOString();
-  const k = `lead:${email}`;
+  const k = `lead:${email.toLowerCase()}`;
   let rec = null;
   try { rec = JSON.parse(await env.LEADS.get(k)); } catch { /* first time, or corrupt */ }
 

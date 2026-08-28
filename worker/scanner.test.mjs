@@ -188,8 +188,12 @@ t("instrument recorded",        rec.mode, "headers");
 t("counted once",               rec.count, 1);
 
 r = await M.handleLead({ email: "A@B.co", mode: "" }, { LEADS, RATE }, "1.1.1.1", "en");
-const rec2 = JSON.parse(LEADS.m.get("lead:A@b.co"));
+const rec2 = JSON.parse(LEADS.m.get("lead:a@b.co"));
 t("mode falls back to scan",    rec2.mode, "scan");
+// Julio@ and julio@ are one person to every mail provider there is.
+t("case does not fork the key", LEADS.m.size, 1);
+t("...and the count carries",   rec2.count, 2);
+t("...keeping what they typed", rec2.email, "A@b.co");
 
 LEADS = kv(); RATE = kv();
 await M.handleLead({ email: "a@b.co" }, { LEADS, RATE }, "1.1.1.1", "en");

@@ -9,13 +9,15 @@ binding = "RATE"
 id = "1361a8801c4f4c8ca804168b8c93a3d6"
 
 # Report requests: one record per address, keyed by the address so a repeat
-# request updates instead of duplicating. Create it once with
-#   wrangler kv namespace create LEADS
-# and paste the id below. Without the binding /lead answers 503 and the page
-# says the report service is not configured — it never silently drops a lead.
+# request updates instead of duplicating. Without the binding /lead answers 503
+# and the page says the report service is not configured — it never silently
+# drops a lead.
+# ⚠️ This is DATRUM_REPORT_LEADS, not the namespace titled LEADS. That one
+# already holds RFQ records from another project under the same `lead:` prefix;
+# binding it here mixes two lists in one bucket. Do not point this at LEADS.
 [[kv_namespaces]]
 binding = "LEADS"
-id = "3d94515c1b3d4e70b7d983457fd33a47"
+id = "f6ebc9c9e73940c9b73c7722b50b8f6e"
 
 [observability]
 enabled = true
