@@ -36,8 +36,7 @@
 a:hover .dx-icon,
 .dx-hoverable:hover .dx-icon,
 .service-cell:hover .dx-icon,
-.method-pillar:hover .dx-icon,
-.framework-step:hover .dx-icon { color: var(--lemon, #F2D24B); }
+.method-pillar:hover .dx-icon { color: var(--lemon, #F2D24B); }
 
 .dx-icon--sm { width: 18px; height: 18px; }
 .dx-icon--lg { width: 32px; height: 32px; }
@@ -46,8 +45,7 @@ a:hover .dx-icon,
 
 /* Sit above the heading inside service/method/framework cards */
 .service-cell .dx-icon,
-.method-pillar .dx-icon,
-.framework-step .dx-icon { margin-bottom: 12px; }
+.method-pillar .dx-icon { margin-bottom: 12px; }
 
 /* ── Chart shell ────────────────────────────────────── */
 .dx-viz { display: block; width: 100%; margin: 28px 0; }
