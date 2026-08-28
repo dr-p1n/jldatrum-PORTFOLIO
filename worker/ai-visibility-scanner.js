@@ -79,6 +79,9 @@ const ERR = {
       : `The target returned HTTP ${n}.`,
     notHtml:  ct => `That URL returned ${ct || "an unknown content type"}, not HTML.`,
     crashed:  m => `Scan failed: ${m}`,
+    email:    "That doesn't look like an email address.",
+    leadRate: "Too many requests \u2014 try again shortly.",
+    leadOff:  "The report service is not configured.",
   },
   es: {
     parse:    "Eso no se puede leer como una URL.",
@@ -98,6 +101,9 @@ const ERR = {
       : `El destino devolvi\u00f3 HTTP ${n}.`,
     notHtml:  ct => `Esa URL devolvi\u00f3 ${ct || "un tipo de contenido desconocido"}, no HTML.`,
     crashed:  m => `El escaneo fall\u00f3: ${m}`,
+    email:    "Eso no parece una direcci\u00f3n de correo.",
+    leadRate: "Demasiadas peticiones \u2014 prueba de nuevo en un rato.",
+    leadOff:  "El servicio de informes no est\u00e1 configurado.",
   },
 };
 const errs = lang => ERR[lang === "es" ? "es" : "en"];
@@ -519,49 +525,49 @@ async function scan(target, lang) {
 const HDR = {
   en: {
     groups: { transport: "The connection", content: "What can run on the page", privacy: "What leaks out" },
-    https:       { t: "The connection is encrypted",
+    https:       { t: "Buyers see a padlock, not a warning",
                    ok: "Served over HTTPS.",
-                   no: "Plain HTTP — anything typed in travels readable, and browsers flag it Not Secure." },
-    hsts:        { t: "Browsers always use the encrypted version",
+                   no: "Plain HTTP — browsers stamp Not Secure on the page before a buyer reads it." },
+    hsts:        { t: "The encrypted page loads without a detour",
                    ok: v => "Set. " + v,
-                   no: "Missing — the first visit still tries the unencrypted address before redirecting." },
-    csp:         { t: "Injected scripts are blocked from running",
+                   no: "Missing — every first visit pays a redirect hop before your page can start." },
+    csp:         { t: "Only your own scripts can run, and cost time",
                    ok: "Set.",
-                   no: "Missing — an injected script would run with full access to whatever visitors type." },
-    frame:       { t: "Pages cannot load inside someone else's site",
+                   no: "Missing — injected third-party scripts run on your page and slow what loads." },
+    frame:       { t: "Your brand cannot be reskinned by someone else",
                    ok: "Framing restricted.",
-                   no: "Missing — your pages can be rendered invisibly over an attacker's, to steal clicks." },
-    nosniff:     { t: "Files cannot run as code when mislabelled",
+                   no: "Missing — your pages can be dressed up inside a stranger's site as their own." },
+    nosniff:     { t: "A mislabelled file cannot run as code",
                    ok: "Set.",
-                   no: "Missing — a file uploaded as an image can be re-interpreted and executed." },
-    referrer:    { t: "Visited pages do not leak to other sites",
+                   no: "Missing — one mislabelled upload can execute and get the domain blocklisted." },
+    referrer:    { t: "Outbound clicks do not leak your URLs",
                    ok: v => "Set. " + v,
                    no: "Missing — every outbound link hands the destination your full page address." },
-    permissions: { t: "Scripts cannot ask for camera, mic or location",
+    permissions: { t: "Nothing prompts for camera or mic in your name",
                    ok: "Set.",
                    no: "Missing — any script on the page can prompt visitors under your domain's name." },
   },
   es: {
     groups: { transport: "La conexión", content: "Qué puede ejecutarse en la página", privacy: "Qué se filtra" },
-    https:       { t: "La conexión está cifrada",
+    https:       { t: "El comprador ve un candado, no una advertencia",
                    ok: "Servido por HTTPS.",
-                   no: "HTTP plano — lo que se escriba viaja legible y el navegador lo marca No seguro." },
-    hsts:        { t: "El navegador siempre usa la versión cifrada",
+                   no: "HTTP plano — el navegador marca No seguro antes de que el comprador lea nada." },
+    hsts:        { t: "La página cifrada carga sin desvío",
                    ok: v => "Configurado. " + v,
-                   no: "Falta — la primera visita intenta la dirección sin cifrar antes de redirigir." },
-    csp:         { t: "Los scripts inyectados no pueden ejecutarse",
+                   no: "Falta — cada primera visita paga un salto de redirección antes de empezar." },
+    csp:         { t: "Solo corren tus scripts, y solo ellos cuestan tiempo",
                    ok: "Configurado.",
-                   no: "Falta — un script inyectado tendría acceso a lo que escriban tus visitantes." },
-    frame:       { t: "Tus páginas no cargan dentro del sitio de otro",
+                   no: "Falta — scripts de terceros inyectados corren en tu página y frenan la carga." },
+    frame:       { t: "Tu marca no puede ser revestida por otro",
                    ok: "Enmarcado restringido.",
-                   no: "Falta — pueden montarse invisibles sobre la página de un atacante, robando clics." },
+                   no: "Falta — tus páginas pueden montarse dentro del sitio de un extraño como suyas." },
     nosniff:     { t: "Un archivo mal etiquetado no corre como código",
                    ok: "Configurado.",
-                   no: "Falta — un archivo subido como imagen puede reinterpretarse y ejecutarse." },
-    referrer:    { t: "Las páginas visitadas no se filtran a otros sitios",
+                   no: "Falta — una subida mal etiquetada puede ejecutarse y hacer bloquear el dominio." },
+    referrer:    { t: "Los clics salientes no filtran tus URLs",
                    ok: v => "Configurado. " + v,
                    no: "Falta — cada enlace saliente entrega la dirección completa de tu página." },
-    permissions: { t: "Los scripts no pueden pedir cámara, micrófono o ubicación",
+    permissions: { t: "Nada pide cámara o micrófono en tu nombre",
                    ok: "Configurado.",
                    no: "Falta — cualquier script puede pedírselo a tus visitantes bajo tu dominio." },
   },
@@ -619,6 +625,86 @@ async function scanHeaders(target, lang) {
   };
 }
 
+/* ── LEADS ──────────────────────────────────────────────────────────
+   The instruments stay free and ungated: the scan renders in full before
+   this is ever offered. What the address buys is the report file, which
+   the CLIENT builds from the result it already has. Nothing about the
+   scanned site is stored here and no report is published — only the
+   address, so that promise on the page stays true.
+   ─────────────────────────────────────────────────────────────────── */
+
+const MAX_EMAIL = 254;
+
+// Deliberately not a full RFC 5322 parser. This rejects what is obviously
+// not an address and accepts the rest; the only real proof an address works
+// is mail arriving at it, and refusing valid-but-odd addresses costs a lead.
+function validEmail(raw) {
+  const e = String(raw || "").trim();
+  if (!e || e.length > MAX_EMAIL) return null;
+  if (/[\s<>",;\\]/.test(e)) return null;
+
+  const at = e.lastIndexOf("@");
+  if (at < 1 || at === e.length - 1) return null;
+  if (e.indexOf("@") !== at) return null;          // exactly one @
+
+  const local = e.slice(0, at);
+  const domain = e.slice(at + 1).toLowerCase();
+  if (local.length > 64) return null;
+  if (local.startsWith(".") || local.endsWith(".") || local.includes("..")) return null;
+
+  const labels = domain.split(".");
+  if (labels.length < 2) return null;
+  for (const l of labels) {
+    if (!l || l.length > 63) return null;
+    if (!/^[a-z0-9-]+$/.test(l)) return null;
+    if (l.startsWith("-") || l.endsWith("-")) return null;
+  }
+  const tld = labels[labels.length - 1];
+  if (!/^[a-z]{2,}$/.test(tld)) return null;
+
+  return local + "@" + domain;                      // domain normalised, local left alone
+}
+
+async function handleLead(body, env, ip, lang) {
+  const E = errs(lang);
+
+  // Honeypot. A real submitter never sees this field, so anything in it is a
+  // bot. Answer 200 so it learns nothing, and store nothing.
+  if (String(body?.company || "").trim() !== "")
+    return { status: 200, payload: { ok: true } };
+
+  const email = validEmail(body?.email);
+  if (!email) return { status: 400, payload: { error: E.email } };
+
+  if (!env?.LEADS) return { status: 503, payload: { error: E.leadOff } };
+
+  if (env?.RATE) {
+    const key = `lead:${ip}:${Math.floor(Date.now() / 3600000)}`;
+    const n = Number(await env.RATE.get(key)) || 0;
+    if (n >= 10) return { status: 429, payload: { error: E.leadRate } };
+    await env.RATE.put(key, String(n + 1), { expirationTtl: 3700 });
+  }
+
+  // Keyed by address, so a second report request updates one record instead
+  // of filing a duplicate. `wrangler kv key list --prefix lead:` is the list.
+  const now = new Date().toISOString();
+  const k = `lead:${email}`;
+  let rec = null;
+  try { rec = JSON.parse(await env.LEADS.get(k)); } catch { /* first time, or corrupt */ }
+
+  await env.LEADS.put(k, JSON.stringify({
+    email,
+    first: rec?.first || now,
+    last: now,
+    count: (Number(rec?.count) || 0) + 1,
+    lang,
+    // Which instrument asked, never what it found.
+    mode: String(body?.mode || "") === "headers" ? "headers" : "scan",
+  }));
+
+  return { status: 200, payload: { ok: true } };
+}
+
 function cors(origin) {
   const allow = ALLOWED_ORIGINS.has(origin) ? origin : "https://jldatrum.com";
   return {
@@ -644,8 +730,17 @@ export default {
     const lang = String(body?.lang || "").toLowerCase() === "es" ? "es" : "en";
     const E = errs(lang);
 
-    // Rate limit: 10 scans per IP per hour. Requires a KV namespace bound as RATE.
     const ip = request.headers.get("CF-Connecting-IP") || "anon";
+
+    // Two endpoints, one worker. Anything that is not /lead is a scan, so the
+    // pre-existing callers that post to the bare origin keep working.
+    if (new URL(request.url).pathname.replace(/\/+$/, "").endsWith("/lead")) {
+      if (body === null) return new Response(JSON.stringify({ error: E.json }), { status: 400, headers });
+      const out = await handleLead(body, env, ip, lang);
+      return new Response(JSON.stringify(out.payload), { status: out.status, headers });
+    }
+
+    // Rate limit: 10 scans per IP per hour. Requires a KV namespace bound as RATE.
     if (env?.RATE) {
       const key = `scan:${ip}:${Math.floor(Date.now() / 3600000)}`;
       const n = Number(await env.RATE.get(key)) || 0;

@@ -976,6 +976,26 @@ nav {
   content: "\2713"; position: absolute; left: 0; color: #6FCF97; font-size: 12px;
 }
 
+/* ── the report offer ──────────────────────────────────────
+   Sits UNDER the finished result, never in front of it. A rule and
+   whitespace, no card: the instrument is still the page. */
+.scan-capture {
+  margin-top: 48px; padding-top: 32px; border-top: 1px solid #1A3A40;
+}
+.scan-capture-lede {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 20px; font-weight: 300; line-height: 1.35;
+  color: #E8EDED; margin: 0;
+}
+.scan-capture-form { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0 8px; }
+.scan-capture-note { font-size: 13px; color: #9AABAF; margin: 0; }
+.scan-capture-status { margin: 16px 0 0; font-size: 14px; color: #6FCF97; }
+.scan-capture-status.is-bad { color: #E8EDED; }
+.scan-capture-form[hidden] { display: none; }
+@media (max-width: 639px) {
+  .scan-capture-lede { font-size: 18px; }
+}
+
 @media (max-width: 560px) {
   .scan-head { gap: 16px; padding: 20px; }
   .scan-grade { font-size: 56px; min-width: 0; }

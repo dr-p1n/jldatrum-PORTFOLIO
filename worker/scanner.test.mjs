@@ -11,7 +11,7 @@ const tmpPath = path.join(here, ".scanner.undertest.mjs");
 
 let src = fs.readFileSync(srcPath, "utf8");
 src = src.slice(0, src.indexOf("export default"));
-src += "\nexport { parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR };";
+src += "\nexport { parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR, validEmail, handleLead };";
 fs.writeFileSync(tmpPath, src);
 const M = await import(tmpPath);
 fs.unlinkSync(tmpPath);
@@ -149,6 +149,75 @@ for (const lang of ["en", "es"]) {
     cs.slice().sort((a, b) => b.deduction - a.deduction)[0].id, "csp");
 }
 t("es differs from en", M.HDR.es.csp.t === M.HDR.en.csp.t, false);
+
+console.log("\nemail validation");
+const ve = M.validEmail;
+t("plain address",              ve("julio@datrum.com"), "julio@datrum.com");
+t("domain is lowercased",       ve("Julio@DATRUM.COM"), "Julio@datrum.com");
+t("surrounding space trimmed",  ve("  a@b.co  "), "a@b.co");
+t("plus tag survives",          ve("a+scan@b.co"), "a+scan@b.co");
+t("subdomain survives",         ve("a@mail.b.co"), "a@mail.b.co");
+t("no @",                       ve("datrum.com"), null);
+t("two @",                      ve("a@b@c.com"), null);
+t("no domain dot",              ve("a@localhost"), null);
+t("numeric tld",                ve("a@b.12"), null);
+t("empty local",                ve("@b.co"), null);
+t("leading dot in local",       ve(".a@b.co"), null);
+t("double dot in local",        ve("a..b@c.co"), null);
+t("hyphen-led label",           ve("a@-b.co"), null);
+t("space inside",               ve("a b@c.co"), null);
+t("header injection",           ve("a@b.co\nBcc: x@y.co"), null);
+t("angle brackets",             ve("<a@b.co>"), null);
+t("over 254 chars",             ve("a".repeat(250) + "@b.co"), null);
+t("local over 64",              ve("a".repeat(65) + "@b.co"), null);
+t("empty",                      ve(""), null);
+t("undefined",                  ve(undefined), null);
+
+console.log("\nthe lead endpoint");
+// Minimal KV doubles. put/get is all handleLead uses.
+const kv = () => { const m = new Map(); return {
+  m, get: async k => (m.has(k) ? m.get(k) : null), put: async (k, v) => { m.set(k, v); } }; };
+
+let LEADS = kv(), RATE = kv();
+let r = await M.handleLead({ email: "a@b.co", mode: "headers" }, { LEADS, RATE }, "1.1.1.1", "en");
+t("valid address stored",       [r.status, r.payload.ok], [200, true]);
+t("keyed by address",           [...LEADS.m.keys()], ["lead:a@b.co"]);
+const rec = JSON.parse(LEADS.m.get("lead:a@b.co"));
+t("record holds no scan data",  Object.keys(rec).sort(), ["count","email","first","lang","last","mode"]);
+t("instrument recorded",        rec.mode, "headers");
+t("counted once",               rec.count, 1);
+
+r = await M.handleLead({ email: "A@B.co", mode: "" }, { LEADS, RATE }, "1.1.1.1", "en");
+const rec2 = JSON.parse(LEADS.m.get("lead:A@b.co"));
+t("mode falls back to scan",    rec2.mode, "scan");
+
+LEADS = kv(); RATE = kv();
+await M.handleLead({ email: "a@b.co" }, { LEADS, RATE }, "1.1.1.1", "en");
+await M.handleLead({ email: "a@b.co" }, { LEADS, RATE }, "1.1.1.1", "en");
+t("second ask updates, not duplicates", LEADS.m.size, 1);
+t("...and increments the count", JSON.parse(LEADS.m.get("lead:a@b.co")).count, 2);
+
+LEADS = kv(); RATE = kv();
+r = await M.handleLead({ email: "a@b.co", company: "Acme" }, { LEADS, RATE }, "1.1.1.1", "en");
+t("honeypot answers 200",       [r.status, r.payload.ok], [200, true]);
+t("...and stores nothing",      LEADS.m.size, 0);
+
+LEADS = kv(); RATE = kv();
+r = await M.handleLead({ email: "nope" }, { LEADS, RATE }, "1.1.1.1", "en");
+t("bad address is 400",         r.status, 400);
+t("...in the page's language",  (await M.handleLead({ email: "nope" }, { LEADS, RATE }, "1.1.1.1", "es")).payload.error, M.ERR.es.email);
+t("...and stores nothing",      LEADS.m.size, 0);
+
+r = await M.handleLead({ email: "a@b.co" }, { RATE }, "1.1.1.1", "en");
+t("no binding is 503, not a silent drop", r.status, 503);
+
+LEADS = kv(); RATE = kv();
+for (let i = 0; i < 10; i++) await M.handleLead({ email: `a${i}@b.co` }, { LEADS, RATE }, "9.9.9.9", "en");
+r = await M.handleLead({ email: "a10@b.co" }, { LEADS, RATE }, "9.9.9.9", "en");
+t("eleventh from one IP is 429", r.status, 429);
+t("...and is not stored",        LEADS.m.size, 10);
+r = await M.handleLead({ email: "a10@b.co" }, { LEADS, RATE }, "8.8.8.8", "en");
+t("another IP is unaffected",    r.status, 200);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

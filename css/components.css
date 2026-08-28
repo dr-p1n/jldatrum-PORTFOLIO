@@ -1137,6 +1137,78 @@ nav {
   color: var(--text);
 }
 
+/* ── WHO: SAME BUDGET, DIFFERENT RESOURCE ───────────── */
+/* Rules only, no cells. The right-hand column is ours: --text against
+   --muted, one lemon head. Never add vertical borders here — that turns
+   it back into a card grid. */
+
+.who-compare-lede {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 300;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin: 0 0 24px;
+}
+
+table.compare {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+table.compare th,
+table.compare td {
+  text-align: left;
+  vertical-align: top;
+  padding: 16px 24px 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+table.compare th:last-child,
+table.compare td:last-child { padding-right: 0; }
+
+table.compare thead th {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-top: 0;
+  padding-bottom: 12px;
+}
+table.compare thead th.is-ours { color: var(--lemon); }
+
+/* table-layout:fixed sizes columns off the FIRST row, so the width has to
+   live on thead, not on tbody th. */
+table.compare thead th:first-child { width: 22%; }
+
+table.compare tbody th {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+table.compare tbody td {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--muted);
+}
+table.compare tbody td.is-ours { color: var(--text); }
+
+@media (max-width: 639px) {
+  .who-compare-lede { font-size: 20px; margin-bottom: 20px; }
+  table.compare th,
+  table.compare td { padding: 12px 12px 12px 0; }
+  table.compare thead th:first-child { width: 26%; }
+  table.compare tbody th { font-size: 12px; }
+  table.compare tbody td { font-size: 14px; }
+  table.compare thead th { font-size: 10px; letter-spacing: 0.1em; }
+}
+
 /* ── SERVICES ───────────────────────────────────────── */
 /* The services tab holds two bands that alternate shade like the rest of
    the site. They cannot be sibling <section>s: tabs.js only hides ids

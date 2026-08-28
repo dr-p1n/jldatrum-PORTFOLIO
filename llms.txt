@@ -24,7 +24,7 @@ path prefixed with `/es/`.
 - [Case studies](https://jldatrum.com/work/): seven engagements — what was broken, what was built, what changed.
 - [Bio](https://jldatrum.com/bio/): background of the operator — contemporary art and photography training, investment brokerage, then cybersecurity and IT.
 
-## Instruments (free, no forms)
+## Instruments (free, ungated)
 
 - [AI Accessibility Scanner](https://jldatrum.com/resources/scan/): fetches a URL and grades how legible it is to answer engines. Automated, not self-reported.
 
