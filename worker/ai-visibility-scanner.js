@@ -610,9 +610,18 @@ function runChecks(ctx) {
   return c;
 }
 
+// The ordinary school scale, because that is the one every reader already has
+// in their head: A from 90, B from 80, C from 70, D from 60, F below. The old
+// curve stretched the top — it called 65 a B- and 70 a B — so a page could read
+// "B" while failing a third of what was measured. A grade that flatters is
+// worth nothing to a prospect who is about to check the same headers elsewhere.
+//
+// It also lines up with the bar. Both instruments are held to 90, which is
+// exactly where A- begins, so clearing the bar and earning an A are the same
+// event rather than two numbers that need reconciling.
 function grade(score) {
-  const bands = [[100,"A+"],[90,"A"],[85,"A-"],[80,"B+"],[70,"B"],[65,"B-"],
-                 [60,"C+"],[50,"C"],[45,"C-"],[40,"D+"],[30,"D"],[25,"D-"],[0,"F"]];
+  const bands = [[97,"A+"],[93,"A"],[90,"A-"],[87,"B+"],[83,"B"],[80,"B-"],
+                 [77,"C+"],[73,"C"],[70,"C-"],[67,"D+"],[63,"D"],[60,"D-"],[0,"F"]];
   return (bands.find(([min]) => score >= min) || [0,"F"])[1];
 }
 

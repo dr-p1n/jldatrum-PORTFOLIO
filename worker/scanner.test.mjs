@@ -42,9 +42,18 @@ const ours = M.parseRobots(fs.readFileSync(path.join(here, "..", "robots.txt"), 
 for (const b of M.AI_CRAWLERS) t(b.ua, M.blocksAgent(ours, b.ua, "/"), false);
 
 console.log("\ngrade bands");
-for (const [s, e] of [[100,"A+"],[95,"A"],[86,"A-"],[80,"B+"],[70,"B"],[66,"B-"],
-                      [60,"C+"],[50,"C"],[45,"C-"],[40,"D+"],[30,"D"],[25,"D-"],[10,"F"],[0,"F"]])
+for (const [s, e] of [[100,"A+"],[97,"A+"],[96,"A"],[93,"A"],[92,"A-"],[90,"A-"],
+                      [89,"B+"],[87,"B+"],[86,"B"],[83,"B"],[82,"B-"],[80,"B-"],
+                      [79,"C+"],[77,"C+"],[76,"C"],[73,"C"],[72,"C-"],[70,"C-"],
+                      [69,"D+"],[67,"D+"],[66,"D"],[65,"D"],[63,"D"],[62,"D-"],[60,"D-"],
+                      [59,"F"],[30,"F"],[0,"F"]])
   t(`${s} -> ${e}`, M.grade(s), e);
+
+// The scale is the ordinary one a reader already knows, and it meets the bar
+// where the bar is: both instruments are held to 90, and 90 is where A- starts.
+t("the bar is exactly where A- begins", M.grade(90), "A-");
+t("one under the bar is a B",           M.grade(89), "B+");
+t("nothing under 60 passes",            M.grade(59), "F");
 
 console.log("\nSSRF: must reject");
 for (const u of ["http://localhost/","http://127.0.0.1/","http://127.1.2.3/","https://192.168.1.1/",
@@ -129,7 +138,7 @@ t("a bare response can still lose 58",
   run({}, "http://x.com/").reduce((n, c) => n + c.deduction, 0), 58);
 t("...and noindex is what it keeps", by(run({}, "http://x.com/"), "noindex").pass, true);
 t("nothing set over http bottoms out", score(run({}, "http://x.com/")), 42);
-t("nothing set over http is still failing", M.grade(score(run({}, "http://x.com/"))), "D+");
+t("nothing set over http is still failing", M.grade(score(run({}, "http://x.com/"))), "F");
 // HTTPS plus an indexable page earns two of the fifteen and nothing else, so
 // it lands far below the bar rather than at zero.
 t("https alone is not enough",        score(run({})) < 60, true);
