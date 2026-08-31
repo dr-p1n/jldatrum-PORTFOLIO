@@ -2,8 +2,21 @@ name = "ai-visibility"
 main = "ai-visibility-scanner.js"
 compatibility_date = "2026-08-01"
 
-# Rate limiting: 10 scans per IP per hour. Without this binding the endpoint
-# would scan anything, for anyone, as fast as it is asked.
+# Per-IP ceilings, per fixed hour bucket. Tuning them is a deploy of this file,
+# not a code edit. Both fall back to 60 in the worker if unset or unreadable,
+# so a typo here cannot mean "unlimited".
+# ⚠️ THESE NUMBERS ARE QUOTED IN THE SITE COPY. Change one and change all four:
+#   /resources/scan/index.html               "Sixty scans per hour."
+#   /es/resources/scan/index.html            "Sesenta escaneos por hora."
+#   /resources/security-headers/index.html   "Sixty tests per hour."
+#   /es/resources/security-headers/index.html "Sesenta pruebas por hora."
+# The 429 strings read the value at runtime and need no edit.
+[vars]
+SCAN_LIMIT = "60"
+LEAD_LIMIT = "60"
+
+# Rate limiting counters. Without this binding the endpoint would scan
+# anything, for anyone, as fast as it is asked.
 [[kv_namespaces]]
 binding = "RATE"
 id = "1361a8801c4f4c8ca804168b8c93a3d6"

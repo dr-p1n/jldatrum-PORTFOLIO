@@ -11,7 +11,7 @@ const tmpPath = path.join(here, ".scanner.undertest.mjs");
 
 let src = fs.readFileSync(srcPath, "utf8");
 src = src.slice(0, src.indexOf("export default"));
-src += "\nexport { isNoindex, langDeclared, mixedContent, canonicalOffsite, decodeEntities, parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR, validEmail, handleLead, titleNames, hasOneH1, descPresent, descUsable, canonicalAbs, headingSkip, headingCensus };";
+src += "\nexport { isNoindex, langDeclared, mixedContent, canonicalOffsite, decodeEntities, parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR, validEmail, handleLead, titleNames, hasOneH1, descPresent, descUsable, canonicalAbs, headingSkip, headingCensus, ceiling };";
 fs.writeFileSync(tmpPath, src);
 const M = await import(tmpPath);
 fs.unlinkSync(tmpPath);
@@ -454,12 +454,36 @@ r = await M.handleLead({ email: "a@b.co" }, { RATE }, "1.1.1.1", "en");
 t("no binding is 503, not a silent drop", r.status, 503);
 
 LEADS = kv(); RATE = kv();
-for (let i = 0; i < 10; i++) await M.handleLead({ email: `a${i}@b.co` }, { LEADS, RATE }, "9.9.9.9", "en");
-r = await M.handleLead({ email: "a10@b.co" }, { LEADS, RATE }, "9.9.9.9", "en");
-t("eleventh from one IP is 429", r.status, 429);
-t("...and is not stored",        LEADS.m.size, 10);
-r = await M.handleLead({ email: "a10@b.co" }, { LEADS, RATE }, "8.8.8.8", "en");
+const capped = { LEADS, RATE, LEAD_LIMIT: "3" };
+for (let i = 0; i < 3; i++) await M.handleLead({ email: `a${i}@b.co` }, capped, "9.9.9.9", "en");
+r = await M.handleLead({ email: "a3@b.co" }, capped, "9.9.9.9", "en");
+t("one over the ceiling is 429", r.status, 429);
+t("...and is not stored",        LEADS.m.size, 3);
+r = await M.handleLead({ email: "a3@b.co" }, capped, "8.8.8.8", "en");
 t("another IP is unaffected",    r.status, 200);
+
+// With no var set the ceiling is the fallback, not the sky. This is the whole
+// point of the fallback being a number: a config that never landed must still
+// stop somebody pointing the endpoint at a stranger's site all afternoon.
+LEADS = kv(); RATE = kv();
+for (let i = 0; i < 60; i++) await M.handleLead({ email: `b${i}@c.co` }, { LEADS, RATE }, "7.7.7.7", "en");
+t("60 pass with no var set",     LEADS.m.size, 60);
+t("the 61st is 429",
+  (await M.handleLead({ email: "b60@c.co" }, { LEADS, RATE }, "7.7.7.7", "en")).status, 429);
+
+console.log("\nthe rate ceilings");
+t("unset falls back to 60",      M.ceiling({}, "SCAN_LIMIT"), 60);
+t("no env at all falls back",    M.ceiling(undefined, "SCAN_LIMIT"), 60);
+t("a set var is honoured",       M.ceiling({ SCAN_LIMIT: "120" }, "SCAN_LIMIT"), 120);
+t("garbled is not unlimited",    M.ceiling({ SCAN_LIMIT: "sixty" }, "SCAN_LIMIT"), 60);
+t("empty is not unlimited",      M.ceiling({ SCAN_LIMIT: "" }, "SCAN_LIMIT"), 60);
+t("zero is a typo, not a door",  M.ceiling({ SCAN_LIMIT: "0" }, "SCAN_LIMIT"), 60);
+t("negative falls back",         M.ceiling({ SCAN_LIMIT: "-5" }, "SCAN_LIMIT"), 60);
+t("each endpoint reads its own",
+  ["SCAN_LIMIT", "LEAD_LIMIT"].map(k => M.ceiling({ SCAN_LIMIT: "30", LEAD_LIMIT: "5" }, k)), [30, 5]);
+t("the 429 names the number",    /\b60 per hour\b/.test(M.ERR.en.rate(60)), true);
+t("...in Spanish too",           /\b60 por hora\b/.test(M.ERR.es.rate(60)), true);
+t("...and follows the var",      /\b120 per hour\b/.test(M.ERR.en.rate(120)), true);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

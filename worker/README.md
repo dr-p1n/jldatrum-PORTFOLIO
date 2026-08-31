@@ -34,7 +34,13 @@ This endpoint fetches attacker-supplied URLs, so it validates before it fetches:
 https/http only, no embedded credentials, and every private range is rejected —
 loopback, RFC1918, link-local (including `169.254.169.254`, the cloud metadata
 address), CGNAT, multicast, IPv6 ULA and link-local. Responses are capped at
-2 MB with an 8-second timeout. Rate limit is 10 scans/IP/hour via KV.
+2 MB with an 8-second timeout. The rate limit is 60 requests/IP/hour on each
+endpoint, counted in KV against a fixed hour bucket. Both ceilings are
+`[vars]` in `wrangler.toml` — `SCAN_LIMIT` and `LEAD_LIMIT` — so tuning them is
+a deploy of that file rather than a code edit, and both fall back to 60 rather
+than to unlimited if the var is missing or unreadable. The numbers are quoted
+in the site copy on both instrument pages in both languages; change one and
+change those four strings with it.
 
 `worker/scanner.test.mjs` covers the robots parser, the grade bands and the
 SSRF rejection list. Run with `node worker/scanner.test.mjs`.

@@ -123,6 +123,20 @@ function headingCensus(doc) {
   return n;
 }
 
+// The rate-limit ceilings live in wrangler.toml [vars], so tuning them is a
+// config deploy rather than a logic edit. The fallback is a number and never
+// Infinity on purpose: an unset, misspelled or garbled var must not silently
+// mean "no limit". This endpoint fetches arbitrary user-supplied URLs and the
+// requests carry jldatrum.com in the User-Agent, so an unmetered scanner is a
+// way for a stranger to get this domain WAF-blocked by somebody else's site.
+// A ceiling of 0 or less reads as a mistake, not as "closed", and falls back
+// too — closing the endpoint is what undeploying is for.
+const RATE_FALLBACK = 60;
+function ceiling(env, name) {
+  const n = parseInt(env?.[name], 10);
+  return Number.isFinite(n) && n > 0 ? n : RATE_FALLBACK;
+}
+
 const ERR = {
   en: {
     parse:    "That doesn't parse as a URL.",
@@ -132,7 +146,7 @@ const ERR = {
     public:   "That hostname doesn't look public.",
     json:     "Expected JSON.",
     method:   "POST only.",
-    rate:     "Scan limit reached \u2014 10 per hour. Try again shortly.",
+    rate:     n => `Scan limit reached \u2014 ${n} per hour. Try again shortly.`,
     fetch:    r => `Could not fetch that URL: ${r}`,
     failed:   "request failed",
     http: n =>
@@ -154,7 +168,7 @@ const ERR = {
     public:   "Ese nombre de host no parece p\u00fablico.",
     json:     "Se esperaba JSON.",
     method:   "Solo POST.",
-    rate:     "L\u00edmite de escaneos alcanzado \u2014 10 por hora. Prueba de nuevo en un rato.",
+    rate:     n => `L\u00edmite de escaneos alcanzado \u2014 ${n} por hora. Prueba de nuevo en un rato.`,
     fetch:    r => `No se pudo obtener esa URL: ${r}`,
     failed:   "la petici\u00f3n fall\u00f3",
     http: n =>
@@ -1029,7 +1043,7 @@ async function handleLead(body, env, ip, lang) {
   if (env?.RATE) {
     const key = `lead:${ip}:${Math.floor(Date.now() / 3600000)}`;
     const n = Number(await env.RATE.get(key)) || 0;
-    if (n >= 10) return { status: 429, payload: { error: E.leadRate } };
+    if (n >= ceiling(env, "LEAD_LIMIT")) return { status: 429, payload: { error: E.leadRate } };
     await env.RATE.put(key, String(n + 1), { expirationTtl: 3700 });
   }
 
@@ -1092,12 +1106,15 @@ export default {
       return new Response(JSON.stringify(out.payload), { status: out.status, headers });
     }
 
-    // Rate limit: 10 scans per IP per hour. Requires a KV namespace bound as RATE.
+    // Scans per IP per fixed hour bucket. SCAN_LIMIT in wrangler.toml; requires
+    // a KV namespace bound as RATE. The bucket is fixed rather than rolling, so
+    // the ceiling at 10:59 and the ceiling again at 11:00 is allowed by design.
     if (env?.RATE) {
+      const limit = ceiling(env, "SCAN_LIMIT");
       const key = `scan:${ip}:${Math.floor(Date.now() / 3600000)}`;
       const n = Number(await env.RATE.get(key)) || 0;
-      if (n >= 10)
-        return new Response(JSON.stringify({ error: E.rate }), { status: 429, headers });
+      if (n >= limit)
+        return new Response(JSON.stringify({ error: E.rate(limit) }), { status: 429, headers });
       await env.RATE.put(key, String(n + 1), { expirationTtl: 3700 });
     }
 
