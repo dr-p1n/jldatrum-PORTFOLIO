@@ -22,9 +22,6 @@
   // Matches the existing .feature-icon vocabulary exactly:
   // viewBox 0 0 24 24, fill none, stroke currentColor, width 1.6, round caps.
   var ICONS = {
-    // compliance / Ley 81
-    shield: '<path d="M12 3l7 3v5.5c0 4.2-2.9 7.6-7 8.5-4.1-.9-7-4.3-7-8.5V6z"/>' +
-            '<path d="M9 12l2 2 4-4"/>',
     // security headers
     lock:   '<rect x="4.5" y="10.5" width="15" height="9.5" rx="2"/>' +
             '<path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><path d="M12 14.5v2"/>',
@@ -32,13 +29,6 @@
     mesh:   '<circle cx="12" cy="5"/><circle cx="5" cy="16"/><circle cx="19" cy="16"/>' +
             '<circle cx="12" cy="12.5"/>' +
             '<path d="M12 5v7.5M12 12.5L5 16M12 12.5L19 16M5 16h14"/>',
-    // bilingual
-    globe:  '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/>' +
-            '<path d="M12 3.5c2.2 2.3 3.4 5.3 3.4 8.5S14.2 18.2 12 20.5"/>' +
-            '<path d="M12 3.5C9.8 5.8 8.6 8.8 8.6 12s1.2 6.2 3.4 8.5"/>',
-    // scored instruments
-    gauge:  '<path d="M4 16.5a8.5 8.5 0 1 1 16 0"/><path d="M12 16.5l4.2-4.6"/>' +
-            '<circle cx="12" cy="16.5" r="1.2"/>',
     // conversion / lead flow
     bars:   '<path d="M5 19v-5"/><path d="M10 19V8"/><path d="M15 19v-8"/><path d="M20 19V5"/>',
 
@@ -50,14 +40,7 @@
     // website design
     window: '<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9h17"/>',
     // web app / app development
-    app:    '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.8 5.4h2.4"/><path d="M11 18.6h2"/>',
-    // heading / information architecture
-    hierarchy:'<rect x="9.5" y="2.8" width="5" height="4" rx="1"/>' +
-              '<rect x="3" y="17.2" width="5" height="4" rx="1"/>' +
-              '<rect x="16" y="17.2" width="5" height="4" rx="1"/>' +
-              '<path d="M12 6.8v5.4M5.5 17.2v-2.7h13v2.7"/>',
-    // utility
-    chevron:'<path d="M6 9.5l6 6 6-6"/>'
+    app:    '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.8 5.4h2.4"/><path d="M11 18.6h2"/>'
   };
 
   function iconSVG(name) {

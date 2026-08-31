@@ -1,82 +1,62 @@
-# HTML
+# jldatrum.com
 
-A modern HTML project utilizing Tailwind CSS for building responsive web applications with minimal setup.
+The DATRUM studio site. Vanilla HTML, CSS and JS — no framework, no build step,
+no bundler. 38 content pages plus `404.html`, mirrored by hand in English and
+Spanish under `/es/`. Live at https://jldatrum.com.
 
-## 🚀 Features
+## The rule that is easy to get wrong
 
-- **HTML5** - Modern HTML structure with best practices
-- **Tailwind CSS** - Utility-first CSS framework for rapid UI development
-- **Custom Components** - Pre-built component classes for buttons and containers
-- **NPM Scripts** - Easy-to-use commands for development and building
-- **Responsive Design** - Mobile-first approach for all screen sizes
+**The repo root is the deploy directory.** Cloudflare Pages serves this
+repository as-is, so every tracked file here is a public URL. A working note
+dropped in the root is published the moment it is pushed. Drafts, briefs and
+handoff notes stay untracked — see `.gitignore`.
 
-## 📋 Prerequisites
-
-- Node.js (v12.x or higher)
-- npm or yarn
-
-## 🛠️ Installation
-
-1. Install dependencies:
-```bash
-npm install
-# or
-yarn install
-```
-
-2. Start the development server:
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-## 📁 Project Structure
+## Layout
 
 ```
-html_app/
-├── css/
-│   ├── tailwind.css   # Tailwind source file with custom utilities
-│   └── main.css       # Compiled CSS (generated)
-├── pages/             # HTML pages
-├── index.html         # Main entry point
-├── package.json       # Project dependencies and scripts
-└── tailwind.config.js # Tailwind CSS configuration
+index.html  bio/  work/  resources/  es/       pages, hand-mirrored EN + ES
+css/  js/                                      two independent stylesheet families
+worker/                                        the scanner API — deploys separately
+tools/serve.py                                 local preview
+_headers  _redirects  robots.txt  sitemap.xml  llms.txt
 ```
 
-## 🎨 Styling
+## Local preview
 
-This project uses Tailwind CSS for styling. Custom utility classes include:
-
-
-## 🧩 Customization
-
-To customize the Tailwind configuration, edit the `tailwind.config.js` file:
-
-
-## 📦 Build for Production
-
-Build the CSS for production:
-
-```bash
-npm run build:css
-# or
-yarn build:css
+```
+python3 tools/serve.py 3456
 ```
 
-## 📱 Responsive Design
+Use this rather than `python -m http.server`. It resolves clean URLs, applies the
+rules in `_redirects`, serves a real 404, and sends the production headers from
+`_headers` — so a Content-Security-Policy that would only fail in production
+fails locally too. HSTS is deliberately stripped: over `http://localhost` it pins
+the browser to HTTPS on that port and breaks the preview until it expires.
 
-The app is built with responsive design using Tailwind CSS breakpoints:
+## Deploying
 
-- `sm`: 640px and up
-- `md`: 768px and up
-- `lg`: 1024px and up
-- `xl`: 1280px and up
-- `2xl`: 1536px and up
+The site deploys automatically on push to `main`. A build takes about 60–90
+seconds.
 
-## 🙏 Acknowledgments
+The worker does **not**. It is a separate deploy:
 
-- Built with [Rocket.new](https://rocket.new)
-- Powered by HTML and Tailwind CSS
+```
+cd worker && npx wrangler deploy
+```
 
-Built with ❤️ on Rocket.new
+Its test suite runs offline, with no account and no network:
+
+```
+node worker/scanner.test.mjs
+```
+
+## The scanner
+
+One worker, two instruments, at `POST /scan`. Omit `mode` for the AI
+Accessibility scan (26 checks); pass `"mode":"headers"` for the Domain Security
+& Trust Index (7 checks). `POST /lead` records a report request. Rate limited to
+10 scans per IP per hour.
+
+The grading logic is in this repo on purpose. The pages claim the score is
+automated rather than self-reported, and that is only worth claiming if anyone
+can read how it is calculated.

@@ -34,3 +34,14 @@
 /es/resources/research/the-trade-already-has-structured-data/ /es/resources/      301
 /resources/research/instruments-beat-pitches/      /resources/                    301
 /es/resources/research/instruments-beat-pitches/   /es/resources/                 301
+
+# Repo files that are not pages. There is no build step, so the repo root is the
+# deploy directory and everything tracked in it answers 200 on the marketing
+# domain — the worker source, the local preview server, the package manifest.
+# They belong in the public repo; they do not belong on jldatrum.com. Pages does
+# not accept a bare 404 status here, so these 301 to the real 404 page.
+/worker/*                                          /404                           301
+/tools/*                                           /404                           301
+/package.json                                      /404                           301
+/.claude/*                                         /404                           301
+/.gitignore                                        /404                           301

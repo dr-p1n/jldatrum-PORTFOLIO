@@ -12,3 +12,13 @@ _*.mjs
 
 # Wrangler build cache.
 worker/.wrangler/
+
+# The repo root IS the Pages deploy directory and there is no build step, so
+# anything tracked here is a public URL on jldatrum.com. Working notes and copy
+# drafts stay local. NEW-CHAT-PROMPT.md was served at 200 for three commits.
+NEW-CHAT-PROMPT.md
+HOME-COPY-BRIEF.md
+DATRUM-copy-EN.txt
+DATRUM-copy-ES.txt
+DATRUM-current-copy.txt
+datrum website copy.txt
