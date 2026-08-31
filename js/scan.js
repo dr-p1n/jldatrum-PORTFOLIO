@@ -40,8 +40,12 @@
     return { id: p[0], label: p[1] || p[0], lede: p[2] || "" };
   });
 
-  function band(score) {
-    return score >= 85 ? "good" : score >= 50 ? "mid" : "bad";
+  // Green means "clears the bar this instrument is held to", not "clears 85".
+  // The security index is held to 90, so an 87 that renders green beside a
+  // printed bar of 90 contradicts the page in the same glance.
+  function band(score, target) {
+    var bar = (isFinite(target) && target > 0) ? target : 85;
+    return score >= bar ? "good" : score >= 50 ? "mid" : "bad";
   }
 
   function el(tag, cls, text) {
@@ -58,6 +62,10 @@
   var otherData = null;   // the other one, once it has been run
   var comparing = false;
   var wantCompare = false;   // a shared link asked for the side-by-side
+  // Every scan carries the generation it was started in. Submitting a new URL
+  // bumps it, so a cross-run still in flight against the old target lands on a
+  // dead generation and drops instead of pairing two different sites.
+  var runId = 0;
 
   // One client, two instruments. The page declares which one it is; the other
   // is whatever this is not. The response shape is identical either way.
@@ -114,7 +122,7 @@
 
     var head = el("div", "scan-head");
     var g = el("div", "scan-grade", data.grade);
-    g.setAttribute("data-band", band(data.score));
+    g.setAttribute("data-band", band(data.score, Number(root.dataset.target)));
     head.appendChild(g);
 
     var meta = el("div", "scan-headmeta");
@@ -232,10 +240,34 @@
 
   function crossRun() {
     if (otherData) { comparing = true; renderCompare(); return Promise.resolve(); }
+    var id = runId;
     return runScan(lastUrl, OTHER).then(function (d) {
+      if (id !== runId) return;          // a new target was submitted meanwhile
       otherData = d;
       comparing = true;
       renderCompare();
+    });
+  }
+
+  // The cross-run's button and its status line, so the shared-link path and the
+  // click path drive the same control and report failure in the same place.
+  var crossBtn = null, crossSay = null;
+
+  function startCross() {
+    if (!crossBtn) return Promise.resolve();
+    if (otherData) { comparing = true; renderCompare(); return Promise.resolve(); }
+    var b = crossBtn, say = crossSay;
+    b.disabled = true;
+    say.classList.remove("is-bad");
+    say.textContent = t("compareRunning", "Running the second instrument…");
+    say.hidden = false;
+    return crossRun().catch(function (err) {
+      // The first result is on the page and is sound. A failure of the second
+      // instrument belongs beside the button that asked for it, not in the
+      // page-level alert above a result that came back fine.
+      say.textContent = err.message || t("genericError", "The scan failed.");
+      say.classList.add("is-bad");
+      b.disabled = false;
     });
   }
 
@@ -251,19 +283,9 @@
     say.setAttribute("aria-live", "polite");
     say.hidden = true;
 
-    b.addEventListener("click", function () {
-      if (otherData) { comparing = true; renderCompare(); return; }
-      b.disabled = true;
-      say.classList.remove("is-bad");
-      say.textContent = t("compareRunning", "Running the second instrument…");
-      say.hidden = false;
-      crossRun()
-        .catch(function (err) {
-          say.textContent = err.message || t("genericError", "The scan failed.");
-          say.classList.add("is-bad");
-          b.disabled = false;
-        });
-    });
+    crossBtn = b;
+    crossSay = say;
+    b.addEventListener("click", startCross);
 
     box.appendChild(b);
     box.appendChild(say);
@@ -276,7 +298,7 @@
 
     var line = el("div", "scan-compare-score");
     var g = el("span", "scan-grade scan-grade--sm", data.grade);
-    g.setAttribute("data-band", band(data.score));
+    g.setAttribute("data-band", band(data.score, target));
     line.appendChild(g);
     line.appendChild(el("span", "scan-compare-num", data.score + "/100"));
     col.appendChild(line);
@@ -291,6 +313,8 @@
 
   function renderCompare() {
     result.textContent = "";
+    crossBtn = null;                     // both are about to be detached
+    crossSay = null;
 
     var head = el("div", "scan-head");
     head.appendChild(el("h2", "scan-subhead", t("compareTitle", "Side by side")));
@@ -879,23 +903,34 @@
     show(status, true);
     btn.disabled = true;
 
+    // Consumed here rather than on the success path: a shared link whose first
+    // scan fails must not leave the flag armed and silently turn the reader's
+    // next, unrelated scan into a two-instrument comparison.
+    var alsoCompare = wantCompare;
+    wantCompare = false;
+
     // A new target invalidates the pair. Keeping the old second column would
     // put two different sites side by side under one URL.
+    var id    = ++runId;
     lastUrl   = url;
     otherData = null;
     comparing = false;
 
     runScan(url, MODE)
       .then(function (data) {
+        if (id !== runId) return;        // superseded while this was in flight
         render(data);
         // A link that asked for the comparison runs the second instrument
         // itself, so the recipient lands on what the sender was looking at.
-        if (wantCompare) { wantCompare = false; return crossRun(); }
+        // startCross keeps its own failure beside its own button.
+        if (alsoCompare) return startCross();
       })
       .catch(function (err) {
+        if (id !== runId) return;
         fail(err.message || t("genericError", "The scan failed."));
       })
       .finally(function () {
+        if (id !== runId) return;
         show(status, false);
         btn.disabled = false;
       });
@@ -906,13 +941,29 @@
     start(input.value);
   });
 
-  // Opening a shared link. The URL goes into the field first, so the page
-  // shows what it is testing rather than running something invisible.
+  // Opening a shared link. The URL goes into the field first, so the page shows
+  // what it is testing rather than running something invisible.
+  //
+  // A link runs without anyone pressing anything, so what it carries is checked
+  // here before it costs a scan. The worker validates properly and answers in
+  // the reader's language; this only refuses what is plainly not a URL, so a
+  // crafted or mistyped link fills the field and waits rather than spending one
+  // of the reader's sixty.
+  function usable(raw) {
+    try {
+      var u = new URL(/^https?:\/\//i.test(raw) ? raw : "https://" + raw);
+      return (u.protocol === "https:" || u.protocol === "http:") &&
+             u.hostname.indexOf(".") > 0 && !u.username && !u.password;
+    } catch (e) { return false; }
+  }
+
   var q = new URLSearchParams(location.search);
   var qUrl = (q.get("u") || "").trim();
   if (qUrl) {
-    wantCompare = q.get("c") === "1";
     input.value = qUrl;
-    start(qUrl);
+    if (usable(qUrl)) {
+      wantCompare = q.get("c") === "1";
+      start(qUrl);
+    }
   }
 })();

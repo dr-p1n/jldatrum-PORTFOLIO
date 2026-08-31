@@ -1019,7 +1019,9 @@ nav {
   border: 1px solid #1A3A40; padding: 9px 16px; font-size: 14px; font-weight: 500;
 }
 .scan-btn--quiet:hover { filter: none; border-color: #F2D24B; color: #F2D24B; }
-.scan-share-say { font-size: 13px; color: #9AABAF; }
+/* Holds the share link when the clipboard refuses it, so it has to be able
+   to break: an encoded URL is one unbreakable token on a phone. */
+.scan-share-say { font-size: 13px; color: #9AABAF; overflow-wrap: anywhere; }
 
 /* ── the two instruments, side by side ─────────────────────
    Compressed to what can be compared honestly: the score, the bar each one is
@@ -1029,7 +1031,7 @@ nav {
 .scan-cross {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 32px 0 0;
 }
-.scan-cross-say { font-size: 13px; color: #9AABAF; margin: 0; }
+.scan-cross-say { font-size: 13px; color: #9AABAF; margin: 0; overflow-wrap: anywhere; }
 .scan-cross-say.is-bad { color: #E8EDED; }
 .scan-cross-say[hidden] { display: none; }
 
