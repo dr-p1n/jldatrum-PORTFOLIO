@@ -89,10 +89,17 @@
   var GATED = root.dataset.gate === "true";
   var unlocked = false;
 
-  function buildChecklist(data) {
+  // onlyGaps: the free view and the comparison both name what is wrong and stop
+  // there. Naming twenty-six passes to sell an audit of five failures buries
+  // the five, and the head line already carries how many of how many passed —
+  // so what was measured is still on the page, in one line instead of twenty.
+  function buildChecklist(data, onlyGaps) {
     var box = el("div", "scan-checklist-box");
     var list = el("ul", "scan-checklist");
-    data.checks.forEach(function (c) {
+    var rows = onlyGaps
+      ? data.checks.filter(function (c) { return !c.pass; })
+      : data.checks;
+    rows.forEach(function (c) {
       var li = el("li", c.pass ? "is-ok" : "is-gap");
       li.appendChild(el("span", "scan-check-mark", c.pass ? "✓" : "✕"));
       li.appendChild(el("span", "scan-check-title", c.title));
@@ -142,17 +149,15 @@
     var gaps = data.checks.filter(function (c) { return !c.pass; })
                           .sort(function (a, b) { return b.deduction - a.deduction; });
 
-    if (gated) {
-      // Every check named and marked, so the checklist is honest about what was
-      // measured and how much of it failed. What is withheld is the why.
+    if (gated && gaps.length) {
+      // Each gap named, and nothing else. What is withheld is the why and the
+      // cost; what was measured is in the head line above, as a count.
       result.appendChild(el("h2", "scan-subhead",
-        t("checklistTitle", "The checklist") + " (" + data.passed + "/" + data.total + ")"));
-      result.appendChild(buildChecklist(data));
-      if (gaps.length) {
-        result.appendChild(el("p", "scan-locked",
-          t("gapsLocked", "{n} need work. The full audit names what each one costs and how to fix it.")
-            .replace("{n}", gaps.length)));
-      }
+        t("gapsLabel", "Gaps") + " (" + gaps.length + ")"));
+      result.appendChild(buildChecklist(data, true));
+      result.appendChild(el("p", "scan-locked",
+        t("gapsLocked", "{n} need work. The full audit names what each one costs and how to fix it.")
+          .replace("{n}", gaps.length)));
     } else if (!gaps.length) {
       result.appendChild(el("p", "scan-clean",
         t("cleanLabel", "No gaps found. Every check passed.")));
@@ -307,7 +312,10 @@
     if (isFinite(target) && target) facts += "  ·  " + t("targetLabel", "The bar") + " " + target;
     col.appendChild(el("p", "scan-compare-facts", facts));
 
-    col.appendChild(buildChecklist(data));
+    if (data.passed === data.total)
+      col.appendChild(el("p", "scan-locked", t("cleanLabel", "No gaps found. Every check passed.")));
+    else
+      col.appendChild(buildChecklist(data, true));
     return col;
   }
 
