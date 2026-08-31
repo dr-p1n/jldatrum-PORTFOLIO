@@ -1021,6 +1021,45 @@ nav {
 .scan-btn--quiet:hover { filter: none; border-color: #F2D24B; color: #F2D24B; }
 .scan-share-say { font-size: 13px; color: #9AABAF; }
 
+/* ── the two instruments, side by side ─────────────────────
+   Compressed to what can be compared honestly: the score, the bar each one is
+   held to, and every check named with its verdict. Two columns wide, stacked
+   below 720px, each under its own rule — rules and whitespace, not a pair of
+   cards. The checklist tightens a step here: it is a comparison, not a read. */
+.scan-cross {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 32px 0 0;
+}
+.scan-cross-say { font-size: 13px; color: #9AABAF; margin: 0; }
+.scan-cross-say.is-bad { color: #E8EDED; }
+.scan-cross-say[hidden] { display: none; }
+
+.scan-compare {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 24px 0 0;
+}
+@media (max-width: 719px) { .scan-compare { grid-template-columns: 1fr; } }
+.scan-compare-col {
+  min-width: 0; border-top: 1px solid #1A3A40; padding-top: 20px;
+}
+.scan-compare-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px; font-weight: 500; letter-spacing: 0.01em;
+  color: #E8EDED; margin: 0 0 14px;
+}
+.scan-compare-score { display: flex; align-items: baseline; gap: 12px; margin: 0 0 4px; }
+.scan-grade--sm { font-size: 34px; min-width: 0; text-align: left; }
+.scan-compare-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px; color: #E8EDED; font-variant-numeric: tabular-nums;
+}
+.scan-compare-facts {
+  margin: 0 0 18px; font-size: 13px; color: #9AABAF;
+  font-variant-numeric: tabular-nums;
+}
+.scan-compare-col .scan-checklist li { font-size: 14px; padding: 8px 0; }
+.scan-compare-note {
+  margin: 28px 0 0; font-size: 13px; color: #9AABAF; line-height: 1.6; max-width: 68ch;
+}
+
 /* ── the report offer ──────────────────────────────────────
    Sits UNDER the finished result, never in front of it. A rule and
    whitespace, no card: the instrument is still the page. */

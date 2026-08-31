@@ -53,7 +53,15 @@
 
   function show(node, on) { node.hidden = !on; }
 
-  var lastData = null;
+  var lastData  = null;   // this page's own instrument
+  var lastUrl   = "";
+  var otherData = null;   // the other one, once it has been run
+  var comparing = false;
+
+  // One client, two instruments. The page declares which one it is; the other
+  // is whatever this is not. The response shape is identical either way.
+  var MODE  = root.dataset.mode || "";
+  var OTHER = MODE === "headers" ? "" : "headers";
 
   /* ── the gate ──────────────────────────────────────────
      Opt-in per page via data-gate, not global: the AI scanner's pages promise
@@ -68,7 +76,7 @@
      This is a soft gate. The worker answers with the full result in one
      response, so the reasons are readable in devtools by anyone who looks.
      Making it hard means a second round trip after the address is taken, which
-     costs a scan against the 10/hour budget. ── */
+     costs a scan against the hourly budget. ── */
   var GATED = root.dataset.gate === "true";
   var unlocked = false;
 
@@ -83,6 +91,19 @@
     });
     box.appendChild(list);
     return box;
+  }
+
+  function runScan(url, mode) {
+    return fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: url, lang: LANG, mode: mode })
+    }).then(function (r) {
+      return r.json().then(function (d) {
+        if (!r.ok || d.error) throw new Error(d.error || t("genericError", "The scan failed."));
+        return d;
+      });
+    });
   }
 
   function render(data) {
@@ -184,6 +205,105 @@
 
     var scale = buildScale(data.score);
     if (scale) result.insertBefore(scale, result.children[1] || null);
+
+    var cross = buildCross();
+    if (cross) result.appendChild(cross);
+
+    result.appendChild(buildCapture());
+    show(result, true);
+  }
+
+  /* ── the two instruments, side by side ─────────────────
+     They measure different things and are scored against different bars, so
+     this compresses each one to what can be compared honestly: the score, the
+     bar it is held to, and every check named with its verdict. No reasons and
+     no costs in this view — those are per-instrument and belong to the full
+     result, which is one button away.
+
+     Compressing to the checklist is also what keeps the gate intact without a
+     second rule: names and verdicts are free on both instruments, and it is
+     the reasons that are held back on the one that gates them.
+
+     A comparison is two scans. At sixty an hour that is not a budget anyone
+     reaches, but it is why this is a button rather than something the page
+     does on its own.
+     ──────────────────────────────────────────────────── */
+
+  function buildCross() {
+    var label = t("compareBtn", "");
+    if (!label || !lastUrl) return null;
+
+    var box = el("div", "scan-cross");
+    var b = el("button", "scan-btn scan-btn--quiet", label);
+    b.type = "button";
+    var say = el("p", "scan-cross-say");
+    say.setAttribute("role", "status");
+    say.setAttribute("aria-live", "polite");
+    say.hidden = true;
+
+    b.addEventListener("click", function () {
+      if (otherData) { comparing = true; renderCompare(); return; }
+      b.disabled = true;
+      say.classList.remove("is-bad");
+      say.textContent = t("compareRunning", "Running the second instrument…");
+      say.hidden = false;
+      runScan(lastUrl, OTHER)
+        .then(function (d) { otherData = d; comparing = true; renderCompare(); })
+        .catch(function (err) {
+          say.textContent = err.message || t("genericError", "The scan failed.");
+          say.classList.add("is-bad");
+          b.disabled = false;
+        });
+    });
+
+    box.appendChild(b);
+    box.appendChild(say);
+    return box;
+  }
+
+  function compareCol(data, name, target) {
+    var col = el("div", "scan-compare-col");
+    col.appendChild(el("h3", "scan-compare-name", name));
+
+    var line = el("div", "scan-compare-score");
+    var g = el("span", "scan-grade scan-grade--sm", data.grade);
+    g.setAttribute("data-band", band(data.score));
+    line.appendChild(g);
+    line.appendChild(el("span", "scan-compare-num", data.score + "/100"));
+    col.appendChild(line);
+
+    var facts = data.passed + "/" + data.total + " " + t("passedLabel", "checks passed");
+    if (isFinite(target) && target) facts += "  ·  " + t("targetLabel", "The bar") + " " + target;
+    col.appendChild(el("p", "scan-compare-facts", facts));
+
+    col.appendChild(buildChecklist(data));
+    return col;
+  }
+
+  function renderCompare() {
+    result.textContent = "";
+
+    var head = el("div", "scan-head");
+    head.appendChild(el("h2", "scan-subhead", t("compareTitle", "Side by side")));
+    head.appendChild(el("p", "scan-target", lastData.url));
+    result.appendChild(head);
+
+    var grid = el("div", "scan-compare");
+    grid.appendChild(compareCol(lastData,  t("ownName", ""),   Number(root.dataset.target)));
+    grid.appendChild(compareCol(otherData, t("otherName", ""), Number(root.dataset.otherTarget)));
+    result.appendChild(grid);
+
+    // Two scores on one screen invite the wrong subtraction. Say the scales
+    // are different rather than hoping the two bars printed above are read.
+    var note = t("compareNote", "");
+    if (note) result.appendChild(el("p", "scan-compare-note", note));
+
+    var box = el("div", "scan-cross");
+    var back = el("button", "scan-btn scan-btn--quiet", t("compareBack", "Back to the full result"));
+    back.type = "button";
+    back.addEventListener("click", function () { comparing = false; render(lastData); });
+    box.appendChild(back);
+    result.appendChild(box);
 
     result.appendChild(buildCapture());
     show(result, true);
@@ -541,7 +661,12 @@
           if (!res.ok || res.data.error)
             throw new Error(res.data.error || t("genericError", "The scan failed."));
           if (GATED && !unlocked) {
+            // Unlocking from the comparison drops back to the full result. The
+            // side-by-side view holds no reasons, so redrawing it would show
+            // the reader nothing for the address they just handed over. The
+            // second column is already scanned; the button reopens it free.
             unlocked = true;
+            comparing = false;
             render(lastData);        // the same result, now with its reasons
             downloadReport();
             return;
@@ -698,19 +823,15 @@
     show(status, true);
     btn.disabled = true;
 
-    fetch(ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      // One client, two instruments. The page declares which via data-mode;
-      // the response shape is identical either way, so nothing below branches.
-      body: JSON.stringify({ url: url, lang: LANG, mode: root.dataset.mode || "" })
-    })
-      .then(function (r) {
-        return r.json().then(function (d) { return { ok: r.ok, data: d }; });
-      })
-      .then(function (res) {
-        if (!res.ok || res.data.error) throw new Error(res.data.error || t("genericError", "The scan failed."));
-        render(res.data);
+    // A new target invalidates the pair. Keeping the old second column would
+    // put two different sites side by side under one URL.
+    lastUrl   = url;
+    otherData = null;
+    comparing = false;
+
+    runScan(url, MODE)
+      .then(function (data) {
+        render(data);
       })
       .catch(function (err) {
         fail(err.message || t("genericError", "The scan failed."));

@@ -83,6 +83,14 @@
      data-target-label="The bar"
      data-target-met="Above the bar. The page is indexable and the four that stop an attack hold."
      data-target-missed="{n} points under the bar. Below 90, something that stops an attack is failing."
+     data-own-name="Security &amp; trust"
+     data-other-name="AI visibility"
+     data-other-target="85"
+     data-compare-btn="Run the AI visibility scan on this URL"
+     data-compare-running="Running the AI visibility scan…"
+     data-compare-title="Side by side"
+     data-compare-back="Back to the full result"
+     data-compare-note="Two instruments, two bars: security and trust is held to 90, AI visibility to 85. Each score is read against its own, so the distance between the two numbers is not a finding."
      data-copy-btn="Copy image"
      data-download-btn="Download image"
      data-copied="Copied."
@@ -105,7 +113,7 @@
            autocomplete="url" spellcheck="false" placeholder="https://yourcompany.com" required>
     <button class="scan-btn" id="scanBtn" type="submit">Test</button>
   </form>
-  <p class="scan-legal">Reads the response headers and the HTML of one public URL. The results are not stored and no report is published. Sixty tests per hour.</p>
+  <p class="scan-legal">Reads the response headers and the HTML of one public URL. The results are not stored and no report is published. Sixty tests per hour. A comparison runs both instruments and counts as two.</p>
 
   <p class="scan-status" id="scanStatus" role="status" aria-live="polite" hidden></p>
   <div class="scan-error" id="scanError" role="alert" hidden></div>

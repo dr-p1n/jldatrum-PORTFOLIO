@@ -80,6 +80,14 @@
      data-target-label="The bar"
      data-target-met="Above the bar. An engine can identify this business and read the page."
      data-target-missed="{n} points under the bar. Below 85 something structural is missing: the entity block, or the content itself."
+     data-own-name="AI visibility"
+     data-other-name="Security &amp; trust"
+     data-other-target="90"
+     data-compare-btn="Run the security and trust test on this URL"
+     data-compare-running="Running the security and trust test…"
+     data-compare-title="Side by side"
+     data-compare-back="Back to the full result"
+     data-compare-note="Two instruments, two bars: security and trust is held to 90, AI visibility to 85. Each score is read against its own, so the distance between the two numbers is not a finding."
      data-copy-btn="Copy image"
      data-download-btn="Download image"
      data-copied="Copied."
@@ -103,7 +111,7 @@
            autocomplete="url" spellcheck="false" placeholder="https://yourcompany.com" required>
     <button class="scan-btn" id="scanBtn" type="submit">Scan</button>
   </form>
-  <p class="scan-legal">Scans one public URL plus its <code>/robots.txt</code>, <code>/sitemap.xml</code> and <code>/llms.txt</code>. The results are not stored and no report is published. Sixty scans per hour.</p>
+  <p class="scan-legal">Scans one public URL plus its <code>/robots.txt</code>, <code>/sitemap.xml</code> and <code>/llms.txt</code>. The results are not stored and no report is published. Sixty scans per hour. A comparison runs both instruments and counts as two.</p>
 
   <p class="scan-status" id="scanStatus" role="status" aria-live="polite" hidden></p>
   <div class="scan-error" id="scanError" role="alert" hidden></div>
