@@ -116,6 +116,19 @@
       result.appendChild(table);
     }
 
+    // The heading census. A count has no pass and no fail, so it is reported as
+    // a fact and priced at nothing — it sits outside the checks and outside the
+    // tally. Levels the page does not use are printed as 0 rather than omitted,
+    // because "no H2s at all" is the finding worth seeing.
+    if (data.headings) {
+      var levels = ["h1", "h2", "h3", "h4", "h5", "h6"];
+      var census = levels.map(function (k) {
+        return k.toUpperCase() + " " + (data.headings[k] || 0);
+      }).join("  ·  ");
+      result.appendChild(el("h2", "scan-subhead", t("headingsTitle", "Heading outline")));
+      result.appendChild(el("p", "scan-census", census));
+    }
+
     // Everything that passed, named and nothing more.
     var ok = data.checks.filter(function (c) { return c.pass; });
     if (ok.length) {
@@ -138,9 +151,12 @@
      works if you have actually measured the peers. A target needs no sample —
      but it does need a derivation, or it is a number someone felt like.
 
-     Both targets fall out of the weights. Security: the deductions are
-     25/20/20/15/10/5/5, and the only subset summing to 5 is one 5, so 95 means
-     precisely one privacy header missing and nothing else. AI: above 85 the
+     Both targets fall out of the weights. Security: the pool is 76 across the
+     seven headers and 24 across the five page checks, and at 10 points of
+     deductions nothing weighing more than 10 can be failing — so 90 means
+     HTTPS, HSTS, a CSP that actually stops injected script, and closed framing
+     are all correct. 90 is the lowest number that still guarantees all four;
+     at 88 the transport check drops out of the guarantee. AI: above 85 the
      deductions total under 15, so nothing weighing 15 or more can be failing —
      the entity block is present, valid, names an Organization, and the content
      is in the served HTML. That is the line every answer engine shares,

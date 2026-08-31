@@ -11,7 +11,7 @@ const tmpPath = path.join(here, ".scanner.undertest.mjs");
 
 let src = fs.readFileSync(srcPath, "utf8");
 src = src.slice(0, src.indexOf("export default"));
-src += "\nexport { parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR, validEmail, handleLead };";
+src += "\nexport { decodeEntities, parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR, validEmail, handleLead, titleNames, hasOneH1, descPresent, descUsable, canonicalAbs, headingSkip, headingCensus };";
 fs.writeFileSync(tmpPath, src);
 const M = await import(tmpPath);
 fs.unlinkSync(tmpPath);
@@ -121,10 +121,16 @@ const ALL = {
 };
 t("everything set scores 100",        score(run(ALL)), 100);
 t("everything set grades A+",         M.grade(score(run(ALL))), "A+");
-t("nothing set over http scores 0",   score(run({}, "http://x.com/")), 0);
+// The header pool is 76 of the 100; the page checks below hold the other 24.
+// A response with no document parsed is judged on its headers alone, so the
+// floor for a bare http response is 100 - 76, not 0. If either pool moves, the
+// bar of 90 stops being derivable and has to be recomputed, not renamed.
+t("header pool totals 76",
+  run({}, "http://x.com/").reduce((n, c) => n + c.deduction, 0), 76);
+t("nothing set over http bottoms out", score(run({}, "http://x.com/")), 24);
 t("nothing set over http grades F",   M.grade(score(run({}, "http://x.com/"))), "F");
 t("https alone is not enough",        score(run({})) < 50, true);
-t("7 checks, no more",                run(ALL).length, 7);
+t("7 header checks without a document", run(ALL).length, 7);
 
 t("plain http fails the https check", by(run({}, "http://x.com/"), "https").pass, false);
 t("https passes it",                  by(run({}), "https").pass, true);
@@ -149,6 +155,71 @@ for (const lang of ["en", "es"]) {
     cs.slice().sort((a, b) => b.deduction - a.deduction)[0].id, "csp");
 }
 t("es differs from en", M.HDR.es.csp.t === M.HDR.en.csp.t, false);
+
+console.log("\nthe page checks, on the same instrument");
+// A parsed document is passed in; without one the instrument judges headers only.
+const doc = (o = {}) => ({
+  title: "DATRUM — Marketing product design studio",
+  description: "x".repeat(120),
+  canonical: "https://x.com/",
+  headings: o.headings ?? [{ level: 1, text: "One" }, { level: 2, text: "Two" }],
+  ...o,
+  h1: (o.headings ?? [{ level: 1, text: "One" }, { level: 2, text: "Two" }]).filter(h => h.level === 1),
+});
+const runD = (hs, d, lang = "en") => M.runHeaderChecks(res(hs), tgt("https://x.com/"), lang, d);
+
+t("a document adds five checks",      runD(ALL, doc()).length, 12);
+t("page pool totals 24",
+  runD({}, doc({ title: "Home", description: "", canonical: "/x",
+                 headings: [{ level: 2, text: "a" }, { level: 4, text: "b" }] }))
+    .filter(c => c.group === "page").reduce((n, c) => n + c.deduction, 0), 24);
+t("a clean page and clean headers still score 100", score(runD(ALL, doc())), 100);
+t("perfect headers, broken page is not an A+",
+  M.grade(score(runD(ALL, doc({ title: "Home", description: "", canonical: "/x",
+    headings: [{ level: 2, text: "a" }, { level: 4, text: "b" }] })))) === "A+", false);
+
+const PD = (d, id) => by(runD(ALL, d), id).pass;
+t("a short title fails",              PD(doc({ title: "Home" }), "title"), false);
+t("a naming title passes",            PD(doc(), "title"), true);
+t("no H1 fails",                      PD(doc({ headings: [{ level: 2, text: "a" }] }), "h1"), false);
+t("two H1s fail",                     PD(doc({ headings: [{ level: 1, text: "a" }, { level: 1, text: "b" }] }), "h1"), false);
+t("exactly one H1 passes",            PD(doc(), "h1"), true);
+t("a skipped level fails",            PD(doc({ headings: [{ level: 2, text: "a" }, { level: 4, text: "b" }] }), "heading-order"), false);
+t("a sequential outline passes",      PD(doc(), "heading-order"), true);
+t("a relative canonical fails",       PD(doc({ canonical: "/x" }), "canonical"), false);
+t("an absolute canonical passes",     PD(doc(), "canonical"), true);
+t("no description fails",             PD(doc({ description: "" }), "description"), false);
+t("a thin description fails",         PD(doc({ description: "Short." }), "description"), false);
+t("a usable description passes",      PD(doc(), "description"), true);
+
+// The whole reason these predicates are shared: two instruments must never
+// return different verdicts about the same H1 on the same page.
+console.log("\nthe two instruments agree about the same document");
+for (const d of [doc(), doc({ title: "Home" }), doc({ headings: [{ level: 1, text: "a" }, { level: 1, text: "b" }] }),
+                 doc({ canonical: "/x" }), doc({ headings: [{ level: 2, text: "a" }, { level: 4, text: "b" }] })]) {
+  const hdr = runD(ALL, d);
+  t("h1 verdict matches the AI scanner",       by(hdr, "h1").pass, M.hasOneH1(d));
+  t("title verdict matches the AI scanner",    by(hdr, "title").pass, M.titleNames(d));
+  t("canonical verdict matches the AI scanner", by(hdr, "canonical").pass, M.canonicalAbs(d));
+  t("outline verdict matches the AI scanner",  by(hdr, "heading-order").pass, !M.headingSkip(d));
+}
+
+console.log("\nentities are decoded before a prospect reads them");
+t("named entity",      M.decodeEntities("Email &amp; SMS"), "Email & SMS");
+t("angle brackets",    M.decodeEntities("&lt;b&gt;"), "<b>");
+t("numeric decimal",   M.decodeEntities("caf&#233;"), "caf\u00e9");
+t("numeric hex",       M.decodeEntities("caf&#xe9;"), "caf\u00e9");
+t("unknown is left alone", M.decodeEntities("a &bogus; b"), "a &bogus; b");
+t("a bare ampersand survives", M.decodeEntities("Tom & Jerry"), "Tom & Jerry");
+t("nothing to decode is unchanged", M.decodeEntities("plain title"), "plain title");
+
+console.log("\nthe heading census is a fact, not a check");
+const cen = M.headingCensus(doc({ headings: [
+  { level: 1, text: "a" }, { level: 2, text: "b" }, { level: 2, text: "c" }, { level: 3, text: "d" }] }));
+t("counts each level", cen.h1 === 1 && cen.h2 === 2 && cen.h3 === 1, true);
+t("absent levels are zero, not missing", cen.h4 === 0 && cen.h5 === 0 && cen.h6 === 0, true);
+t("the census scores nothing",
+  runD(ALL, doc()).some(c => c.id === "heading-census"), false);
 
 console.log("\npresent-but-useless is a failure, not a pass");
 const hh = h => run(h);

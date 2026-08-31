@@ -64,6 +64,38 @@ function isPrivateHost(host) {
 // presence test and identify no business.
 const MIN_TITLE = 15;
 
+/* ── Facts about a document, shared by both instruments ──────────────
+   Both instruments now read the same page, and both report on its title,
+   description, H1 and heading order. They must never disagree about one:
+   a prospect who runs both and gets two verdicts on the same H1 learns to
+   trust neither. These predicates are the single source of truth, the way
+   HSTS_MIN_AGE already is for the header both instruments judge.
+   ─────────────────────────────────────────────────────────────────── */
+const titleNames    = doc => doc.title.trim().length >= MIN_TITLE;
+const hasOneH1      = doc => doc.h1.length === 1;
+const descPresent   = doc => doc.description.trim().length > 0;
+const descUsable    = doc => { const n = doc.description.trim().length;
+                               return n === 0 || (n >= 50 && n <= 320); };
+const canonicalAbs  = doc => /^https?:\/\/\S+$/i.test(String(doc.canonical || "").trim());
+
+// The first place the document drops a level, e.g. an h2 followed by an h4.
+// Returns null when the outline is sequential.
+function headingSkip(doc) {
+  for (let i = 1; i < doc.headings.length; i++) {
+    const d = doc.headings[i].level - doc.headings[i - 1].level;
+    if (d > 1) return { from: doc.headings[i - 1].level, to: doc.headings[i].level };
+  }
+  return null;
+}
+
+// A census, not a check. "How many H2s" has no pass and no fail, so it is
+// reported as a fact beside the checks and priced at nothing.
+function headingCensus(doc) {
+  const n = { h1: 0, h2: 0, h3: 0, h4: 0, h5: 0, h6: 0 };
+  for (const h of doc.headings) n["h" + h.level]++;
+  return n;
+}
+
 const ERR = {
   en: {
     parse:    "That doesn't parse as a URL.",
@@ -194,6 +226,24 @@ function blocksAgent(groups, ua, path = "/") {
 }
 
 /* ── HTML extraction via HTMLRewriter (streaming, no DOM in Workers) ── */
+// HTMLRewriter hands back the raw source text, so "Email &amp; SMS" arrives
+// with the entity intact. The results table writes through textContent, which
+// is correct and also means an undecoded entity is printed literally at the
+// prospect. Decode the five named ones and numeric refs — enough for a title
+// or a description, and no HTML parser needed to do it.
+const ENT = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
+function decodeEntities(s) {
+  return String(s).replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (m, body) => {
+    if (body[0] === "#") {
+      const n = body[1] === "x" || body[1] === "X"
+        ? parseInt(body.slice(2), 16) : parseInt(body.slice(1), 10);
+      return Number.isFinite(n) && n > 0 && n <= 0x10ffff ? String.fromCodePoint(n) : m;
+    }
+    const v = ENT[body.toLowerCase()];
+    return v === undefined ? m : v;
+  });
+}
+
 async function extractHtml(html) {
   const out = {
     title: "", description: "", canonical: "", lang: "",
@@ -235,6 +285,10 @@ async function extractHtml(html) {
     .replace(/&[a-zA-Z#0-9]+;/g, " ")
     .replace(/\s+/g, " ")
     .trim().length;
+
+  out.title = decodeEntities(out.title);
+  out.description = decodeEntities(out.description);
+  out.headings.forEach(h => { h.text = decodeEntities(h.text); });
 
   out.h1 = out.headings.filter(h => h.level === 1);
   out.jsonld = out.jsonld.filter(Boolean);
@@ -464,7 +518,7 @@ function runChecks(ctx) {
   // A title is the label an engine repeats when it names the business. "Home"
   // is a title element and identifies nothing, so presence is not the test.
   const title = doc.title.trim();
-  const titleOk = title.length >= MIN_TITLE;
+  const titleOk = titleNames(doc);
   add("title", "retrieval", titleOk, 5, { title, ok: titleOk });
 
   // A description is judged on whether a retrieval engine can use it, not on
@@ -473,23 +527,18 @@ function runChecks(ctx) {
   // for exceeding it measures the wrong thing. Penalise absent, uselessly
   // thin, or so long it has stopped being a summary.
   const dlen = doc.description.trim().length;
-  add("description", "retrieval", dlen > 0, 5, { len: dlen });
-  add("description-length", "retrieval",
-      dlen === 0 || (dlen >= 50 && dlen <= 320), 3, { len: dlen });
+  add("description", "retrieval", descPresent(doc), 5, { len: dlen });
+  add("description-length", "retrieval", descUsable(doc), 3, { len: dlen });
 
-  add("h1", "retrieval", doc.h1.length === 1, 5,
-      { n: doc.h1.length, text: doc.h1.length === 1 ? doc.h1[0].text.trim().slice(0, 60) : "" });
+  add("h1", "retrieval", hasOneH1(doc), 5,
+      { n: doc.h1.length, text: hasOneH1(doc) ? doc.h1[0].text.trim().slice(0, 60) : "" });
 
-  let skip = null;
-  for (let i = 1; i < doc.headings.length; i++) {
-    const d = doc.headings[i].level - doc.headings[i - 1].level;
-    if (d > 1) { skip = { from: doc.headings[i - 1].level, to: doc.headings[i].level }; break; }
-  }
+  const skip = headingSkip(doc);
   add("heading-order", "retrieval", !skip, 5, { skip });
 
   // Google resolves a relative canonical, but it is a declaration about
   // identity and half the crawlers that matter here take it literally.
-  const canonOk = /^https?:\/\/\S+$/i.test(String(doc.canonical || "").trim());
+  const canonOk = canonicalAbs(doc);
   add("canonical", "retrieval", canonOk, 5, { canonical: doc.canonical, ok: canonOk });
 
   add("alt", "retrieval", doc.imgTotal === 0 || doc.imgNoAlt === 0, 5,
@@ -581,7 +630,25 @@ async function scan(target, lang) {
    claim its score, it borrows the grade bands and the ordering of harm. */
 const HDR = {
   en: {
-    groups: { transport: "The connection", content: "What can run on the page", privacy: "What leaks out" },
+    groups: { transport: "The connection", content: "What can run on the page", privacy: "What leaks out",
+              page: "What the page says it is" },
+    title:       { t: "The page names the business, not the file",
+                   ok: v => "“" + v.slice(0, 60) + "”",
+                   no: "Too short to identify anything — this is the line an engine repeats as you." },
+    h1:          { t: "One heading says what this page is",
+                   ok: "Exactly one H1.",
+                   no: v => v === 0 ? "No H1 at all — nothing on the page claims to be its own subject."
+                                    : "Found " + v + " — an outline with more than one subject presents none." },
+    description: { t: "The summary is written, not scraped",
+                   ok: v => "Present, " + v + " characters.",
+                   no: "Missing — the engine writes your summary from whatever it finds first." },
+    headingOrder:{ t: "The outline runs in order",
+                   ok: "Levels run in sequence.",
+                   no: v => v ? "Jumps H" + v.from + " to H" + v.to + " — a skipped level breaks the outline that follows."
+                              : "A skipped level breaks the outline that follows it on the page." },
+    canonical:   { t: "One address is the real one",
+                   ok: "Absolute canonical declared.",
+                   no: "Missing or relative — duplicate addresses split the page against itself." },
     https:       { t: "Buyers see a padlock, not a warning",
                    ok: "Served over HTTPS.",
                    no: "Plain HTTP — browsers stamp Not Secure on the page before a buyer reads it." },
@@ -612,10 +679,29 @@ const HDR = {
       frame:       "Set to a value browsers ignore — your pages can still be framed elsewhere.",
       referrer:    "Set to a policy that still leaks — full URLs go out cross-site or on downgrade.",
       permissions: "Set but restricts nothing — scripts can still prompt under your domain's name.",
+      description: "Present but unusable as a summary — too thin to say anything, or too long to be one.",
     },
   },
   es: {
-    groups: { transport: "La conexión", content: "Qué puede ejecutarse en la página", privacy: "Qué se filtra" },
+    groups: { transport: "La conexión", content: "Qué puede ejecutarse en la página", privacy: "Qué se filtra",
+              page: "Qué dice la página que es" },
+    title:       { t: "La página nombra al negocio, no al archivo",
+                   ok: v => "“" + v.slice(0, 60) + "”",
+                   no: "Muy corto para identificar nada — es la línea que el motor repite como tú." },
+    h1:          { t: "Un encabezado dice de qué trata la página",
+                   ok: "Exactamente un H1.",
+                   no: v => v === 0 ? "Sin H1 — nada en la página declara cuál es su propio tema central."
+                                    : "Hay " + v + " — un esquema con más de un tema no presenta ninguno con claridad." },
+    description: { t: "El resumen está escrito, no recogido",
+                   ok: v => "Presente, " + v + " caracteres.",
+                   no: "Falta — el motor arma tu resumen con lo primero que encuentre." },
+    headingOrder:{ t: "El esquema va en orden",
+                   ok: "Los niveles van en secuencia.",
+                   no: v => v ? "Salta de H" + v.from + " a H" + v.to + " — un nivel omitido rompe el esquema que sigue."
+                              : "Un nivel omitido rompe el esquema que sigue en la propia página." },
+    canonical:   { t: "Una dirección es la verdadera",
+                   ok: "Canónica absoluta declarada.",
+                   no: "Falta o es relativa — direcciones duplicadas parten la página contra sí misma." },
     https:       { t: "El comprador ve un candado, no una advertencia",
                    ok: "Servido por HTTPS.",
                    no: "HTTP plano — el navegador marca No seguro antes de que el comprador lea nada." },
@@ -643,6 +729,7 @@ const HDR = {
       frame:       "Con un valor que el navegador ignora — te pueden seguir enmarcando afuera.",
       referrer:    "Con una política que igual filtra — la URL completa sale al bajar de HTTPS.",
       permissions: "Configurado pero no restringe nada — los scripts pueden pedir en tu nombre.",
+      description: "Presente pero inservible — muy delgado para decir algo, o muy largo para resumir.",
     },
   },
 };
@@ -692,7 +779,23 @@ function frameIsClosed(csp, xfo) {
   return /^\s*(deny|sameorigin)\s*$/i.test(xfo || "");
 }
 
-function runHeaderChecks(res, target, lang) {
+/* The deduction pool, stated once so the target stays derivable.
+
+   Security 76:  csp 20 · hsts 16 · frame 16 · https 12 · nosniff 8
+                 · referrer 2 · permissions 2
+   Page      24:  title 6 · h1 6 · description 4 · heading-order 4 · canonical 4
+
+   The security ordering is the one this instrument has always used — CSP above
+   HSTS and framing, those above transport, those above the two privacy headers.
+   Only the scale changed, to make room.
+
+   The bar is 90, and 90 is derived, not chosen: at 10 points of deductions
+   nothing weighing more than 10 can be failing, so a score of 90 or better
+   means HTTPS, HSTS, a CSP that actually stops injected script, and closed
+   framing are all correct — the four that stop an attack rather than describe
+   one. Everything below that line is worth fixing and none of it is a breach.
+   Change a weight and this paragraph stops being true: re-derive it. */
+function runHeaderChecks(res, target, lang, doc) {
   const L = HDR[lang === "es" ? "es" : "en"];
   const c = [];
   const h = n => res.headers.get(n);
@@ -701,38 +804,56 @@ function runHeaderChecks(res, target, lang) {
   const add = (id, group, state, weight, key, val) => {
     const S = L[key];
     const pass = state === "ok";
-    const d = pass ? (typeof S.ok === "function" ? S.ok(val) : S.ok)
-            : state === "weak" ? L.weak[key]
-            : S.no;
+    // Either side may interpolate what the scan found — "Found 3", "Jumps H2
+    // to H4" — so both are resolved the same way. Treating only `ok` as
+    // callable renders a function into the reason the prospect reads.
+    const pick = v => (typeof v === "function" ? v(val) : v);
+    const d = pass ? pick(S.ok)
+            : state === "weak" ? pick(L.weak[key])
+            : pick(S.no);
     c.push({ id, group, pass, deduction: pass ? 0 : weight, title: S.t, detail: d });
   };
   const grade3 = (present, good) => !present ? "no" : good ? "ok" : "weak";
 
-  add("https", "transport", target.protocol === "https:" ? "ok" : "no", 15, "https");
+  add("https", "transport", target.protocol === "https:" ? "ok" : "no", 12, "https");
 
   const hsts = h("strict-transport-security");
   const age = Number((/max-age\s*=\s*"?(\d+)/i.exec(hsts || "") || [])[1] || 0);
-  add("hsts", "transport", grade3(!!hsts, age >= HSTS_MIN_AGE), 20, "hsts", hsts || "");
+  add("hsts", "transport", grade3(!!hsts, age >= HSTS_MIN_AGE), 16, "hsts", hsts || "");
 
   const csp = h("content-security-policy");
-  add("csp", "content", grade3(!!csp, cspStopsInlineScript(csp || "")), 25, "csp");
+  add("csp", "content", grade3(!!csp, cspStopsInlineScript(csp || "")), 20, "csp");
 
   // frame-ancestors in a CSP supersedes X-Frame-Options; either one closes it.
   const xfo = h("x-frame-options");
   add("frame", "content",
-      grade3(!!xfo || /frame-ancestors/i.test(csp || ""), frameIsClosed(csp, xfo)), 20, "frame");
+      grade3(!!xfo || /frame-ancestors/i.test(csp || ""), frameIsClosed(csp, xfo)), 16, "frame");
 
   add("nosniff", "content",
-      /nosniff/i.test(h("x-content-type-options") || "") ? "ok" : "no", 10, "nosniff");
+      /nosniff/i.test(h("x-content-type-options") || "") ? "ok" : "no", 8, "nosniff");
 
   const ref = h("referrer-policy");
   // A list is legal; the last token a browser understands wins, so judge that one.
   const refLast = String(ref || "").split(",").map(x => x.trim().toLowerCase())
                     .filter(Boolean).pop() || "";
-  add("referrer", "privacy", grade3(!!ref, SAFE_REFERRER.has(refLast)), 5, "referrer", ref || "");
+  add("referrer", "privacy", grade3(!!ref, SAFE_REFERRER.has(refLast)), 2, "referrer", ref || "");
 
   const perm = h("permissions-policy");
-  add("permissions", "privacy", grade3(!!perm, /=/.test(perm || "")), 5, "permissions");
+  add("permissions", "privacy", grade3(!!perm, /=/.test(perm || "")), 2, "permissions");
+
+  // What the page says about itself. Same predicates the AI scanner uses, so
+  // the two instruments cannot return different verdicts on one H1. A document
+  // that could not be parsed is not judged here rather than failed on guesswork.
+  if (doc) {
+    add("title", "page", titleNames(doc) ? "ok" : "no", 6, "title", doc.title.trim());
+    add("h1", "page", hasOneH1(doc) ? "ok" : "no", 6, "h1", doc.h1.length);
+    add("description", "page",
+        !descPresent(doc) ? "no" : descUsable(doc) ? "ok" : "weak", 4,
+        "description", doc.description.trim().length);
+    const skip = headingSkip(doc);
+    add("heading-order", "page", skip ? "no" : "ok", 4, "headingOrder", skip);
+    add("canonical", "page", canonicalAbs(doc) ? "ok" : "no", 4, "canonical");
+  }
 
   return c;
 }
@@ -743,7 +864,13 @@ async function scanHeaders(target, lang) {
   if (page.status !== "fulfilled") return { error: E.fetch(page.reason?.message || E.failed) };
   if (!page.value.res.ok)          return { error: E.http(page.value.res.status) };
 
-  const checks = runHeaderChecks(page.value.res, target, lang);
+  // The body is already in hand from the same fetch — no second request. It is
+  // only parsed when the response is actually HTML; a PDF or a JSON endpoint
+  // still gets its headers judged, and simply carries no page checks.
+  const ct = page.value.res.headers.get("content-type") || "";
+  const doc = /text\/html/i.test(ct) ? await extractHtml(page.value.body) : null;
+
+  const checks = runHeaderChecks(page.value.res, target, lang, doc);
   const score = Math.max(0, 100 - checks.reduce((s, c) => s + c.deduction, 0));
   return {
     url: target.href,
@@ -753,6 +880,9 @@ async function scanHeaders(target, lang) {
     score, grade: grade(score),
     passed: checks.filter(c => c.pass).length,
     total: checks.length,
+    // A census, not a verdict. Counts have no pass state, so they are reported
+    // beside the checks and priced at nothing.
+    headings: doc ? headingCensus(doc) : null,
     checks,
   };
 }
