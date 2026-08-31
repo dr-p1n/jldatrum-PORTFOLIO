@@ -28,7 +28,7 @@ path prefixed with `/es/`.
 
 - [AI Accessibility Scanner](https://jldatrum.com/resources/scan/): fetches a URL and grades how legible it is to answer engines. Automated, not self-reported.
 
-- [Domain Security &amp; Trust Index](https://jldatrum.com/resources/security-headers/): reads a URL's response headers and the page itself, and grades the twelve things a corporate buyer checks. Automated, not self-reported.
+- [Domain Security &amp; Trust Index](https://jldatrum.com/resources/security-headers/): reads a URL's response headers and the page itself, and grades the fifteen things a corporate buyer checks. Automated, not self-reported.
 
 ## Guides
 

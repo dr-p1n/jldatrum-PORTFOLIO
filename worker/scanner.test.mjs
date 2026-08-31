@@ -11,7 +11,7 @@ const tmpPath = path.join(here, ".scanner.undertest.mjs");
 
 let src = fs.readFileSync(srcPath, "utf8");
 src = src.slice(0, src.indexOf("export default"));
-src += "\nexport { decodeEntities, parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR, validEmail, handleLead, titleNames, hasOneH1, descPresent, descUsable, canonicalAbs, headingSkip, headingCensus };";
+src += "\nexport { isNoindex, langDeclared, mixedContent, canonicalOffsite, decodeEntities, parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR, validEmail, handleLead, titleNames, hasOneH1, descPresent, descUsable, canonicalAbs, headingSkip, headingCensus };";
 fs.writeFileSync(tmpPath, src);
 const M = await import(tmpPath);
 fs.unlinkSync(tmpPath);
@@ -121,16 +121,20 @@ const ALL = {
 };
 t("everything set scores 100",        score(run(ALL)), 100);
 t("everything set grades A+",         M.grade(score(run(ALL))), "A+");
-// The header pool is 76 of the 100; the page checks below hold the other 24.
-// A response with no document parsed is judged on its headers alone, so the
-// floor for a bare http response is 100 - 76, not 0. If either pool moves, the
-// bar of 90 stops being derivable and has to be recomputed, not renamed.
-t("header pool totals 76",
-  run({}, "http://x.com/").reduce((n, c) => n + c.deduction, 0), 76);
-t("nothing set over http bottoms out", score(run({}, "http://x.com/")), 24);
-t("nothing set over http grades F",   M.grade(score(run({}, "http://x.com/"))), "F");
-t("https alone is not enough",        score(run({})) < 50, true);
-t("7 header checks without a document", run(ALL).length, 7);
+// A bare response cannot lose the whole header pool: absence of noindex IS the
+// pass, so 15 of the 73 header points are already earned. What is left to lose
+// is 58. If a weight moves, the bar of 90 stops being derivable and has to be
+// recomputed, not renamed.
+t("a bare response can still lose 58",
+  run({}, "http://x.com/").reduce((n, c) => n + c.deduction, 0), 58);
+t("...and noindex is what it keeps", by(run({}, "http://x.com/"), "noindex").pass, true);
+t("nothing set over http bottoms out", score(run({}, "http://x.com/")), 42);
+t("nothing set over http is still failing", M.grade(score(run({}, "http://x.com/"))), "D+");
+// HTTPS plus an indexable page earns two of the fifteen and nothing else, so
+// it lands far below the bar rather than at zero.
+t("https alone is not enough",        score(run({})) < 60, true);
+t("...and nowhere near the bar",      score(run({})) < 90, true);
+t("8 header checks without a document", run(ALL).length, 8);
 
 t("plain http fails the https check", by(run({}, "http://x.com/"), "https").pass, false);
 t("https passes it",                  by(run({}), "https").pass, true);
@@ -147,10 +151,13 @@ for (const lang of ["en", "es"]) {
     cs.every(c => !/Content-Security-Policy|X-Frame-Options|Strict-Transport|X-Content-Type/i.test(c.title)), true);
   // One line per test, Observatory-style: long enough to name the consequence,
   // short enough that seven of them read as a table rather than an essay.
+  // The rule is about the gaps table, where the reasons have to read as rows.
+  // A passing check says "Set." on purpose and is not held to it.
+  const gaps = cs.filter(c => !c.pass);
   t(`${lang}: every reason fits one line`,
-    cs.every(c => c.detail.length <= 84), true);
+    gaps.every(c => c.detail.length <= 84), true);
   t(`${lang}: every reason still names a consequence`,
-    cs.every(c => c.detail.length >= 60 && /—/.test(c.detail)), true);
+    gaps.every(c => c.detail.length >= 60 && /—/.test(c.detail)), true);
   t(`${lang}: worst gap is the CSP`,
     cs.slice().sort((a, b) => b.deduction - a.deduction)[0].id, "csp");
 }
@@ -162,17 +169,26 @@ const doc = (o = {}) => ({
   title: "DATRUM — Marketing product design studio",
   description: "x".repeat(120),
   canonical: "https://x.com/",
+  lang: "en", robotsMeta: "", insecureRefs: 0,
   headings: o.headings ?? [{ level: 1, text: "One" }, { level: 2, text: "Two" }],
   ...o,
   h1: (o.headings ?? [{ level: 1, text: "One" }, { level: 2, text: "Two" }]).filter(h => h.level === 1),
 });
-const runD = (hs, d, lang = "en") => M.runHeaderChecks(res(hs), tgt("https://x.com/"), lang, d);
+const runD = (hs, d, lang = "en", url = "https://x.com/") => M.runHeaderChecks(res(hs), tgt(url), lang, d);
 
-t("a document adds five checks",      runD(ALL, doc()).length, 12);
-t("page pool totals 24",
-  runD({}, doc({ title: "Home", description: "", canonical: "/x",
+t("a document adds seven checks",     runD(ALL, doc()).length, 15);
+t("page pool totals 20",
+  runD({}, doc({ title: "Home", description: "", canonical: "/x", lang: "",
                  headings: [{ level: 2, text: "a" }, { level: 4, text: "b" }] }))
-    .filter(c => c.group === "page").reduce((n, c) => n + c.deduction, 0), 24);
+    .filter(c => c.group === "page").reduce((n, c) => n + c.deduction, 0), 20);
+// Everything wrong at once, over http and with noindex, must account for
+// exactly 100 — the proof that the pool has not drifted.
+const allWrong = doc({ title: "Home", description: "", canonical: "/x", lang: "",
+                       insecureRefs: 3, robotsMeta: "noindex",
+                       headings: [{ level: 2, text: "a" }, { level: 4, text: "b" }] });
+t("the whole pool is still 100",
+  runD({}, allWrong, "en", "http://x.com/").reduce((n, c) => n + c.deduction, 0), 100);
+t("...and that is a zero", score(runD({}, allWrong, "en", "http://x.com/")), 0);
 t("a clean page and clean headers still score 100", score(runD(ALL, doc())), 100);
 t("perfect headers, broken page is not an A+",
   M.grade(score(runD(ALL, doc({ title: "Home", description: "", canonical: "/x",
@@ -203,6 +219,46 @@ for (const d of [doc(), doc({ title: "Home" }), doc({ headings: [{ level: 1, tex
   t("canonical verdict matches the AI scanner", by(hdr, "canonical").pass, M.canonicalAbs(d));
   t("outline verdict matches the AI scanner",  by(hdr, "heading-order").pass, !M.headingSkip(d));
 }
+
+console.log("\nindexability, mixed content, lang, compression");
+// noindex arrives in the header or the markup; either alone removes the page.
+t("clean page is indexable",       PD(doc(), "noindex"), true);
+t("meta noindex fails",            by(runD(ALL, doc({ robotsMeta: "noindex" })), "noindex").pass, false);
+t("meta none fails",               by(runD(ALL, doc({ robotsMeta: "none" })), "noindex").pass, false);
+t("X-Robots-Tag noindex fails",
+  by(M.runHeaderChecks(res({ ...ALL, "x-robots-tag": "noindex" }), tgt("https://x.com/"), "en", doc()), "noindex").pass, false);
+t("noindex is case-insensitive",   by(runD(ALL, doc({ robotsMeta: "NoIndex" })), "noindex").pass, false);
+t("nofollow alone is not noindex", by(runD(ALL, doc({ robotsMeta: "nofollow" })), "noindex").pass, true);
+t("'noindexing' does not trip it", by(runD(ALL, doc({ robotsMeta: "noindexing" })), "noindex").pass, true);
+
+// Mixed content: subresources only. A plain link to http is not mixed content.
+t("no insecure refs passes",       PD(doc(), "mixed"), true);
+t("one insecure subresource fails", PD(doc({ insecureRefs: 1 }), "mixed"), false);
+t("the reason counts them",
+  /\b3 files\b/.test(by(runD(ALL, doc({ insecureRefs: 3 })), "mixed").detail), true);
+t("one file is singular",
+  /\b1 file\b/.test(by(runD(ALL, doc({ insecureRefs: 1 })), "mixed").detail), true);
+
+t("a declared lang passes",        PD(doc(), "lang"), true);
+t("no lang fails",                 PD(doc({ lang: "" }), "lang"), false);
+t("whitespace is not a lang",      PD(doc({ lang: "   " }), "lang"), false);
+
+console.log("\na canonical may point away, but not off-site");
+t("self canonical passes",         PD(doc(), "canonical"), true);
+t("another path on the same site is fine",
+  by(runD(ALL, doc({ canonical: "https://x.com/other" })), "canonical").pass, true);
+t("www is not another site",
+  by(runD(ALL, doc({ canonical: "https://www.x.com/" })), "canonical").pass, true);
+t("...and the reverse holds",
+  by(runD(ALL, doc({ canonical: "https://x.com/" }), "en", "https://www.x.com/"), "canonical").pass, true);
+t("another domain fails",
+  by(runD(ALL, doc({ canonical: "https://someone-else.com/" })), "canonical").pass, false);
+t("...and says so, not 'missing'",
+  /another domain/i.test(by(runD(ALL, doc({ canonical: "https://someone-else.com/" })), "canonical").detail), true);
+t("a relative canonical is still the missing case",
+  /Missing or relative/i.test(by(runD(ALL, doc({ canonical: "/x" })), "canonical").detail), true);
+t("garbage canonical does not throw",
+  by(runD(ALL, doc({ canonical: "http://[bad" })), "canonical").pass, false);
 
 console.log("\nentities are decoded before a prospect reads them");
 t("named entity",      M.decodeEntities("Email &amp; SMS"), "Email & SMS");

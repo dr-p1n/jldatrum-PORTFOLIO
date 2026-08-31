@@ -151,12 +151,12 @@
      works if you have actually measured the peers. A target needs no sample —
      but it does need a derivation, or it is a number someone felt like.
 
-     Both targets fall out of the weights. Security: the pool is 76 across the
-     seven headers and 24 across the five page checks, and at 10 points of
-     deductions nothing weighing more than 10 can be failing — so 90 means
-     HTTPS, HSTS, a CSP that actually stops injected script, and closed framing
-     are all correct. 90 is the lowest number that still guarantees all four;
-     at 88 the transport check drops out of the guarantee. AI: above 85 the
+     Both targets fall out of the weights. Security: fifteen checks share 100 —
+     noindex 15, then the headers, then the page — and at 10 points of
+     deductions nothing weighing more than 10 can be failing, so 90 means the
+     page is indexable and HTTPS, HSTS, a CSP that actually stops injected
+     script and closed framing are all correct. 90 is the lowest number that
+     still guarantees all five; at 89 transport drops out. AI: above 85 the
      deductions total under 15, so nothing weighing 15 or more can be failing —
      the entity block is present, valid, names an Organization, and the content
      is in the served HTML. That is the line every answer engine shares,

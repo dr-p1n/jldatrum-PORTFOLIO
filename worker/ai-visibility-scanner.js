@@ -76,7 +76,34 @@ const hasOneH1      = doc => doc.h1.length === 1;
 const descPresent   = doc => doc.description.trim().length > 0;
 const descUsable    = doc => { const n = doc.description.trim().length;
                                return n === 0 || (n >= 50 && n <= 320); };
-const canonicalAbs  = doc => /^https?:\/\/\S+$/i.test(String(doc.canonical || "").trim());
+// Absolute AND parseable. "http://[bad" satisfies the shape and no browser can
+// resolve it, so shape alone is not the test.
+const canonicalAbs  = doc => {
+  const v = String(doc.canonical || "").trim();
+  if (!/^https?:\/\/\S+$/i.test(v)) return false;
+  try { new URL(v); return true; } catch { return false; }
+};
+const langDeclared  = doc => String(doc.lang || "").trim().length > 0;
+const mixedContent  = doc => doc.insecureRefs > 0;
+
+// noindex removes the page from the index outright — it is not a ranking
+// penalty. It can arrive in the response header or in the markup, and the two
+// are read together because either one alone is enough to do it.
+function isNoindex(robotsHeader, doc) {
+  const v = (String(robotsHeader || "") + " " + String((doc && doc.robotsMeta) || "")).toLowerCase();
+  return /\bnone\b|\bnoindex\b/.test(v);
+}
+
+// A canonical is allowed to point somewhere else — that is what it is for on a
+// paginated or syndicated page, and failing those would be inventing a finding.
+// What is never right is pointing at a different site, which hands this page's
+// standing to a domain the owner may not control. www is not a different site.
+const bareHost = h => String(h || "").toLowerCase().replace(/^www\./, "");
+function canonicalOffsite(doc, target) {
+  if (!canonicalAbs(doc)) return false;          // priced by the absolute check
+  try { return bareHost(new URL(doc.canonical.trim()).hostname) !== bareHost(target.hostname); }
+  catch { return false; }
+}
 
 // The first place the document drops a level, e.g. an h2 followed by an h4.
 // Returns null when the outline is sequential.
@@ -249,12 +276,23 @@ async function extractHtml(html) {
     title: "", description: "", canonical: "", lang: "",
     h1: [], headings: [], jsonld: [], hreflang: [],
     imgTotal: 0, imgNoAlt: 0, textLen: 0, hasMain: false,
+    robotsMeta: "", insecureRefs: 0,
   };
+  // A subresource is fetched by the browser; a link is not. Only the first kind
+  // is mixed content, so an ordinary <a href="http://…"> is left alone.
+  const insecure = v => { if (/^http:\/\//i.test(String(v || "").trim())) out.insecureRefs++; };
   let capture = null;
 
   const rewriter = new HTMLRewriter()
     .on("title", { text(t) { out.title += t.text; } })
     .on('meta[name="description"]',  { element(e) { out.description = e.getAttribute("content") || ""; } })
+    .on('meta[name="robots"], meta[name="googlebot"]',
+                                     { element(e) { out.robotsMeta += " " + (e.getAttribute("content") || ""); } })
+    .on("script[src], img[src], iframe[src], audio[src], video[src], embed[src], source[src], track[src]",
+                                     { element(e) { insecure(e.getAttribute("src")); } })
+    .on('link[rel="stylesheet"], link[rel="preload"], link[rel="modulepreload"]',
+                                     { element(e) { insecure(e.getAttribute("href")); } })
+    .on("object[data]",              { element(e) { insecure(e.getAttribute("data")); } })
     .on('link[rel="canonical"]',     { element(e) { out.canonical  = e.getAttribute("href") || ""; } })
     .on('link[rel="alternate"]',     { element(e) { const h = e.getAttribute("hreflang"); if (h) out.hreflang.push(h); } })
     .on("html",                      { element(e) { out.lang = e.getAttribute("lang") || ""; } })
@@ -631,7 +669,16 @@ async function scan(target, lang) {
 const HDR = {
   en: {
     groups: { transport: "The connection", content: "What can run on the page", privacy: "What leaks out",
-              page: "What the page says it is" },
+              page: "What the page says it is", indexing: "Whether it can be found at all" },
+    noindex:     { t: "The page is allowed into the index",
+                   ok: "Indexable.",
+                   no: "Carries noindex — the page is removed from the index, not ranked lower." },
+    mixed:       { t: "The padlock is not undone by the page itself",
+                   ok: "All subresources load over HTTPS.",
+                   no: v => "Loads " + v + " file" + (v === 1 ? "" : "s") + " over plain HTTP — the browser blocks them and flags it." },
+    lang:        { t: "The page declares what language it is in",
+                   ok: v => "Declared: " + v,
+                   no: "No lang attribute — parsers and screen readers guess which language this is." },
     title:       { t: "The page names the business, not the file",
                    ok: v => "“" + v.slice(0, 60) + "”",
                    no: "Too short to identify anything — this is the line an engine repeats as you." },
@@ -680,11 +727,21 @@ const HDR = {
       referrer:    "Set to a policy that still leaks — full URLs go out cross-site or on downgrade.",
       permissions: "Set but restricts nothing — scripts can still prompt under your domain's name.",
       description: "Present but unusable as a summary — too thin to say anything, or too long to be one.",
+      canonical:   "Points at another domain — this hands the page's standing to a site elsewhere.",
     },
   },
   es: {
     groups: { transport: "La conexión", content: "Qué puede ejecutarse en la página", privacy: "Qué se filtra",
-              page: "Qué dice la página que es" },
+              page: "Qué dice la página que es", indexing: "Si se puede encontrar siquiera" },
+    noindex:     { t: "La página tiene permiso de entrar al índice",
+                   ok: "Indexable.",
+                   no: "Lleva noindex — la página sale del índice, no baja de posición." },
+    mixed:       { t: "La propia página no deshace el candado",
+                   ok: "Todos los subrecursos cargan por HTTPS.",
+                   no: v => "Carga " + v + " archivo" + (v === 1 ? "" : "s") + " por HTTP plano — el navegador los bloquea y la marca." },
+    lang:        { t: "La página declara en qué idioma está",
+                   ok: v => "Declarado: " + v,
+                   no: "Sin atributo lang — los parsers y lectores de pantalla adivinan el idioma." },
     title:       { t: "La página nombra al negocio, no al archivo",
                    ok: v => "“" + v.slice(0, 60) + "”",
                    no: "Muy corto para identificar nada — es la línea que el motor repite como tú." },
@@ -730,6 +787,7 @@ const HDR = {
       referrer:    "Con una política que igual filtra — la URL completa sale al bajar de HTTPS.",
       permissions: "Configurado pero no restringe nada — los scripts pueden pedir en tu nombre.",
       description: "Presente pero inservible — muy delgado para decir algo, o muy largo para resumir.",
+      canonical:   "Apunta a otro dominio — le entrega el peso de esta página a un sitio ajeno.",
     },
   },
 };
@@ -779,22 +837,27 @@ function frameIsClosed(csp, xfo) {
   return /^\s*(deny|sameorigin)\s*$/i.test(xfo || "");
 }
 
-/* The deduction pool, stated once so the target stays derivable.
+/* The deduction pool, stated once so the target stays derivable. Fifteen
+   checks, 100 points:
 
-   Security 76:  csp 20 · hsts 16 · frame 16 · https 12 · nosniff 8
-                 · referrer 2 · permissions 2
-   Page      24:  title 6 · h1 6 · description 4 · heading-order 4 · canonical 4
+   indexing   15:  noindex 15
+   content    38:  csp 14 · frame 12 · mixed 7 · nosniff 5
+   transport  23:  hsts 12 · https 11
+   page       20:  title 5 · h1 5 · canonical 5 · description 2
+                   · heading-order 2 · lang 1
+   privacy     4:  referrer 2 · permissions 2
 
    The security ordering is the one this instrument has always used — CSP above
-   HSTS and framing, those above transport, those above the two privacy headers.
-   Only the scale changed, to make room.
+   framing, HSTS above transport, those above the two privacy headers. Only the
+   scale changed, to make room.
 
-   The bar is 90, and 90 is derived, not chosen: at 10 points of deductions
-   nothing weighing more than 10 can be failing, so a score of 90 or better
-   means HTTPS, HSTS, a CSP that actually stops injected script, and closed
-   framing are all correct — the four that stop an attack rather than describe
-   one. Everything below that line is worth fixing and none of it is a breach.
-   Change a weight and this paragraph stops being true: re-derive it. */
+   The bar stays 90, and 90 stays derived rather than chosen: at 10 points of
+   deductions nothing weighing more than 10 can be failing, so a score of 90 or
+   better means the page is indexable and HTTPS, HSTS, a CSP that actually
+   stops injected script and closed framing are all correct. 90 is the lowest
+   number that still guarantees all five — at 89 the transport check drops out
+   of the guarantee. Change a weight and this paragraph stops being true:
+   re-derive it rather than renaming it. */
 function runHeaderChecks(res, target, lang, doc) {
   const L = HDR[lang === "es" ? "es" : "en"];
   const c = [];
@@ -815,22 +878,33 @@ function runHeaderChecks(res, target, lang, doc) {
   };
   const grade3 = (present, good) => !present ? "no" : good ? "ok" : "weak";
 
-  add("https", "transport", target.protocol === "https:" ? "ok" : "no", 12, "https");
+  // Nothing else on this list matters if the page is not in the index at all,
+  // so it is judged first and priced highest. Header and markup are read
+  // together because either one alone removes the page.
+  add("noindex", "indexing", isNoindex(h("x-robots-tag"), doc) ? "no" : "ok", 15, "noindex");
+
+  add("https", "transport", target.protocol === "https:" ? "ok" : "no", 11, "https");
 
   const hsts = h("strict-transport-security");
   const age = Number((/max-age\s*=\s*"?(\d+)/i.exec(hsts || "") || [])[1] || 0);
-  add("hsts", "transport", grade3(!!hsts, age >= HSTS_MIN_AGE), 16, "hsts", hsts || "");
+  add("hsts", "transport", grade3(!!hsts, age >= HSTS_MIN_AGE), 12, "hsts", hsts || "");
+
+  // No compression check here on purpose. The Workers runtime decompresses the
+  // response transparently and strips Content-Encoding before a Worker can read
+  // it, so the header is absent for every target — including sites that
+  // demonstrably send brotli to a browser. The check could only ever report a
+  // false failure, which is the one thing this instrument must not do.
 
   const csp = h("content-security-policy");
-  add("csp", "content", grade3(!!csp, cspStopsInlineScript(csp || "")), 20, "csp");
+  add("csp", "content", grade3(!!csp, cspStopsInlineScript(csp || "")), 14, "csp");
 
   // frame-ancestors in a CSP supersedes X-Frame-Options; either one closes it.
   const xfo = h("x-frame-options");
   add("frame", "content",
-      grade3(!!xfo || /frame-ancestors/i.test(csp || ""), frameIsClosed(csp, xfo)), 16, "frame");
+      grade3(!!xfo || /frame-ancestors/i.test(csp || ""), frameIsClosed(csp, xfo)), 12, "frame");
 
   add("nosniff", "content",
-      /nosniff/i.test(h("x-content-type-options") || "") ? "ok" : "no", 8, "nosniff");
+      /nosniff/i.test(h("x-content-type-options") || "") ? "ok" : "no", 5, "nosniff");
 
   const ref = h("referrer-policy");
   // A list is legal; the last token a browser understands wins, so judge that one.
@@ -845,14 +919,23 @@ function runHeaderChecks(res, target, lang, doc) {
   // the two instruments cannot return different verdicts on one H1. A document
   // that could not be parsed is not judged here rather than failed on guesswork.
   if (doc) {
-    add("title", "page", titleNames(doc) ? "ok" : "no", 6, "title", doc.title.trim());
-    add("h1", "page", hasOneH1(doc) ? "ok" : "no", 6, "h1", doc.h1.length);
+    // A padlock the page's own markup undermines. Mixed subresources are
+    // blocked or downgraded by the browser that the https check just credited.
+    add("mixed", "content", mixedContent(doc) ? "no" : "ok", 7, "mixed", doc.insecureRefs);
+
+    add("title", "page", titleNames(doc) ? "ok" : "no", 5, "title", doc.title.trim());
+    add("h1", "page", hasOneH1(doc) ? "ok" : "no", 5, "h1", doc.h1.length);
+    // Absent or relative is one failure; pointing at another site is a worse
+    // one and gets its own reason. Pointing elsewhere on the same site is
+    // legitimate — pagination and syndication do it — and is not flagged.
+    add("canonical", "page",
+        !canonicalAbs(doc) ? "no" : canonicalOffsite(doc, target) ? "weak" : "ok", 5, "canonical");
     add("description", "page",
-        !descPresent(doc) ? "no" : descUsable(doc) ? "ok" : "weak", 4,
+        !descPresent(doc) ? "no" : descUsable(doc) ? "ok" : "weak", 2,
         "description", doc.description.trim().length);
     const skip = headingSkip(doc);
-    add("heading-order", "page", skip ? "no" : "ok", 4, "headingOrder", skip);
-    add("canonical", "page", canonicalAbs(doc) ? "ok" : "no", 4, "canonical");
+    add("heading-order", "page", skip ? "no" : "ok", 2, "headingOrder", skip);
+    add("lang", "page", langDeclared(doc) ? "ok" : "no", 1, "lang", doc.lang.trim());
   }
 
   return c;
