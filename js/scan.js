@@ -55,9 +55,40 @@
 
   var lastData = null;
 
+  /* ── the gate ──────────────────────────────────────────
+     Opt-in per page via data-gate, not global: the AI scanner's pages promise
+     ungated results and still keep that promise. Where it is on, the free view
+     is the checklist — every check, named, with its verdict — and what the
+     address buys is why each one failed and what it costs.
+
+     The score and the bar stay outside the gate on purpose. A number with no
+     scale is not a teaser, it is noise, and the distance to the bar is the
+     reason anyone would hand over an address at all.
+
+     This is a soft gate. The worker answers with the full result in one
+     response, so the reasons are readable in devtools by anyone who looks.
+     Making it hard means a second round trip after the address is taken, which
+     costs a scan against the 10/hour budget. ── */
+  var GATED = root.dataset.gate === "true";
+  var unlocked = false;
+
+  function buildChecklist(data) {
+    var box = el("div", "scan-checklist-box");
+    var list = el("ul", "scan-checklist");
+    data.checks.forEach(function (c) {
+      var li = el("li", c.pass ? "is-ok" : "is-gap");
+      li.appendChild(el("span", "scan-check-mark", c.pass ? "✓" : "✕"));
+      li.appendChild(el("span", "scan-check-title", c.title));
+      list.appendChild(li);
+    });
+    box.appendChild(list);
+    return box;
+  }
+
   function render(data) {
     lastData = data;
     result.textContent = "";
+    var gated = GATED && !unlocked;
 
     var head = el("div", "scan-head");
     var g = el("div", "scan-grade", data.grade);
@@ -81,7 +112,18 @@
     var gaps = data.checks.filter(function (c) { return !c.pass; })
                           .sort(function (a, b) { return b.deduction - a.deduction; });
 
-    if (!gaps.length) {
+    if (gated) {
+      // Every check named and marked, so the checklist is honest about what was
+      // measured and how much of it failed. What is withheld is the why.
+      result.appendChild(el("h2", "scan-subhead",
+        t("checklistTitle", "The checklist") + " (" + data.passed + "/" + data.total + ")"));
+      result.appendChild(buildChecklist(data));
+      if (gaps.length) {
+        result.appendChild(el("p", "scan-locked",
+          t("gapsLocked", "{n} need work. The full audit names what each one costs and how to fix it.")
+            .replace("{n}", gaps.length)));
+      }
+    } else if (!gaps.length) {
       result.appendChild(el("p", "scan-clean",
         t("cleanLabel", "No gaps found. Every check passed.")));
     } else {
@@ -129,8 +171,9 @@
       result.appendChild(el("p", "scan-census", census));
     }
 
-    // Everything that passed, named and nothing more.
-    var ok = data.checks.filter(function (c) { return c.pass; });
+    // Everything that passed, named and nothing more. Redundant behind the
+    // gate, where the checklist has already named every check.
+    var ok = gated ? [] : data.checks.filter(function (c) { return c.pass; });
     if (ok.length) {
       result.appendChild(el("h2", "scan-subhead",
         t("passedTitle", "Passed") + " (" + ok.length + ")"));
@@ -426,8 +469,10 @@
 
   function buildCapture() {
     var box = el("div", "scan-capture");
+    var locked = GATED && !unlocked;
     box.appendChild(el("p", "scan-capture-lede",
-      t("reportLede", "Download this as a report \u2014 one file you can send on.")));
+      locked ? t("unlockLede", "Get the full audit \u2014 what each gap costs and how to close it.")
+             : t("reportLede", "Download this as a report \u2014 one file you can send on.")));
 
     var f = document.createElement("form");
     f.className = "scan-capture-form";
@@ -452,7 +497,8 @@
     pot.autocomplete = "off";
     pot.setAttribute("aria-hidden", "true");
 
-    var go = el("button", "scan-btn", t("reportBtn", "Get the report"));
+    var go = el("button", "scan-btn",
+      locked ? t("unlockBtn", "Show the full audit") : t("reportBtn", "Get the report"));
     go.type = "submit";
 
     f.appendChild(lab);
@@ -494,6 +540,12 @@
         .then(function (res) {
           if (!res.ok || res.data.error)
             throw new Error(res.data.error || t("genericError", "The scan failed."));
+          if (GATED && !unlocked) {
+            unlocked = true;
+            render(lastData);        // the same result, now with its reasons
+            downloadReport();
+            return;
+          }
           downloadReport();
           say.textContent = t("reportReady", "Report downloaded.");
           say.hidden = false;

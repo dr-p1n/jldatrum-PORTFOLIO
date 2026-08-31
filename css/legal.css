@@ -963,6 +963,26 @@ nav {
 .scan-table--compact .scan-title { font-size: 14.5px; margin: 0 0 1px; }
 .scan-table--compact .scan-detail { font-size: 13.5px; line-height: 1.45; max-width: 68ch; }
 
+/* The gated checklist. Every check named with its verdict; the reason is what
+   the address buys. Rules and whitespace, no boxes around the rows. */
+.scan-checklist { list-style: none; margin: 0; padding: 0; }
+.scan-checklist li {
+  display: flex; gap: 12px; align-items: baseline;
+  padding: 10px 0; border-bottom: 1px solid #1A3A40;
+  font-size: 15px; line-height: 1.5;
+}
+.scan-checklist li:last-child { border-bottom: 0; }
+.scan-check-mark { flex: none; width: 14px; font-size: 12px; }
+.scan-checklist .is-ok  .scan-check-mark { color: #6FCF97; }
+.scan-checklist .is-gap .scan-check-mark { color: #F2D24B; }
+.scan-checklist .is-ok  .scan-check-title { color: #9AABAF; }
+.scan-checklist .is-gap .scan-check-title { color: #E8EDED; }
+
+.scan-locked {
+  margin: 16px 0 0; color: #9AABAF; font-size: 14px; line-height: 1.6;
+  max-width: 68ch;
+}
+
 /* The heading census: a row of counts, not a verdict. Tabular figures so the
    numbers line up, and --muted because it carries no pass or fail. */
 .scan-census {

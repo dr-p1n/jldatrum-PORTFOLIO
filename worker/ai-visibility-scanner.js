@@ -971,10 +971,13 @@ async function scanHeaders(target, lang) {
 }
 
 /* ── LEADS ──────────────────────────────────────────────────────────
-   The instruments stay free and ungated: the scan renders in full before
-   this is ever offered. What the address buys is the report file, which
-   the CLIENT builds from the result it already has. Nothing about the
-   scanned site is stored here and no report is published — only the
+   Both instruments are free and neither asks for an account. The AI scan
+   still renders in full before this is ever offered; the trust index renders
+   the checklist and holds the reasons, which is a choice made on the page via
+   data-gate, not here. Either way the worker answers with the whole result and
+   the CLIENT decides what to show, so the gate is soft by construction.
+   Nothing about the scanned site is stored here and no report is published —
+   only the
    address, so that promise on the page stays true.
    ─────────────────────────────────────────────────────────────────── */
 
