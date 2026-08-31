@@ -57,6 +57,7 @@
   var lastUrl   = "";
   var otherData = null;   // the other one, once it has been run
   var comparing = false;
+  var wantCompare = false;   // a shared link asked for the side-by-side
 
   // One client, two instruments. The page declares which one it is; the other
   // is whatever this is not. The response shape is identical either way.
@@ -229,6 +230,15 @@
      does on its own.
      ──────────────────────────────────────────────────── */
 
+  function crossRun() {
+    if (otherData) { comparing = true; renderCompare(); return Promise.resolve(); }
+    return runScan(lastUrl, OTHER).then(function (d) {
+      otherData = d;
+      comparing = true;
+      renderCompare();
+    });
+  }
+
   function buildCross() {
     var label = t("compareBtn", "");
     if (!label || !lastUrl) return null;
@@ -247,8 +257,7 @@
       say.classList.remove("is-bad");
       say.textContent = t("compareRunning", "Running the second instrument…");
       say.hidden = false;
-      runScan(lastUrl, OTHER)
-        .then(function (d) { otherData = d; comparing = true; renderCompare(); })
+      crossRun()
         .catch(function (err) {
           say.textContent = err.message || t("genericError", "The scan failed.");
           say.classList.add("is-bad");
@@ -297,6 +306,14 @@
     // are different rather than hoping the two bars printed above are read.
     var note = t("compareNote", "");
     if (note) result.appendChild(el("p", "scan-compare-note", note));
+
+    var row = el("div", "scan-share");
+    var say = el("span", "scan-share-say");
+    say.setAttribute("role", "status");
+    say.setAttribute("aria-live", "polite");
+    row.appendChild(linkButton(say));
+    row.appendChild(say);
+    result.appendChild(row);
 
     var box = el("div", "scan-cross");
     var back = el("button", "scan-btn scan-btn--quiet", t("compareBack", "Back to the full result"));
@@ -533,6 +550,46 @@
     return "datrum-" + host + "-" + data.score + ".png";
   }
 
+  /* ── a link somebody else can open ─────────────────────
+     The link carries the URL that was tested and nothing else — no result and
+     no id, because there is no stored result to point an id at. Opening it
+     runs the test again, so a recipient sees the site as it is now rather
+     than a number the sender kept. Two consequences worth stating: the score
+     can differ from the one the sender saw, which is the honest outcome when
+     a site has changed in between; and "the results are not stored", which is
+     printed on this page, stays true.
+
+     ?c=1 asks for the side-by-side, which costs the opener two scans.
+     ──────────────────────────────────────────────────── */
+
+  function shareUrl() {
+    var u = (lastData && lastData.url) || lastUrl;
+    var link = location.origin + location.pathname + "?u=" + encodeURIComponent(u);
+    if (comparing) link += "&c=1";
+    return link;
+  }
+
+  function linkButton(say) {
+    var b = el("button", "scan-btn scan-btn--quiet", t("linkBtn", "Copy link"));
+    b.type = "button";
+    b.addEventListener("click", function () {
+      var ok = function () {
+        say.textContent = t("linkCopied", "Link copied. It runs the test again when opened.");
+      };
+      // Where the clipboard is refused, print the link rather than telling the
+      // reader to go and find it: the page URL is not the share URL.
+      var no = function () {
+        say.textContent = t("linkFailed", "Copy this link:") + " " + shareUrl();
+      };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText)
+          navigator.clipboard.writeText(shareUrl()).then(ok, no);
+        else no();
+      } catch (e) { no(); }
+    });
+    return b;
+  }
+
   function buildShare(data, target) {
     var box = el("div", "scan-share");
 
@@ -575,6 +632,7 @@
 
     box.appendChild(copy);
     box.appendChild(down);
+    box.appendChild(linkButton(say));
     box.appendChild(say);
     return box;
   }
@@ -810,10 +868,8 @@
     show(errorBox, true);
   }
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    var url = input.value.trim();
+  function start(raw) {
+    var url = String(raw || "").trim();
     if (!url) return;
     if (!/^https?:\/\//i.test(url)) url = "https://" + url;
 
@@ -832,6 +888,9 @@
     runScan(url, MODE)
       .then(function (data) {
         render(data);
+        // A link that asked for the comparison runs the second instrument
+        // itself, so the recipient lands on what the sender was looking at.
+        if (wantCompare) { wantCompare = false; return crossRun(); }
       })
       .catch(function (err) {
         fail(err.message || t("genericError", "The scan failed."));
@@ -840,5 +899,20 @@
         show(status, false);
         btn.disabled = false;
       });
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    start(input.value);
   });
+
+  // Opening a shared link. The URL goes into the field first, so the page
+  // shows what it is testing rather than running something invisible.
+  var q = new URLSearchParams(location.search);
+  var qUrl = (q.get("u") || "").trim();
+  if (qUrl) {
+    wantCompare = q.get("c") === "1";
+    input.value = qUrl;
+    start(qUrl);
+  }
 })();
