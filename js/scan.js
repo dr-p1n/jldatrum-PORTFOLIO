@@ -281,7 +281,7 @@
     if (!label || !lastUrl) return null;
 
     var box = el("div", "scan-cross");
-    var b = el("button", "scan-btn scan-btn--quiet", label);
+    var b = el("button", "scan-btn scan-btn--cross", label);
     b.type = "button";
     var say = el("p", "scan-cross-say");
     say.setAttribute("role", "status");
@@ -368,12 +368,17 @@
      deductions nothing weighing more than 10 can be failing, so 90 means the
      page is indexable and HTTPS, HSTS, a CSP that actually stops injected
      script and closed framing are all correct. 90 is the lowest number that
-     still guarantees all five; at 89 transport drops out. AI: above 85 the
-     deductions total under 15, so nothing weighing 15 or more can be failing —
-     the entity block is present, valid, names an Organization, and the content
-     is in the served HTML. That is the line every answer engine shares,
-     because none of them reliably run JavaScript and all of them need an
-     entity to attach a recommendation to.
+     still guarantees all five; at 89 transport drops out.
+
+     AI visibility derives the same 90 the same way. At ten points of slack
+     nothing weighing eleven or more can be failing, which on that instrument
+     is: the entity block present (40), parsing (25), naming an Organization
+     (15), the content in the served HTML (25), GPTBot not blocked (15), and
+     HTTPS (11). 90 is again the lowest number that holds all six — at 89 the
+     11-point transport check drops out, exactly as it does on the other
+     instrument. Those six are the line every answer engine shares, because
+     none of them reliably run JavaScript and all of them need an entity to
+     attach a recommendation to.
 
      data-target on the page carries the number. Absent, this renders nothing.
      ──────────────────────────────────────────────────── */

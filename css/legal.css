@@ -1019,6 +1019,17 @@ nav {
   border: 1px solid #1A3A40; padding: 9px 16px; font-size: 14px; font-weight: 500;
 }
 .scan-btn--quiet:hover { filter: none; border-color: #F2D24B; color: #F2D24B; }
+
+/* The cross-run is the one action on a finished result, so it carries the
+   filled treatment the scan button has, in teal rather than the near-black.
+   Teal on lemon measures 3.10:1 — that clears AA as large text only, which is
+   why the size is not decorative: 19px at 700 puts it over the 18.66px bold
+   threshold. Do not shrink this without changing the colour. */
+.scan-btn--cross {
+  background: #F2D24B; color: #1E7F98; border: 0;
+  padding: 16px 30px; font-size: 19px; font-weight: 700; letter-spacing: -0.005em;
+}
+.scan-btn--cross:hover { filter: brightness(1.06); }
 /* Holds the share link when the clipboard refuses it, so it has to be able
    to break: an encoded URL is one unbreakable token on a phone. */
 .scan-share-say { font-size: 13px; color: #9AABAF; overflow-wrap: anywhere; }
