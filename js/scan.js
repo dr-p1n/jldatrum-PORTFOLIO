@@ -60,8 +60,10 @@
   var lastData  = null;   // this page's own instrument
   var lastUrl   = "";
   var otherData = null;   // the other one, once it has been run
-  var comparing = false;
+  var comparing = false;     // the two instruments, side by side
   var wantCompare = false;   // a shared link asked for the side-by-side
+  var rivalsOn  = false;     // this instrument, several sites
+  var rivals    = [];        // [{ url, host, data }] in the order they were added
   // Every scan carries the generation it was started in. Submitting a new URL
   // bumps it, so a cross-run still in flight against the old target lands on a
   // dead generation and drops instead of pairing two different sites.
@@ -125,6 +127,7 @@
   function render(data) {
     lastData = data;
     result.textContent = "";
+    if (lastUrl) result.appendChild(viewBar());
     var gated = GATED && !unlocked;
 
     var head = el("div", "scan-head");
@@ -217,8 +220,9 @@
       result.appendChild(list);
     }
 
+    // After the view bar and the head, so the score keeps its place at the top.
     var scale = buildScale(data.score);
-    if (scale) result.insertBefore(scale, result.children[1] || null);
+    if (scale) result.insertBefore(scale, result.children[lastUrl ? 2 : 1] || null);
 
     var cross = buildCross();
     if (cross) result.appendChild(cross);
@@ -244,12 +248,13 @@
      ──────────────────────────────────────────────────── */
 
   function crossRun() {
-    if (otherData) { comparing = true; renderCompare(); return Promise.resolve(); }
+    if (otherData) { comparing = true; rivalsOn = false; renderCompare(); return Promise.resolve(); }
     var id = runId;
     return runScan(lastUrl, OTHER).then(function (d) {
       if (id !== runId) return;          // a new target was submitted meanwhile
       otherData = d;
       comparing = true;
+      rivalsOn  = false;
       renderCompare();
     });
   }
@@ -355,10 +360,201 @@
                .replace("{s}", sec.total - sec.passed);
   }
 
+  /* ── the same test, several sites ──────────────────────
+     A score on its own has no consequence attached. 65 reads as survivable
+     until it is sitting under a firm the reader loses work to, and then it is
+     a position rather than a number.
+
+     Every row here is measured, never quoted: the studio's own site goes
+     through the same request as anybody else's, because a page that claims
+     "automated, not self-reported" cannot print its own score from a constant.
+     That costs one test per site, which is why sites are added one at a time
+     and never fetched on the reader's behalf.
+     ──────────────────────────────────────────────────── */
+
+  function hostOf(u) {
+    try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return u; }
+  }
+
+  function rivalRow(url, data, isYou) {
+    var tr = document.createElement("tr");
+    if (isYou) tr.className = "is-you";
+
+    var site = document.createElement("td");
+    site.appendChild(el("span", "scan-rival-host", hostOf(url)));
+    if (isYou) site.appendChild(el("span", "scan-rival-you", t("scaleYou", "This site")));
+    tr.appendChild(site);
+
+    var g = el("td", "scan-rival-grade", data.grade);
+    g.setAttribute("data-band", band(data.score, Number(root.dataset.target)));
+    tr.appendChild(g);
+
+    tr.appendChild(el("td", "scan-rival-num", String(data.score)));
+    tr.appendChild(el("td", "scan-rival-gaps",
+      (data.total - data.passed) + " / " + data.total));
+    return tr;
+  }
+
+  function renderRivals() {
+    result.textContent = "";
+    crossBtn = null;
+    crossSay = null;
+    result.appendChild(viewBar());
+
+    result.appendChild(el("p", "scan-rivals-lede",
+      t("rivalsLede", "Add any public URL. Each one is measured with this same test.")));
+
+    // Ranked, because the ranking is the finding. The reader's own row is
+    // marked rather than pinned, so where they land is the first thing seen.
+    var rows = [{ url: lastData.url, data: lastData, you: true }]
+      .concat(rivals.map(function (r) { return { url: r.url, data: r.data, you: false }; }))
+      .sort(function (a, b) { return b.data.score - a.data.score; });
+
+    var table = el("table", "scan-rivals");
+    var thead = document.createElement("thead");
+    var hr = document.createElement("tr");
+    hr.appendChild(el("th", null, t("rivalsSite", "Site")));
+    hr.appendChild(el("th", "scan-rival-grade", ""));
+    hr.appendChild(el("th", "scan-rival-num", t("scoreLabel", "Score")));
+    hr.appendChild(el("th", "scan-rival-gaps", t("gapsLabel", "Gaps")));
+    thead.appendChild(hr);
+    table.appendChild(thead);
+
+    var tbody = document.createElement("tbody");
+    rows.forEach(function (r) { tbody.appendChild(rivalRow(r.url, r.data, r.you)); });
+    table.appendChild(tbody);
+    result.appendChild(table);
+
+    result.appendChild(rivalsForm());
+    result.appendChild(buildCapture());
+    show(result, true);
+  }
+
+  function addRival(url, say, done) {
+    var host = hostOf(url);
+    if (host === hostOf(lastData.url) || rivals.some(function (r) { return r.host === host; })) {
+      say.textContent = t("rivalsDupe", "That one is already in the list.");
+      say.hidden = false;
+      done(false);
+      return;
+    }
+    say.classList.remove("is-bad");
+    say.textContent = t("rivalsRunning", "Measuring…");
+    say.hidden = false;
+    var id = runId;
+    runScan(url, MODE)
+      .then(function (d) {
+        if (id !== runId) return;
+        rivals.push({ url: url, host: host, data: d });
+        renderRivals();
+      })
+      .catch(function (err) {
+        say.textContent = err.message || t("genericError", "The scan failed.");
+        say.classList.add("is-bad");
+        done(false);
+      });
+  }
+
+  function rivalsForm() {
+    var box = el("div", "scan-rivals-add");
+    var f = document.createElement("form");
+    f.className = "scan-capture-form";
+
+    var lab = el("label", "sr-only", t("rivalsSite", "Site"));
+    lab.htmlFor = "scanRival";
+    var input2 = document.createElement("input");
+    input2.className = "scan-input";
+    input2.id = "scanRival";
+    input2.type = "text";
+    input2.autocomplete = "off";
+    input2.spellcheck = false;
+    input2.placeholder = t("rivalsPlaceholder", "competitor.com");
+
+    var go = el("button", "scan-btn", t("rivalsAdd", "Add"));
+    go.type = "submit";
+
+    var say = el("p", "scan-cross-say");
+    say.setAttribute("role", "status");
+    say.setAttribute("aria-live", "polite");
+    say.hidden = true;
+
+    f.appendChild(lab);
+    f.appendChild(input2);
+    f.appendChild(go);
+    box.appendChild(f);
+
+    // One click rather than one more thing to type. It is scanned like any
+    // other row — the number it comes back with is the number it earned.
+    var mark = root.dataset.benchmarkUrl;
+    if (mark && hostOf(mark) !== hostOf(lastData.url) &&
+        !rivals.some(function (r) { return r.host === hostOf(mark); })) {
+      var chip = el("button", "scan-btn scan-btn--quiet", t("rivalsBenchmark", "Add the studio's own site"));
+      chip.type = "button";
+      chip.addEventListener("click", function () {
+        chip.disabled = true;
+        addRival(mark, say, function () { chip.disabled = false; });
+      });
+      var chipRow = el("div", "scan-cross");
+      chipRow.appendChild(chip);
+      box.appendChild(chipRow);
+    }
+
+    box.appendChild(say);
+
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var raw = input2.value.trim();
+      if (!raw) return;
+      var url = /^https?:\/\//i.test(raw) ? raw : "https://" + raw;
+      go.disabled = true;
+      addRival(url, say, function () { go.disabled = false; });
+    });
+
+    return box;
+  }
+
+  /* ── the view bar ──────────────────────────────────────
+     Three ways to read one scan, and the reader is always in exactly one of
+     them. Buttons rather than links: nothing here changes the address, and a
+     tab that lies about being a page is worse than a tab.
+     ──────────────────────────────────────────────────── */
+
+  function viewBar() {
+    var bar = el("div", "scan-views");
+    var here = comparing ? "both" : rivalsOn ? "rivals" : "single";
+    [["single", t("viewResult", "Result")],
+     ["rivals", t("viewRivals", "Competitors")],
+     ["both",   t("viewBoth", "Both tests")]].forEach(function (v) {
+      var b = el("button", "scan-view" + (here === v[0] ? " is-on" : ""), v[1]);
+      b.type = "button";
+      if (here === v[0]) b.setAttribute("aria-current", "true");
+      b.addEventListener("click", function () {
+        if (v[0] === "single") { comparing = false; rivalsOn = false; render(lastData); }
+        else if (v[0] === "rivals") { comparing = false; rivalsOn = true; renderRivals(); }
+        else if (otherData) { rivalsOn = false; comparing = true; renderCompare(); }
+        else {
+          // Reachable from any view, so it cannot lean on the cross-run button
+          // — that only exists in the single result. The page-level status line
+          // carries the wait instead.
+          rivalsOn = false;
+          b.disabled = true;
+          status.textContent = t("compareRunning", "Running the second instrument…");
+          show(status, true);
+          crossRun()
+            .catch(function (err) { fail(err.message || t("genericError", "The scan failed.")); })
+            .then(function () { show(status, false); b.disabled = false; });
+        }
+      });
+      bar.appendChild(b);
+    });
+    return bar;
+  }
+
   function renderCompare() {
     result.textContent = "";
     crossBtn = null;                     // both are about to be detached
     crossSay = null;
+    result.appendChild(viewBar());
 
     var head = el("div", "scan-head");
     head.appendChild(el("h2", "scan-subhead", t("compareTitle", "Side by side")));
@@ -389,7 +585,7 @@
     var box = el("div", "scan-cross");
     var back = el("button", "scan-btn scan-btn--quiet", t("compareBack", "Back to the full result"));
     back.type = "button";
-    back.addEventListener("click", function () { comparing = false; render(lastData); });
+    back.addEventListener("click", function () { comparing = false; rivalsOn = false; render(lastData); });
     box.appendChild(back);
     result.appendChild(box);
 
@@ -801,6 +997,7 @@
             // second column is already scanned; the button reopens it free.
             unlocked = true;
             comparing = false;
+            rivalsOn  = false;
             render(lastData);        // the same result, now with its reasons
             downloadReport();
             return;
@@ -967,6 +1164,8 @@
     lastUrl   = url;
     otherData = null;
     comparing = false;
+    rivalsOn  = false;
+    rivals    = [];
 
     runScan(url, MODE)
       .then(function (data) {

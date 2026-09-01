@@ -87,6 +87,17 @@
      data-compare-title="Side by side"
      data-compare-back="Back to the full result"
      data-compare-note="Both instruments are held to 90, and both derive it the same way: at ten points of slack, nothing heavier than ten can be failing. They still measure different things, so the two scores answer different questions rather than grading the same one twice."
+     data-benchmark-url="https://jldatrum.com/"
+     data-view-result="Result"
+     data-view-rivals="Competitors"
+     data-view-both="Both tests"
+     data-rivals-site="Site"
+     data-rivals-lede="Add any public URL. Each one is measured with this same test, and each one counts as a test."
+     data-rivals-add="Add"
+     data-rivals-placeholder="competitor.com"
+     data-rivals-benchmark="Add the studio's own site"
+     data-rivals-running="Measuring…"
+     data-rivals-dupe="That one is already in the list."
      data-verdict-both="Both doors are open. An answer engine can read this page, and a buyer who checks the response before the call finds nothing missing."
      data-verdict-engine-only="An answer engine can read this page. A buyer who checks the response finds {s} things missing — and that check happens before the call, not after it."
      data-verdict-buyer-only="The response holds up to a buyer's check. An answer engine reading the same page hits {a} gaps, and it does not ask you to explain them."
@@ -117,7 +128,7 @@
            autocomplete="url" spellcheck="false" placeholder="https://yourcompany.com" required>
     <button class="scan-btn" id="scanBtn" type="submit">Scan</button>
   </form>
-  <p class="scan-legal">Scans one public URL plus its <code>/robots.txt</code>, <code>/sitemap.xml</code> and <code>/llms.txt</code>. The results are not stored and no report is published. Sixty scans per hour. A comparison runs both instruments and counts as two.</p>
+  <p class="scan-legal">Scans one public URL plus its <code>/robots.txt</code>, <code>/sitemap.xml</code> and <code>/llms.txt</code>. The results are not stored and no report is published. Sixty scans per hour — the second instrument and each site you add to a comparison each count as one.</p>
 
   <p class="scan-status" id="scanStatus" role="status" aria-live="polite" hidden></p>
   <div class="scan-error" id="scanError" role="alert" hidden></div>
