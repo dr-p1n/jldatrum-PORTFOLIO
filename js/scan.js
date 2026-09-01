@@ -63,7 +63,12 @@
   var comparing = false;     // the two instruments, side by side
   var wantCompare = false;   // a shared link asked for the side-by-side
   var rivalsOn  = false;     // this instrument, several sites
-  var rivals    = [];        // [{ url, host, data }] in the order they were added
+  var rivals    = [];        // [{ url, host, data, other }] as they were added
+  // Whose pair the comparison is showing: null is the reader's own scan, a
+  // hostname is one of the rows in the ranking. The outreach move is "here is
+  // what your rival looks like on both doors", so the comparison cannot be
+  // welded to the URL that happened to go in the form.
+  var subject   = null;
   // Every scan carries the generation it was started in. Submitting a new URL
   // bumps it, so a cross-run still in flight against the old target lands on a
   // dead generation and drops instead of pairing two different sites.
@@ -336,13 +341,24 @@
      columns underneath it.
      ──────────────────────────────────────────────────── */
 
+  function rivalBy(host) {
+    for (var i = 0; i < rivals.length; i++) if (rivals[i].host === host) return rivals[i];
+    return null;
+  }
+
+  function pairFor(host) {
+    if (!host) return { url: lastData ? lastData.url : lastUrl, mine: lastData, theirs: otherData };
+    var r = rivalBy(host);
+    return r ? { url: r.url, mine: r.data, theirs: r.other } : null;
+  }
+
   function targetFor(mode) {
     return Number(mode === MODE ? root.dataset.target : root.dataset.otherTarget);
   }
 
-  function verdict() {
-    var sec = MODE === "headers" ? lastData  : otherData;
-    var ai  = MODE === "headers" ? otherData : lastData;
+  function verdict(pair) {
+    var sec = MODE === "headers" ? pair.mine  : pair.theirs;
+    var ai  = MODE === "headers" ? pair.theirs : pair.mine;
     if (!sec || !ai) return null;
 
     var secBar = targetFor("headers"), aiBar = targetFor("");
@@ -376,7 +392,34 @@
     try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return u; }
   }
 
-  function rivalRow(url, data, isYou) {
+  function bothFor(host, btn, say) {
+    var r = host ? rivalBy(host) : null;
+    if (host && !r) return;
+    var have = host ? r.other : otherData;
+    if (have) { subject = host; comparing = true; rivalsOn = false; renderCompare(); return; }
+
+    btn.disabled = true;
+    say.classList.remove("is-bad");
+    say.textContent = t("compareRunning", "Running the second instrument…");
+    say.hidden = false;
+    var id = runId;
+    runScan(host ? r.url : lastUrl, OTHER)
+      .then(function (d) {
+        if (id !== runId) return;
+        if (host) r.other = d; else otherData = d;
+        subject = host;
+        comparing = true;
+        rivalsOn = false;
+        renderCompare();
+      })
+      .catch(function (err) {
+        say.textContent = err.message || t("genericError", "The scan failed.");
+        say.classList.add("is-bad");
+        btn.disabled = false;
+      });
+  }
+
+  function rivalRow(url, data, isYou, say) {
     var tr = document.createElement("tr");
     if (isYou) tr.className = "is-you";
 
@@ -392,6 +435,15 @@
     tr.appendChild(el("td", "scan-rival-num", String(data.score)));
     tr.appendChild(el("td", "scan-rival-gaps",
       (data.total - data.passed) + " / " + data.total));
+
+    // Every row, not only the reader's: the useful thing to send a prospect is
+    // what their rival looks like on both doors.
+    var act = el("td", "scan-rival-act");
+    var b = el("button", "scan-btn scan-btn--row", t("viewBoth", "Both tests"));
+    b.type = "button";
+    b.addEventListener("click", function () { bothFor(isYou ? null : hostOf(url), b, say); });
+    act.appendChild(b);
+    tr.appendChild(act);
     return tr;
   }
 
@@ -410,6 +462,11 @@
       .concat(rivals.map(function (r) { return { url: r.url, data: r.data, you: false }; }))
       .sort(function (a, b) { return b.data.score - a.data.score; });
 
+    var say = el("p", "scan-cross-say");
+    say.setAttribute("role", "status");
+    say.setAttribute("aria-live", "polite");
+    say.hidden = true;
+
     var table = el("table", "scan-rivals");
     var thead = document.createElement("thead");
     var hr = document.createElement("tr");
@@ -417,13 +474,15 @@
     hr.appendChild(el("th", "scan-rival-grade", ""));
     hr.appendChild(el("th", "scan-rival-num", t("scoreLabel", "Score")));
     hr.appendChild(el("th", "scan-rival-gaps", t("gapsLabel", "Gaps")));
+    hr.appendChild(el("th", "scan-rival-act", ""));
     thead.appendChild(hr);
     table.appendChild(thead);
 
     var tbody = document.createElement("tbody");
-    rows.forEach(function (r) { tbody.appendChild(rivalRow(r.url, r.data, r.you)); });
+    rows.forEach(function (r) { tbody.appendChild(rivalRow(r.url, r.data, r.you, say)); });
     table.appendChild(tbody);
     result.appendChild(table);
+    result.appendChild(say);
 
     result.appendChild(rivalsForm());
     result.appendChild(buildCapture());
@@ -529,14 +588,15 @@
       b.type = "button";
       if (here === v[0]) b.setAttribute("aria-current", "true");
       b.addEventListener("click", function () {
-        if (v[0] === "single") { comparing = false; rivalsOn = false; render(lastData); }
+        if (v[0] === "single") { comparing = false; rivalsOn = false; subject = null; render(lastData); }
         else if (v[0] === "rivals") { comparing = false; rivalsOn = true; renderRivals(); }
-        else if (otherData) { rivalsOn = false; comparing = true; renderCompare(); }
+        else if (otherData) { rivalsOn = false; subject = null; comparing = true; renderCompare(); }
         else {
           // Reachable from any view, so it cannot lean on the cross-run button
           // — that only exists in the single result. The page-level status line
           // carries the wait instead.
           rivalsOn = false;
+          subject = null;
           b.disabled = true;
           status.textContent = t("compareRunning", "Running the second instrument…");
           show(status, true);
@@ -556,17 +616,20 @@
     crossSay = null;
     result.appendChild(viewBar());
 
+    var pair = pairFor(subject);
+    if (!pair || !pair.mine || !pair.theirs) { subject = null; pair = pairFor(null); }
+
     var head = el("div", "scan-head");
     head.appendChild(el("h2", "scan-subhead", t("compareTitle", "Side by side")));
-    head.appendChild(el("p", "scan-target", lastData.url));
+    head.appendChild(el("p", "scan-target", pair.url));
     result.appendChild(head);
 
-    var says = verdict();
+    var says = verdict(pair);
     if (says) result.appendChild(el("p", "scan-verdict", says));
 
     var grid = el("div", "scan-compare");
-    grid.appendChild(compareCol(lastData,  t("ownName", ""),   Number(root.dataset.target)));
-    grid.appendChild(compareCol(otherData, t("otherName", ""), Number(root.dataset.otherTarget)));
+    grid.appendChild(compareCol(pair.mine,   t("ownName", ""),   Number(root.dataset.target)));
+    grid.appendChild(compareCol(pair.theirs, t("otherName", ""), Number(root.dataset.otherTarget)));
     result.appendChild(grid);
 
     // Two scores on one screen invite the wrong subtraction. Say the scales
@@ -585,11 +648,15 @@
     var box = el("div", "scan-cross");
     var back = el("button", "scan-btn scan-btn--quiet", t("compareBack", "Back to the full result"));
     back.type = "button";
-    back.addEventListener("click", function () { comparing = false; rivalsOn = false; render(lastData); });
+    back.addEventListener("click", function () {
+      comparing = false; rivalsOn = false; subject = null; render(lastData);
+    });
     box.appendChild(back);
     result.appendChild(box);
 
-    result.appendChild(buildCapture());
+    // The report is the reader's own audit. It does not belong under somebody
+    // else's pair of columns.
+    if (!subject) result.appendChild(buildCapture());
     show(result, true);
   }
 
@@ -835,7 +902,10 @@
      ──────────────────────────────────────────────────── */
 
   function shareUrl() {
-    var u = (lastData && lastData.url) || lastUrl;
+    // Whatever is on screen is what gets sent. Comparing a rival and copying
+    // the link hands the recipient that rival's pair, run fresh on their side.
+    var p = comparing ? pairFor(subject) : null;
+    var u = (p && p.url) || (lastData && lastData.url) || lastUrl;
     var link = location.origin + location.pathname + "?u=" + encodeURIComponent(u);
     if (comparing) link += "&c=1";
     return link;
@@ -998,6 +1068,7 @@
             unlocked = true;
             comparing = false;
             rivalsOn  = false;
+            subject   = null;
             render(lastData);        // the same result, now with its reasons
             downloadReport();
             return;
@@ -1166,6 +1237,7 @@
     comparing = false;
     rivalsOn  = false;
     rivals    = [];
+    subject   = null;
 
     runScan(url, MODE)
       .then(function (data) {

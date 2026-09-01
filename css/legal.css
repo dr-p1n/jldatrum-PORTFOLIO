@@ -1098,6 +1098,22 @@ nav {
   text-align: right; width: 4.5em; white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
+.scan-rival-act { text-align: right; white-space: nowrap; }
+.scan-btn--row {
+  background: transparent; color: #9AABAF; border: 1px solid #1A3A40;
+  padding: 6px 12px; font-size: 12.5px; font-weight: 500; border-radius: 4px;
+}
+.scan-btn--row:hover { filter: none; border-color: #F2D24B; color: #F2D24B; }
+/* Narrow screens tighten the table rather than dropping a column — hiding the
+   action would remove the feature on a phone, which is where a link gets sent
+   from. The host wraps; nothing else has to. */
+@media (max-width: 560px) {
+  .scan-rivals td, .scan-rivals th { font-size: 13px; }
+  .scan-rival-grade { font-size: 17px; width: 2.6em; }
+  .scan-rival-num, .scan-rival-gaps { width: 3.6em; }
+  .scan-btn--row { padding: 5px 9px; font-size: 12px; }
+  .scan-rival-host { overflow-wrap: anywhere; }
+}
 .scan-rivals-lede { margin: 20px 0 0; color: #9AABAF; font-size: 14px; max-width: 66ch; }
 .scan-rivals-add { margin-top: 24px; }
 .scan-rivals-add .scan-capture-form { margin: 0 0 8px; }
