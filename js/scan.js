@@ -402,7 +402,7 @@
     result.appendChild(viewBar());
 
     result.appendChild(el("p", "scan-rivals-lede",
-      t("rivalsLede", "Add any public URL. Each one is measured with this same test.")));
+      t("rivalsLede", "Add two: a firm you compete with, and one you think does this well.")));
 
     // Ranked, because the ranking is the finding. The reader's own row is
     // marked rather than pinned, so where they land is the first thing seen.
