@@ -319,6 +319,42 @@
     return col;
   }
 
+  /* ── the joint verdict ─────────────────────────────────
+     Two scores on one screen are two facts. The finding is what the pair
+     means, and it is not an average: these are different doors. One is the
+     answer engine, which reads the page and never asks you to explain
+     anything; the other is the buyer, who checks the response before the call
+     rather than after it. A page can pass one and fail the other, and which
+     one is shut decides what it costs.
+
+     Read from the gaps, not from the scores, so the sentence agrees with the
+     columns underneath it.
+     ──────────────────────────────────────────────────── */
+
+  function targetFor(mode) {
+    return Number(mode === MODE ? root.dataset.target : root.dataset.otherTarget);
+  }
+
+  function verdict() {
+    var sec = MODE === "headers" ? lastData  : otherData;
+    var ai  = MODE === "headers" ? otherData : lastData;
+    if (!sec || !ai) return null;
+
+    var secBar = targetFor("headers"), aiBar = targetFor("");
+    var secOk = isFinite(secBar) && secBar ? sec.score >= secBar : true;
+    var aiOk  = isFinite(aiBar)  && aiBar  ? ai.score  >= aiBar  : true;
+
+    var key = secOk && aiOk ? "verdictBoth"
+            : aiOk         ? "verdictEngineOnly"
+            : secOk        ? "verdictBuyerOnly"
+            :                "verdictNeither";
+    var line = t(key, "");
+    if (!line) return null;
+
+    return line.replace("{a}", ai.total - ai.passed)
+               .replace("{s}", sec.total - sec.passed);
+  }
+
   function renderCompare() {
     result.textContent = "";
     crossBtn = null;                     // both are about to be detached
@@ -328,6 +364,9 @@
     head.appendChild(el("h2", "scan-subhead", t("compareTitle", "Side by side")));
     head.appendChild(el("p", "scan-target", lastData.url));
     result.appendChild(head);
+
+    var says = verdict();
+    if (says) result.appendChild(el("p", "scan-verdict", says));
 
     var grid = el("div", "scan-compare");
     grid.appendChild(compareCol(lastData,  t("ownName", ""),   Number(root.dataset.target)));

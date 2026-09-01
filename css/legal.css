@@ -1048,6 +1048,15 @@ nav {
 .scan-cross-say.is-bad { color: #E8EDED; }
 .scan-cross-say[hidden] { display: none; }
 
+/* The finding leads, above the two columns it is read from. Larger than the
+   facts under it and in --text rather than --muted, because this is the
+   sentence a prospect repeats to whoever else has to hear it. */
+.scan-verdict {
+  margin: 20px 0 0; font-size: 17px; line-height: 1.55; color: #E8EDED;
+  max-width: 62ch;
+}
+@media (max-width: 639px) { .scan-verdict { font-size: 16px; } }
+
 .scan-compare {
   display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 24px 0 0;
 }
