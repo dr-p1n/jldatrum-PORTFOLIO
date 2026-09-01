@@ -1021,12 +1021,14 @@ nav {
 .scan-btn--quiet:hover { filter: none; border-color: #F2D24B; color: #F2D24B; }
 
 /* The cross-run is the one action on a finished result, so it carries the
-   filled treatment the scan button has, in teal rather than the near-black.
-   Teal on lemon measures 3.10:1 — that clears AA as large text only, which is
-   why the size is not decorative: 19px at 700 puts it over the 18.66px bold
-   threshold. Do not shrink this without changing the colour. */
+   filled treatment the scan button has, at a size that says so. Solid black
+   rather than the #0C1B1F the scan button uses: on lemon it measures 14.1:1
+   against that button's 12.6:1, and the extra weight is what separates the two
+   when they sit on the same result. Teal was tried here and dropped — 3.10:1
+   cleared AA as large text only, which made the type size load-bearing. Black
+   holds at any size, so this one is free to change. */
 .scan-btn--cross {
-  background: #F2D24B; color: #1E7F98; border: 0;
+  background: #F2D24B; color: #000; border: 0;
   padding: 16px 30px; font-size: 19px; font-weight: 700; letter-spacing: -0.005em;
 }
 .scan-btn--cross:hover { filter: brightness(1.06); }
