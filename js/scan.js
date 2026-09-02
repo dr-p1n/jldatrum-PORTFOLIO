@@ -1126,14 +1126,25 @@
       "th,td{text-align:left;vertical-align:top;padding:14px 16px 14px 0;",
       "border-bottom:1px solid #1A3A40}",
       "td.c{text-align:right;white-space:nowrap;color:#F2D24B;padding-right:0}",
-      ".t{font-weight:600;margin:0 0 4px}",
+      // The mark and the number are what make this readable down a phone line:
+      // one glance finds the failures, and "number three" points at a row
+      // without anybody reading a title aloud. The gaps are sorted worst first,
+      // so the ordinal carries the priority rather than decorating it.
+      "td.x{width:2.4em;padding-right:8px;white-space:nowrap;color:#E5484D;",
+      "font-weight:600;font-size:15px}",
+      "td.x .n{color:#9AABAF;font-weight:500;font-size:13px;margin-left:2px}",
+      ".t{font-weight:600;margin:0 0 4px;font-size:17px}",
       ".d{margin:0;color:#9AABAF;font-size:14px}",
       "ul{padding-left:18px;color:#9AABAF;font-size:14px}",
+      ".ok{margin-top:56px}",
+      ".ok h2{color:#6FCF97}",
+      ".ok ul{columns:2;column-gap:32px;font-size:13px;line-height:1.8}",
+      "@media (max-width:560px){.ok ul{columns:1}}",
       ".f{margin-top:48px;padding-top:16px;border-top:1px solid #1A3A40;",
       "color:#9AABAF;font-size:13px}",
       ".f a{color:#F2D24B}",
       "@media print{body{background:#fff;color:#111}.d,.sub,ul,.f{color:#444}",
-      "td.c,.f a{color:#111}}"
+      "td.c,.f a{color:#111}td.x{color:#B3231F}.ok h2{color:#1E7A46}}"
     ].join("");
     doc.head.appendChild(css);
 
@@ -1159,8 +1170,11 @@
       wrap.appendChild(E("h2", null, t("gapsLabel", "Gaps") + " (" + gaps.length + ")"));
       var tb = doc.createElement("table");
       var body = doc.createElement("tbody");
-      gaps.forEach(function (c) {
+      gaps.forEach(function (c, i) {
         var tr = doc.createElement("tr");
+        var mark = E("td", "x", "\u2715");
+        mark.appendChild(E("span", "n", String(i + 1)));
+        tr.appendChild(mark);
         var td = doc.createElement("td");
         td.appendChild(E("p", "t", c.title));
         td.appendChild(E("p", "d", c.detail));
@@ -1174,12 +1188,17 @@
       wrap.appendChild(E("p", "d", t("cleanLabel", "No gaps found. Every check passed.")));
     }
 
+    // Kept, because the report is the audit and an audit says what it looked
+    // at — but at the back and in two quiet columns. Nobody opens this file to
+    // read what already works, and on a call it was in the way.
     var ok = lastData.checks.filter(function (c) { return c.pass; });
     if (ok.length) {
-      wrap.appendChild(E("h2", null, t("passedTitle", "Passed") + " (" + ok.length + ")"));
+      var okBox = E("div", "ok");
+      okBox.appendChild(E("h2", null, t("passedTitle", "Passed") + " (" + ok.length + ")"));
       var ul = doc.createElement("ul");
       ok.forEach(function (c) { ul.appendChild(E("li", null, c.title)); });
-      wrap.appendChild(ul);
+      okBox.appendChild(ul);
+      wrap.appendChild(okBox);
     }
 
     var f = E("div", "f");
