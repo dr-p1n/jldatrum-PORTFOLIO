@@ -1120,10 +1120,22 @@
     return pngBlob(function () { return drawResults(data, target); });
   }
 
-  function cardName(data) {
+  // The host and the score, so a folder of these sorts by site and a file
+  // named in a cold email says what it is before it is opened.
+  function cardName(data, kind) {
     var host;
     try { host = new URL(data.url).hostname; } catch (e) { host = "site"; }
-    return "datrum-" + host + "-" + data.score + ".png";
+    return "datrum-" + host + "-" + data.score + (kind ? "-" + kind : "") + ".png";
+  }
+
+  // A download, not an image load: img-src is 'self' data:, but an anchor is
+  // free to take a blob: URL and this never reaches an <img>.
+  function saveBlob(b, name) {
+    var href = URL.createObjectURL(b);
+    var a = document.createElement("a");
+    a.href = href; a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(href); }, 30000);
   }
 
   /* ── a link somebody else can open ─────────────────────
@@ -1172,15 +1184,45 @@
   function buildShare(data, target) {
     var box = el("div", "scan-share");
 
+    // The text on its own, first in the row. It is the one that belongs in a
+    // cold email: an attachment from an unknown sender is a deliverability
+    // signal and half the clients block remote images anyway, so a diagnosis
+    // sent as a picture arrives as a grey box. This one renders in the preview
+    // pane and survives being forwarded into their own thread.
+    var plain = el("button", "scan-btn scan-btn--quiet", t("copyTextBtn", "Copy text"));
+    plain.type = "button";
     var copy = el("button", "scan-btn scan-btn--quiet", t("copyBtn", "Copy image"));
     copy.type = "button";
     var both = el("button", "scan-btn scan-btn--quiet", t("copyBothBtn", "Copy image + results"));
     both.type = "button";
     var down = el("button", "scan-btn scan-btn--quiet", t("downloadBtn", "Download image"));
     down.type = "button";
+    var downBoth = el("button", "scan-btn scan-btn--quiet",
+                      t("downloadBothBtn", "Download image + results"));
+    downBoth.type = "button";
     var say = el("span", "scan-share-say");
     say.setAttribute("role", "status");
     say.setAttribute("aria-live", "polite");
+
+    plain.addEventListener("click", function () {
+      var body = resultsText(data, target);
+      var go;
+      try {
+        go = (navigator.clipboard && navigator.clipboard.writeText)
+          ? navigator.clipboard.writeText(body)
+          : Promise.reject(new Error("unsupported"));
+      } catch (e) { go = Promise.reject(e); }
+
+      plain.disabled = true;
+      go.then(function () {
+          say.textContent = t("copiedText", "Copied as text. Paste it into an email.");
+        })
+        .catch(function () {
+          say.textContent = t("copyTextFailed",
+            "This browser will not let the page copy — download it instead.");
+        })
+        .then(function () { plain.disabled = false; });
+    });
 
     // Clipboard image write is not universal, and Firefox in particular will
     // reject it. Offer the button, and say plainly when it will not go.
@@ -1229,24 +1271,30 @@
         .then(function () { both.disabled = false; });
     });
 
-    down.addEventListener("click", function () {
-      down.disabled = true;
-      cardBlob(data, target)
-        .then(function (b) {
-          var href = URL.createObjectURL(b);
-          var a = document.createElement("a");
-          a.href = href; a.download = cardName(data);
-          document.body.appendChild(a); a.click(); document.body.removeChild(a);
-          setTimeout(function () { URL.revokeObjectURL(href); }, 30000);
-          say.textContent = t("downloaded", "Saved.");
-        })
-        .catch(function () { say.textContent = t("genericError", "The scan failed."); })
-        .then(function () { down.disabled = false; });
-    });
+    // Two downloads, one handler. The clipboard is the right way into a
+    // messenger; a file is the right way into a mail client, where there is
+    // nothing to paste into and an attachment is what the composer expects.
+    function saver(button, make, kind) {
+      button.addEventListener("click", function () {
+        button.disabled = true;
+        make()
+          .then(function (b) {
+            saveBlob(b, cardName(data, kind));
+            say.textContent = t("downloaded", "Saved.");
+          })
+          .catch(function () { say.textContent = t("genericError", "The scan failed."); })
+          .then(function () { button.disabled = false; });
+      });
+    }
 
+    saver(down, function () { return cardBlob(data, target); }, "");
+    saver(downBoth, function () { return resultsBlob(data, target); }, "results");
+
+    box.appendChild(plain);
     box.appendChild(copy);
     box.appendChild(both);
     box.appendChild(down);
+    box.appendChild(downBoth);
     box.appendChild(linkButton(say));
     box.appendChild(say);
     return box;
