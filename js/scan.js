@@ -109,7 +109,13 @@
     rows.forEach(function (c) {
       var li = el("li", c.pass ? "is-ok" : "is-gap");
       li.appendChild(el("span", "scan-check-mark", c.pass ? "✓" : "✕"));
-      li.appendChild(el("span", "scan-check-title", c.title));
+      var body = el("span", "scan-check-title", c.title);
+      // What the gap means, wherever the gap is named. The technical reason and
+      // the cost are what the address buys; this is what the two people looking
+      // at the screen actually say to each other, and withholding it only makes
+      // the free result harder to act on without making the audit worth more.
+      if (c.so) body.appendChild(el("span", "scan-check-so", c.so));
+      li.appendChild(body);
       list.appendChild(li);
     });
     box.appendChild(list);
@@ -192,6 +198,7 @@
         var td = document.createElement("td");
         if (!compact && area[c.group]) td.appendChild(el("span", "scan-area", area[c.group]));
         td.appendChild(el("p", "scan-title", c.title));
+        if (c.so) td.appendChild(el("p", "scan-so", c.so));
         td.appendChild(el("p", "scan-detail", c.detail));
         tr.appendChild(td);
         tr.appendChild(el("td", "scan-col-cost scan-cost", "\u2212" + c.deduction));

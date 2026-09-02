@@ -950,7 +950,11 @@ nav {
   font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
   color: #9AABAF; margin-bottom: 5px;
 }
-.scan-title { color: #E8EDED; font-size: 15px; margin: 0 0 3px; }
+.scan-title { color: #E8EDED; font-size: 15px; margin: 0 0 4px; }
+/* What the gap costs the business, in one sentence. Sits above the technical
+   line and reads at body weight — it is the sentence a prospect repeats to
+   whoever else has to hear it. */
+.scan-so { color: #E8EDED; font-size: 14.5px; line-height: 1.55; margin: 0 0 4px; max-width: 62ch; }
 .scan-detail { color: #9AABAF; font-size: 14px; margin: 0; line-height: 1.55; max-width: 62ch; }
 .scan-cost {
   font-family: 'Space Grotesk', sans-serif;
@@ -977,6 +981,10 @@ nav {
 .scan-checklist .is-gap .scan-check-mark { color: #F2D24B; }
 .scan-checklist .is-ok  .scan-check-title { color: #9AABAF; }
 .scan-checklist .is-gap .scan-check-title { color: #E8EDED; }
+.scan-check-so {
+  display: block; color: #9AABAF; font-size: 13.5px; line-height: 1.5;
+  margin-top: 3px; max-width: 62ch;
+}
 
 .scan-locked {
   margin: 16px 0 0; color: #9AABAF; font-size: 14px; line-height: 1.6;
@@ -1149,7 +1157,8 @@ nav {
   margin: 0 0 18px; font-size: 13px; color: #9AABAF;
   font-variant-numeric: tabular-nums;
 }
-.scan-compare-col .scan-checklist li { font-size: 14px; padding: 8px 0; }
+.scan-compare-col .scan-checklist li { font-size: 14px; padding: 10px 0; align-items: flex-start; }
+.scan-compare-col .scan-check-so { font-size: 13px; }
 .scan-compare-note {
   margin: 28px 0 0; font-size: 13px; color: #9AABAF; line-height: 1.6; max-width: 68ch;
 }
