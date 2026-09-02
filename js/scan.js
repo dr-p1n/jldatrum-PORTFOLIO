@@ -689,20 +689,26 @@
      works if you have actually measured the peers. A target needs no sample —
      but it does need a derivation, or it is a number someone felt like.
 
-     Both targets fall out of the weights. Security: fifteen checks share 100 —
-     noindex 15, then the headers, then the page — and at 10 points of
-     deductions nothing weighing more than 10 can be failing, so 90 means the
-     page is indexable and HTTPS, HSTS, a CSP that actually stops injected
-     script and closed framing are all correct. 90 is the lowest number that
-     still guarantees all five; at 89 transport drops out.
+     Both targets fall out of the weights. Security: fifteen checks over a pool
+     of 110 — noindex 15, one H1 15, then the headers, then the rest of the
+     page — and at 10 points of deductions nothing weighing more than 10 can be
+     failing, so 90 means the page is indexable, says what it is in one H1, and
+     HTTPS, HSTS, a CSP that actually stops injected script and closed framing
+     are all correct. 90 is the lowest number that still guarantees all six; at
+     89 transport drops out.
 
      AI visibility derives the same 90 the same way. At ten points of slack
      nothing weighing eleven or more can be failing, which on that instrument
-     is: the entity block present (40), parsing (25), naming an Organization
-     (15), the content in the served HTML (25), GPTBot not blocked (15), and
-     HTTPS (11). 90 is again the lowest number that holds all six — at 89 the
-     11-point transport check drops out, exactly as it does on the other
-     instrument. Those six are the line every answer engine shares, because
+     is: the entity block present (40), parsing (25), the content in the served
+     HTML (25), one H1 (25), naming an Organization (15), GPTBot not blocked
+     (15), and HTTPS (11). 90 is again the lowest number that holds all seven —
+     at 89 the 11-point transport check drops out, exactly as it does on the
+     other instrument.
+
+     The pool is not normalised to 100 on either instrument. Pricing every
+     check against the others means the only way to say an H1 matters is to say
+     framing matters less, which is a statement about arithmetic rather than
+     about what it costs the reader. Those six are the line every answer engine shares, because
      none of them reliably run JavaScript and all of them need an entity to
      attach a recommendation to.
 

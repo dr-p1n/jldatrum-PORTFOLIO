@@ -630,7 +630,12 @@ function runChecks(ctx) {
   add("description", "retrieval", descPresent(doc), 5, { len: dlen });
   add("description-length", "retrieval", descUsable(doc), 3, { len: dlen });
 
-  add("h1", "retrieval", hasOneH1(doc), 5,
+  // 25, the same as the content being there and the entity parsing. A page
+  // with no H1 makes no claim about its own subject, so a retriever that can
+  // read every word still cannot say what the page is for. Priced with the
+  // things that decide whether the page is legible at all, not with the
+  // things that make a legible page tidier.
+  add("h1", "retrieval", hasOneH1(doc), 25,
       { n: doc.h1.length, text: hasOneH1(doc) ? doc.h1[0].text.trim().slice(0, 60) : "" });
 
   const skip = headingSkip(doc);
@@ -939,26 +944,31 @@ function frameIsClosed(csp, xfo) {
 }
 
 /* The deduction pool, stated once so the target stays derivable. Fifteen
-   checks, 100 points:
+   checks, 110 points:
 
    indexing   15:  noindex 15
    content    38:  csp 14 · frame 12 · mixed 7 · nosniff 5
    transport  23:  hsts 12 · https 11
-   page       20:  title 5 · h1 5 · canonical 5 · description 2
+   page       30:  h1 15 · title 5 · canonical 5 · description 2
                    · heading-order 2 · lang 1
    privacy     4:  referrer 2 · permissions 2
 
+   The pool is 110, not 100, and that is deliberate. Forcing it to 100 means
+   every check is priced against the others rather than against what it costs
+   the reader, and the only way to say an H1 matters would have been to say
+   framing or HSTS matters less. A page that fails everything floors at 0
+   either way, which is the only thing 100 was buying.
+
    The security ordering is the one this instrument has always used — CSP above
-   framing, HSTS above transport, those above the two privacy headers. Only the
-   scale changed, to make room.
+   framing, HSTS above transport, those above the two privacy headers.
 
    The bar stays 90, and 90 stays derived rather than chosen: at 10 points of
    deductions nothing weighing more than 10 can be failing, so a score of 90 or
-   better means the page is indexable and HTTPS, HSTS, a CSP that actually
-   stops injected script and closed framing are all correct. 90 is the lowest
-   number that still guarantees all five — at 89 the transport check drops out
-   of the guarantee. Change a weight and this paragraph stops being true:
-   re-derive it rather than renaming it. */
+   better means the page is indexable, says what it is in one H1, and HTTPS,
+   HSTS, a CSP that actually stops injected script and closed framing are all
+   correct. 90 is the lowest number that still guarantees all six — at 89 the
+   transport check drops out of the guarantee. Change a weight and this
+   paragraph stops being true: re-derive it rather than renaming it. */
 function runHeaderChecks(res, target, lang, doc) {
   const L = HDR[lang === "es" ? "es" : "en"];
   const c = [];
@@ -1029,7 +1039,10 @@ function runHeaderChecks(res, target, lang, doc) {
     add("mixed", "content", mixedContent(doc) ? "no" : "ok", 7, "mixed", doc.insecureRefs);
 
     add("title", "page", titleNames(doc) ? "ok" : "no", 5, "title", doc.title.trim());
-    add("h1", "page", hasOneH1(doc) ? "ok" : "no", 5, "h1", doc.h1.length);
+    // 15, level with noindex: both are the page failing to be identifiable at
+    // all rather than failing to be tidy, and 15 puts it inside what the bar
+    // guarantees. Nothing was taken from another check to pay for it.
+    add("h1", "page", hasOneH1(doc) ? "ok" : "no", 15, "h1", doc.h1.length);
     // Absent or relative is one failure; pointing at another site is a worse
     // one and gets its own reason. Pointing elsewhere on the same site is
     // legitimate — pagination and syndication do it — and is not flagged.

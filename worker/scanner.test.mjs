@@ -216,18 +216,30 @@ const doc = (o = {}) => ({
 const runD = (hs, d, lang = "en", url = "https://x.com/") => M.runHeaderChecks(res(hs), tgt(url), lang, d);
 
 t("a document adds seven checks",     runD(ALL, doc()).length, 15);
-t("page pool totals 20",
+t("page pool totals 30",
   runD({}, doc({ title: "Home", description: "", canonical: "/x", lang: "",
                  headings: [{ level: 2, text: "a" }, { level: 4, text: "b" }] }))
-    .filter(c => c.group === "page").reduce((n, c) => n + c.deduction, 0), 20);
-// Everything wrong at once, over http and with noindex, must account for
-// exactly 100 — the proof that the pool has not drifted.
+    .filter(c => c.group === "page").reduce((n, c) => n + c.deduction, 0), 30);
+// Everything wrong at once, over http and with noindex, accounts for the whole
+// pool. It is 110 rather than 100 because the H1 was raised without taking the
+// points from another check — the proof that the pool has not drifted since.
 const allWrong = doc({ title: "Home", description: "", canonical: "/x", lang: "",
                        insecureRefs: 3, robotsMeta: "noindex",
                        headings: [{ level: 2, text: "a" }, { level: 4, text: "b" }] });
-t("the whole pool is still 100",
-  runD({}, allWrong, "en", "http://x.com/").reduce((n, c) => n + c.deduction, 0), 100);
-t("...and that is a zero", score(runD({}, allWrong, "en", "http://x.com/")), 0);
+t("the whole pool is 110",
+  runD({}, allWrong, "en", "http://x.com/").reduce((n, c) => n + c.deduction, 0), 110);
+t("...and that is still a zero", score(runD({}, allWrong, "en", "http://x.com/")), 0);
+
+// What the bar actually promises, asserted rather than described. A check
+// heavier than the 10 points of slack cannot be failing at 90, so this is the
+// list an A- certifies — and it now includes the H1 on both instruments.
+const GUARANTEED_HDR = ["noindex", "https", "hsts", "csp", "frame", "h1"];
+t("the bar guarantees exactly these six", GUARANTEED_HDR.join(),
+  runD({}, allWrong, "en", "http://x.com/")
+    .filter(c => c.deduction > 10).map(c => c.id).sort()
+    .join() === [...GUARANTEED_HDR].sort().join() ? GUARANTEED_HDR.join() : "drifted");
+t("no page missing an H1 can reach the bar",
+  score(runD(ALL, doc({ headings: [{ level: 2, text: "a" }] }))) < 90, true);
 t("a clean page and clean headers still score 100", score(runD(ALL, doc())), 100);
 t("perfect headers, broken page is not an A+",
   M.grade(score(runD(ALL, doc({ title: "Home", description: "", canonical: "/x",
