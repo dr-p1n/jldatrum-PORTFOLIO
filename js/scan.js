@@ -665,13 +665,9 @@
     var note = t("compareNote", "");
     if (note) result.appendChild(el("p", "scan-compare-note", note));
 
-    var row = el("div", "scan-share");
-    var say = el("span", "scan-share-say");
-    say.setAttribute("role", "status");
-    say.setAttribute("aria-live", "polite");
-    row.appendChild(linkButton(say));
-    row.appendChild(say);
-    result.appendChild(row);
+    // Every way out that the single result has. This is the view an outreach
+    // message quotes, so it is the last place that should offer only a link.
+    result.appendChild(buildShare(pairShare(pair)));
 
     var box = el("div", "scan-cross");
     var back = el("button", "scan-btn scan-btn--quiet", t("compareBack", "Back to the full result"));
@@ -779,7 +775,7 @@
 
     var note = made ? t("targetMet", "") : t("targetMissed", "");
     if (note) box.appendChild(el("p", "scan-scale-cap", note.replace("{n}", target - score)));
-    if (lastData) box.appendChild(buildShare(lastData, target));
+    if (lastData) box.appendChild(buildShare(singleShare(lastData, target)));
     return box;
   }
 
@@ -931,10 +927,6 @@
       });
   }
 
-  function cardBlob(data, target) {
-    return pngBlob(function () { return drawCard(data, target); });
-  }
-
   /* ── the results, as something you can paste ───────────
      A link is the better artifact and it is still here, but a cold recipient
      is right to be wary of one and half of them will not open it. So the
@@ -963,9 +955,28 @@
     return s;
   }
 
+  // Canvas has no line breaking. Wrapping and drawing are one pass, so a line
+  // that fits while measuring cannot fail to fit while drawing. Pass draw
+  // false to get the height without painting anything.
+  function wrapText(x, text, left, right, y, size, fill, weight, draw) {
+    x.font = cardFonts(weight || 400, size, "DM Sans");
+    x.fillStyle = fill;
+    var words = String(text).split(/\s+/), line = "",
+        step = Math.round(size * 1.4), max = right - left;
+    for (var i = 0; i < words.length; i++) {
+      var probe = line ? line + " " + words[i] : words[i];
+      if (x.measureText(probe).width > max && line) {
+        if (draw) x.fillText(line, left, y);
+        y += step; line = words[i];
+      } else { line = probe; }
+    }
+    if (line) { if (draw) x.fillText(line, left, y); y += step; }
+    return y;
+  }
+
   // Laid out twice against the same code: once to find the height, once to
-  // draw it. Canvas has no line breaking and the gap sentences wrap, so the
-  // height cannot be known before the wrapping is done.
+  // draw it. The gap sentences wrap, so the height cannot be known before the
+  // wrapping is done.
   function drawResults(data, target) {
     var c = document.createElement("canvas");
     var x = c.getContext("2d");
@@ -973,22 +984,8 @@
     var gaps = gapsOf(data), shown = gaps.slice(0, CARD_GAPS), rest = gaps.length - shown.length;
 
     function layout(draw, H) {
-      // Wrapping and drawing share one pass, so a line that fits in the
-      // measure cannot fail to fit in the draw.
       function put(text, left, y, size, fill, weight) {
-        x.font = cardFonts(weight || 400, size, "DM Sans");
-        x.fillStyle = fill;
-        var words = String(text).split(/\s+/), line = "",
-            step = Math.round(size * 1.4), max = RIGHT - left;
-        for (var i = 0; i < words.length; i++) {
-          var probe = line ? line + " " + words[i] : words[i];
-          if (x.measureText(probe).width > max && line) {
-            if (draw) x.fillText(line, left, y);
-            y += step; line = words[i];
-          } else { line = probe; }
-        }
-        if (line) { if (draw) x.fillText(line, left, y); y += step; }
-        return y;
+        return wrapText(x, text, left, RIGHT, y, size, fill, weight, draw);
       }
 
       function rule(y) {
@@ -1116,8 +1113,198 @@
     return out.join("\n");
   }
 
-  function resultsBlob(data, target) {
-    return pngBlob(function () { return drawResults(data, target); });
+  /* ── the pair, as something you can paste ──────────────
+     The comparison is the first-touch artifact: two doors, one shut on the
+     engine and one on the buyer, about a site the recipient owns and has not
+     asked anyone to look at. It travels the same six ways the single result
+     does, because the channel decides the form and a stranger's inbox is the
+     hardest channel of all.
+
+     Fewer gaps shown per instrument than on a single card. Two lists in one
+     message is already the long version, and the verdict above them is what
+     the first line of an outreach note is actually quoting.
+     ──────────────────────────────────────────────────── */
+
+  var PAIR_GAPS = 6;
+
+  function pairSides(pair) {
+    return [{ name: t("ownName", ""),   data: pair.mine,
+              bar: Number(root.dataset.target) },
+            { name: t("otherName", ""), data: pair.theirs,
+              bar: Number(root.dataset.otherTarget) }];
+  }
+
+  function pairName(pair, kind) {
+    var host;
+    try { host = new URL(pair.url).hostname; } catch (e) { host = "site"; }
+    return "datrum-" + host + "-both" + (kind ? "-" + kind : "") + ".png";
+  }
+
+  // The head both pair cards share: the two grades beside each other, then the
+  // joint verdict. Drawn identically on the 630 card and on the tall one, so
+  // the pair reads the same whichever of the two gets sent.
+  function paintPairHead(x, pair, draw) {
+    var M = 72, RIGHT = CARD_W - M, sides = pairSides(pair);
+
+    var y = M + 26;
+    if (draw) {
+      x.fillStyle = LEMON;
+      x.font = cardFonts(700, 34, "Space Grotesk");
+      x.letterSpacing = "2px";
+      x.fillText("DATRUM", M, y);
+      x.letterSpacing = "0px";
+      x.fillStyle = MUTED;
+      x.font = cardFonts(500, 20, "DM Sans");
+      x.textAlign = "right";
+      x.fillText(t("compareTitle", "Side by side"), RIGHT, y - 2);
+      x.textAlign = "left";
+    }
+
+    y += 66;
+    if (draw) {
+      x.fillStyle = TEXT;
+      x.font = cardFonts(400, 26, "DM Sans");
+      x.fillText(bareUrl(pair.url), M, y);
+    }
+
+    // Side by side stays side by side: two grades on one line is the whole
+    // claim, and it survives being looked at on a phone.
+    y += 76;
+    sides.forEach(function (s, i) {
+      if (!draw || !s.data) return;
+      var left = i === 0 ? M : Math.round(CARD_W / 2) + 12;
+      x.fillStyle = MUTED;
+      x.font = cardFonts(500, 20, "DM Sans");
+      x.fillText(s.name, left, y);
+
+      x.fillStyle = LEMON;
+      x.font = cardFonts(600, 76, "Space Grotesk");
+      x.fillText(s.data.grade, left, y + 74);
+      var gw = x.measureText(s.data.grade).width;
+      x.fillStyle = MUTED;
+      x.font = cardFonts(400, 26, "DM Sans");
+      x.fillText(s.data.score + "/100", left + gw + 18, y + 74);
+
+      x.font = cardFonts(400, 20, "DM Sans");
+      x.fillText(scoreLine(s.data, s.bar), left, y + 110);
+    });
+
+    y += 196;
+    var says = verdict(pair);
+    if (says) y = wrapText(x, says, M, RIGHT, y, 26, TEXT, 400, draw);
+    return y;
+  }
+
+  function drawPairCard(pair) {
+    var c = document.createElement("canvas");
+    c.width = CARD_W; c.height = CARD_H;
+    var x = c.getContext("2d");
+    x.fillStyle = BG;
+    x.fillRect(0, 0, CARD_W, CARD_H);
+    paintPairHead(x, pair, true);
+    x.fillStyle = MUTED;
+    x.font = cardFonts(400, 20, "DM Sans");
+    x.fillText("jldatrum.com", 72, CARD_H - 44);
+    return c;
+  }
+
+  function drawPairResults(pair) {
+    var c = document.createElement("canvas");
+    var x = c.getContext("2d");
+    var M = 72, IND = 62, RIGHT = CARD_W - M;
+
+    function layout(draw, H) {
+      if (draw) { x.fillStyle = BG; x.fillRect(0, 0, CARD_W, H); }
+      var y = paintPairHead(x, pair, draw);
+
+      pairSides(pair).forEach(function (s) {
+        if (!s.data) return;
+        var gaps = gapsOf(s.data), shown = gaps.slice(0, PAIR_GAPS),
+            rest = gaps.length - shown.length;
+
+        y += 34;
+        if (draw) {
+          x.strokeStyle = BORDER; x.lineWidth = 2;
+          x.beginPath(); x.moveTo(M, y); x.lineTo(RIGHT, y); x.stroke();
+        }
+        y += 46;
+
+        if (draw) {
+          x.fillStyle = MUTED;
+          x.font = cardFonts(500, 20, "DM Sans");
+          x.fillText(s.name + "  ·  " + (gaps.length
+            ? t("gapsLabel", "Gaps") + " (" + gaps.length + ")"
+            : t("cleanLabel", "No gaps found. Every check passed.")), M, y);
+        }
+        y += 44;
+
+        shown.forEach(function (gap, i) {
+          var top = y;
+          if (draw) {
+            x.fillStyle = "#E5484D";
+            x.font = cardFonts(600, 24, "DM Sans");
+            x.fillText("✕", M, top);
+            x.fillStyle = MUTED;
+            x.font = cardFonts(500, 22, "DM Sans");
+            x.fillText(String(i + 1), M + 32, top);
+          }
+          y = wrapText(x, gap.title, M + IND, RIGHT, y, 26, TEXT, 600, draw);
+          if (gap.so) y = wrapText(x, gap.so, M + IND, RIGHT, y + 8, 23, MUTED, 400, draw);
+          y += 34;
+        });
+        if (rest > 0)
+          y = wrapText(x, t("moreGaps", "+{n} more").replace("{n}", rest),
+                       M, RIGHT, y + 4, 22, MUTED, 400, draw);
+      });
+
+      y += 18;
+      if (draw) {
+        x.strokeStyle = BORDER; x.lineWidth = 2;
+        x.beginPath(); x.moveTo(M, y); x.lineTo(RIGHT, y); x.stroke();
+      }
+      y += 44;
+      if (draw) {
+        x.fillStyle = MUTED;
+        x.font = cardFonts(400, 20, "DM Sans");
+        x.fillText("jldatrum.com  ·  " + today(), M, y);
+      }
+      return y + M - 20;
+    }
+
+    var h = layout(false, 0);
+    c.width = CARD_W; c.height = h;
+    layout(true, h);
+    return c;
+  }
+
+  function pairText(pair) {
+    var out = ["DATRUM — " + t("compareTitle", "Side by side"),
+               bareUrl(pair.url) + " · " + today(), ""];
+
+    var says = verdict(pair);
+    if (says) out.push(says, "");
+
+    pairSides(pair).forEach(function (s) {
+      if (!s.data) return;
+      out.push(s.name + " — " + s.data.grade + " · " + s.data.score + "/100 · " +
+               scoreLine(s.data, s.bar).replace(/ {2}/g, " "), "");
+
+      var gaps = gapsOf(s.data), shown = gaps.slice(0, PAIR_GAPS),
+          rest = gaps.length - shown.length;
+      if (!gaps.length) {
+        out.push(t("cleanLabel", "No gaps found. Every check passed."), "");
+        return;
+      }
+      shown.forEach(function (gap, i) {
+        out.push("✕ " + (i + 1) + ". " + gap.title);
+        if (gap.so) out.push("   " + gap.so);
+        out.push("");
+      });
+      if (rest > 0) out.push(t("moreGaps", "+{n} more").replace("{n}", rest), "");
+    });
+
+    out.push("jldatrum.com");
+    return out.join("\n");
   }
 
   // The host and the score, so a folder of these sorts by site and a file
@@ -1181,7 +1368,28 @@
     return b;
   }
 
-  function buildShare(data, target) {
+  // One row, two subjects. The single result and the pair differ only in what
+  // they draw and what they write, so they hand this the same four things and
+  // every button below means exactly what it means in the other view.
+  function singleShare(data, target) {
+    return {
+      card:    function () { return drawCard(data, target); },
+      results: function () { return drawResults(data, target); },
+      text:    function () { return resultsText(data, target); },
+      name:    function (kind) { return cardName(data, kind); }
+    };
+  }
+
+  function pairShare(pair) {
+    return {
+      card:    function () { return drawPairCard(pair); },
+      results: function () { return drawPairResults(pair); },
+      text:    function () { return pairText(pair); },
+      name:    function (kind) { return pairName(pair, kind); }
+    };
+  }
+
+  function buildShare(spec) {
     var box = el("div", "scan-share");
 
     // The text on its own, first in the row. It is the one that belongs in a
@@ -1205,7 +1413,7 @@
     say.setAttribute("aria-live", "polite");
 
     plain.addEventListener("click", function () {
-      var body = resultsText(data, target);
+      var body = spec.text();
       var go;
       try {
         go = (navigator.clipboard && navigator.clipboard.writeText)
@@ -1228,7 +1436,7 @@
     // reject it. Offer the button, and say plainly when it will not go.
     copy.addEventListener("click", function () {
       copy.disabled = true;
-      cardBlob(data, target)
+      pngBlob(spec.card)
         .then(function (b) {
           if (!navigator.clipboard || !window.ClipboardItem) throw new Error("unsupported");
           return navigator.clipboard.write([new window.ClipboardItem({ "image/png": b })]);
@@ -1244,12 +1452,12 @@
     // refused outright — Firefox — the text still goes, which in a message is
     // the half that carries the finding.
     both.addEventListener("click", function () {
-      var text = resultsText(data, target);
+      var text = spec.text();
       var wrote = null;
       try {
         if (navigator.clipboard && navigator.clipboard.write && window.ClipboardItem)
           wrote = navigator.clipboard.write([new window.ClipboardItem({
-            "image/png": resultsBlob(data, target),
+            "image/png": pngBlob(spec.results),
             "text/plain": new Blob([text], { type: "text/plain" })
           })]);
       } catch (e) { wrote = null; }
@@ -1279,7 +1487,7 @@
         button.disabled = true;
         make()
           .then(function (b) {
-            saveBlob(b, cardName(data, kind));
+            saveBlob(b, spec.name(kind));
             say.textContent = t("downloaded", "Saved.");
           })
           .catch(function () { say.textContent = t("genericError", "The scan failed."); })
@@ -1287,8 +1495,8 @@
       });
     }
 
-    saver(down, function () { return cardBlob(data, target); }, "");
-    saver(downBoth, function () { return resultsBlob(data, target); }, "results");
+    saver(down, function () { return pngBlob(spec.card); }, "");
+    saver(downBoth, function () { return pngBlob(spec.results); }, "results");
 
     box.appendChild(plain);
     box.appendChild(copy);
