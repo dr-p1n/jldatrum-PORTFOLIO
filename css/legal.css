@@ -1095,17 +1095,28 @@ nav {
   display: inline-block; margin-left: 10px;
   font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #F2D24B;
 }
+/* One cell per instrument: grade, score, and what is failing out of what was
+   measured — enough to read a row across without opening it. */
+.scan-rival-score { text-align: right; white-space: nowrap; width: 8.5em; }
+th.scan-rival-score {
+  font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+}
 .scan-rival-grade {
   font-family: var(--font-display, 'Space Grotesk', sans-serif);
-  font-size: 20px; font-weight: 400; text-align: right; width: 3.5em; white-space: nowrap;
+  font-size: 19px; font-weight: 400;
 }
 .scan-rival-grade[data-band="good"] { color: #6FCF97; }
 .scan-rival-grade[data-band="mid"]  { color: #F2D24B; }
 .scan-rival-grade[data-band="bad"]  { color: #E88B6A; }
-.scan-rival-num, .scan-rival-gaps {
-  text-align: right; width: 4.5em; white-space: nowrap;
-  font-variant-numeric: tabular-nums;
+.scan-rival-num {
+  margin-left: 8px; font-variant-numeric: tabular-nums;
+  font-family: var(--font-display, 'Space Grotesk', sans-serif); font-size: 15px;
 }
+.scan-rival-gaps {
+  display: block; font-size: 12px; color: #9AABAF;
+  font-variant-numeric: tabular-nums; margin-top: 2px;
+}
+.scan-rival-none { color: #1A3A40; font-size: 19px; }
 .scan-rival-act { text-align: right; white-space: nowrap; }
 .scan-btn--row {
   background: transparent; color: #9AABAF; border: 1px solid #1A3A40;
@@ -1117,8 +1128,9 @@ nav {
    from. The host wraps; nothing else has to. */
 @media (max-width: 560px) {
   .scan-rivals td, .scan-rivals th { font-size: 13px; }
-  .scan-rival-grade { font-size: 17px; width: 2.6em; }
-  .scan-rival-num, .scan-rival-gaps { width: 3.6em; }
+  .scan-rival-grade { font-size: 16px; }
+  .scan-rival-score { width: 5.6em; }
+  .scan-rival-num { font-size: 13px; margin-left: 5px; }
   .scan-btn--row { padding: 5px 9px; font-size: 12px; }
   .scan-rival-host { overflow-wrap: anywhere; }
 }

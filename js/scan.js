@@ -399,11 +399,23 @@
     try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return u; }
   }
 
+  function otherFor(host) {
+    if (!host) return otherData;
+    var r = rivalBy(host);
+    return r ? r.other : null;
+  }
+
+  // Two clicks, two different things, and the label says which: the first
+  // measures the second instrument for that row and stays in the table, so the
+  // ranking fills in across both tests; the second opens that row's pair. One
+  // click is never more than one scan.
   function bothFor(host, btn, say) {
     var r = host ? rivalBy(host) : null;
     if (host && !r) return;
-    var have = host ? r.other : otherData;
-    if (have) { subject = host; comparing = true; rivalsOn = false; renderCompare(); return; }
+    if (otherFor(host)) {
+      subject = host; comparing = true; rivalsOn = false; renderCompare();
+      return;
+    }
 
     btn.disabled = true;
     say.classList.remove("is-bad");
@@ -414,10 +426,7 @@
       .then(function (d) {
         if (id !== runId) return;
         if (host) r.other = d; else otherData = d;
-        subject = host;
-        comparing = true;
-        rivalsOn = false;
-        renderCompare();
+        renderRivals();               // the row now carries both scores
       })
       .catch(function (err) {
         say.textContent = err.message || t("genericError", "The scan failed.");
@@ -435,20 +444,33 @@
     if (isYou) site.appendChild(el("span", "scan-rival-you", t("scaleYou", "This site")));
     tr.appendChild(site);
 
-    var g = el("td", "scan-rival-grade", data.grade);
-    g.setAttribute("data-band", band(data.score, Number(root.dataset.target)));
-    tr.appendChild(g);
+    // One cell per instrument. A site nobody has run the second test on shows a
+    // dash rather than a zero — unmeasured and failing are not the same thing,
+    // and a ranking that blurs them is worse than one that admits the hole.
+    var cell = function (d, target) {
+      var td = el("td", "scan-rival-score");
+      if (!d) { td.appendChild(el("span", "scan-rival-none", "\u2014")); return td; }
+      var g = el("span", "scan-rival-grade", d.grade);
+      g.setAttribute("data-band", band(d.score, target));
+      td.appendChild(g);
+      td.appendChild(el("span", "scan-rival-num", String(d.score)));
+      td.appendChild(el("span", "scan-rival-gaps",
+        (d.total - d.passed) + "/" + d.total));
+      return td;
+    };
 
-    tr.appendChild(el("td", "scan-rival-num", String(data.score)));
-    tr.appendChild(el("td", "scan-rival-gaps",
-      (data.total - data.passed) + " / " + data.total));
+    var host = isYou ? null : hostOf(url);
+    var other = otherFor(host);
+    tr.appendChild(cell(data,  Number(root.dataset.target)));
+    tr.appendChild(cell(other, Number(root.dataset.otherTarget)));
 
     // Every row, not only the reader's: the useful thing to send a prospect is
     // what their rival looks like on both doors.
     var act = el("td", "scan-rival-act");
-    var b = el("button", "scan-btn scan-btn--row", t("viewBoth", "Both tests"));
+    var b = el("button", "scan-btn scan-btn--row",
+                other ? t("compareTitle", "Side by side") : t("viewBoth", "Both tests"));
     b.type = "button";
-    b.addEventListener("click", function () { bothFor(isYou ? null : hostOf(url), b, say); });
+    b.addEventListener("click", function () { bothFor(host, b, say); });
     act.appendChild(b);
     tr.appendChild(act);
     return tr;
@@ -478,9 +500,8 @@
     var thead = document.createElement("thead");
     var hr = document.createElement("tr");
     hr.appendChild(el("th", null, t("rivalsSite", "Site")));
-    hr.appendChild(el("th", "scan-rival-grade", ""));
-    hr.appendChild(el("th", "scan-rival-num", t("scoreLabel", "Score")));
-    hr.appendChild(el("th", "scan-rival-gaps", t("gapsLabel", "Gaps")));
+    hr.appendChild(el("th", "scan-rival-score", t("ownName", "")));
+    hr.appendChild(el("th", "scan-rival-score", t("otherName", "")));
     hr.appendChild(el("th", "scan-rival-act", ""));
     thead.appendChild(hr);
     table.appendChild(thead);
