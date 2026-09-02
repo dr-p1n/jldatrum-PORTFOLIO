@@ -170,7 +170,7 @@
         t("gapsLabel", "Gaps") + " (" + gaps.length + ")"));
       result.appendChild(buildChecklist(data, true));
       result.appendChild(el("p", "scan-locked",
-        t("gapsLocked", "{n} need work. The full audit names what each one costs and how to fix it.")
+        t("gapsLocked", "{n} need work. The full audit names what each one costs and why it stops a reader.")
           .replace("{n}", gaps.length)));
     } else if (!gaps.length) {
       result.appendChild(el("p", "scan-clean",
@@ -998,7 +998,7 @@
     var box = el("div", "scan-capture");
     var locked = GATED && !unlocked;
     box.appendChild(el("p", "scan-capture-lede",
-      locked ? t("unlockLede", "Get the full audit \u2014 what each gap costs and how to close it.")
+      locked ? t("unlockLede", "Get the full audit \u2014 what each gap costs and why it stops a reader.")
              : t("reportLede", "Download this as a report \u2014 one file you can send on.")));
 
     var f = document.createElement("form");
