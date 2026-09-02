@@ -803,6 +803,25 @@
     return weight + " " + size + "px '" + family + "', system-ui, sans-serif";
   }
 
+  // What the reader would say out loud, not what was typed into the form.
+  function bareUrl(u) {
+    return String(u).replace(/^https?:\/\//, "").replace(/\/$/, "");
+  }
+
+  function instrumentName() {
+    var h1 = document.querySelector("h1");
+    return h1 ? h1.textContent.trim() : "";
+  }
+
+  function today() { return new Date().toISOString().slice(0, 10); }
+
+  // Worst first, everywhere: the ordinal in the card and in the pasted text is
+  // the priority, the same ordering the downloaded report prints.
+  function gapsOf(data) {
+    return (data.checks || []).filter(function (c) { return !c.pass; })
+             .sort(function (a, b) { return b.deduction - a.deduction; });
+  }
+
   function drawCard(data, target) {
     var c = document.createElement("canvas");
     c.width = CARD_W; c.height = CARD_H;
@@ -820,16 +839,15 @@
     x.letterSpacing = "0px";
 
     // What was measured, and by which instrument.
-    var h1 = document.querySelector("h1");
     x.fillStyle = MUTED;
     x.font = cardFonts(500, 20, "DM Sans");
     x.textAlign = "right";
-    x.fillText(h1 ? h1.textContent.trim() : "", CARD_W - M, M + 24);
+    x.fillText(instrumentName(), CARD_W - M, M + 24);
     x.textAlign = "left";
 
     x.fillStyle = TEXT;
     x.font = cardFonts(400, 26, "DM Sans");
-    x.fillText(String(data.url).replace(/^https?:\/\//, "").replace(/\/$/, ""), M, 208);
+    x.fillText(bareUrl(data.url), M, 208);
 
     x.fillStyle = LEMON;
     x.font = cardFonts(600, 132, "Space Grotesk");
@@ -889,8 +907,7 @@
 
     // The worst single gap, so the card is a diagnosis and not just a number.
     // This is what makes it usable in an outreach message.
-    var worst = (data.checks || []).filter(function (k) { return !k.pass; })
-                  .sort(function (a, b) { return b.deduction - a.deduction; })[0];
+    var worst = gapsOf(data)[0];
     if (worst) wrap("\u2212" + worst.deduction + "  " + worst.title, y + 12, 22, MUTED);
 
     x.fillStyle = MUTED;
@@ -900,15 +917,207 @@
     return c;
   }
 
-  function cardBlob(data, target) {
+  // Drawn after the fonts have loaded, never before: canvas 2D takes whatever
+  // the document has at the moment of the call, and a card in fallback sans is
+  // the thing this route exists to avoid.
+  function pngBlob(make) {
     return (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve())
       .then(function () {
         return new Promise(function (resolve, reject) {
-          drawCard(data, target).toBlob(function (b) {
+          make().toBlob(function (b) {
             b ? resolve(b) : reject(new Error("canvas"));
           }, "image/png");
         });
       });
+  }
+
+  function cardBlob(data, target) {
+    return pngBlob(function () { return drawCard(data, target); });
+  }
+
+  /* ── the results, as something you can paste ───────────
+     A link is the better artifact and it is still here, but a cold recipient
+     is right to be wary of one and half of them will not open it. So the
+     findings themselves have to travel inside the message: the head, and every
+     gap with the one sentence that says what it costs. Not the report — the
+     report is the file the address buys, with the technical line under each
+     row and the passing checks at the back.
+
+     Two representations, one clipboard write. A messenger takes the image; a
+     plain text field takes the text. Nothing here is behind the gate: the free
+     view already names every gap and prints its plain sentence, and the points
+     and the technical reasons are left out of both.
+     ──────────────────────────────────────────────────── */
+
+  // Enough to be a diagnosis, short enough to stay a message. What is left out
+  // is counted out loud rather than dropped — a card that quietly shows eight
+  // of twelve is a card that flatters.
+  var CARD_GAPS = 8;
+
+  // What the grade does not already say. On the card the grade is set large
+  // above this line; in the text there is nothing to set large, so the grade
+  // and the score are put back in front of it there.
+  function scoreLine(data, target) {
+    var s = data.passed + "/" + data.total + " " + t("passedLabel", "checks passed");
+    if (isFinite(target) && target) s += "  ·  " + t("targetLabel", "The bar") + " " + target;
+    return s;
+  }
+
+  // Laid out twice against the same code: once to find the height, once to
+  // draw it. Canvas has no line breaking and the gap sentences wrap, so the
+  // height cannot be known before the wrapping is done.
+  function drawResults(data, target) {
+    var c = document.createElement("canvas");
+    var x = c.getContext("2d");
+    var M = 72, IND = 62, RIGHT = CARD_W - M;
+    var gaps = gapsOf(data), shown = gaps.slice(0, CARD_GAPS), rest = gaps.length - shown.length;
+
+    function layout(draw, H) {
+      // Wrapping and drawing share one pass, so a line that fits in the
+      // measure cannot fail to fit in the draw.
+      function put(text, left, y, size, fill, weight) {
+        x.font = cardFonts(weight || 400, size, "DM Sans");
+        x.fillStyle = fill;
+        var words = String(text).split(/\s+/), line = "",
+            step = Math.round(size * 1.4), max = RIGHT - left;
+        for (var i = 0; i < words.length; i++) {
+          var probe = line ? line + " " + words[i] : words[i];
+          if (x.measureText(probe).width > max && line) {
+            if (draw) x.fillText(line, left, y);
+            y += step; line = words[i];
+          } else { line = probe; }
+        }
+        if (line) { if (draw) x.fillText(line, left, y); y += step; }
+        return y;
+      }
+
+      function rule(y) {
+        if (!draw) return;
+        x.strokeStyle = BORDER; x.lineWidth = 2;
+        x.beginPath(); x.moveTo(M, y); x.lineTo(RIGHT, y); x.stroke();
+      }
+
+      if (draw) { x.fillStyle = BG; x.fillRect(0, 0, CARD_W, H); }
+
+      var y = M + 26;
+      if (draw) {
+        x.fillStyle = LEMON;
+        x.font = cardFonts(700, 34, "Space Grotesk");
+        x.letterSpacing = "2px";
+        x.fillText("DATRUM", M, y);
+        x.letterSpacing = "0px";
+        x.fillStyle = MUTED;
+        x.font = cardFonts(500, 20, "DM Sans");
+        x.textAlign = "right";
+        x.fillText(instrumentName(), RIGHT, y - 2);
+        x.textAlign = "left";
+      }
+
+      y += 66;
+      if (draw) {
+        x.fillStyle = TEXT;
+        x.font = cardFonts(400, 26, "DM Sans");
+        x.fillText(bareUrl(data.url), M, y);
+      }
+
+      y += 92;
+      if (draw) {
+        x.fillStyle = LEMON;
+        x.font = cardFonts(600, 92, "Space Grotesk");
+        x.fillText(data.grade, M, y);
+        var gw = x.measureText(data.grade).width;
+        x.fillStyle = MUTED;
+        x.font = cardFonts(400, 28, "DM Sans");
+        x.fillText(data.score + "/100", M + gw + 22, y);
+      }
+
+      y += 44;
+      if (draw) {
+        x.fillStyle = MUTED;
+        x.font = cardFonts(400, 22, "DM Sans");
+        x.fillText(scoreLine(data, target), M, y);
+      }
+
+      y += 34;
+      rule(y);
+      y += 52;
+
+      if (!gaps.length) {
+        y = put(t("cleanLabel", "No gaps found. Every check passed."), M, y, 26, TEXT, 600);
+      } else {
+        if (draw) {
+          x.fillStyle = MUTED;
+          x.font = cardFonts(500, 20, "DM Sans");
+          x.fillText(t("gapsLabel", "Gaps") + " (" + gaps.length + ")", M, y);
+        }
+        y += 46;
+        shown.forEach(function (gap, i) {
+          var top = y;
+          if (draw) {
+            x.fillStyle = "#E5484D";
+            x.font = cardFonts(600, 24, "DM Sans");
+            x.fillText("✕", M, top);
+            x.fillStyle = MUTED;
+            x.font = cardFonts(500, 22, "DM Sans");
+            x.fillText(String(i + 1), M + 32, top);
+          }
+          y = put(gap.title, M + IND, y, 26, TEXT, 600);
+          if (gap.so) y = put(gap.so, M + IND, y + 8, 23, MUTED);
+          y += 34;
+        });
+        // Flush with the marks rather than with the titles: it closes the list
+        // instead of reading as a ninth line belonging to the eighth gap.
+        if (rest > 0) y = put(t("moreGaps", "+{n} more").replace("{n}", rest), M, y + 4, 22, MUTED);
+      }
+
+      y += 18;
+      rule(y);
+      y += 44;
+      if (draw) {
+        x.fillStyle = MUTED;
+        x.font = cardFonts(400, 20, "DM Sans");
+        x.fillText("jldatrum.com  ·  " + today(), M, y);
+      }
+      return y + M - 20;
+    }
+
+    var h = layout(false, 0);
+    c.width = CARD_W; c.height = h;   // resizing clears the context; layout sets
+    layout(true, h);                  // its own font and fill on every line
+    return c;
+  }
+
+  function resultsText(data, target) {
+    var gaps = gapsOf(data), shown = gaps.slice(0, CARD_GAPS), rest = gaps.length - shown.length;
+    var name = instrumentName();
+    var out = ["DATRUM" + (name ? " — " + name : ""),
+               bareUrl(data.url) + " · " + today(),
+               "",
+               data.grade + " · " + data.score + "/100 · " +
+                 scoreLine(data, target).replace(/ {2}/g, " "),
+               ""];
+
+    if (!gaps.length) {
+      out.push(t("cleanLabel", "No gaps found. Every check passed."));
+    } else {
+      out.push(t("gapsLabel", "Gaps") + " (" + gaps.length + ")", "");
+      // The mark travels with the title. Every check is titled for what it
+      // prevents — "Structured data is present" — so a bare line under a
+      // heading reads as the good news, which is the opposite of the finding.
+      shown.forEach(function (gap, i) {
+        out.push("✕ " + (i + 1) + ". " + gap.title);
+        if (gap.so) out.push("   " + gap.so);
+        out.push("");
+      });
+      if (rest > 0) out.push(t("moreGaps", "+{n} more").replace("{n}", rest), "");
+    }
+
+    out.push("jldatrum.com");
+    return out.join("\n");
+  }
+
+  function resultsBlob(data, target) {
+    return pngBlob(function () { return drawResults(data, target); });
   }
 
   function cardName(data) {
@@ -965,6 +1174,8 @@
 
     var copy = el("button", "scan-btn scan-btn--quiet", t("copyBtn", "Copy image"));
     copy.type = "button";
+    var both = el("button", "scan-btn scan-btn--quiet", t("copyBothBtn", "Copy image + results"));
+    both.type = "button";
     var down = el("button", "scan-btn scan-btn--quiet", t("downloadBtn", "Download image"));
     down.type = "button";
     var say = el("span", "scan-share-say");
@@ -985,6 +1196,39 @@
         .then(function () { copy.disabled = false; });
     });
 
+    // Both representations go on in one write, inside the click itself: Safari
+    // only honours a clipboard write from the gesture that started it, so the
+    // image goes in as a promise rather than after an await. Where images are
+    // refused outright — Firefox — the text still goes, which in a message is
+    // the half that carries the finding.
+    both.addEventListener("click", function () {
+      var text = resultsText(data, target);
+      var wrote = null;
+      try {
+        if (navigator.clipboard && navigator.clipboard.write && window.ClipboardItem)
+          wrote = navigator.clipboard.write([new window.ClipboardItem({
+            "image/png": resultsBlob(data, target),
+            "text/plain": new Blob([text], { type: "text/plain" })
+          })]);
+      } catch (e) { wrote = null; }
+
+      both.disabled = true;
+      (wrote || Promise.reject(new Error("unsupported")))
+        .then(function () {
+          say.textContent = t("copiedBoth", "Copied. Paste it straight into a message.");
+        })
+        .catch(function () {
+          return navigator.clipboard.writeText(text).then(function () {
+            say.textContent = t("copiedTextOnly",
+              "This browser will not copy images — the results went across as text.");
+          });
+        })
+        .catch(function () {
+          say.textContent = t("copyFailed", "This browser will not copy images — download it instead.");
+        })
+        .then(function () { both.disabled = false; });
+    });
+
     down.addEventListener("click", function () {
       down.disabled = true;
       cardBlob(data, target)
@@ -1001,6 +1245,7 @@
     });
 
     box.appendChild(copy);
+    box.appendChild(both);
     box.appendChild(down);
     box.appendChild(linkButton(say));
     box.appendChild(say);
