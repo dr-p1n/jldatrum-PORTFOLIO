@@ -513,6 +513,9 @@
     result.appendChild(say);
 
     result.appendChild(rivalsForm());
+    // The ranking is a finding too, and it was the last view that could not
+    // leave the page.
+    result.appendChild(buildShare(rankShare()));
     result.appendChild(buildCapture());
     show(result, true);
   }
@@ -1138,6 +1141,148 @@
               bar: Number(root.dataset.target) },
             { name: t("otherName", ""), data: pair.theirs,
               bar: Number(root.dataset.otherTarget) }];
+  }
+
+  /* ── the ranking, as something you can paste ───────────
+     One row per site, one cell per instrument, in the order the table shows.
+     The reader's own row is marked rather than pinned, exactly as on screen,
+     because where they land is the finding.
+
+     An unmeasured cell is a dash here too. A ranking that prints 0 for a test
+     nobody ran is worse than one that admits the hole, and this file travels
+     further than the screen does.
+     ──────────────────────────────────────────────────── */
+
+  function rankRows() {
+    return [{ url: lastData.url, data: lastData, other: otherData, you: true }]
+      .concat(rivals.map(function (r) {
+        return { url: r.url, data: r.data, other: r.other, you: false };
+      }))
+      .sort(function (a, b) { return b.data.score - a.data.score; });
+  }
+
+  function rankName(kind) {
+    var host;
+    try { host = new URL(lastData.url).hostname; } catch (e) { host = "site"; }
+    return "datrum-" + host + "-ranked" + (kind ? "-" + kind : "") + ".png";
+  }
+
+  // "A- 90" or "—". Never "0": unmeasured and failing are not the same thing.
+  function rankCell(d) {
+    return d ? d.grade + " " + d.score : "\u2014";
+  }
+
+  function drawRank(pair) {
+    var c = document.createElement("canvas");
+    var x = c.getContext("2d");
+    var M = 72, RIGHT = CARD_W - M, rows = rankRows();
+    var names = [t("ownName", ""), t("otherName", "")];
+    // Two score columns on the right, the site name taking what is left.
+    var COL = [CARD_W - 470, CARD_W - 230];
+
+    function layout(draw, H) {
+      if (draw) { x.fillStyle = BG; x.fillRect(0, 0, CARD_W, H); }
+
+      var y = M + 26;
+      if (draw) {
+        x.fillStyle = LEMON;
+        x.font = cardFonts(700, 34, "Space Grotesk");
+        x.letterSpacing = "2px";
+        x.fillText("DATRUM", M, y);
+        x.letterSpacing = "0px";
+        x.fillStyle = MUTED;
+        x.font = cardFonts(500, 20, "DM Sans");
+        x.textAlign = "right";
+        x.fillText(t("viewRivals", "Competitors"), RIGHT, y - 2);
+        x.textAlign = "left";
+      }
+
+      y += 76;
+      if (draw) {
+        x.fillStyle = MUTED;
+        x.font = cardFonts(500, 18, "DM Sans");
+        x.letterSpacing = "1px";
+        x.fillText(t("rivalsSite", "Site").toUpperCase(), M, y);
+        names.forEach(function (n, i) {
+          x.fillText(String(n).toUpperCase(), COL[i], y);
+        });
+        x.letterSpacing = "0px";
+      }
+
+      y += 20;
+      rows.forEach(function (r) {
+        if (draw) {
+          x.strokeStyle = BORDER; x.lineWidth = 2;
+          x.beginPath(); x.moveTo(M, y); x.lineTo(RIGHT, y); x.stroke();
+        }
+        y += 52;
+        if (draw) {
+          x.fillStyle = r.you ? LEMON : TEXT;
+          x.font = cardFonts(r.you ? 600 : 400, 26, "DM Sans");
+          x.fillText(hostOf(r.url), M, y);
+          if (r.you) {
+            var w = x.measureText(hostOf(r.url)).width;
+            x.fillStyle = MUTED;
+            x.font = cardFonts(500, 17, "DM Sans");
+            x.letterSpacing = "1px";
+            x.fillText(String(t("scaleYou", "This site")).toUpperCase(), M + w + 16, y);
+            x.letterSpacing = "0px";
+          }
+          [r.data, r.other].forEach(function (d, i) {
+            x.fillStyle = d ? TEXT : MUTED;
+            x.font = cardFonts(d ? 600 : 400, 26, "DM Sans");
+            x.fillText(rankCell(d), COL[i], y);
+            if (d) {
+              x.fillStyle = MUTED;
+              x.font = cardFonts(400, 19, "DM Sans");
+              x.fillText((d.total - d.passed) + "/" + d.total, COL[i], y + 26);
+            }
+          });
+        }
+        y += 40;
+      });
+
+      y += 10;
+      if (draw) {
+        x.strokeStyle = BORDER; x.lineWidth = 2;
+        x.beginPath(); x.moveTo(M, y); x.lineTo(RIGHT, y); x.stroke();
+      }
+      y += 44;
+      if (draw) {
+        x.fillStyle = MUTED;
+        x.font = cardFonts(400, 20, "DM Sans");
+        x.fillText("jldatrum.com  \u00b7  " + today(), M, y);
+      }
+      return y + M - 20;
+    }
+
+    var h = layout(false, 0);
+    c.width = CARD_W; c.height = Math.max(h, 400);
+    layout(true, c.height);
+    return c;
+  }
+
+  function rankText() {
+    var rows = rankRows(), names = [t("ownName", ""), t("otherName", "")];
+    var out = ["DATRUM \u2014 " + t("viewRivals", "Competitors"), today(), ""];
+    rows.forEach(function (r, i) {
+      var line = (i + 1) + ". " + hostOf(r.url) + (r.you ? "  (" + t("scaleYou", "This site") + ")" : "");
+      out.push(line);
+      out.push("   " + names[0] + " " + rankCell(r.data) +
+               "  \u00b7  " + names[1] + " " + rankCell(r.other));
+      out.push("");
+    });
+    out.push("jldatrum.com");
+    return out.join("\n");
+  }
+
+  function rankShare() {
+    return {
+      card:    function () { return drawRank(); },
+      results: function () { return drawRank(); },
+      text:    rankText,
+      name:    rankName
+    };
   }
 
   function pairName(pair, kind) {
