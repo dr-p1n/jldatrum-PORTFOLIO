@@ -1133,8 +1133,9 @@
       "td.x{width:2.4em;padding-right:8px;white-space:nowrap;color:#E5484D;",
       "font-weight:600;font-size:15px}",
       "td.x .n{color:#9AABAF;font-weight:500;font-size:13px;margin-left:2px}",
-      ".t{font-weight:600;margin:0 0 4px;font-size:17px}",
-      ".d{margin:0;color:#9AABAF;font-size:14px}",
+      ".t{font-weight:600;margin:0 0 6px;font-size:17px}",
+      ".so{margin:0 0 6px;color:#E8EDED;font-size:15px;line-height:1.55;max-width:62ch}",
+      ".d{margin:0;color:#9AABAF;font-size:13.5px}",
       "ul{padding-left:18px;color:#9AABAF;font-size:14px}",
       ".ok{margin-top:56px}",
       ".ok h2{color:#6FCF97}",
@@ -1143,7 +1144,7 @@
       ".f{margin-top:48px;padding-top:16px;border-top:1px solid #1A3A40;",
       "color:#9AABAF;font-size:13px}",
       ".f a{color:#F2D24B}",
-      "@media print{body{background:#fff;color:#111}.d,.sub,ul,.f{color:#444}",
+      "@media print{body{background:#fff;color:#111}.d,.sub,ul,.f{color:#444}.so{color:#111}",
       "td.c,.f a{color:#111}td.x{color:#B3231F}.ok h2{color:#1E7A46}}"
     ].join("");
     doc.head.appendChild(css);
@@ -1177,6 +1178,10 @@
         tr.appendChild(mark);
         var td = doc.createElement("td");
         td.appendChild(E("p", "t", c.title));
+        // The plain sentence sits above the technical line and in the reading
+        // colour: this file gets forwarded, and the person it lands on has to
+        // be able to discuss the row without anyone translating it for them.
+        if (c.so) td.appendChild(E("p", "so", c.so));
         td.appendChild(E("p", "d", c.detail));
         tr.appendChild(td);
         tr.appendChild(E("td", "c", "\u2212" + c.deduction));

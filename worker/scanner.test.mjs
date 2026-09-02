@@ -55,6 +55,36 @@ t("the bar is exactly where A- begins", M.grade(90), "A-");
 t("one under the bar is a B",           M.grade(89), "B+");
 t("nothing under 60 passes",            M.grade(59), "F");
 
+/* ── the plain sentence ────────────────────────────────────────────────
+   Every check that can fail carries one sentence about what it costs the
+   business, because the report is forwarded and discussed by people who do
+   not read the technical line. A missing one ships a gap that cannot be
+   talked about; an untranslated one ships English into a Spanish report. */
+console.log("\nevery failure explains itself in plain language");
+const soKeys = t => Object.keys(t).filter(k => t[k] && typeof t[k] === "object" && (t[k].t || t[k].d));
+for (const [name, table] of [["STR", M.STR], ["HDR", M.HDR]]) {
+  const en = soKeys(table.en).filter(k => k !== "groups" && k !== "weak");
+  t(`${name}: every check has one in English`, en.filter(k => !table.en[k].so), []);
+  t(`${name}: every check has one in Spanish`, en.filter(k => !table.es[k].so), []);
+  t(`${name}: none is left in English`,
+    en.filter(k => table.es[k].so === table.en[k].so), []);
+  t(`${name}: one sentence, not a paragraph`,
+    en.filter(k => (table.en[k].so.match(/\. /g) || []).length > 0), []);
+  t(`${name}: no jargon in the plain line`,
+    en.filter(k => /robots\.txt|JSON-LD|canonical|HSTS|CSP|X-Frame|hreflang|sitemap|meta |H1\b/.test(table.en[k].so)), []);
+}
+
+// It rides on failures only: a passing check has nothing to explain, and the
+// payload is read by a browser on every scan.
+const hs2 = { "strict-transport-security": "max-age=63072000" };
+const someChecks = M.runHeaderChecks({ headers: { get: n => hs2[n.toLowerCase()] ?? null } },
+                                     new URL("https://x.com/"), "en");
+t("carried on failures", someChecks.filter(c => !c.pass).every(c => typeof c.so === "string"), true);
+t("...and not on passes",  someChecks.filter(c =>  c.pass).every(c => c.so === undefined), true);
+t("Spanish scan gets Spanish sentences",
+  M.runHeaderChecks({ headers: { get: () => null } }, new URL("https://x.com/"), "es")
+    .filter(c => !c.pass).every(c => c.so && c.so === M.HDR.es[Object.keys(M.HDR.es).find(k => M.HDR.es[k].t === c.title)].so), true);
+
 console.log("\nSSRF: must reject");
 for (const u of ["http://localhost/","http://127.0.0.1/","http://127.1.2.3/","https://192.168.1.1/",
   "https://10.0.0.5/","https://172.16.0.1/","https://172.31.255.254/","https://169.254.169.254/",
