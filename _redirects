@@ -35,6 +35,13 @@
 /resources/research/instruments-beat-pitches/      /resources/                    301
 /es/resources/research/instruments-beat-pitches/   /es/resources/                 301
 
+# The share images were renamed to force LinkedIn, WhatsApp and iMessage to
+# re-fetch them. Those caches key on the image URL and hold for days, so the
+# old filename was still serving the retired tagline long after the file that
+# carried it was replaced. The old paths 301 so nothing already indexed 404s.
+/assets/og-image.png                               /assets/og-image-v2.png        301
+/assets/og-image-es.png                            /assets/og-image-es-v2.png     301
+
 # Repo files that are not pages. There is no build step, so the repo root is the
 # deploy directory and everything tracked in it answers 200 on the marketing
 # domain — the worker source, the local preview server, the package manifest.
