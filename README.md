@@ -52,9 +52,9 @@ node worker/scanner.test.mjs
 
 ## The scanner
 
-One worker, two instruments, at `POST /scan`. Omit `mode` for the AI
-Accessibility scan (26 checks); pass `"mode":"headers"` for the Domain Security
-& Trust Index (15 checks). `POST /lead` records a report request. Rate limited
+One worker, two instruments, at `POST /scan`. Omit `mode` for the AI Visibility Map
+(26 checks); pass `"mode":"headers"` for the Header Security &
+Indexability Scanner (15 checks). `POST /lead` records a report request. Rate limited
 to 60 requests per IP per hour on each endpoint; the ceilings are `SCAN_LIMIT`
 and `LEAD_LIMIT` in `worker/wrangler.toml`.
 

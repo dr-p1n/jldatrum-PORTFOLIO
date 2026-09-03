@@ -355,184 +355,188 @@ async function extractHtml(html) {
 const STR = {
   en: {
     "ld-present": {
-      so: "Nothing on the page tells an AI assistant what business this is, so it guesses from the prose or skips you.", t: "Structured data is present",
+      so: "Nothing on the page tells an AI assistant what business this is, so it guesses from the prose or skips you.", t: "The page says what business this is",
       d: v => v.n === 0
-        ? "No JSON-LD on this page. To an answer engine it describes no entity — prose with no claims it can attribute, no name, no address, no services. Everything below in this section is unmeasurable until there is a block to read."
-        : `${v.n} JSON-LD block(s) found.` },
+        ? "Nothing on this page describes the business in a form a machine can read on its own — no name, no address, no list of what you sell, only prose. Nothing else in this section can be measured until something does."
+        : `${v.n} machine-readable description(s) of the business found.` },
     "ld-valid": {
-      so: "The one block that describes your business is unreadable to every engine, so it counts as if it were not there.", t: "Structured data parses as valid JSON",
-      d: v => v.malformed === 0 ? "All blocks parse."
+      so: "The one block that describes your business is unreadable to every engine, so it counts as if it were not there.", t: "The description of the business is readable",
+      d: v => v.malformed === 0 ? "All of them read cleanly."
         : v.entityBug
-          ? `${v.malformed} block(s) fail to parse. An HTML entity (${v.entityBug}) leaked into the JSON — the page looks correct to a human and is silently invisible to every parser.`
-          : `${v.malformed} block(s) are malformed JSON and are discarded silently by every consumer.` },
+          ? `${v.malformed} of them are written incorrectly and no engine can read them. A stray character (${v.entityBug}) got into the text — the page looks right to a person and is blank to every machine.`
+          : `${v.malformed} of them are written incorrectly, so every engine throws them away without telling anyone.` },
     "ld-org": {
-      so: "Nothing states that this is a company, so an assistant has no business to attach a recommendation to.", t: "An Organization entity is declared",
+      so: "Nothing states that this is a company, so an assistant has no business to attach a recommendation to.", t: "The page states that this is a company",
       d: v => v.type ? `Declared as ${v.type}.`
-        : "No Organization, LocalBusiness or ProfessionalService node. Nothing here states what business this is." },
+        : "The description never says this is a company at all, so there is nothing for a recommendation to attach to." },
     "ld-name": {
-      so: "Your business has no name an engine can quote, so it cannot be recommended by name.", t: "The entity has a machine-readable name",
-      d: v => v.name ? `name: ${v.name}` : "No name field on the entity." },
+      so: "Your business has no name an engine can quote, so it cannot be recommended by name.", t: "The business has a name an engine can quote",
+      d: v => v.name ? `Named: ${v.name}` : "The description carries no name an engine could quote back." },
     "ld-address": {
-      so: "Nothing states where you operate, so you do not come up when someone asks for a firm in your city.", t: "A postal address is structured",
-      d: v => v.ok ? "PostalAddress present."
-        : "No structured address — geographic queries cannot resolve to this business." },
+      so: "Nothing states where you operate, so you do not come up when someone asks for a firm in your city.", t: "The page says where you operate",
+      d: v => v.ok ? "A postal address is stated."
+        : "No address is stated where a machine looks, so a search for a firm in your city cannot land on you." },
     "ld-sameas": {
-      so: "Nothing connects this site to your LinkedIn or directory listings, so engines treat you as a stranger rather than a known company.", t: "sameAs links disambiguate the entity",
-      d: v => v.n ? `${v.n} sameAs link(s).`
-        : "No sameAs. Engines cannot reconcile this business with its LinkedIn, Wikidata or directory records, so it stays an unlinked string rather than a known entity." },
+      so: "Nothing connects this site to your LinkedIn or directory listings, so engines treat you as a stranger rather than a known company.", t: "You are linked to the profiles that identify you",
+      d: v => v.n ? `${v.n} link(s) out to your other profiles.`
+        : "Nothing links this site to your LinkedIn or to any directory listing, so engines cannot tell this business apart from any other with a similar name." },
     "ld-services": {
-      so: "Nothing lists what you actually sell, so an assistant cannot match you to someone asking for it.", t: "Services or products are enumerated",
-      d: v => v.catalog ? "Catalog declared."
-        : "No offer catalog. A machine can only recommend what it can list." },
+      so: "Nothing lists what you actually sell, so an assistant cannot match you to someone asking for it.", t: "What you sell is listed, not just described",
+      d: v => v.catalog ? "Services are listed."
+        : "Nothing lists what you sell. A machine can only recommend what it can read as a list." },
     "robots-exists": {
-      so: "The file that tells crawlers what they may read is missing, so each one decides for itself.", t: "robots.txt is reachable",
+      so: "The file that tells crawlers what they may read is missing, so each one decides for itself.", t: "Your site publishes rules for what may be read",
       d: v => v.ok ? "Served."
-        : v.served ? "That URL answers, but what it returns is not robots.txt — no crawl policy is being published."
-        : "No robots.txt. Not fatal, but you have published no crawl policy at all." },
+        : v.served ? "That address answers, but what comes back is not robots.txt — you are publishing no rules at all."
+        : "There is no robots.txt on your domain. Not fatal, but you have published no rules about what may be read." },
     bot: {
       so: "This crawler is turned away at the door, so the assistant it feeds cannot see your site at all.", t: v => `${v.ua} is allowed`,
       d: v => v.blocked
-        ? `Blocked by robots.txt. ${v.label} cannot read this page — not ranked lower, absent.`
+        ? `Your own rules turn it away. ${v.label} cannot read this page — not ranked lower, absent.`
         : `Allowed. ${v.label} can retrieve this page.` },
     sitemap: {
-      so: "Nothing hands engines a list of your pages, so they find only what they stumble on.", t: "A sitemap is published",
+      so: "Nothing hands engines a list of your pages, so they find only what they stumble on.", t: "Your pages are listed where engines look",
       d: v => v.ok ? (v.declared ? "Declared in robots.txt." : "sitemap.xml served.")
-        : v.served ? "That URL answers, but it holds no URLs a crawler can follow — an empty sitemap discovers nothing."
-        : "No sitemap.xml — discovery depends entirely on internal linking." },
+        : v.served ? "That address answers, but it holds no URLs anything can follow — an empty list finds nothing."
+        : "No list of your pages is published, so engines find only what they stumble into from links." },
     ssr: {
-      so: "The page arrives nearly empty and fills in afterwards, and most AI crawlers only read what arrived.", t: "Content is in the served HTML",
-      d: v => v.ok ? `${v.len} characters of text in the raw response.`
-        : `Only ${v.len} characters of text in the raw HTML. This page renders client-side. Most retrieval crawlers do not execute JavaScript, so they see an empty shell.` },
+      so: "The page arrives nearly empty and fills in afterwards, and most AI crawlers only read what arrived.", t: "The words arrive with the page",
+      d: v => v.ok ? `${v.len} characters of text arrived with the page.`
+        : `Only ${v.len} characters of text arrived with the page — the rest is filled in afterwards, in the visitor’s browser. Most engines read only what arrived, so they see an empty shell.` },
     title: {
-      so: "The line engines repeat as your headline does not say what you do.", t: "The page states what it is, in the title",
-      d: v => !v.title ? "Missing."
+      so: "The line engines repeat as your headline does not say what you do.", t: "The page's headline says what you do",
+      d: v => !v.title ? "The page has no title line at all."
         : v.ok ? v.title
-        : `"${v.title}" — too thin to identify anything. This is the label an engine repeats when it names you.` },
+        : `"${v.title}" — too thin to identify anything. This is the line search results and shared links show as you.` },
     description: {
-      so: "Engines write your summary for you, from whatever text they find first.", t: "A meta description is present",
-      d: v => v.len === 0 ? "Missing. Engines fall back to guessing a summary from the body." : `${v.len} characters.` },
+      so: "Engines write your summary for you, from whatever text they find first.", t: "A summary is written, not scraped",
+      d: v => v.len === 0 ? "No summary is written for this page, so engines guess one from the body text." : `${v.len} characters.` },
     "description-length": {
-      so: "Your summary is too thin to stand on its own when it appears without the page around it.", t: "The description works as a standalone summary",
-      d: v => v.len === 0 ? "No description to assess."
+      so: "Your summary is too thin to stand on its own when it appears without the page around it.", t: "The summary stands on its own",
+      d: v => v.len === 0 ? "There is no summary to assess."
         : v.len < 50  ? `${v.len} characters — too thin to summarise the page.`
         : v.len > 320 ? `${v.len} characters — past the point where it reads as a summary.`
-        : `${v.len} characters. Usable in full by a retrieval engine.`
+        : `${v.len} characters. An engine can use it whole.`
           + (v.len > 160 ? " Google will truncate the visible snippet at roughly 160, which costs nothing here." : "") },
     h1: {
-      so: "Nothing on the page claims to be its subject, so engines decide what it is about for you.", t: "Exactly one H1", d: v => v.n === 1 ? `"${v.text}"` : `Found ${v.n}.` },
+      so: "Nothing on the page claims to be its subject, so engines decide what it is about for you.", t: "One heading says what this page is", d: v => v.n === 1 ? `"${v.text}"`
+        : v.n === 0 ? "The page has no main heading, so nothing on it says what it is about."
+        : `Found ${v.n} main headings, so none of them reads as the page’s subject.` },
     "heading-order": {
-      so: "The page skips levels, so anything reading it as an outline loses the thread.", t: "Heading hierarchy is sequential",
-      d: v => v.skip ? `H${v.skip.from} followed directly by H${v.skip.to}` : "No skipped levels." },
+      so: "The page skips levels, so anything reading it as an outline loses the thread.", t: "The outline runs in order",
+      d: v => v.skip ? `The headings jump from level ${v.skip.from} to level ${v.skip.to}, so the outline breaks there.` : "No skipped levels." },
     canonical: {
-      so: "The same page lives at several addresses and its credit is divided between them.", t: "A canonical URL is declared",
-      d: v => !v.canonical ? "Missing."
+      so: "The same page lives at several addresses and its credit is divided between them.", t: "One address is the real one",
+      d: v => !v.canonical ? "The page never states which address is the real one."
         : v.ok ? v.canonical
-        : `"${v.canonical}" is not an absolute URL. A canonical that does not resolve is worse than none: it points nowhere.` },
+        : `"${v.canonical}" is not a full address. A pointer that resolves nowhere is worse than none: it points at nothing.` },
     alt: {
-      so: "Images carry no description, so anything that cannot see them — engines included — misses that part of the page.", t: "Images carry alt text",
-      d: v => v.total === 0 ? "No images." : `${v.noAlt} of ${v.total} images have no alt text.` },
+      so: "Images carry no description, so anything that cannot see them — engines included — misses that part of the page.", t: "Images are described for anything that cannot see",
+      d: v => v.total === 0 ? "No images." : `${v.noAlt} of ${v.total} images carry no description.` },
     hreflang: {
-      so: "Your language versions are not linked to each other, so engines can serve the wrong one.", t: "Language alternates are declared coherently",
-      d: v => v.n ? `${v.n} hreflang declarations.` : "Single-language site — not applicable." },
+      so: "Your language versions are not linked to each other, so engines can serve the wrong one.", t: "Your language versions point at each other",
+      d: v => v.n ? `${v.n} language versions are linked to each other.` : "Single-language site — not applicable." },
     llms: {
-      so: "There is no short summary written for AI assistants, which is the cheapest thing on this list to add.", t: "An llms.txt summary is published",
-      d: v => v.ok ? "Served." : "No llms.txt. Emerging convention, not yet load-bearing — cheap to add." },
+      so: "There is no short summary written for AI assistants, which is the cheapest thing on this list to add.", t: "A short summary is written for AI assistants",
+      d: v => v.ok ? "Served." : "There is no llms.txt on your domain. A newer convention, not yet decisive, and the cheapest thing here to add." },
     hsts: {
-      so: "Every first visit takes an extra unprotected step before the secure connection starts.", t: "HTTPS is enforced with HSTS",
-      d: v => !v.hsts ? "No Strict-Transport-Security header."
+      so: "Every first visit takes an extra unprotected step before the secure connection starts.", t: "The encrypted page loads without a detour",
+      d: v => !v.hsts ? "Nothing tells a browser to go straight to the secure address, so a first visit starts unprotected."
         : v.ok ? v.hsts
-        : `${v.hsts} — under six months. A browser that has not visited in a while goes back to plain HTTP first.` },
+        : `${v.hsts} — under six months. A browser that has not visited in a while starts on the unprotected address again.` },
   },
 
   es: {
     "ld-present": {
-      so: "Nada en la página le dice a un asistente de IA qué negocio es este, así que adivina con el texto o te salta.", t: "Hay datos estructurados",
+      so: "Nada en la página le dice a un asistente de IA qué negocio es este, así que adivina con el texto o te salta.", t: "La página dice qué negocio es este",
       d: v => v.n === 0
-        ? "No hay JSON-LD en esta página. Para un motor de respuesta no describe ninguna entidad — prosa sin afirmaciones que pueda atribuir, sin nombre, sin dirección, sin servicios. Nada más de esta sección se puede medir hasta que haya un bloque que leer."
-        : `${v.n} bloque(s) JSON-LD encontrados.` },
+        ? "Nada en esta página describe al negocio de una forma que una máquina lea sola — sin nombre, sin dirección, sin lista de lo que vendes, solo prosa. Nada más de esta sección se puede medir hasta que algo lo haga."
+        : `${v.n} descripción(es) del negocio legibles por máquina.` },
     "ld-valid": {
-      so: "El único bloque que describe tu negocio es ilegible para los motores, así que cuenta como si no existiera.", t: "Los datos estructurados son JSON válido",
-      d: v => v.malformed === 0 ? "Todos los bloques parsean."
+      so: "El único bloque que describe tu negocio es ilegible para los motores, así que cuenta como si no existiera.", t: "La descripción del negocio se puede leer",
+      d: v => v.malformed === 0 ? "Todas se leen bien."
         : v.entityBug
-          ? `${v.malformed} bloque(s) no parsean. Una entidad HTML (${v.entityBug}) se filtró dentro del JSON — la página se ve correcta para una persona y es invisible para cualquier parser.`
-          : `${v.malformed} bloque(s) son JSON mal formado y todo consumidor los descarta en silencio.` },
+          ? `${v.malformed} están mal escritas y ningún motor puede leerlas. Un carácter suelto (${v.entityBug}) se coló en el texto — la página se ve bien para una persona y en blanco para toda máquina.`
+          : `${v.malformed} están mal escritas, así que todo motor las descarta sin avisarle a nadie.` },
     "ld-org": {
-      so: "Nada declara que esto es una empresa, así que un asistente no tiene a quién atribuirle una recomendación.", t: "Se declara una entidad Organization",
+      so: "Nada declara que esto es una empresa, así que un asistente no tiene a quién atribuirle una recomendación.", t: "La página declara que esto es una empresa",
       d: v => v.type ? `Declarada como ${v.type}.`
-        : "No hay nodo Organization, LocalBusiness ni ProfessionalService. Nada aquí dice qué negocio es este." },
+        : "La descripción nunca dice que esto es una empresa, así que no hay a qué colgarle una recomendación." },
     "ld-name": {
-      so: "Tu negocio no tiene un nombre que un motor pueda citar, así que no te puede recomendar por nombre.", t: "La entidad tiene un nombre legible por máquina",
-      d: v => v.name ? `name: ${v.name}` : "La entidad no tiene campo name." },
+      so: "Tu negocio no tiene un nombre que un motor pueda citar, así que no te puede recomendar por nombre.", t: "El negocio tiene un nombre que un motor puede citar",
+      d: v => v.name ? `Se llama: ${v.name}` : "La descripción no lleva un nombre que un motor pueda citar." },
     "ld-address": {
-      so: "Nada dice dónde operas, así que no apareces cuando alguien pide una firma en tu ciudad.", t: "Hay una dirección postal estructurada",
-      d: v => v.ok ? "PostalAddress presente."
-        : "No hay dirección estructurada — las búsquedas por ubicación no pueden resolver a este negocio." },
+      so: "Nada dice dónde operas, así que no apareces cuando alguien pide una firma en tu ciudad.", t: "La página dice dónde operas",
+      d: v => v.ok ? "Hay una dirección postal declarada."
+        : "No hay una dirección donde una máquina la busca, así que una búsqueda por tu ciudad no llega a ti." },
     "ld-sameas": {
-      so: "Nada conecta este sitio con tu LinkedIn ni con directorios, así que los motores te tratan como un desconocido y no como una empresa identificada.", t: "Los enlaces sameAs desambiguan la entidad",
-      d: v => v.n ? `${v.n} enlace(s) sameAs.`
-        : "No hay sameAs. Los motores no pueden reconciliar este negocio con su LinkedIn, Wikidata o registros de directorios, así que queda como un texto suelto y no como una entidad conocida." },
+      so: "Nada conecta este sitio con tu LinkedIn ni con directorios, así que los motores te tratan como un desconocido y no como una empresa identificada.", t: "Estás enlazado a los perfiles que te identifican",
+      d: v => v.n ? `${v.n} enlace(s) hacia tus otros perfiles.`
+        : "Nada enlaza este sitio con tu LinkedIn ni con ningún directorio, así que los motores no distinguen este negocio de cualquier otro de nombre parecido." },
     "ld-services": {
-      so: "Nada enumera lo que vendes, así que un asistente no puede emparejarte con quien lo está pidiendo.", t: "Los servicios o productos están enumerados",
-      d: v => v.catalog ? "Catálogo declarado."
-        : "No hay catálogo de oferta. Una máquina solo puede recomendar lo que puede listar." },
+      so: "Nada enumera lo que vendes, así que un asistente no puede emparejarte con quien lo está pidiendo.", t: "Lo que vendes está listado, no solo descrito",
+      d: v => v.catalog ? "Los servicios están listados."
+        : "Nada lista lo que vendes. Una máquina solo puede recomendar lo que puede leer como lista." },
     "robots-exists": {
-      so: "Falta el archivo que le dice a los crawlers qué pueden leer, así que cada uno decide por su cuenta.", t: "robots.txt es alcanzable",
+      so: "Falta el archivo que le dice a los crawlers qué pueden leer, así que cada uno decide por su cuenta.", t: "Tu sitio publica reglas sobre qué se puede leer",
       d: v => v.ok ? "Servido."
-        : v.served ? "Esa URL responde, pero lo que devuelve no es robots.txt — no estás publicando ninguna política de rastreo."
-        : "No hay robots.txt. No es fatal, pero no has publicado ninguna política de rastreo." },
+        : v.served ? "Esa dirección responde, pero lo que vuelve no es robots.txt — no estás publicando ninguna regla."
+        : "No hay robots.txt en tu dominio. No es fatal, pero no has publicado ninguna regla sobre qué se puede leer." },
     bot: {
       so: "A este crawler lo dejan fuera en la puerta, así que el asistente que alimenta no ve tu sitio.", t: v => `${v.ua} tiene permiso`,
       d: v => v.blocked
-        ? `Bloqueado por robots.txt. ${v.label} no puede leer esta página — no queda más abajo, queda ausente.`
+        ? `Tus propias reglas lo dejan fuera. ${v.label} no puede leer esta página — no queda más abajo, queda ausente.`
         : `Permitido. ${v.label} puede recuperar esta página.` },
     sitemap: {
-      so: "Nada le entrega a los motores la lista de tus páginas, así que encuentran solo lo que se tropiezan.", t: "Hay un sitemap publicado",
+      so: "Nada le entrega a los motores la lista de tus páginas, así que encuentran solo lo que se tropiezan.", t: "Tus páginas están listadas donde los motores buscan",
       d: v => v.ok ? (v.declared ? "Declarado en robots.txt." : "sitemap.xml servido.")
-        : v.served ? "Esa URL responde, pero no contiene ninguna URL que un crawler pueda seguir — un sitemap vacío no descubre nada."
-        : "No hay sitemap.xml — el descubrimiento depende por completo del enlazado interno." },
+        : v.served ? "Esa dirección responde, pero no contiene ninguna URL que se pueda seguir — una lista vacía no encuentra nada."
+        : "No hay una lista publicada de tus páginas, así que los motores solo encuentran lo que se tropiezan desde un enlace." },
     ssr: {
-      so: "La página llega casi vacía y se completa después, y la mayoría de los crawlers de IA solo leen lo que llegó.", t: "El contenido viene en el HTML servido",
-      d: v => v.ok ? `${v.len} caracteres de texto en la respuesta cruda.`
-        : `Solo ${v.len} caracteres de texto en el HTML crudo. Esta página se renderiza en el cliente. La mayoría de los crawlers de recuperación no ejecutan JavaScript, así que ven un cascarón vacío.` },
+      so: "La página llega casi vacía y se completa después, y la mayoría de los crawlers de IA solo leen lo que llegó.", t: "Las palabras llegan con la página",
+      d: v => v.ok ? `${v.len} caracteres de texto llegaron con la página.`
+        : `Solo ${v.len} caracteres de texto llegaron con la página — el resto se completa después, en el navegador de quien la abre. La mayoría de los motores solo leen lo que llegó, así que ven un cascarón vacío.` },
     title: {
-      so: "La línea que los motores repiten como tu titular no dice a qué te dedicas.", t: "La página dice qué es, en el title",
-      d: v => !v.title ? "Falta."
+      so: "La línea que los motores repiten como tu titular no dice a qué te dedicas.", t: "El titular de la página dice a qué te dedicas",
+      d: v => !v.title ? "La página no tiene línea de título."
         : v.ok ? v.title
-        : `"${v.title}" — demasiado corto para identificar nada. Esta es la etiqueta que un motor repite cuando te nombra.` },
+        : `"${v.title}" — demasiado corto para identificar nada. Es la línea que muestran los resultados de búsqueda y los enlaces compartidos.` },
     description: {
-      so: "Los motores arman tu resumen por ti, con el primer texto que encuentran.", t: "Hay una meta description",
-      d: v => v.len === 0 ? "Falta. Los motores terminan adivinando un resumen a partir del cuerpo." : `${v.len} caracteres.` },
+      so: "Los motores arman tu resumen por ti, con el primer texto que encuentran.", t: "Hay un resumen escrito, no recogido",
+      d: v => v.len === 0 ? "Nadie escribió un resumen para esta página, así que los motores lo adivinan del texto." : `${v.len} caracteres.` },
     "description-length": {
-      so: "Tu resumen es demasiado corto para sostenerse solo cuando aparece sin la página alrededor.", t: "La description funciona como resumen autónomo",
-      d: v => v.len === 0 ? "No hay description que evaluar."
+      so: "Tu resumen es demasiado corto para sostenerse solo cuando aparece sin la página alrededor.", t: "El resumen se sostiene solo",
+      d: v => v.len === 0 ? "No hay resumen que evaluar."
         : v.len < 50  ? `${v.len} caracteres — demasiado delgada para resumir la página.`
         : v.len > 320 ? `${v.len} caracteres — pasada del punto en que se lee como un resumen.`
-        : `${v.len} caracteres. Utilizable completa por un motor de recuperación.`
+        : `${v.len} caracteres. Un motor la puede usar entera.`
           + (v.len > 160 ? " Google va a truncar el fragmento visible cerca de los 160, y eso aquí no cuesta nada." : "") },
     h1: {
-      so: "Nada en la página declara ser su tema, así que los motores deciden por ti de qué trata.", t: "Exactamente un H1", d: v => v.n === 1 ? `"${v.text}"` : `Se encontraron ${v.n}.` },
+      so: "Nada en la página declara ser su tema, así que los motores deciden por ti de qué trata.", t: "Un encabezado dice de qué trata esta página", d: v => v.n === 1 ? `"${v.text}"`
+        : v.n === 0 ? "La página no tiene encabezado principal, así que nada en ella dice de qué trata."
+        : `Hay ${v.n} encabezados principales, así que ninguno se lee como el tema de la página.` },
     "heading-order": {
-      so: "La página se salta niveles, así que lo que la lee como esquema pierde el hilo.", t: "La jerarquía de encabezados es secuencial",
-      d: v => v.skip ? `H${v.skip.from} seguido directamente de H${v.skip.to}` : "No hay niveles saltados." },
+      so: "La página se salta niveles, así que lo que la lee como esquema pierde el hilo.", t: "El esquema va en su orden",
+      d: v => v.skip ? `Los encabezados saltan del nivel ${v.skip.from} al ${v.skip.to}, así que el esquema se rompe ahí.` : "No hay niveles saltados." },
     canonical: {
-      so: "La misma página vive en varias direcciones y su crédito se reparte entre ellas.", t: "Hay una URL canónica declarada",
-      d: v => !v.canonical ? "Falta."
+      so: "La misma página vive en varias direcciones y su crédito se reparte entre ellas.", t: "Una dirección es la verdadera de todas",
+      d: v => !v.canonical ? "La página nunca dice cuál de sus direcciones es la verdadera."
         : v.ok ? v.canonical
-        : `"${v.canonical}" no es una URL absoluta. Una canónica que no resuelve es peor que ninguna: apunta a la nada.` },
+        : `"${v.canonical}" no es una dirección completa. Un puntero que no resuelve es peor que ninguno: apunta a la nada.` },
     alt: {
-      so: "Las imágenes no llevan descripción, así que todo lo que no puede verlas — motores incluidos — se pierde esa parte.", t: "Las imágenes llevan texto alt",
-      d: v => v.total === 0 ? "No hay imágenes." : `${v.noAlt} de ${v.total} imágenes no tienen texto alt.` },
+      so: "Las imágenes no llevan descripción, así que todo lo que no puede verlas — motores incluidos — se pierde esa parte.", t: "Las imágenes están descritas para quien no las ve",
+      d: v => v.total === 0 ? "No hay imágenes." : `${v.noAlt} de ${v.total} imágenes no llevan descripción.` },
     hreflang: {
-      so: "Tus versiones por idioma no están enlazadas entre sí, así que los motores pueden servir la equivocada.", t: "Las alternativas de idioma están declaradas de forma coherente",
-      d: v => v.n ? `${v.n} declaraciones hreflang.` : "Sitio de un solo idioma — no aplica." },
+      so: "Tus versiones por idioma no están enlazadas entre sí, así que los motores pueden servir la equivocada.", t: "Tus versiones por idioma se apuntan entre sí",
+      d: v => v.n ? `${v.n} versiones por idioma enlazadas entre sí.` : "Sitio de un solo idioma — no aplica." },
     llms: {
-      so: "No hay un resumen corto escrito para asistentes de IA, que es lo más barato de agregar de esta lista.", t: "Hay un resumen llms.txt publicado",
-      d: v => v.ok ? "Servido." : "No hay llms.txt. Convención emergente, todavía no decisiva — barata de agregar." },
+      so: "No hay un resumen corto escrito para asistentes de IA, que es lo más barato de agregar de esta lista.", t: "Hay un resumen corto escrito para asistentes de IA",
+      d: v => v.ok ? "Servido." : "No hay llms.txt en tu dominio. Convención nueva, todavía no decisiva, y lo más barato de agregar de esta lista." },
     hsts: {
-      so: "Cada primera visita da un paso extra sin protección antes de que arranque la conexión segura.", t: "HTTPS se fuerza con HSTS",
-      d: v => !v.hsts ? "No hay encabezado Strict-Transport-Security."
+      so: "Cada primera visita da un paso extra sin protección antes de que arranque la conexión segura.", t: "La página cifrada carga sin ningún desvío",
+      d: v => !v.hsts ? "Nada le dice al navegador que vaya directo a la dirección segura, así que la primera visita empieza sin protección."
         : v.ok ? v.hsts
-        : `${v.hsts} — bajo seis meses. Un navegador que no te visita hace rato vuelve a intentar HTTP plano primero.` },
+        : `${v.hsts} — bajo seis meses. Un navegador que no te visita hace rato vuelve a empezar por la dirección sin proteger.` },
   },
 };
 
@@ -749,76 +753,77 @@ const HDR = {
     noindex:     {
       so: "Your page is asking search engines to leave it out, so someone looking for you by name may never reach it.", t: "The page is allowed into the index",
                    ok: "Indexable.",
-                   no: "Carries noindex — the page is removed from the index, not ranked lower." },
+                   no: "Something on this page tells search engines to skip it — so none list it." },
     mixed:       {
       so: "The browser blocks part of the page and warns the visitor, so something does not load and nobody is told why.", t: "The padlock is not undone by the page itself",
                    ok: "All subresources load over HTTPS.",
-                   no: v => "Loads " + v + " file" + (v === 1 ? "" : "s") + " over plain HTTP — the browser blocks them and flags it." },
+                   no: v => v === 1 ? "1 file on the page arrives unprotected — the browser blocks it and warns."
+                                    : v + " files on the page arrive unprotected — the browser blocks them and warns." },
     lang:        {
       so: "Translation tools and screen readers have to guess what language this is, and they sometimes guess wrong.", t: "The page declares what language it is in",
                    ok: v => "Declared: " + v,
-                   no: "No lang attribute — parsers and screen readers guess which language this is." },
+                   no: "The page never says which language it is written in — everything guesses." },
     title:       {
       so: "This is the line that shows in search results and when someone shares your link, and it does not say who you are.", t: "The page names the business, not the file",
                    ok: v => "“" + v.slice(0, 60) + "”",
-                   no: "Too short to identify anything — this is the line an engine repeats as you." },
+                   no: "Too short to name anyone — this is the line search results show as you." },
     h1:          {
       so: "A visitor has to work out what the page is about instead of being told in the first line.", t: "One heading says what this page is",
                    ok: "Exactly one H1.",
-                   no: v => v === 0 ? "No H1 at all — nothing on the page claims to be its own subject."
-                                    : "Found " + v + " — an outline with more than one subject presents none." },
+                   no: v => v === 0 ? "The page has no main heading — nothing on it says what it is about."
+                                    : "Found " + v + " main headings — a page with several subjects presents none." },
     description: {
       so: "Search engines write your summary for you, from whatever sentence they happen to find first.", t: "The summary is written, not scraped",
                    ok: v => "Present, " + v + " characters.",
-                   no: "Missing — the engine writes your summary from whatever it finds first." },
+                   no: "No summary is written for this page — the engine invents one from the text." },
     headingOrder:{
       so: "The page reads out of order to anything that follows its structure, screen readers and search engines included.", t: "The outline runs in order",
                    ok: "Levels run in sequence.",
-                   no: v => v ? "Jumps H" + v.from + " to H" + v.to + " — a skipped level breaks the outline that follows."
-                              : "A skipped level breaks the outline that follows it on the page." },
+                   no: v => v ? "The headings jump from level " + v.from + " to level " + v.to + " — the outline breaks there."
+                              : "A heading level is skipped partway down — the outline breaks from there on." },
     canonical:   {
       so: "The same page exists at several addresses and search engines split its credit between them, so none ranks as well as one would.", t: "One address is the real one",
                    ok: "Absolute canonical declared.",
-                   no: "Missing or relative — duplicate addresses split the page against itself." },
+                   no: "The page never names its real address — copies of it compete with it." },
     https:       {
       so: "Browsers put a Not Secure warning next to your address before a buyer has read a word.", t: "Buyers see a padlock, not a warning",
                    ok: "Served over HTTPS.",
-                   no: "Plain HTTP — browsers stamp Not Secure on the page before a buyer reads it." },
+                   no: "The page travels unencrypted — browsers label it Not Secure on arrival." },
     hsts:        {
       so: "Every first visit takes an extra unprotected step before the secure connection starts.", t: "The encrypted page loads without a detour",
                    ok: v => "Set. " + v,
-                   no: "Missing — every first visit pays a redirect hop before your page can start." },
+                   no: "Every first visit starts unprotected and is redirected — a wasted hop." },
     csp:         {
       so: "If anyone gets a script onto your page, it can read what visitors type into your forms.", t: "Only your own scripts can run, and cost time",
                    ok: "Set.",
-                   no: "Missing — injected third-party scripts run on your page and slow what loads." },
+                   no: "Nothing limits which code may run here — anything slipped in runs too." },
     frame:       {
       so: "Someone can load your site inside their own page and pass your work off as theirs.", t: "Your brand cannot be reskinned by someone else",
                    ok: "Framing restricted.",
-                   no: "Missing — your pages can be dressed up inside a stranger's site as their own." },
+                   no: "Nothing stops another site from showing your pages inside its own — as theirs." },
     nosniff:     {
       so: "A file uploaded with the wrong label can be run as code by the visitor's browser.", t: "A mislabelled file cannot run as code",
                    ok: "Set.",
-                   no: "Missing — one mislabelled upload can execute and get the domain blocklisted." },
+                   no: "A file with the wrong label can run as code here — one upload is enough." },
     referrer:    {
       so: "Every outbound click tells the other site exactly which of your pages the visitor came from.", t: "Outbound clicks do not leak your URLs",
                    ok: v => "Set. " + v,
-                   no: "Missing — every outbound link hands the destination your full page address." },
+                   no: "Every outbound click hands the other site your exact page — address and all." },
     permissions: {
       so: "Anything running on your page can ask a visitor for their camera or microphone, and the request looks like it came from you.", t: "Nothing prompts for camera or mic in your name",
                    ok: "Set.",
-                   no: "Missing — any script on the page can prompt visitors under your domain's name." },
+                   no: "Anything on the page can ask visitors for camera or mic — in your name." },
     // Present-but-useless is its own verdict. A header that exists and does not
     // hold reads as a pass on a presence test and is why most sites score well
     // on one; it is not a pass here.
     weak: {
-      hsts:        "Set but expires too soon — under six months, browsers forget between visits.",
-      csp:         "Set but allows inline scripts — an injected one runs anyway, and still costs.",
-      frame:       "Set to a value browsers ignore — your pages can still be framed elsewhere.",
-      referrer:    "Set to a policy that still leaks — full URLs go out cross-site or on downgrade.",
-      permissions: "Set but restricts nothing — scripts can still prompt under your domain's name.",
-      description: "Present but unusable as a summary — too thin to say anything, or too long to be one.",
-      canonical:   "Points at another domain — this hands the page's standing to a site elsewhere.",
+      hsts:        "It expires too soon — a browser forgets it between visits and starts over.",
+      csp:         "The limit on what can run has a hole — anything slipped in runs anyway.",
+      frame:       "The rule against being shown elsewhere is one browsers ignore — it does nothing.",
+      referrer:    "The rule still leaks — your full page address goes out to other sites.",
+      permissions: "The rule restricts nothing — anything can still ask in your domain's name.",
+      description: "The summary is unusable — too thin to say anything, or too long to be one.",
+      canonical:   "It names another domain as the real one — this page hands its standing over.",
     },
   },
   es: {
@@ -827,73 +832,74 @@ const HDR = {
     noindex:     {
       so: "Tu página le está pidiendo a los buscadores que la dejen fuera, así que quien te busque por nombre puede no llegar nunca.", t: "La página tiene permiso de entrar al índice",
                    ok: "Indexable.",
-                   no: "Lleva noindex — la página sale del índice, no baja de posición." },
+                   no: "Algo en esta página le dice a los buscadores que la salten — nadie la lista." },
     mixed:       {
       so: "El navegador bloquea parte de la página y le avisa al visitante, así que algo no carga y nadie sabe por qué.", t: "La propia página no deshace el candado",
                    ok: "Todos los subrecursos cargan por HTTPS.",
-                   no: v => "Carga " + v + " archivo" + (v === 1 ? "" : "s") + " por HTTP plano — el navegador los bloquea y la marca." },
+                   no: v => v === 1 ? "1 archivo de la página llega sin protección — el navegador lo bloquea."
+                                    : v + " archivos de la página llegan sin protección — el navegador los bloquea." },
     lang:        {
       so: "Los traductores y lectores de pantalla tienen que adivinar en qué idioma está esto, y a veces se equivocan.", t: "La página declara en qué idioma está",
                    ok: v => "Declarado: " + v,
-                   no: "Sin atributo lang — los parsers y lectores de pantalla adivinan el idioma." },
+                   no: "La página nunca dice en qué idioma está — todo lo que la lee lo adivina." },
     title:       {
       so: "Es la línea que aparece en los resultados y cuando alguien comparte tu enlace, y no dice quién eres.", t: "La página nombra al negocio, no al archivo",
                    ok: v => "“" + v.slice(0, 60) + "”",
-                   no: "Muy corto para identificar nada — es la línea que el motor repite como tú." },
+                   no: "Muy corta para nombrar a nadie — es la línea que los buscadores muestran." },
     h1:          {
       so: "Quien llega tiene que deducir de qué trata la página en vez de que se lo digan en la primera línea.", t: "Un encabezado dice de qué trata la página",
                    ok: "Exactamente un H1.",
-                   no: v => v === 0 ? "Sin H1 — nada en la página declara cuál es su propio tema central."
-                                    : "Hay " + v + " — un esquema con más de un tema no presenta ninguno con claridad." },
+                   no: v => v === 0 ? "La página no tiene encabezado principal — nada dice de qué trata."
+                                    : "Hay " + v + " encabezados principales — una página con varios temas no presenta ninguno." },
     description: {
       so: "Los buscadores escriben tu resumen por ti, con la primera frase que encuentren.", t: "El resumen está escrito, no recogido",
                    ok: v => "Presente, " + v + " caracteres.",
-                   no: "Falta — el motor arma tu resumen con lo primero que encuentre." },
+                   no: "Nadie escribió un resumen para esta página — el motor lo inventa del texto." },
     headingOrder:{
       so: "La página se lee en desorden para todo lo que sigue su estructura, lectores de pantalla y buscadores incluidos.", t: "El esquema va en orden",
                    ok: "Los niveles van en secuencia.",
-                   no: v => v ? "Salta de H" + v.from + " a H" + v.to + " — un nivel omitido rompe el esquema que sigue."
-                              : "Un nivel omitido rompe el esquema que sigue en la propia página." },
+                   no: v => v ? "Los encabezados saltan del nivel " + v.from + " al " + v.to + " — el esquema se rompe ahí."
+                              : "Se salta un nivel de encabezado a media página — el esquema se rompe ahí." },
     canonical:   {
       so: "La misma página existe en varias direcciones y los buscadores reparten su crédito entre ellas, así que ninguna posiciona como lo haría una sola.", t: "Una dirección es la verdadera",
                    ok: "Canónica absoluta declarada.",
-                   no: "Falta o es relativa — direcciones duplicadas parten la página contra sí misma." },
+                   no: "La página nunca dice cuál es su dirección real — sus copias le compiten." },
     https:       {
       so: "El navegador pone un aviso de No seguro junto a tu dirección antes de que un comprador lea una palabra.", t: "El comprador ve un candado, no una advertencia",
                    ok: "Servido por HTTPS.",
-                   no: "HTTP plano — el navegador marca No seguro antes de que el comprador lea nada." },
+                   no: "La página viaja sin cifrar — el navegador la marca No seguro al abrirla." },
     hsts:        {
       so: "Cada primera visita da un paso extra sin protección antes de que arranque la conexión segura.", t: "La página cifrada carga sin desvío",
                    ok: v => "Configurado. " + v,
-                   no: "Falta — cada primera visita paga un salto de redirección antes de empezar." },
+                   no: "Cada primera visita empieza sin protección y se redirige — un salto perdido." },
     csp:         {
       so: "Si alguien logra meter un script en tu página, puede leer lo que los visitantes escriben en tus formularios.", t: "Solo corren tus scripts, y solo ellos cuestan tiempo",
                    ok: "Configurado.",
-                   no: "Falta — scripts de terceros inyectados corren en tu página y frenan la carga." },
+                   no: "Nada limita qué código puede correr aquí — lo que se cuele corre también." },
     frame:       {
       so: "Cualquiera puede cargar tu sitio dentro de su propia página y presentar tu trabajo como suyo.", t: "Tu marca no puede ser revestida por otro",
                    ok: "Enmarcado restringido.",
-                   no: "Falta — tus páginas pueden montarse dentro del sitio de un extraño como suyas." },
+                   no: "Nada impide que otro sitio muestre tus páginas dentro del suyo — como suyas." },
     nosniff:     {
       so: "Un archivo subido con la etiqueta equivocada puede ejecutarse como código en el navegador del visitante.", t: "Un archivo mal etiquetado no corre como código",
                    ok: "Configurado.",
-                   no: "Falta — una subida mal etiquetada puede ejecutarse y hacer bloquear el dominio." },
+                   no: "Un archivo mal etiquetado puede correr como código — basta una subida." },
     referrer:    {
       so: "Cada click hacia afuera le dice al otro sitio exactamente desde cuál de tus páginas salió el visitante.", t: "Los clics salientes no filtran tus URLs",
                    ok: v => "Configurado. " + v,
-                   no: "Falta — cada enlace saliente entrega la dirección completa de tu página." },
+                   no: "Cada clic saliente le entrega al otro sitio tu página exacta — completa." },
     permissions: {
       so: "Cualquier cosa que corra en tu página puede pedirle cámara o micrófono a un visitante, y el permiso parece venir de ti.", t: "Nada pide cámara o micrófono en tu nombre",
                    ok: "Configurado.",
-                   no: "Falta — cualquier script puede pedírselo a tus visitantes bajo tu dominio." },
+                   no: "Cualquier cosa en la página puede pedir cámara o micrófono — en tu nombre." },
     weak: {
-      hsts:        "Configurado pero vence muy pronto — bajo seis meses el navegador lo olvida.",
-      csp:         "Configurado pero permite scripts inline — uno inyectado corre y cuesta igual.",
-      frame:       "Con un valor que el navegador ignora — te pueden seguir enmarcando afuera.",
-      referrer:    "Con una política que igual filtra — la URL completa sale al bajar de HTTPS.",
-      permissions: "Configurado pero no restringe nada — los scripts pueden pedir en tu nombre.",
-      description: "Presente pero inservible — muy delgado para decir algo, o muy largo para resumir.",
-      canonical:   "Apunta a otro dominio — le entrega el peso de esta página a un sitio ajeno.",
+      hsts:        "Vence demasiado pronto — el navegador lo olvida entre visita y visita.",
+      csp:         "El límite de lo que puede correr tiene un hueco — lo inyectado corre igual.",
+      frame:       "La regla contra mostrarte en otro lado es una que el navegador ignora — nada hace.",
+      referrer:    "La regla igual filtra — tu dirección completa sale hacia otros sitios.",
+      permissions: "La regla no restringe nada — cualquiera puede seguir pidiendo en tu nombre.",
+      description: "El resumen es inservible — muy delgado para decir algo, o muy largo para serlo.",
+      canonical:   "Nombra a otro dominio como el real — esta página le entrega su propio peso.",
     },
   },
 };

@@ -306,8 +306,11 @@ t("another domain fails",
   by(runD(ALL, doc({ canonical: "https://someone-else.com/" })), "canonical").pass, false);
 t("...and says so, not 'missing'",
   /another domain/i.test(by(runD(ALL, doc({ canonical: "https://someone-else.com/" })), "canonical").detail), true);
+// Compared against the table rather than a phrase, so rewording the reason
+// cannot fail this. The claim is that a relative canonical reads as the
+// missing case, not as the points-elsewhere one.
 t("a relative canonical is still the missing case",
-  /Missing or relative/i.test(by(runD(ALL, doc({ canonical: "/x" })), "canonical").detail), true);
+  by(runD(ALL, doc({ canonical: "/x" })), "canonical").detail, M.HDR.en.canonical.no);
 t("garbage canonical does not throw",
   by(runD(ALL, doc({ canonical: "http://[bad" })), "canonical").pass, false);
 

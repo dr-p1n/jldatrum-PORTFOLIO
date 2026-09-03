@@ -190,7 +190,7 @@
     <h2>Cómo DATRUM asegura sus propios sistemas</h2>
     <ul>
       <li><strong style="color:var(--text)">Hosting</strong> — Cloudflare Pages (desplegado en el borde, protegido contra DDoS, TLS 1.3 automático).</li>
-      <li><strong style="color:var(--text)">Seguridad de dominio y email</strong> — DKIM, SPF, DMARC aplicados para jldatrum.com. HSTS preload, CSP, X-Frame-Options configurados en cada respuesta. DNSSEC habilitado. El conjunto exacto de encabezados est&aacute; documentado en la <a href="/es/resources/security-headers/">Índice de Seguridad y Confianza del Dominio</a>, con la configuraci&oacute;n para desplegarlo.</li>
+      <li><strong style="color:var(--text)">Seguridad de dominio y email</strong> — DKIM, SPF, DMARC aplicados para jldatrum.com. HSTS preload, CSP, X-Frame-Options configurados en cada respuesta. DNSSEC habilitado. El conjunto exacto de encabezados est&aacute; documentado en el <a href="/es/resources/security-headers/">Escáner de Seguridad de Encabezados e Indexabilidad</a>, con la configuraci&oacute;n para desplegarlo.</li>
       <li><strong style="color:var(--text)">Código fuente</strong> — repositorio privado de GitHub con commits firmados requeridos y 2FA obligatorio para cualquier contribuidor.</li>
       <li><strong style="color:var(--text)">Secretos</strong> — almacenados como secretos de Cloudflare Worker, nunca commiteados al código. Rotados ante cambios de personal.</li>
       <li><strong style="color:var(--text)">Postura de backup</strong> — sitio estático (el historial de Git es el backup), el estado del worker se replica en el borde por Cloudflare.</li>
