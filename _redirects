@@ -42,6 +42,14 @@
 /assets/og-image.png                               /assets/og-image-v2.png        301
 /assets/og-image-es.png                            /assets/og-image-es-v2.png     301
 
+# The favicon was a black three-pointed spike left over from a template, and
+# browsers pin a favicon far longer than the four hours the asset header asks
+# for. Renaming it is the only reliable way to make a tab let go. The bare
+# /favicon.ico is here because crawlers and older browsers ask for it at the
+# root whether or not the page declares one — it was answering 404.
+/favicon.ico                                       /assets/favicon-v2.ico         301
+/assets/favicon.ico                                /assets/favicon-v2.ico         301
+
 # Repo files that are not pages. There is no build step, so the repo root is the
 # deploy directory and everything tracked in it answers 200 on the marketing
 # domain — the worker source, the local preview server, the package manifest.
