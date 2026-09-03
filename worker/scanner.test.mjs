@@ -74,6 +74,32 @@ for (const [name, table] of [["STR", M.STR], ["HDR", M.HDR]]) {
     en.filter(k => /robots\.txt|JSON-LD|canonical|HSTS|CSP|X-Frame|hreflang|sitemap|meta |H1\b/.test(table.en[k].so)), []);
 }
 
+/* Every title names what the check PREVENTS, so beside a red mark it reads as
+   good news — the reader cannot tell a gap from a pass. Each check therefore
+   carries a second title for the failing case, and a failing check must report
+   that one. Without these, a rewritten title silently reverts the result to
+   ambiguity, which is the exact complaint these strings were written for. */
+console.log("\nand a failing check states the failure, not what it guards");
+for (const [name, table] of [["STR", M.STR], ["HDR", M.HDR]]) {
+  const en = soKeys(table.en).filter(k => k !== "groups" && k !== "weak");
+  t(`${name}: every check has a failing title in English`, en.filter(k => !table.en[k].nt), []);
+  t(`${name}: every check has a failing title in Spanish`, en.filter(k => !table.es[k].nt), []);
+  t(`${name}: the two titles differ`,
+    en.filter(k => String(table.en[k].nt) === String(table.en[k].t)), []);
+  t(`${name}: neither is left in English`,
+    en.filter(k => String(table.es[k].nt) === String(table.en[k].nt)), []);
+}
+const bareDoc = { jsonld: [], headings: [], h1: [], title: "", description: "",
+                  canonical: "", hreflang: [], imgTotal: 0, imgNoAlt: 0, textLen: 0,
+                  lang: "", robotsMeta: "", insecureRefs: 0 };
+t("no gap reports its passing title",
+  M.runHeaderChecks({ headers: { get: () => null } }, new URL("http://x.com/"), "en", bareDoc)
+    .concat(M.runChecks({ doc: bareDoc, robots: { ok: false, groups: [] }, sitemap: { ok: false },
+                          llms: { ok: false }, headers: {}, path: "/", lang: "en" }))
+    .filter(c => !c.pass)
+    .filter(c => [M.HDR.en, M.STR.en].some(tb => Object.values(tb)
+      .some(v => v && typeof v === "object" && v.t === c.title))), []);
+
 // It rides on failures only: a passing check has nothing to explain, and the
 // payload is read by a browser on every scan.
 const hs2 = { "strict-transport-security": "max-age=63072000" };
@@ -83,7 +109,10 @@ t("carried on failures", someChecks.filter(c => !c.pass).every(c => typeof c.so 
 t("...and not on passes",  someChecks.filter(c =>  c.pass).every(c => c.so === undefined), true);
 t("Spanish scan gets Spanish sentences",
   M.runHeaderChecks({ headers: { get: () => null } }, new URL("https://x.com/"), "es")
-    .filter(c => !c.pass).every(c => c.so && c.so === M.HDR.es[Object.keys(M.HDR.es).find(k => M.HDR.es[k].t === c.title)].so), true);
+    // A failing check reports `nt`, the failure form, so the lookup back to
+    // the table has to accept either title.
+    .filter(c => !c.pass).every(c => c.so && c.so === M.HDR.es[Object.keys(M.HDR.es)
+      .find(k => M.HDR.es[k].t === c.title || M.HDR.es[k].nt === c.title)].so), true);
 
 console.log("\nSSRF: must reject");
 for (const u of ["http://localhost/","http://127.0.0.1/","http://127.1.2.3/","https://192.168.1.1/",
