@@ -135,21 +135,8 @@
     });
   }
 
-  /* El tercer instrumento enseña los tres resultados juntos cuando el
-     visitante corrió los tres en esta pestaña. Se guarda la nota, nunca el
-     resultado completo, dura lo que dure la pestaña, y no sale del
-     navegador. En modo privado el acceso lanza, así que va envuelto. */
-  function remember(data) {
-    try {
-      sessionStorage.setItem("datrum:" + (MODE || "ai"), JSON.stringify({
-        host: data.url, score: data.score, grade: data.grade
-      }));
-    } catch (e) { /* sin sessionStorage el trío simplemente no aparece */ }
-  }
-
   function render(data) {
     lastData = data;
-    remember(data);
     result.textContent = "";
     if (lastUrl) result.appendChild(viewBar());
     var gated = GATED && !unlocked;

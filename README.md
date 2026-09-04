@@ -52,12 +52,8 @@ node worker/scanner.test.mjs
 
 ## The scanners
 
-Three instruments across two workers. The first two share the worker in this
-repo; the third — Pipeline Visibility, at `/resources/pipeline/` and
-`/es/resources/pipeline/` — is its own repo and its own worker, because the root
-of this repo is the deploy directory and anything tracked here is a public URL.
-Both languages of every instrument are served by the same code: the page
-declares its language and the worker picks the copy file.
+Two instruments, one worker, in this repo. Both languages are served by the
+same code: the page declares its language and the worker picks the copy file.
 
 This worker, two instruments, at `POST /scan`. Omit `mode` for the AI Visibility Map
 (26 checks); pass `"mode":"headers"` for the Header Security &

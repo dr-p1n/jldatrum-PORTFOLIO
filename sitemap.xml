@@ -146,24 +146,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jldatrum.com/resources/pipeline/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/pipeline/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/pipeline/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/pipeline/"/>
-    <lastmod>2026-09-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jldatrum.com/es/resources/pipeline/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/pipeline/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/pipeline/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/pipeline/"/>
-    <lastmod>2026-09-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://jldatrum.com/resources/security-headers/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/security-headers/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/security-headers/"/>

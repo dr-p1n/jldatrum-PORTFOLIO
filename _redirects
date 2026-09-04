@@ -60,3 +60,8 @@
 /package.json                                      /404                           301
 /.claude/*                                         /404                           301
 /.gitignore                                        /404                           301
+
+# Pipeline Visibility was published and withdrawn. It was in the sitemap and in
+# llms.txt, so the addresses exist out there; they go where the instruments are.
+/resources/pipeline/*                              /resources/                    301
+/es/resources/pipeline/*                           /es/resources/                 301
