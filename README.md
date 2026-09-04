@@ -50,9 +50,16 @@ Its test suite runs offline, with no account and no network:
 node worker/scanner.test.mjs
 ```
 
-## The scanner
+## The scanners
 
-One worker, two instruments, at `POST /scan`. Omit `mode` for the AI Visibility Map
+Three instruments across two workers. The first two share the worker in this
+repo; the third — Pipeline Visibility, at `/resources/pipeline/` and
+`/es/resources/pipeline/` — is its own repo and its own worker, because the root
+of this repo is the deploy directory and anything tracked here is a public URL.
+Both languages of every instrument are served by the same code: the page
+declares its language and the worker picks the copy file.
+
+This worker, two instruments, at `POST /scan`. Omit `mode` for the AI Visibility Map
 (26 checks); pass `"mode":"headers"` for the Header Security &
 Indexability Scanner (15 checks). `POST /lead` records a report request. Rate limited
 to 60 requests per IP per hour on each endpoint; the ceilings are `SCAN_LIMIT`

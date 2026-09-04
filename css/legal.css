@@ -1297,18 +1297,42 @@ body.has-nav .band--top .wrap { padding-top: 160px; }
 .pv-item-so { font-size: 14px; color: #E8EDED; margin: 6px 0 0 24px; }
 .pv-item-detail { font-size: 13px; color: #9AABAF; margin: 4px 0 0 24px; }
 
+/* El costo: las ocho etapas en orden, con las invisibles marcadas. Lleva la
+   barra lemon porque es el último lugar donde se mira antes de decidir. */
 .pv-cost {
   border-left: 2px solid #F2D24B; padding: 4px 0 4px 20px; margin: 0 0 40px;
 }
 .pv-cost-title {
   font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 500;
-  letter-spacing: 0.12em; text-transform: uppercase; color: #9AABAF; margin: 0 0 8px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: #9AABAF; margin: 0 0 16px;
+}
+/* La tira. Cada etapa es una fila y el orden es el del embudo, así que se
+   lee de arriba abajo y el punto donde se apaga la luz se ve de un vistazo.
+   La marca ✓/✕/· viaja con el color: ninguno de los dos es portador solo. */
+.pv-steps { list-style: none; margin: 0 0 20px; padding: 0; }
+.pv-step {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 7px 0; border-bottom: 1px solid #142E34;
+}
+.pv-step:last-child { border-bottom: 0; }
+.pv-step-mark { font-size: 14px; line-height: 1; width: 14px; flex: 0 0 14px; }
+.pv-step-label { font-size: 15px; }
+.pv-step--seen .pv-step-mark { color: #6FCF97; }
+.pv-step--seen .pv-step-label { color: #E8EDED; }
+.pv-step--dark .pv-step-mark { color: #E88B6A; }
+.pv-step--dark .pv-step-label { color: #E88B6A; }
+.pv-step--na .pv-step-mark,
+.pv-step--na .pv-step-label { color: #9AABAF; }
+
+.pv-cost-seen {
+  font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 500;
+  color: #9AABAF; margin: 0 0 8px;
 }
 .pv-cost-line {
   font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 500;
   color: #E8EDED; margin: 0; line-height: 1.45;
 }
-.pv-cost-meta { font-size: 14px; color: #9AABAF; margin: 8px 0 0; }
+.pv-cost-meta { font-size: 14px; color: #9AABAF; margin: 12px 0 0; }
 
 .pv-trio { margin: 0 0 40px; }
 .pv-trio-title {
@@ -1350,4 +1374,5 @@ body.has-nav .band--top .wrap { padding-top: 160px; }
   .pv-grade { font-size: 44px; }
   .pv-cols { gap: 24px; }
   .pv-cost-line { font-size: 18px; }
+  .pv-step-label { font-size: 14px; }
 }

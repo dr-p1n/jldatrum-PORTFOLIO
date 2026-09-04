@@ -72,7 +72,10 @@
     fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: url })
+      /* El idioma lo declara la página, no el navegador: quien abre la
+         versión en inglés quiere el informe en inglés aunque su teléfono
+         esté en español. */
+      body: JSON.stringify({ url: url, lang: root.dataset.lang || "es" })
     }).then(function (r) {
       return r.json().then(function (j) { return { ok: r.ok, body: j }; });
     }).then(function (res) {
@@ -107,8 +110,7 @@
 
     out.appendChild(headline(d));
     out.appendChild(columns(d));
-    var c = cost(d);
-    if (c) out.appendChild(c);
+    out.appendChild(cost(d));
     var three = trio(d);
     if (three) out.appendChild(three);
     out.appendChild(cta());
@@ -186,28 +188,53 @@
   }
 
   /* ── El costo ─────────────────────────────────────────────────────────
-     La etapa donde se apaga la luz. Se lee de las fallas en orden, no de
-     una narrativa escrita a mano: el primer chequeo de Ceguera que falla
-     es el punto donde el dueño deja de poder seguir a nadie. */
+     Las ocho etapas del embudo en orden, con las invisibles marcadas. Es la
+     lectura entera del instrumento en una tira: dónde se puede seguir a
+     alguien y dónde se apaga la luz.
+
+     Todo sale del escaneo. No se estima nada y no se le pregunta nada al
+     visitante — una proyección de "leads perdidos" sería el número inventado
+     que las tres páginas prometen no tener, y la única entrada de esta
+     página es la URL.
+
+     Tres estados, no dos: una etapa que no se pudo medir queda en punto, no
+     en ✕. Misma regla que la celda con guion en la comparación. */
   var STAGES = ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8"];
 
   function cost(d) {
-    var first = null;
-    for (var i = 0; i < STAGES.length && !first; i++) {
-      d.rows.forEach(function (r) {
-        if (!first && r.id === STAGES[i] && r.measured && !r.pass) first = r;
-      });
-    }
-    if (!first) return null;
+    var by = {};
+    d.rows.forEach(function (r) { by[r.id] = r; });
 
     var box = el("section", "pv-cost");
     box.appendChild(el("h2", "pv-cost-title", t("costTitle")));
-    box.appendChild(el("p", "pv-cost-line", fill(t("costLine"), { stage: t("stage" + first.id) })));
+
+    var list = el("ol", "pv-steps");
+    var seen = 0, measured = 0, dark = null;
+    STAGES.forEach(function (id) {
+      var r = by[id];
+      if (!r) return;
+      if (r.measured) { measured++; if (r.pass) seen++; else if (!dark) dark = r; }
+
+      var li = el("li", "pv-step");
+      li.classList.add(!r.measured ? "pv-step--na" : r.pass ? "pv-step--seen" : "pv-step--dark");
+      var mark = el("span", "pv-step-mark", r.measured ? (r.pass ? "✓" : "✕") : "·");
+      mark.setAttribute("aria-hidden", "true");
+      li.appendChild(mark);
+      li.appendChild(el("span", "sr-only",
+        r.measured ? (r.pass ? t("passA11y") : t("failA11y")) : t("naA11y")));
+      li.appendChild(el("span", "pv-step-label", t("step" + id)));
+      list.appendChild(li);
+    });
+    box.appendChild(list);
+
+    box.appendChild(el("p", "pv-cost-seen", fill(t("costSeen"), { n: seen, m: measured })));
+    box.appendChild(el("p", "pv-cost-line", dark
+      ? fill(t("costLine"), { stage: t("stage" + dark.id) })
+      : t("costClean")));
 
     if (d.channels && d.channels.kinds) {
-      var ch = el("p", "pv-cost-meta",
-        fill(t("channels"), { n: d.channels.kinds, m: d.channels.destinations }));
-      box.appendChild(ch);
+      box.appendChild(el("p", "pv-cost-meta",
+        fill(t("channels"), { n: d.channels.kinds, m: d.channels.destinations })));
     }
     return box;
   }
@@ -258,7 +285,7 @@
     box.appendChild(el("h2", "pv-blocked-title", d.title));
     box.appendChild(el("p", "pv-blocked-body", d.body));
     var a = el("a", "cs-btn-primary", t("blockedCta"));
-    a.href = "/es/resources/scan/";
+    a.href = t("blockedHref");
     box.appendChild(a);
     return box;
   }

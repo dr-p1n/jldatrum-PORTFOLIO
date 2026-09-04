@@ -30,6 +30,8 @@ path prefixed with `/es/`.
 
 - [Header Security &amp; Indexability Scanner](https://jldatrum.com/resources/security-headers/): reads a URL's response headers and the page itself, and grades the fifteen things a corporate buyer checks. Automated, not self-reported.
 
+- [Pipeline Visibility](https://jldatrum.com/resources/pipeline/): reads a site the way a buyer moves through it and grades sixteen checks in two columns — whether the ways in work, and whether the owner would know if they stopped. Automated, not self-reported.
+
 ## Guides
 
 Neutral, answer-first reference pages. Each section answers one buyer question.

@@ -55,6 +55,33 @@ function showCookieBanner() {
 
    The functions above stay exported on window: they are the behaviour, this is
    only how it is reached. */
+/* Los canales de contacto, medidos.
+   Un WhatsApp que vino de un anuncio y uno que vino de un amigo eran el mismo
+   evento invisible: el canal principal de este mercado era el único que no
+   aparecía en ningún reporte. Esto no manda nada a nadie más — es el mismo GA4
+   que ya está cargado, y con Consent Mode denegado no sale del navegador. */
+const CHANNELS = [
+  { id: 'whatsapp', re: /^whatsapp:|wa\.me\/|api\.whatsapp\.com/i },
+  { id: 'tel',      re: /^tel:/i },
+  { id: 'email',    re: /^mailto:/i },
+  { id: 'booking',  re: /calendly\.com/i },
+];
+
+document.addEventListener('click', function (e) {
+  const a = e.target.closest('a[href]');
+  if (!a) return;
+  const href = a.getAttribute('href') || '';
+  const channel = CHANNELS.find(c => c.re.test(href));
+  // El destino no se manda: interesa por dónde y desde qué página se van,
+  // nunca a qué número escribió quién.
+  if (channel && typeof window.gtag === 'function') {
+    window.gtag('event', 'contact_click', {
+      contact_channel: channel.id,
+      page_path: location.pathname,
+    });
+  }
+});
+
 document.addEventListener('click', function (e) {
   const el = e.target.closest('[data-action]');
   if (!el) return;

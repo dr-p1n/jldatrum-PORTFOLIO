@@ -18,7 +18,9 @@
   <meta name="twitter:image" content="https://jldatrum.com/assets/og-image-es-v2.png">
 
   <link rel="canonical" href="https://jldatrum.com/es/resources/pipeline/">
+  <link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/pipeline/">
   <link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/pipeline/">
+  <link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/pipeline/">
 
   <script src="/js/analytics.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL53ZQMZ4P"></script>
@@ -41,11 +43,13 @@
   <a href="/es/work/" data-action="close-drawer">Casos de estudio</a>
   <a href="/es/resources/" data-action="close-drawer">Recursos</a>
   <a href="/es/bio/" data-action="close-drawer">Bio</a>
-  <a href="/es/es/resources/pipeline/" class="btn-diagnose-drawer" data-action="close-drawer">Escanea tu sitio &rarr;</a>
+  <a href="/resources/pipeline/" data-action="close-drawer" lang="en" hreflang="en">EN</a>
+  <a href="/es/resources/pipeline/" class="btn-diagnose-drawer" data-action="close-drawer">Escanea tu sitio &rarr;</a>
 </div>
 <div class="cs-topbar">
   <a href="/es/" class="cs-wordmark">DATRUM</a>
   <div class="cs-topbar-right">
+    <a href="/resources/pipeline/" class="cs-lang" lang="en" hreflang="en">EN</a>
     <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" data-action="toggle-drawer">
       <span></span><span></span><span></span>
     </button>
@@ -53,6 +57,7 @@
 </div>
 
 <div class="wrap" id="pipeline"
+     data-lang="es"
      data-endpoint="https://pipeline-visibility.julioernestolv.workers.dev/scan"
      data-scanning="Leyendo tu sitio como lo lee un desconocido…"
      data-generic-error="El escaneo falló."
@@ -67,7 +72,17 @@
      data-fail-a11y="Falló"
      data-na-a11y="Sin medir"
      data-cost-title="El costo"
+     data-cost-seen="Etapas que dejan rastro: {n} de {m}."
      data-cost-line="De cada 100 personas que llegan a tu sitio, no puedes ver qué pasa con ninguna después de {stage}."
+     data-cost-clean="Las ocho etapas dejan rastro: lo que pasa en tu sitio queda anotado."
+     data-step-c1="Llega al sitio"
+     data-step-c2="Escribe"
+     data-step-c3="Termina de escribir"
+     data-step-c4="Se sabe de dónde vino"
+     data-step-c5="Llama o manda WhatsApp"
+     data-step-c6="El mensaje llega a alguien"
+     data-step-c7="Entra por cualquier puerta"
+     data-step-c8="Se va sin escribir"
      data-channels="{n} maneras de escribirte, {m} destinos distintos."
      data-stage-c1="que entran"
      data-stage-c2="que te escriben"
@@ -84,6 +99,7 @@
      data-trio-line="La gente te encuentra. Duda. Y desaparece sin dejar rastro."
      data-not-run="sin correr"
      data-blocked-cta="Probar el Mapa de Visibilidad IA →"
+     data-blocked-href="/es/resources/scan/"
      data-cta-line="Si quieres que estas dieciséis casillas queden en verde, eso es exactamente lo que hago."
      data-cta-btn="Hablemos por WhatsApp →">
   <a href="/es/resources/" class="back-link">← Todos los recursos</a>
