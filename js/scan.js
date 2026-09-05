@@ -147,9 +147,16 @@
     head.appendChild(g);
 
     var meta = el("div", "scan-headmeta");
-    meta.appendChild(el("p", "scan-score",
-      t("scoreLabel", "Score") + " " + data.score + "/100 · " +
-      data.passed + "/" + data.total + " " + t("passedLabel", "checks passed")));
+    /* The pool is printed, not implied. "16 of 20 passed" beside "25/100" is
+       a reader's first objection and it is a fair one: without the weights
+       the two numbers look like they came from different instruments. With
+       the pool on the line the arithmetic is theirs to check. */
+    var line = t("scoreLabel", "Score") + " " + data.score + "/100 · " +
+               data.passed + "/" + data.total + " " + t("passedLabel", "checks passed");
+    if (typeof data.pool === "number" && data.pool > 0)
+      line += " · " + t("poolLabel", "{lost} of {pool} points lost")
+        .replace("{lost}", data.deducted).replace("{pool}", data.pool);
+    meta.appendChild(el("p", "scan-score", line));
     meta.appendChild(el("p", "scan-target", data.url));
     head.appendChild(meta);
     result.appendChild(head);
@@ -206,6 +213,30 @@
       });
       table.appendChild(tbody);
       result.appendChild(table);
+    }
+
+    /* ── Report A: what is true about the markup ───────────────────────
+       Observations, not gaps. No letter, no points, no cost column, and no
+       claimed consequence — because the site this report was rebuilt from was
+       failing every one of these while ranking first in two languages and
+       being quoted back with five of its own URLs. Stating them as faults said
+       something the reader could disprove; stating them as facts does not. */
+    var obs = data.observations || [];
+    if (obs.length) {
+      result.appendChild(el("h2", "scan-subhead", t("obsTitle", "Structural observations")));
+      result.appendChild(el("p", "scan-obslede",
+        t("obsLede", "True about the markup, and deliberately not scored. None of it is claimed to cost you visibility.")));
+      var olist = el("ul", "scan-obs");
+      obs.forEach(function (o) {
+        var li = el("li", "scan-obs-item" + (o.pass ? "" : " scan-obs-item--note"));
+        li.appendChild(el("span", "scan-obs-mark", o.pass ? "\u2713" : "\u00b7"));
+        var body = el("div", "scan-obs-body");
+        body.appendChild(el("p", "scan-title", o.title));
+        body.appendChild(el("p", "scan-detail", o.detail));
+        li.appendChild(body);
+        olist.appendChild(li);
+      });
+      result.appendChild(olist);
     }
 
     // The heading census. A count has no pass and no fail, so it is reported as
@@ -692,28 +723,30 @@
      works if you have actually measured the peers. A target needs no sample —
      but it does need a derivation, or it is a number someone felt like.
 
-     Both targets fall out of the weights. Security: fifteen checks over a pool
-     of 110 — noindex 15, one H1 15, then the headers, then the rest of the
-     page — and at 10 points of deductions nothing weighing more than 10 can be
-     failing, so 90 means the page is indexable, says what it is in one H1, and
-     HTTPS, HSTS, a CSP that actually stops injected script and closed framing
-     are all correct. 90 is the lowest number that still guarantees all six; at
-     89 transport drops out.
+     Both targets fall out of the weights. Security: thirteen checks over a pool
+     of 93 — noindex 15, then the headers, then what the page says it is — and
+     at 10 points of deductions nothing weighing more than 10 can be failing,
+     so 90 means the page is indexable and HTTPS, HSTS, a CSP that actually
+     stops injected script and closed framing are all correct. 90 is the lowest
+     number that still guarantees all five; at 89 transport drops out. The H1
+     and the outline used to be in this pool and are not any more: they are
+     HTML, this instrument reads a response, and both were already being
+     charged by the other one.
 
-     AI visibility derives the same 90 the same way. At ten points of slack
-     nothing weighing eleven or more can be failing, which on that instrument
-     is: the entity block present (40), parsing (25), the content in the served
-     HTML (25), one H1 (25), naming an Organization (15), GPTBot not blocked
-     (15), and HTTPS (11). 90 is again the lowest number that holds all seven —
-     at 89 the 11-point transport check drops out, exactly as it does on the
-     other instrument.
+     AI visibility derives the same 90, and its pool IS normalised, because
+     that instrument has checks that can be n/a — a site whose sitemap cannot
+     be read has not been shown to have no footprint, and a check that could
+     not be measured has to leave the pool rather than count either way. At ten
+     points of slack on a normalised hundred, nothing worth more than a tenth
+     of the pool can be failing: the content arriving in the served HTML (25),
+     GPTBot not blocked (15), the footprint (12), and HTTPS (11).
 
-     The pool is not normalised to 100 on either instrument. Pricing every
-     check against the others means the only way to say an H1 matters is to say
-     framing matters less, which is a statement about arithmetic rather than
-     about what it costs the reader. Those six are the line every answer engine shares, because
-     none of them reliably run JavaScript and all of them need an entity to
-     attach a recommendation to.
+     What is NOT in that pool any more is the markup. Structured data, the
+     heading outline and alt text are reported and priced at nothing, because
+     the best-ranked site this instrument has been run against was failing all
+     three while being quoted back with five of its own URLs. Grading them said
+     something a reader could disprove in ten seconds, and once one line in a
+     report is disproved none of the others get read.
 
      data-target on the page carries the number. Absent, this renders nothing.
      ──────────────────────────────────────────────────── */

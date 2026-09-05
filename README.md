@@ -48,6 +48,7 @@ Its test suite runs offline, with no account and no network:
 
 ```
 node worker/scanner.test.mjs
+node worker/calibration.test.mjs
 ```
 
 ## The scanners
@@ -55,11 +56,49 @@ node worker/scanner.test.mjs
 Two instruments, one worker, in this repo. Both languages are served by the
 same code: the page declares its language and the worker picks the copy file.
 
-This worker, two instruments, at `POST /scan`. Omit `mode` for the AI Visibility Map
-(26 checks); pass `"mode":"headers"` for the Header Security &
-Indexability Scanner (15 checks). `POST /lead` records a report request. Rate limited
-to 60 requests per IP per hour on each endpoint; the ceilings are `SCAN_LIMIT`
-and `LEAD_LIMIT` in `worker/wrangler.toml`.
+This worker, two instruments, at `POST /scan`. Omit `mode` for the AI Visibility Map;
+pass `"mode":"headers"` for the Header Security & Indexability Scanner (13 checks).
+`POST /lead` records a report request. Rate limited to 60 requests per IP per hour on
+each endpoint; the ceilings are `SCAN_LIMIT` and `LEAD_LIMIT` in `worker/wrangler.toml`.
+
+### Two reports, one of them ungraded
+
+The AI Visibility Map returns `checks` and `observations`, and only the first
+is scored.
+
+`checks` is what decides whether a machine can reach the site, read it, and
+find a page that answers one question: crawler access, the words arriving in
+the served HTML, the title and description, and how much of the business has
+an address of its own. Scored, normalised to the checks that actually ran, and
+every row carries the `weight` it was worth so the pool in the payload adds up.
+
+`observations` is structured data, the heading outline and alt text. Reported
+plainly, priced at nothing, and no consequence is claimed for any of it.
+
+That split is not tidiness. The instrument graded a Panama interiors studio
+25/100 F while that studio ranked first for its category in two languages and
+was being quoted back by Google's AI Overview with citations to five of its own
+URLs. It has four `<h1>`s — three of them the numerals `1.` `2.` `3.` — no
+structured data, a broken heading outline and almost no alt text. Every hygiene
+signal was failing and every outcome that matters was passing, so hygiene stopped
+carrying a grade.
+
+### Calibration
+
+`worker/calibration.test.mjs` runs the scoring against captured fixtures whose
+real-world search outcome is recorded. The rule it enforces is direction, not
+precision: a site that ranks and is described correctly must score above one
+that does not, and any build grading the ceiling reference below a B fails.
+
+A fixture with no recorded outcome takes part in no ordering assertion. That is
+deliberate — the alternative is inventing a search result nobody looked up.
+
+### What it does not measure
+
+Whether an engine actually cites you. That needs a SERP API for index coverage
+and own-name ownership, and a model API to ask an engine what it says about a
+business. Neither key exists here, so the instrument measures the shapes that
+precede citation and says so, rather than estimating the thing itself.
 
 The grading logic is in this repo on purpose. The pages claim the score is
 automated rather than self-reported, and that is only worth claiming if anyone

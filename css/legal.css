@@ -993,6 +993,24 @@ nav {
 
 /* The heading census: a row of counts, not a verdict. Tabular figures so the
    numbers line up, and --muted because it carries no pass or fail. */
+/* Report A. Observations, not gaps: no cost column, no red, and the mark is a
+   neutral dot rather than a cross. A cross would say "you failed this", which
+   is the claim the split exists to stop making. */
+.scan-obslede {
+  color: #9AABAF; font-size: 14px; margin: 0 0 16px; max-width: 62ch;
+}
+.scan-obs { list-style: none; margin: 0 0 40px; padding: 0; }
+.scan-obs-item {
+  display: flex; gap: 12px; align-items: baseline;
+  padding: 10px 0; border-bottom: 1px solid #142E34;
+}
+.scan-obs-item:last-child { border-bottom: 0; }
+.scan-obs-mark { flex: 0 0 14px; width: 14px; font-size: 14px; line-height: 1; color: #6FCF97; }
+.scan-obs-item--note .scan-obs-mark { color: #9AABAF; }
+.scan-obs-body { min-width: 0; }
+.scan-obs-body .scan-title { margin: 0; }
+.scan-obs-body .scan-detail { margin: 4px 0 0; }
+
 .scan-census {
   margin: 0; color: #9AABAF; font-size: 14px; line-height: 1.7;
   font-variant-numeric: tabular-nums;

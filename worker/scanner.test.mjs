@@ -11,7 +11,7 @@ const tmpPath = path.join(here, ".scanner.undertest.mjs");
 
 let src = fs.readFileSync(srcPath, "utf8");
 src = src.slice(0, src.indexOf("export default"));
-src += "\nexport { isNoindex, langDeclared, mixedContent, canonicalOffsite, decodeEntities, parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR, validEmail, handleLead, titleNames, hasOneH1, descPresent, descUsable, canonicalAbs, headingSkip, headingCensus, ceiling };";
+src += "\nexport { isNoindex, langDeclared, mixedContent, canonicalOffsite, decodeEntities, parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR, validEmail, handleLead, titleNames, hasOneH1, descPresent, descUsable, canonicalAbs, headingSkip, headingCensus, ceiling, h1State, h1Subject, looksUnrendered };";
 fs.writeFileSync(tmpPath, src);
 const M = await import(tmpPath);
 fs.unlinkSync(tmpPath);
@@ -62,16 +62,31 @@ t("nothing under 60 passes",            M.grade(59), "F");
    talked about; an untranslated one ships English into a Spanish report. */
 console.log("\nevery failure explains itself in plain language");
 const soKeys = t => Object.keys(t).filter(k => t[k] && typeof t[k] === "object" && (t[k].t || t[k].d));
+
+/* A title or a plain sentence may depend on WHICH way the check failed — the
+   H1 one does, because "no heading" and "four headings" are different facts
+   and printing the first over the second is the bug these strings exist to
+   prevent. So a string may be a function of what the scan found, and every
+   assertion below has to hold for EVERY branch of it, not for one sample.
+   These probes cover the three failing states the H1 check can report. */
+const PROBES = [
+  { state: "none",  n: 0, text: "",                   all: [] },
+  { state: "blank", n: 1, text: "",                   all: [""] },
+  { state: "many",  n: 4, text: "Timeless interiors", all: ["Timeless interiors", "1.", "2.", "3."] },
+];
+const variants = x => typeof x === "function" ? PROBES.map(p => String(x(p))) : [String(x)];
+const joined   = x => variants(x).join(" ~ ");
 for (const [name, table] of [["STR", M.STR], ["HDR", M.HDR]]) {
   const en = soKeys(table.en).filter(k => k !== "groups" && k !== "weak");
   t(`${name}: every check has one in English`, en.filter(k => !table.en[k].so), []);
   t(`${name}: every check has one in Spanish`, en.filter(k => !table.es[k].so), []);
   t(`${name}: none is left in English`,
-    en.filter(k => table.es[k].so === table.en[k].so), []);
+    en.filter(k => joined(table.es[k].so) === joined(table.en[k].so)), []);
   t(`${name}: one sentence, not a paragraph`,
-    en.filter(k => (table.en[k].so.match(/\. /g) || []).length > 0), []);
+    en.filter(k => variants(table.en[k].so).some(v => (v.match(/\. /g) || []).length > 0)), []);
   t(`${name}: no jargon in the plain line`,
-    en.filter(k => /robots\.txt|JSON-LD|canonical|HSTS|CSP|X-Frame|hreflang|sitemap|meta |H1\b/.test(table.en[k].so)), []);
+    en.filter(k => variants(table.en[k].so).some(v =>
+      /robots\.txt|JSON-LD|canonical|HSTS|CSP|X-Frame|hreflang|sitemap|meta |H1\b/.test(v))), []);
 }
 
 /* Every title names what the check PREVENTS, so beside a red mark it reads as
@@ -85,9 +100,9 @@ for (const [name, table] of [["STR", M.STR], ["HDR", M.HDR]]) {
   t(`${name}: every check has a failing title in English`, en.filter(k => !table.en[k].nt), []);
   t(`${name}: every check has a failing title in Spanish`, en.filter(k => !table.es[k].nt), []);
   t(`${name}: the two titles differ`,
-    en.filter(k => String(table.en[k].nt) === String(table.en[k].t)), []);
+    en.filter(k => variants(table.en[k].nt).some(v => v === String(table.en[k].t))), []);
   t(`${name}: neither is left in English`,
-    en.filter(k => String(table.es[k].nt) === String(table.en[k].nt)), []);
+    en.filter(k => joined(table.es[k].nt) === joined(table.en[k].nt)), []);
 }
 const bareDoc = { jsonld: [], headings: [], h1: [], title: "", description: "",
                   canonical: "", hreflang: [], imgTotal: 0, imgNoAlt: 0, textLen: 0,
@@ -244,31 +259,32 @@ const doc = (o = {}) => ({
 });
 const runD = (hs, d, lang = "en", url = "https://x.com/") => M.runHeaderChecks(res(hs), tgt(url), lang, d);
 
-t("a document adds seven checks",     runD(ALL, doc()).length, 15);
-t("page pool totals 30",
+t("a document adds five checks",      runD(ALL, doc()).length, 13);
+t("page pool totals 13",
   runD({}, doc({ title: "Home", description: "", canonical: "/x", lang: "",
                  headings: [{ level: 2, text: "a" }, { level: 4, text: "b" }] }))
-    .filter(c => c.group === "page").reduce((n, c) => n + c.deduction, 0), 30);
+    .filter(c => c.group === "page").reduce((n, c) => n + c.deduction, 0), 13);
 // Everything wrong at once, over http and with noindex, accounts for the whole
-// pool. It is 110 rather than 100 because the H1 was raised without taking the
-// points from another check — the proof that the pool has not drifted since.
+// pool. 93, because the H1 (15) and the outline (2) left this instrument: they
+// are HTML elements and this one reads what a server returns.
 const allWrong = doc({ title: "Home", description: "", canonical: "/x", lang: "",
                        insecureRefs: 3, robotsMeta: "noindex",
                        headings: [{ level: 2, text: "a" }, { level: 4, text: "b" }] });
-t("the whole pool is 110",
-  runD({}, allWrong, "en", "http://x.com/").reduce((n, c) => n + c.deduction, 0), 110);
-t("...and that is still a zero", score(runD({}, allWrong, "en", "http://x.com/")), 0);
+t("the whole pool is 93",
+  runD({}, allWrong, "en", "http://x.com/").reduce((n, c) => n + c.deduction, 0), 93);
+// The pool no longer reaches 100, so failing every single check leaves 7 rather
+// than 0. Still an F, and the alternative was re-weighting real checks to
+// protect a cosmetic zero.
+t("...and that is still an F", M.grade(score(runD({}, allWrong, "en", "http://x.com/"))), "F");
 
 // What the bar actually promises, asserted rather than described. A check
 // heavier than the 10 points of slack cannot be failing at 90, so this is the
-// list an A- certifies — and it now includes the H1 on both instruments.
-const GUARANTEED_HDR = ["noindex", "https", "hsts", "csp", "frame", "h1"];
-t("the bar guarantees exactly these six", GUARANTEED_HDR.join(),
+// list an A- certifies.
+const GUARANTEED_HDR = ["noindex", "https", "hsts", "csp", "frame"];
+t("the bar guarantees exactly these five", GUARANTEED_HDR.join(),
   runD({}, allWrong, "en", "http://x.com/")
     .filter(c => c.deduction > 10).map(c => c.id).sort()
     .join() === [...GUARANTEED_HDR].sort().join() ? GUARANTEED_HDR.join() : "drifted");
-t("no page missing an H1 can reach the bar",
-  score(runD(ALL, doc({ headings: [{ level: 2, text: "a" }] }))) < 90, true);
 t("a clean page and clean headers still score 100", score(runD(ALL, doc())), 100);
 t("perfect headers, broken page is not an A+",
   M.grade(score(runD(ALL, doc({ title: "Home", description: "", canonical: "/x",
@@ -277,27 +293,24 @@ t("perfect headers, broken page is not an A+",
 const PD = (d, id) => by(runD(ALL, d), id).pass;
 t("a short title fails",              PD(doc({ title: "Home" }), "title"), false);
 t("a naming title passes",            PD(doc(), "title"), true);
-t("no H1 fails",                      PD(doc({ headings: [{ level: 2, text: "a" }] }), "h1"), false);
-t("two H1s fail",                     PD(doc({ headings: [{ level: 1, text: "a" }, { level: 1, text: "b" }] }), "h1"), false);
-t("exactly one H1 passes",            PD(doc(), "h1"), true);
-t("a skipped level fails",            PD(doc({ headings: [{ level: 2, text: "a" }, { level: 4, text: "b" }] }), "heading-order"), false);
-t("a sequential outline passes",      PD(doc(), "heading-order"), true);
 t("a relative canonical fails",       PD(doc({ canonical: "/x" }), "canonical"), false);
 t("an absolute canonical passes",     PD(doc(), "canonical"), true);
 t("no description fails",             PD(doc({ description: "" }), "description"), false);
 t("a thin description fails",         PD(doc({ description: "Short." }), "description"), false);
 t("a usable description passes",      PD(doc(), "description"), true);
 
-// The whole reason these predicates are shared: two instruments must never
-// return different verdicts about the same H1 on the same page.
-console.log("\nthe two instruments agree about the same document");
+// The predicates that are still shared must never return two verdicts about
+// one page. The two that USED to be shared must now appear on one instrument
+// only: a prospect running both read the same H1 problem twice, in near
+// identical words, one of them inside a score calling itself security.
+console.log("\nthe two instruments agree, and no finding is charged twice");
 for (const d of [doc(), doc({ title: "Home" }), doc({ headings: [{ level: 1, text: "a" }, { level: 1, text: "b" }] }),
                  doc({ canonical: "/x" }), doc({ headings: [{ level: 2, text: "a" }, { level: 4, text: "b" }] })]) {
   const hdr = runD(ALL, d);
-  t("h1 verdict matches the AI scanner",       by(hdr, "h1").pass, M.hasOneH1(d));
   t("title verdict matches the AI scanner",    by(hdr, "title").pass, M.titleNames(d));
   t("canonical verdict matches the AI scanner", by(hdr, "canonical").pass, M.canonicalAbs(d));
-  t("outline verdict matches the AI scanner",  by(hdr, "heading-order").pass, !M.headingSkip(d));
+  t("the security instrument scores no H1",    by(hdr, "h1"), undefined);
+  t("the security instrument scores no outline", by(hdr, "heading-order"), undefined);
 }
 
 console.log("\nindexability, mixed content, lang, compression");
@@ -440,6 +453,74 @@ t("a real title passes",
 t("\"Home\" fails",           K({ doc: { title: "Home" } }, "title").pass, false);
 t("...and is quoted back",   /"Home"/.test(K({ doc: { title: "Home" } }, "title").detail), true);
 t("empty still fails",       K({}, "title").pass, false);
+
+/* ── a scanner must be able to say "I could not read this" ─────────────
+   The reader does not run scripts, so a site that renders in the browser
+   hands it a shell — and every content check then reports the reader's limit
+   as the site's fault. That is the failure signature the Piekno case was
+   first suspected of, and it has to halt rather than score. */
+console.log("\nthe unreadable page halts instead of scoring");
+const shell = "<html><head></head><body><div id=root></div>" +
+              "<script src=/app.js></script>".padEnd(9000, " ") + "</body></html>";
+t("a hydration shell is unreadable",
+  M.looksUnrendered(shell, { textLen: 12 }), true);
+t("a terse but real page is scored",
+  M.looksUnrendered("<html><body>" + "x".repeat(400) + "</body></html>", { textLen: 400 }), false);
+t("a small page with little text is not a shell",
+  M.looksUnrendered("<html><body><script src=a.js></script>hi</body></html>", { textLen: 2 }), false);
+t("plenty of markup AND plenty of text is a real page",
+  M.looksUnrendered(shell, { textLen: 5000 }), false);
+t("no script means it is simply an empty page",
+  M.looksUnrendered("<html><body></body></html>".padEnd(9000, " "), { textLen: 3 }), false);
+// The error has to hand the reader both numbers, so the claim is checkable.
+t("the message carries the byte count", /40,000 bytes/.test(M.ERR.en.shell(40000, 200)), true);
+t("...and the character count",        /200 characters/.test(M.ERR.en.shell(40000, 200)), true);
+t("...in Spanish too",                 /200 caracteres/.test(M.ERR.es.shell(40000, 200)), true);
+
+/* ── the H1, in three states ───────────────────────────────────────────
+   The defect this replaces: a page with four H1s was told "no heading says
+   what this page is". It shipped to a prospect whose site had four, three of
+   them the numerals 1. 2. 3., and the claim was disproved by pressing ctrl-U.
+   Absence and excess are different facts and the failing title must say which
+   one this is. The pass condition has not moved. */
+const H1 = hs => ({ doc: { headings: hs, h1: hs.filter(h => h.level === 1) } });
+const one   = [{ level: 1, text: "Timeless interiors designed with intention" }];
+const four  = [{ level: 1, text: "Timeless interiors designed with intention" },
+               { level: 1, text: "1." }, { level: 1, text: "2." }, { level: 1, text: "3." }];
+const blank = [{ level: 1, text: "  " }];
+
+t("one speaking H1 passes",      K(H1(one), "h1").pass, true);
+t("no H1 at all fails",          K(H1([]), "h1").pass, false);
+t("four H1s fail",               K(H1(four), "h1").pass, false);
+t("an empty H1 fails",           K(H1(blank), "h1").pass, false);
+t("a numeral-only H1 carries no subject", M.h1Subject("1."), false);
+t("...and a worded one does",    M.h1Subject("Timeless interiors"), true);
+
+t("state: none",  M.h1State({ h1: [] }), "none");
+t("state: many",  M.h1State({ h1: four }), "many");
+t("state: blank", M.h1State({ h1: blank }), "blank");
+t("state: ok",    M.h1State({ h1: one }), "ok");
+
+// The regression itself. Four headings must never be reported as none.
+t("four H1s are not reported as an absence",
+  /no heading|No heading/i.test(K(H1(four), "h1").title), false);
+t("...the failing title counts them",   /4 headings/.test(K(H1(four), "h1").title), true);
+t("...and the evidence quotes them",    /"1\."/.test(K(H1(four), "h1").detail), true);
+t("an absence still reads as an absence",
+  /No heading says/.test(K(H1([]), "h1").title), true);
+t("the empty H1 says it is empty, not missing",
+  /carries no words/.test(K(H1(blank), "h1").title), true);
+// The H1 is an OBSERVATION now, so it carries no consequence line at all —
+// that is what "stated plainly, with no claimed consequence" is enforced by.
+t("an observation costs nothing",       K(H1(four), "h1").deduction, 0);
+t("...and claims no consequence",       K(H1(four), "h1").so, undefined);
+t("...and is filed under report A",     K(H1(four), "h1").report, "a");
+// The sentence still has to follow the state wherever it is read from, because
+// "nothing claims to be the subject" is false when four things do.
+t("the plain line matches the excess case",
+  /Several headings/.test(M.STR.en.h1.so({ state: "many", n: 4 })), true);
+t("...and the absence case",
+  /Nothing on the page/.test(M.STR.en.h1.so({ state: "none", n: 0 })), true);
 
 // A canonical is a claim about identity; a relative one does not resolve.
 t("absolute canonical passes",

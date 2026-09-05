@@ -72,7 +72,22 @@ const MIN_TITLE = 15;
    HSTS_MIN_AGE already is for the header both instruments judge.
    ─────────────────────────────────────────────────────────────────── */
 const titleNames    = doc => doc.title.trim().length >= MIN_TITLE;
-const hasOneH1      = doc => doc.h1.length === 1;
+
+/* Three states, not two. A page with four H1s has not failed to have one, and
+   telling its owner "no heading says what this page is" is a statement they
+   disprove by pressing ctrl-U — which is the worst thing a cold-outreach
+   instrument can do. The pass condition is unchanged (exactly one H1 that says
+   something); what changes is that each failure now names the failure it is.
+   A heading of "1." is present and carries no subject, so it is neither a pass
+   nor an absence. Anything holding a letter carries a subject; numerals and
+   punctuation styled large do not. */
+const h1Subject = t => /\p{L}/u.test(String(t || ""));
+function h1State(doc) {
+  if (doc.h1.length === 0) return "none";
+  if (doc.h1.length > 1)   return "many";
+  return h1Subject(doc.h1[0].text) ? "ok" : "blank";
+}
+const hasOneH1      = doc => h1State(doc) === "ok";
 const descPresent   = doc => doc.description.trim().length > 0;
 const descUsable    = doc => { const n = doc.description.trim().length;
                                return n === 0 || (n >= 50 && n <= 320); };
@@ -155,6 +170,8 @@ const ERR = {
         ? `The target returned HTTP ${n} — it refused an identified crawler. That is bot protection, not a markup problem, and this scan cannot see the page at all. It is worth knowing that the same rule frequently blocks GPTBot and the other AI crawlers: where it does, the page is invisible to answer engines however good its structured data is. Confirm that against the site's own WAF and robots rules rather than inferring it from this one refusal.`
       : `The target returned HTTP ${n}.`,
     notHtml:  ct => `That URL returned ${ct || "an unknown content type"}, not HTML.`,
+    shell: (bytes, text) =>
+      `That URL returned ${bytes.toLocaleString()} bytes of HTML holding only ${text} characters of text — the page builds itself in the browser, and this reader does not run scripts. Everything measured on the words of a page would be measured against an empty shell, so nothing is scored. What a visitor sees is not in question; what an engine that does not run scripts sees is exactly this.`,
     crashed:  m => `Scan failed: ${m}`,
     email:    "That doesn't look like an email address.",
     leadRate: "Too many requests \u2014 try again shortly.",
@@ -177,6 +194,8 @@ const ERR = {
         ? `El destino devolvi\u00f3 HTTP ${n} — rechaz\u00f3 a un crawler identificado. Eso es protecci\u00f3n anti-bots, no un problema de marcado, y este escaneo no alcanza a ver la p\u00e1gina. Vale saber que esa misma regla suele bloquear a GPTBot y a los dem\u00e1s crawlers de IA: donde lo hace, la p\u00e1gina es invisible para los motores de respuesta por bueno que sea su marcado. Conf\u00edrmalo contra las reglas de WAF y robots del sitio, no lo infieras de este solo rechazo.`
       : `El destino devolvi\u00f3 HTTP ${n}.`,
     notHtml:  ct => `Esa URL devolvi\u00f3 ${ct || "un tipo de contenido desconocido"}, no HTML.`,
+    shell: (bytes, text) =>
+      `Esa URL devolvi\u00f3 ${bytes.toLocaleString()} bytes de HTML con apenas ${text} caracteres de texto — la p\u00e1gina se arma en el navegador y este lector no ejecuta scripts. Todo lo que se mide sobre las palabras de una p\u00e1gina se medir\u00eda contra una c\u00e1scara vac\u00eda, as\u00ed que no se califica nada. Lo que ve una persona no est\u00e1 en duda; lo que ve un motor que no ejecuta scripts es exactamente esto.`,
     crashed:  m => `El escaneo fall\u00f3: ${m}`,
     email:    "Eso no parece una direcci\u00f3n de correo.",
     leadRate: "Demasiadas peticiones \u2014 prueba de nuevo en un rato.",
@@ -419,9 +438,21 @@ const STR = {
         : `${v.len} characters. An engine can use it whole.`
           + (v.len > 160 ? " Google will truncate the visible snippet at roughly 160, which costs nothing here." : "") },
     h1: {
-      so: "Nothing on the page claims to be its subject, so engines decide what it is about for you.", t: "One heading says what this page is", nt: "No one heading says what this page is", d: v => v.n === 1 ? `"${v.text}"`
-        : v.n === 0 ? "The page has no main heading, so nothing on it says what it is about."
-        : `Found ${v.n} main headings, so none of them reads as the page’s subject.` },
+      so: v => v.state === "many"
+        ? "Several headings claim to be the subject, so an engine picks one of them for you."
+        : "Nothing on the page claims to be its subject, so engines decide what it is about for you.",
+      t: "One heading says what this page is",
+      // The failing title states which failure this is. "No heading says what
+      // this page is" printed over a page with four of them is a claim the
+      // reader disproves in ten seconds, and then nothing else in the report
+      // gets believed either.
+      nt: v => v.state === "many"  ? `${v.n} headings each claim to be this page's subject`
+             : v.state === "blank" ? "The main heading carries no words"
+             :                       "No heading says what this page is",
+      d: v => v.state === "ok"    ? `"${v.text}"`
+        : v.state === "none"  ? "The page has no main heading, so nothing on it says what it is about."
+        : v.state === "blank" ? "The main heading holds no words — it reads as a heading and names nothing."
+        : `${v.n} main headings: ${v.all.map(t => t ? `"${t}"` : "(empty)").join(", ")}. An engine has to choose which one is the subject.` },
     "heading-order": {
       so: "The page skips levels, so anything reading it as an outline loses the thread.", t: "The outline runs in order", nt: "The outline runs out of order",
       d: v => v.skip ? `The headings jump from level ${v.skip.from} to level ${v.skip.to}, so the outline breaks there.` : "No skipped levels." },
@@ -439,6 +470,18 @@ const STR = {
     llms: {
       so: "There is no short summary written for AI assistants, which is the cheapest thing on this list to add.", t: "A short summary is written for AI assistants", nt: "No short summary is written for AI assistants",
       d: v => v.ok ? "Served." : "There is no llms.txt on your domain. A newer convention, not yet decisive, and the cheapest thing here to add." },
+    footprint: {
+      so: "The whole business lives at a handful of addresses, so there is no page for an engine to send anyone to.", t: "Enough of the business has its own address", nt: "Almost none of the business has its own address",
+      d: v => v.n >= 12 ? `${v.n} addresses published. There is a page to cite.`
+        : `${v.n} addresses published. A question about one service or one place lands on a page that also answers six others.` },
+    families: {
+      so: "One page is doing the work of many, so a question about one of them matches nothing in particular.", t: "You publish a page per thing, not one page for all of them", nt: "One page carries what should be several",
+      d: v => v.n > 0 ? `${v.top} holds ${v.size} pages that each answer for one thing${v.n > 1 ? `, and ${v.n - 1} more groups do the same` : ""}.`
+        : "No group of addresses covers one thing each — every service and every place shares a page." },
+    people: {
+      so: "Nobody is named anywhere an engine can reach, so answers about this business name the business and no one in it.", t: "A person is named at an address of their own", nt: "No page names a person",
+      d: v => v.ok ? "A page exists for the people behind the business."
+        : "No address names a person. Answers that would have quoted a founder quote nobody." },
     hsts: {
       so: "Every first visit takes an extra unprotected step before the secure connection starts.", t: "The encrypted page loads without a detour", nt: "The encrypted page loads through a detour",
       d: v => !v.hsts ? "Nothing tells a browser to go straight to the secure address, so a first visit starts unprotected."
@@ -512,9 +555,17 @@ const STR = {
         : `${v.len} caracteres. Un motor la puede usar entera.`
           + (v.len > 160 ? " Google va a truncar el fragmento visible cerca de los 160, y eso aquí no cuesta nada." : "") },
     h1: {
-      so: "Nada en la página declara ser su tema, así que los motores deciden por ti de qué trata.", t: "Un encabezado dice de qué trata esta página", nt: "Ningún encabezado dice de qué trata esta página", d: v => v.n === 1 ? `"${v.text}"`
-        : v.n === 0 ? "La página no tiene encabezado principal, así que nada en ella dice de qué trata."
-        : `Hay ${v.n} encabezados principales, así que ninguno se lee como el tema de la página.` },
+      so: v => v.state === "many"
+        ? "Varios encabezados dicen ser el tema, así que el motor elige uno por ti."
+        : "Nada en la página declara ser su tema, así que los motores deciden por ti de qué trata.",
+      t: "Un encabezado dice de qué trata esta página",
+      nt: v => v.state === "many"  ? `${v.n} encabezados dicen ser el tema de esta página`
+             : v.state === "blank" ? "El encabezado principal no lleva palabras"
+             :                       "Ningún encabezado dice de qué trata esta página",
+      d: v => v.state === "ok"    ? `"${v.text}"`
+        : v.state === "none"  ? "La página no tiene encabezado principal, así que nada en ella dice de qué trata."
+        : v.state === "blank" ? "El encabezado principal no lleva palabras — se lee como encabezado y no nombra nada."
+        : `${v.n} encabezados principales: ${v.all.map(t => t ? `"${t}"` : "(vacío)").join(", ")}. El motor tiene que elegir cuál es el tema.` },
     "heading-order": {
       so: "La página se salta niveles, así que lo que la lee como esquema pierde el hilo.", t: "El esquema va en su orden", nt: "El esquema va fuera de orden",
       d: v => v.skip ? `Los encabezados saltan del nivel ${v.skip.from} al ${v.skip.to}, así que el esquema se rompe ahí.` : "No hay niveles saltados." },
@@ -532,6 +583,18 @@ const STR = {
     llms: {
       so: "No hay un resumen corto escrito para asistentes de IA, que es lo más barato de agregar de esta lista.", t: "Hay un resumen corto escrito para asistentes de IA", nt: "No hay resumen corto escrito para asistentes de IA",
       d: v => v.ok ? "Servido." : "No hay llms.txt en tu dominio. Convención nueva, todavía no decisiva, y lo más barato de agregar de esta lista." },
+    footprint: {
+      so: "Todo el negocio vive en un puñado de direcciones, así que no hay página a la que un motor pueda mandar a nadie.", t: "Suficiente del negocio tiene dirección propia", nt: "Casi nada del negocio tiene dirección propia",
+      d: v => v.n >= 12 ? `${v.n} direcciones publicadas. Hay página que citar.`
+        : `${v.n} direcciones publicadas. Una pregunta por un servicio o un lugar cae en una página que contesta otras seis.` },
+    families: {
+      so: "Una sola página hace el trabajo de muchas, así que una pregunta por una de ellas no coincide con nada en particular.", t: "Publicas una página por cosa, no una para todas", nt: "Una sola página carga con lo que deberían ser varias",
+      d: v => v.n > 0 ? `${v.top} tiene ${v.size} páginas que contestan por una cosa cada una${v.n > 1 ? `, y ${v.n - 1} grupos más hacen lo mismo` : ""}.`
+        : "Ningún grupo de direcciones cubre una cosa cada una — cada servicio y cada lugar comparten página." },
+    people: {
+      so: "Nadie está nombrado donde un motor pueda alcanzarlo, así que las respuestas nombran al negocio y a nadie dentro.", t: "Hay una persona nombrada en su propia dirección", nt: "Ninguna página nombra a una persona",
+      d: v => v.ok ? "Existe una página para las personas detrás del negocio."
+        : "Ninguna dirección nombra a una persona. Las respuestas que habrían citado a un fundador no citan a nadie." },
     hsts: {
       so: "Cada primera visita da un paso extra sin protección antes de que arranque la conexión segura.", t: "La página cifrada carga sin ningún desvío", nt: "La página cifrada carga con un desvío",
       d: v => !v.hsts ? "Nada le dice al navegador que vaya directo a la dirección segura, así que la primera visita empieza sin protección."
@@ -541,6 +604,16 @@ const STR = {
 };
 
 /* ── The checks ─────────────────────────────────────────────────────── */
+/* Two reports out of one pass, and the split is the whole point. Structure and
+   entity markup are things that are TRUE ABOUT THE MARKUP; they are reported
+   plainly and priced at nothing, because the case this split came from was a
+   site failing every one of them while ranking first in two languages and
+   being quoted back with five of its own URLs. Charging a grade for them said
+   something false. Access, retrieval and footprint are what decides whether a
+   machine can reach the site, read it, and find a page that answers one
+   question — those carry the grade. */
+const REPORT_A = new Set(["entity", "structure"]);
+
 function runChecks(ctx) {
   const c = [];
   const L = STR[ctx.lang === "es" ? "es" : "en"];
@@ -551,8 +624,18 @@ function runChecks(ctx) {
   const add = (id, group, pass, weight, vars, key) => {
     const s = L[key || id] || STR.en[key || id];
     const v = vars || {};
+    const report = REPORT_A.has(group) ? "a" : "b";
     const row = {
-      id, group, pass, deduction: pass ? 0 : weight,
+      id, group, report,
+      pass,
+      // What this check was worth, on the row, so the pool a score was computed
+      // against can be added up from the report itself rather than taken on
+      // trust. A prospect asking "16 of 20 passed, why is that a 25?" gets to
+      // check the arithmetic instead of being told the weighting is severe.
+      weight: report === "a" ? 0 : weight,
+      // An observation costs nothing. It is a fact about the markup, not a
+      // charge against the site.
+      deduction: report === "a" || pass ? 0 : weight,
       // A title names what the check PREVENTS, so under a red mark it reads as
       // good news — "One heading says what this page is" next to a cross tells
       // a reader nothing about which way it went. A failing check states the
@@ -564,7 +647,7 @@ function runChecks(ctx) {
     // failures because that is the only place it is read: the report goes to
     // the client, and the client discusses the gaps. `detail` stays technical
     // for whoever has to fix it; `so` is what the two of them talk about.
-    if (!pass && s.so) row.so = s.so;
+    if (!pass && report === "b" && s.so) row.so = resolve(s.so, v);
     c.push(row);
   };
 
@@ -620,6 +703,29 @@ function runChecks(ctx) {
   add("sitemap", "access", sitemap.ok, 5,
       { ok: sitemap.ok, served: sitemap.served, declared: sitemap.declared });
 
+  /* — Footprint: how much of the business has an address of its own —
+     Read entirely from the sitemap the site already publishes. These three
+     are the shapes that got a Panama studio quoted back with five of its own
+     URLs while it failed every markup check this instrument used to score.
+     Each is n/a rather than a failure when the sitemap could not be read: a
+     site whose shape cannot be seen has not been shown to have a bad one. */
+  const shape = ctx.shape || { locs: [], families: [], person: false, seen: false };
+  if (shape.seen) {
+    // Being cited requires a page to cite. One page cannot be the answer to
+    // eight questions, and the sites that get quoted have an address per
+    // answer. 12 — below the retrieval essentials, above the tidiness checks.
+    add("footprint", "footprint", shape.locs.length >= 12, 12,
+        { n: shape.locs.length });
+
+    // One address per thing, rather than one page listing them all.
+    const top = shape.families[0] || null;
+    add("families", "footprint", shape.families.length > 0, 10,
+        { n: shape.families.length, top: top && top.parent, size: top && top.n });
+
+    // An engine names a person when the site gives it one to name.
+    add("people", "footprint", shape.person, 8, { ok: shape.person });
+  }
+
   /* — Retrievability — */
   const ssrOk = doc.textLen >= 500;
   add("ssr", "retrieval", ssrOk, 25, { ok: ssrOk, len: doc.textLen });
@@ -644,18 +750,20 @@ function runChecks(ctx) {
   // read every word still cannot say what the page is for. Priced with the
   // things that decide whether the page is legible at all, not with the
   // things that make a legible page tidier.
-  add("h1", "retrieval", hasOneH1(doc), 25,
-      { n: doc.h1.length, text: hasOneH1(doc) ? doc.h1[0].text.trim().slice(0, 60) : "" });
+  add("h1", "structure", hasOneH1(doc), 25,
+      { n: doc.h1.length, state: h1State(doc),
+        text: doc.h1.length ? doc.h1[0].text.trim().slice(0, 60) : "",
+        all: doc.h1.map(h => h.text.replace(/\s+/g, " ").trim().slice(0, 40)) });
 
   const skip = headingSkip(doc);
-  add("heading-order", "retrieval", !skip, 5, { skip });
+  add("heading-order", "structure", !skip, 5, { skip });
 
   // Google resolves a relative canonical, but it is a declaration about
   // identity and half the crawlers that matter here take it literally.
   const canonOk = canonicalAbs(doc);
   add("canonical", "retrieval", canonOk, 5, { canonical: doc.canonical, ok: canonOk });
 
-  add("alt", "retrieval", doc.imgTotal === 0 || doc.imgNoAlt === 0, 5,
+  add("alt", "structure", doc.imgTotal === 0 || doc.imgNoAlt === 0, 5,
       { total: doc.imgTotal, noAlt: doc.imgNoAlt });
 
   add("hreflang", "retrieval", doc.hreflang.length === 0 || doc.hreflang.length >= 2, 3,
@@ -687,6 +795,107 @@ function grade(score) {
   return (bands.find(([min]) => score >= min) || [0,"F"])[1];
 }
 
+/* ── What a site publishes about its own shape ────────────────────────
+   Everything below reads ONE file the site already publishes: its sitemap. No
+   search API is called, no index count is fetched, no engine is asked what it
+   thinks. Those need keys this instrument does not have, and inventing their
+   answers would be the invented statistic every page here promises not to
+   carry.
+
+   What a sitemap does show is SHAPE, and shape is what the case this check set
+   came from turned on. A studio that ranks first in two languages and gets
+   quoted back with five of its own URLs was failing every hygiene signal this
+   scanner used to measure. What it had instead: a page per zone it serves, a
+   page per project with the thing and the place in the address, a named human,
+   and enough addresses to be worth paginating. None of that was measured. All
+   of it is measurable from here, for nothing.                              */
+
+// <loc> only, absolute http(s), deduplicated, capped so one enormous sitemap
+// cannot turn a scan into a parse. A sitemap index yields its child sitemaps,
+// which is one hop from the URLs and counts as a footprint either way.
+const MAX_LOCS = 5000;
+function sitemapLocs(xml) {
+  const out = [];
+  const seen = new Set();
+  const re = /<loc>\s*([^<\s]+)\s*<\/loc>/gi;
+  let m;
+  while ((m = re.exec(String(xml || ""))) && out.length < MAX_LOCS) {
+    const raw = m[1].replace(/&amp;/g, "&").trim();
+    if (!/^https?:\/\//i.test(raw)) continue;
+    let path;
+    try { path = new URL(raw).pathname; } catch { continue; }
+    const key = path.replace(/\/+$/, "") || "/";
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(key);
+  }
+  return out;
+}
+
+const slugWords = seg => String(seg || "").split(/[-_]/).filter(w => /[a-zà-ÿ]/i.test(w));
+
+/* A family is several addresses under one parent that differ only in their
+   last segment — /zonas/<zone>, /project/<project>, /services/<service>. It is
+   the difference between one page that mentions eight neighbourhoods and eight
+   pages that each answer for one, and a query naming a neighbourhood matches
+   the second. Three is the floor: two pages under a parent is a coincidence.
+
+   No industry is read here and none is needed. The check does not know what a
+   zone is; it knows that a site either publishes one address per thing or it
+   does not. */
+const FAMILY_MIN = 3;
+function urlFamilies(paths) {
+  const byParent = new Map();
+  for (const p of paths) {
+    const segs = p.split("/").filter(Boolean);
+    if (segs.length < 2) continue;
+    const parent = "/" + segs.slice(0, -1).join("/");
+    const leaf = segs[segs.length - 1];
+    if (!byParent.has(parent)) byParent.set(parent, []);
+    byParent.get(parent).push(leaf);
+  }
+  const families = [];
+  for (const [parent, leaves] of byParent) {
+    // A language prefix is not a family: /es/... and /en/... are the same site
+    // twice, and counting them would credit a translation as coverage.
+    if (/^\/(?:es|en|pt|fr|de|it)$/i.test(parent)) continue;
+    if (leaves.length < FAMILY_MIN) continue;
+    // Leaves have to name something. Ten pages at /p/1 … /p/10 are a family
+    // whose addresses say nothing, which is the opposite of the finding.
+    const named = leaves.filter(l => slugWords(l).length >= 2);
+    if (named.length < FAMILY_MIN) continue;
+    families.push({ parent, n: named.length });
+  }
+  return families.sort((a, b) => b.n - a.n);
+}
+
+/* Does any address name a person's page? An answer engine names people when
+   the site gives it one to name — that is how the founder surfaced in the case
+   behind this check. Matching the ADDRESS, not the prose, keeps it honest:
+   this is a fact about what the site publishes, not a guess about its staff. */
+const PEOPLE_PATH = /(^|\/)(team|equipo|our-team|nuestro-equipo|about-us|sobre-nosotros|quienes-somos|people|staff|founder|fundador|leadership|bio|about|nosotros)(\/|$)/i;
+const namesAPerson = paths => paths.some(p => PEOPLE_PATH.test(p));
+
+/* ── A scanner has to be able to say "I could not read this" ──────────
+   This reader does not run scripts. A site that renders in the browser hands
+   it a shell: no H1, no alt text, no entity markup, no outline — and every one
+   of those is then reported as a fault of the site rather than a limit of the
+   reader. The failure signature is indistinguishable from a genuinely empty
+   page, which is exactly why it has to be caught before anything is scored.
+
+   The test is the RATIO, not the text length on its own. A deliberately terse
+   page that ships 400 characters in 3 KB of HTML is a real page and gets
+   scored. Forty kilobytes of markup carrying 200 characters is a hydration
+   shell. Both numbers travel in the error so the reader can check the claim.
+   Halting is the honest outcome: no score at all beats a fabricated F. */
+const SHELL_MIN_TEXT  = 240;    // below this there is nothing to measure
+const SHELL_MIN_BYTES = 8000;   // ...and this much markup means it is not a small page
+function looksUnrendered(html, doc) {
+  return doc.textLen < SHELL_MIN_TEXT
+      && html.length >= SHELL_MIN_BYTES
+      && /<script[\s>]/i.test(html);
+}
+
 async function scan(target, lang) {
   const E = errs(lang);
   const origin = target.origin;
@@ -707,6 +916,10 @@ async function scan(target, lang) {
     return { error: E.notHtml(ct) };
 
   const doc = await extractHtml(page.value.body);
+
+  // Before anything is scored: did we actually receive the page?
+  if (looksUnrendered(page.value.body, doc))
+    return { error: E.shell(page.value.body.length, doc.textLen) };
 
   // A host that answers 200 with its HTML 404 page for every unknown path is
   // the common case, not the exception. Checking the status alone credits a
@@ -731,18 +944,46 @@ async function scan(target, lang) {
                         && !/<html/i.test(llmsRes.value.body.slice(0, 200)) };
   const headers = { hsts: page.value.res.headers.get("strict-transport-security") };
 
-  const checks = runChecks({ doc, robots, sitemap, llms, headers, path: target.pathname, lang });
-  const deducted = checks.reduce((s, c) => s + c.deduction, 0);
-  const score = Math.max(0, 100 - deducted);
+  // What the site says about its own shape. Only read when a real sitemap came
+  // back: a site whose shape could not be seen has not been shown to have a
+  // bad one, so the three footprint checks leave the pool entirely.
+  const locs = sitemapReal ? sitemapLocs(sitemapBody) : [];
+  const shape = { seen: sitemapReal, locs,
+                  families: urlFamilies(locs), person: namesAPerson(locs) };
+
+  const all = runChecks({ doc, robots, sitemap, llms, headers, shape,
+                          path: target.pathname, lang });
+  const checks = all.filter(c => c.report === "b");
+  const observations = all.filter(c => c.report === "a")
+    .map(({ id, group, pass, title, detail }) => ({ id, group, pass, title, detail }));
+
+  /* Report B is normalised to the checks that actually ran, which the old
+     subtract-from-100 model could not do: a check that could not be measured
+     has to leave the pool rather than count as a pass or a failure. A site with
+     no readable sitemap is not thereby a site with no footprint. Report A has
+     no score of any kind — that is the point of it. */
+  const pool     = checks.reduce((n, c) => n + c.weight, 0);
+  const deducted = checks.reduce((n, c) => n + c.deduction, 0);
+  const score    = pool > 0 ? Math.max(0, Math.round(100 * (pool - deducted) / pool)) : 0;
 
   return {
     url: target.href,
     lang: lang === "es" ? "es" : "en",
     scannedAt: new Date().toISOString(),
     score, grade: grade(score),
+    // The pool the score was computed against, published rather than implied.
+    pool, deducted,
     passed: checks.filter(c => c.pass).length,
     total: checks.length,
+    // What the reader actually received, so any score in this report can be
+    // reproduced and argued with. NOT the page itself: storing the HTML of
+    // every scanned site would make "scan results are not stored" false on
+    // /subprocessors and on the badge over the instruments, and two numbers
+    // are enough to tell a real page from a shell.
+    fetched: { bytes: page.value.body.length, textLen: doc.textLen },
     checks,
+    // Report A. No score, no letter, no consequence claimed for any of it.
+    observations,
   };
 }
 
@@ -772,20 +1013,10 @@ const HDR = {
       so: "This is the line that shows in search results and when someone shares your link, and it does not say who you are.", t: "The page names the business, not the file", nt: "The page names the file, not the business",
                    ok: v => "“" + v.slice(0, 60) + "”",
                    no: "Too short to name anyone — this is the line search results show as you." },
-    h1:          {
-      so: "A visitor has to work out what the page is about instead of being told in the first line.", t: "One heading says what this page is", nt: "No heading says what this page is",
-                   ok: "Exactly one H1.",
-                   no: v => v === 0 ? "The page has no main heading — nothing on it says what it is about."
-                                    : "Found " + v + " main headings — a page with several subjects presents none." },
     description: {
       so: "Search engines write your summary for you, from whatever sentence they happen to find first.", t: "The summary is written, not scraped", nt: "The summary gets scraped, not written",
                    ok: v => "Present, " + v + " characters.",
                    no: "No summary is written for this page — the engine invents one from the text." },
-    headingOrder:{
-      so: "The page reads out of order to anything that follows its structure, screen readers and search engines included.", t: "The outline runs in order", nt: "The outline runs out of order",
-                   ok: "Levels run in sequence.",
-                   no: v => v ? "The headings jump from level " + v.from + " to level " + v.to + " — the outline breaks there."
-                              : "A heading level is skipped partway down — the outline breaks from there on." },
     canonical:   {
       so: "The same page exists at several addresses and search engines split its credit between them, so none ranks as well as one would.", t: "One address is the real one", nt: "No address is marked as the real one",
                    ok: "Absolute canonical declared.",
@@ -807,15 +1038,15 @@ const HDR = {
                    ok: "Framing restricted.",
                    no: "Nothing stops another site from showing your pages inside its own — as theirs." },
     nosniff:     {
-      so: "A file uploaded with the wrong label can be run as code by the visitor's browser.", t: "A mislabelled file cannot run as code", nt: "A mislabelled file can run as code",
+      so: "Where your site serves files someone else uploaded, the browser decides for itself what they are.", t: "A mislabelled file cannot run as code", nt: "A mislabelled file can run as code",
                    ok: "Set.",
                    no: "A file with the wrong label can run as code here — one upload is enough." },
     referrer:    {
-      so: "Every outbound click tells the other site exactly which of your pages the visitor came from.", t: "Outbound clicks do not leak your URLs", nt: "Outbound clicks leak your URLs",
+      so: "How much of your address travels with an outbound click is left to each browser's default rather than set by you.", t: "You decide what travels with an outbound click", nt: "The browser decides what travels with an outbound click",
                    ok: v => "Set. " + v,
                    no: "Every outbound click hands the other site your exact page — address and all." },
     permissions: {
-      so: "Anything running on your page can ask a visitor for their camera or microphone, and the request looks like it came from you.", t: "Nothing prompts for camera or mic in your name", nt: "Anything can prompt for camera or mic in your name",
+      so: "Nothing limits which embedded third party may ask a visitor for their camera, microphone or location.", t: "Embedded third parties cannot prompt in your name", nt: "Any embedded third party can prompt in your name",
                    ok: "Set.",
                    no: "Anything on the page can ask visitors for camera or mic — in your name." },
     // Present-but-useless is its own verdict. A header that exists and does not
@@ -851,20 +1082,10 @@ const HDR = {
       so: "Es la línea que aparece en los resultados y cuando alguien comparte tu enlace, y no dice quién eres.", t: "La página nombra al negocio, no al archivo", nt: "La página nombra al archivo, no al negocio",
                    ok: v => "“" + v.slice(0, 60) + "”",
                    no: "Muy corta para nombrar a nadie — es la línea que los buscadores muestran." },
-    h1:          {
-      so: "Quien llega tiene que deducir de qué trata la página en vez de que se lo digan en la primera línea.", t: "Un encabezado dice de qué trata la página", nt: "Ningún encabezado dice de qué trata la página",
-                   ok: "Exactamente un H1.",
-                   no: v => v === 0 ? "La página no tiene encabezado principal — nada dice de qué trata."
-                                    : "Hay " + v + " encabezados principales — una página con varios temas no presenta ninguno." },
     description: {
       so: "Los buscadores escriben tu resumen por ti, con la primera frase que encuentren.", t: "El resumen está escrito, no recogido", nt: "El resumen se recoge, no está escrito",
                    ok: v => "Presente, " + v + " caracteres.",
                    no: "Nadie escribió un resumen para esta página — el motor lo inventa del texto." },
-    headingOrder:{
-      so: "La página se lee en desorden para todo lo que sigue su estructura, lectores de pantalla y buscadores incluidos.", t: "El esquema va en orden", nt: "El esquema va fuera de orden",
-                   ok: "Los niveles van en secuencia.",
-                   no: v => v ? "Los encabezados saltan del nivel " + v.from + " al " + v.to + " — el esquema se rompe ahí."
-                              : "Se salta un nivel de encabezado a media página — el esquema se rompe ahí." },
     canonical:   {
       so: "La misma página existe en varias direcciones y los buscadores reparten su crédito entre ellas, así que ninguna posiciona como lo haría una sola.", t: "Una dirección es la verdadera", nt: "Ninguna dirección está marcada como la verdadera",
                    ok: "Canónica absoluta declarada.",
@@ -886,15 +1107,15 @@ const HDR = {
                    ok: "Enmarcado restringido.",
                    no: "Nada impide que otro sitio muestre tus páginas dentro del suyo — como suyas." },
     nosniff:     {
-      so: "Un archivo subido con la etiqueta equivocada puede ejecutarse como código en el navegador del visitante.", t: "Un archivo mal etiquetado no corre como código", nt: "Un archivo mal etiquetado puede correr como código",
+      so: "Donde tu sitio sirve archivos que subió otra persona, el navegador decide por su cuenta qué son.", t: "Un archivo mal etiquetado no corre como código", nt: "Un archivo mal etiquetado puede correr como código",
                    ok: "Configurado.",
                    no: "Un archivo mal etiquetado puede correr como código — basta una subida." },
     referrer:    {
-      so: "Cada click hacia afuera le dice al otro sitio exactamente desde cuál de tus páginas salió el visitante.", t: "Los clics salientes no filtran tus URLs", nt: "Los clics salientes filtran tus URLs",
+      so: "Cuánta de tu dirección viaja con un clic saliente lo decide el navegador por defecto y no lo fijas tú.", t: "Tú decides qué viaja con un clic saliente", nt: "El navegador decide qué viaja con un clic saliente",
                    ok: v => "Configurado. " + v,
                    no: "Cada clic saliente le entrega al otro sitio tu página exacta — completa." },
     permissions: {
-      so: "Cualquier cosa que corra en tu página puede pedirle cámara o micrófono a un visitante, y el permiso parece venir de ti.", t: "Nada pide cámara o micrófono en tu nombre", nt: "Cualquier cosa puede pedir cámara o micrófono en tu nombre",
+      so: "Nada limita qué tercero incrustado puede pedirle cámara, micrófono o ubicación a un visitante.", t: "Ningún tercero incrustado pide permisos en tu nombre", nt: "Cualquier tercero incrustado puede pedir permisos en tu nombre",
                    ok: "Configurado.",
                    no: "Cualquier cosa en la página puede pedir cámara o micrófono — en tu nombre." },
     weak: {
@@ -954,32 +1175,44 @@ function frameIsClosed(csp, xfo) {
   return /^\s*(deny|sameorigin)\s*$/i.test(xfo || "");
 }
 
-/* The deduction pool, stated once so the target stays derivable. Fifteen
-   checks, 110 points:
+/* The deduction pool, stated once so the target stays derivable. Thirteen
+   checks, 93 points:
 
    indexing   15:  noindex 15
    content    38:  csp 14 · frame 12 · mixed 7 · nosniff 5
    transport  23:  hsts 12 · https 11
-   page       30:  h1 15 · title 5 · canonical 5 · description 2
-                   · heading-order 2 · lang 1
+   page       13:  title 5 · canonical 5 · description 2 · lang 1
    privacy     4:  referrer 2 · permissions 2
 
-   The pool is 110, not 100, and that is deliberate. Forcing it to 100 means
-   every check is priced against the others rather than against what it costs
-   the reader, and the only way to say an H1 matters would have been to say
-   framing or HSTS matters less. A page that fails everything floors at 0
-   either way, which is the only thing 100 was buying.
+   ⚠️ h1 (15) and heading-order (2) USED TO BE IN THE page BUCKET AND ARE GONE.
+   They are HTML elements. This instrument reads what a server returns, and a
+   heading level is not that — it was scoring the same two facts the visibility
+   instrument scores, in near-identical words, so a prospect running both read
+   one problem twice and saw an <h1> inside something calling itself a security
+   score. What survives in `page` is indexability, which the instrument's name
+   covers: the title, the canonical, the description and the declared language
+   are all statements about whether the page can be found and identified.
+   The heading outline now lives in exactly one place — the structural
+   observations, which carry no grade at all.
+
+   The pool is 93, not 100, and not being 100 is deliberate. Forcing it to 100
+   means every check is priced against the others rather than against what it
+   costs the reader, and the only way to say framing matters would have been to
+   say HSTS matters less. A page that fails everything floors at 0 either way,
+   which is the only thing 100 was buying.
 
    The security ordering is the one this instrument has always used — CSP above
    framing, HSTS above transport, those above the two privacy headers.
 
    The bar stays 90, and 90 stays derived rather than chosen: at 10 points of
    deductions nothing weighing more than 10 can be failing, so a score of 90 or
-   better means the page is indexable, says what it is in one H1, and HTTPS,
-   HSTS, a CSP that actually stops injected script and closed framing are all
-   correct. 90 is the lowest number that still guarantees all six — at 89 the
-   transport check drops out of the guarantee. Change a weight and this
-   paragraph stops being true: re-derive it rather than renaming it. */
+   better means the page is indexable and HTTPS, HSTS, a CSP that actually
+   stops injected script and closed framing are all correct. 90 is the lowest
+   number that still guarantees all five — at 89 the transport check drops out
+   of the guarantee. Dropping h1 did not move the bar, because the bar is a
+   statement about weights above 10 and h1 was never what made 90 the answer.
+   Change a weight and this paragraph stops being true: re-derive it rather
+   than renaming it. */
 function runHeaderChecks(res, target, lang, doc) {
   const L = HDR[lang === "es" ? "es" : "en"];
   const c = [];
@@ -1052,10 +1285,6 @@ function runHeaderChecks(res, target, lang, doc) {
     add("mixed", "content", mixedContent(doc) ? "no" : "ok", 7, "mixed", doc.insecureRefs);
 
     add("title", "page", titleNames(doc) ? "ok" : "no", 5, "title", doc.title.trim());
-    // 15, level with noindex: both are the page failing to be identifiable at
-    // all rather than failing to be tidy, and 15 puts it inside what the bar
-    // guarantees. Nothing was taken from another check to pay for it.
-    add("h1", "page", hasOneH1(doc) ? "ok" : "no", 15, "h1", doc.h1.length);
     // Absent or relative is one failure; pointing at another site is a worse
     // one and gets its own reason. Pointing elsewhere on the same site is
     // legitimate — pagination and syndication do it — and is not flagged.
@@ -1064,8 +1293,6 @@ function runHeaderChecks(res, target, lang, doc) {
     add("description", "page",
         !descPresent(doc) ? "no" : descUsable(doc) ? "ok" : "weak", 2,
         "description", doc.description.trim().length);
-    const skip = headingSkip(doc);
-    add("heading-order", "page", skip ? "no" : "ok", 2, "headingOrder", skip);
     add("lang", "page", langDeclared(doc) ? "ok" : "no", 1, "lang", doc.lang.trim());
   }
 

@@ -1,0 +1,10 @@
+# Piekno Studio — robots.txt
+# Permite explícitamente a buscadores y agentes de IA (objetivo: máxima visibilidad en AI Search)
+
+User-agent: *
+Allow: /
+
+Sitemap: https://studiodearquitectura.com/sitemap.xml
+
+
+Sitemap: https://studiodearquitectura.com/sitemap.xml
