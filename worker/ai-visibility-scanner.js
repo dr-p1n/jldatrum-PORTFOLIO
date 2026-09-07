@@ -814,6 +814,206 @@ function grade(score) {
 // cannot turn a scan into a parse. A sitemap index yields its child sitemaps,
 // which is one hop from the URLs and counts as a footprint either way.
 const MAX_LOCS = 5000;
+/* ── FINDINGS: the report a person reads out loud ───────────────────
+   Thirteen rows is a list. Four is something you can say on a call.
+   A site with no security headers at all failed six separate checks and got
+   six separate alarms, which is six ways of saying one thing: the server
+   sends none of them, and they are all set in the same place. The same shape
+   ran through the AI report — six crawler rows, each a variant of the same
+   sentence.
+
+   ⚠️ THIS CHANGES NOTHING ABOUT THE SCORE. Every check keeps its id, its
+   weight and its deduction, `checks[]` is emitted exactly as before, and the
+   pool is still summed from it. A finding is a VIEW over rows that were
+   already computed — grouping is presentation, and the model this instrument
+   was rebuilt around stays where the calibration harness pinned it.
+
+   ⚠️ AND IT DOES NOT REINTRODUCE THE VOCABULARY. He asked for something as
+   digestible as Observatory, and most of Observatory's legibility comes from
+   naming the header — which is the one thing these strings were written out
+   of. A finding says where the failure is and that one hand fixes all of it;
+   it still never names a header or a tag.
+   ─────────────────────────────────────────────────────────────────── */
+
+const FINDINGS = {
+  // AI Visibility Map. Every scored id belongs to exactly one of these, and a
+  // test asserts it, so adding a check without placing it fails the build
+  // rather than dropping it silently out of the report.
+  "": [
+    { id: "allowed",  members: ["robots-exists"].concat(AI_CRAWLERS.map(b => `bot-${b.ua}`)) },
+    { id: "arrives",  members: ["ssr", "hsts"] },
+    { id: "identified", members: ["title", "description", "description-length",
+                                  "canonical", "hreflang", "llms"] },
+    { id: "findable", members: ["sitemap", "footprint", "families", "people"] },
+  ],
+  headers: [
+    { id: "indexed",     members: ["noindex"] },
+    { id: "encrypted",   members: ["https", "hsts", "mixed"] },
+    { id: "protections", members: ["csp", "frame", "nosniff", "referrer", "permissions"] },
+    { id: "appearance",  members: ["title", "canonical", "description", "lang"] },
+  ],
+};
+
+/* Each finding carries the same four strings a check does — the passing form,
+   the failing form, one plain sentence about the cost, and an evidence line —
+   for the same reason: under a red mark, a title that names what the group
+   PREVENTS reads as good news. `nt` and `d` may be functions of what failed,
+   because "some of these are missing" and "none of these are here" are not
+   the same finding and must not share a sentence. */
+const FIND = {
+  en: {
+    allowed: {
+      // robots.txt missing is not the same event as a crawler being refused:
+      // with no file at all, every crawler is allowed. Saying "turned away"
+      // there would be the invented-absence bug one level up.
+      nt: v => v.bots >= v.crawlers ? "Every AI assistant is turned away at the door"
+             : `${v.bots} of the AI assistants are turned away at the door`,
+      t: "AI assistants are allowed to read this site",
+      so: "A blocked assistant cannot see this site at all, so it answers questions about your market without you in it.",
+      d: v => `${v.bots} of ${v.crawlers} refused by one file at the root of the site.`,
+    },
+    arrives: {
+      // ssr is 25 points and hsts is 2. Leading with the small one because it
+      // happens to sort first would bury the finding that matters.
+      nt: "The page arrives nearly empty, and slowly",
+      t: "The page arrives with its words already in it",
+      so: "Most AI crawlers read only what arrived and never run the code that fills the page in.",
+      d: v => `${v.failed} of ${v.total}. What a reader without a browser receives is not what you see on screen.`,
+    },
+    identified: {
+      nt: "The page does not say plainly who this is",
+      t: "The page says who this is and what they do",
+      so: "An assistant describing you has to guess from the prose, and it guesses wrong or leaves you out.",
+      d: v => `${v.failed} of the ${v.total} lines an engine reads about this page are missing or unusable.`,
+    },
+    findable: {
+      nt: "There is barely a page to send anyone to",
+      t: "There is a page for an engine to send someone to",
+      so: "An answer cites a specific page. One page carrying the whole business gives it nothing specific to cite.",
+      d: v => `${v.failed} of ${v.total}. This is about how many addresses you publish, not how the pages look.`,
+    },
+    encrypted: {
+      nt: "The lock on your address is not fully in place",
+      t: "The connection is encrypted, and stays encrypted",
+      so: "Part of what a visitor loads, or their first move to your site, still travels unprotected.",
+      d: v => `${v.failed} of ${v.total}. A padlock the page's own contents undermine is still a warning.`,
+    },
+    protections: {
+      nt: v => v.failed === v.total ? "Nothing protects visitors while they are on the page"
+                                    : "Some of what protects visitors is missing",
+      t: "The browser is told how to protect your visitors",
+      so: "A browser enforces only what your server asks it to enforce, and yours asks for little.",
+      // The line that makes this presentable: one hand, one place, one sitting.
+      d: v => `${v.failed} of ${v.total} — all of them set in the same place, by whoever runs the server.`,
+    },
+    appearance: {
+      nt: "How this page shows up in a result is left to chance",
+      t: "How this page shows up in a result is decided here",
+      so: "Search engines write your headline and summary for you, from whatever sentence they find first.",
+      d: v => `${v.failed} of ${v.total}. These are lines of the page, not settings on the server.`,
+    },
+  },
+  es: {
+    allowed: {
+      nt: v => v.bots >= v.crawlers ? "A todos los asistentes de IA se les niega la entrada"
+             : `A ${v.bots} de los asistentes de IA se les niega la entrada`,
+      t: "Los asistentes de IA tienen permiso de leer este sitio",
+      so: "Un asistente bloqueado no ve el sitio en absoluto, así que responde sobre tu mercado sin ti adentro.",
+      d: v => `${v.bots} de ${v.crawlers} rechazados por un solo archivo en la raíz del sitio.`,
+    },
+    arrives: {
+      nt: "La página llega casi vacía, y con desvío",
+      t: "La página llega con sus palabras ya adentro",
+      so: "Casi todos los rastreadores de IA leen solo lo que llegó y nunca corren el código que la llena.",
+      d: v => `${v.failed} de ${v.total}. Lo que recibe un lector sin navegador no es lo que ves en pantalla.`,
+    },
+    identified: {
+      nt: "La página no dice con claridad quién es esto",
+      t: "La página dice quién es esto y a qué se dedica",
+      so: "Un asistente que te describe tiene que adivinar del texto, y adivina mal o te deja afuera.",
+      d: v => `${v.failed} de las ${v.total} líneas que un motor lee sobre esta página faltan o no sirven.`,
+    },
+    findable: {
+      nt: "Casi no hay página a la que mandar a alguien",
+      t: "Hay una página a la que un motor puede mandar a alguien",
+      so: "Una respuesta cita una página concreta. Una sola página con todo el negocio no le da nada concreto que citar.",
+      d: v => `${v.failed} de ${v.total}. Esto es cuántas direcciones publicas, no cómo se ven las páginas.`,
+    },
+    encrypted: {
+      nt: "El candado de tu dirección no está del todo puesto",
+      t: "La conexión va cifrada, y sigue cifrada",
+      so: "Parte de lo que carga un visitante, o su primer paso hacia tu sitio, todavía viaja sin protección.",
+      d: v => `${v.failed} de ${v.total}. Un candado que el propio contenido de la página desarma sigue siendo un aviso.`,
+    },
+    protections: {
+      nt: v => v.failed === v.total ? "Nada protege a los visitantes mientras están en la página"
+                                    : "Falta parte de lo que protege a los visitantes",
+      t: "Al navegador se le dice cómo proteger a tus visitantes",
+      so: "Un navegador solo aplica lo que tu servidor le pide aplicar, y el tuyo pide poco.",
+      d: v => `${v.failed} de ${v.total} — todos se configuran en el mismo lugar, por quien administra el servidor.`,
+    },
+    appearance: {
+      nt: "Cómo aparece esta página en un resultado queda al azar",
+      t: "Cómo aparece esta página en un resultado se decide acá",
+      so: "Los buscadores te escriben el titular y el resumen, con la primera frase que encuentren.",
+      d: v => `${v.failed} de ${v.total}. Estas son líneas de la página, no ajustes del servidor.`,
+    },
+  },
+};
+
+/* Rolls the scored rows up into the four groups the report is read in.
+   Only groups with at least one failure come back: a report is what needs
+   doing, and the passing checks are already tallied by name further down. */
+function buildFindings(checks, mode, lang) {
+  const spec = FINDINGS[mode === "headers" ? "headers" : ""];
+  const L = FIND[lang === "es" ? "es" : "en"];
+  const byId = new Map(checks.map(c => [c.id, c]));
+  const out = [];
+  for (const grp of spec) {
+    // A check that did not run leaves the group rather than counting as a
+    // pass — the footprint trio is n/a on a site with no readable sitemap,
+    // and "0 of 0" is not a finding.
+    const rows = grp.members.map(id => byId.get(id)).filter(Boolean);
+    if (!rows.length) continue;
+    const failedRows = rows.filter(r => !r.pass);
+    if (!failedRows.length) continue;
+    const ids = failedRows.map(r => r.id);
+    // One failure is not a group. The check's own title is more concrete than
+    // any summary of it and is already written in the same plain register, so
+    // rolling it up would trade precision for nothing. This is also why there
+    // are no group strings for a finding that can only ever hold one check.
+    if (failedRows.length === 1) {
+      const r = failedRows[0];
+      out.push({ id: grp.id, failed: 1, total: rows.length, deduction: r.deduction,
+                 title: r.title, so: r.so, detail: r.detail, members: ids });
+      continue;
+    }
+    const v = {
+      failed: failedRows.length,
+      total: rows.length,
+      ids,
+      bots: ids.filter(id => id.startsWith("bot-")).length,
+      crawlers: rows.filter(r => r.id.startsWith("bot-")).length,
+    };
+    const s = L[grp.id] || FIND.en[grp.id];
+    const resolve = x => (typeof x === "function" ? x(v) : x);
+    out.push({
+      id: grp.id,
+      failed: v.failed,
+      total: v.total,
+      deduction: failedRows.reduce((n, r) => n + r.deduction, 0),
+      title: resolve(s.nt),
+      so: resolve(s.so),
+      detail: resolve(s.d),
+      // Ids, not titles: the client already holds every row, and duplicating
+      // a title here is a second place for it to go stale.
+      members: ids,
+    });
+  }
+  // Worst first, so the ordinal a prospect hears on a call is the priority.
+  return out.sort((a, b) => b.deduction - a.deduction);
+}
+
 function sitemapLocs(xml) {
   const out = [];
   const seen = new Set();
@@ -982,6 +1182,9 @@ async function scan(target, lang) {
     // are enough to tell a real page from a shell.
     fetched: { bytes: page.value.body.length, textLen: doc.textLen },
     checks,
+    // The same rows, rolled into the four groups the report is read in. The
+    // client renders these and keeps `checks` for the evidence underneath.
+    findings: buildFindings(checks, "", lang),
     // Report A. No score, no letter, no consequence claimed for any of it.
     observations,
   };
@@ -1325,6 +1528,7 @@ async function scanHeaders(target, lang) {
     // beside the checks and priced at nothing.
     headings: doc ? headingCensus(doc) : null,
     checks,
+    findings: buildFindings(checks, "headers", lang),
   };
 }
 
@@ -1415,6 +1619,66 @@ async function handleLead(body, env, ip, lang) {
   return { status: 200, payload: { ok: true } };
 }
 
+/* ── THE SCAN LOG ───────────────────────────────────────────────────
+   Stage 2 of the closing system: every scan the studio runs becomes a row in
+   one Google Sheet, so the outreach index is a byproduct of outreach rather
+   than a project of its own. `worker/sheet-log.gs` is the other half.
+
+   ⚠️ IT LOGS THE STUDIO'S OWN SCANS AND NOTHING ELSE. Four published places
+   say the results are not stored — /subprocessors, both instrument pages, the
+   resources panel, and their Spanish mirrors. A visitor's scan is not written
+   anywhere and that promise stays literally true. Writing every scan would
+   have made it false, which is the reason for the key rather than a
+   preference about it.
+
+   ⚠️ TWO SECRETS, NOT ONE, AND THEY ARE NOT INTERCHANGEABLE.
+     OPERATOR_KEY  travels to a browser. Whoever holds it can cause a row.
+     SHEET_TOKEN   never leaves the worker. Whoever holds it can write to the
+                   Sheet directly, bypassing everything here.
+   Making them the same value would hand the second capability to anyone who
+   ever read the first out of a URL bar.
+   ─────────────────────────────────────────────────────────────────── */
+
+// Three, because three is what fits in a first message. Sorted by what the
+// gap costs, so the ordinal is the priority when the row is read on a call.
+const LOG_GAPS = 3;
+
+function isOperator(body, env) {
+  const key = String(env?.OPERATOR_KEY || "");
+  const sent = String(body?.op || "");
+  // Both halves matter: an unset secret must not turn every visitor into the
+  // operator, and an empty `op` must not match an unset secret.
+  return key.length > 0 && sent.length > 0 && sent === key;
+}
+
+async function logScan(result, env) {
+  if (!env?.SHEET_URL || !env?.SHEET_TOKEN) return;
+  const gaps = (result.checks || [])
+    .filter(c => !c.pass)
+    .sort((a, b) => b.deduction - a.deduction)
+    .slice(0, LOG_GAPS)
+    .map(c => c.title);
+  try {
+    await fetch(env.SHEET_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token: env.SHEET_TOKEN,
+        url: result.url,
+        mode: result.mode === "headers" ? "headers" : "",
+        score: result.score,
+        grade: result.grade,
+        gaps,
+      }),
+    });
+  } catch (e) {
+    // The scan already succeeded and the reader is owed it. A Sheet that is
+    // unreachable is a logging failure, never a failed scan — it surfaces in
+    // the worker's own observability instead of in the result.
+    console.error("scan log failed", e?.message || e);
+  }
+}
+
 function cors(origin) {
   const allow = ALLOWED_ORIGINS.has(origin) ? origin : "https://jldatrum.com";
   return {
@@ -1426,7 +1690,7 @@ function cors(origin) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = request.headers.get("Origin") || "";
     const headers = { ...cors(origin), "Content-Type": "application/json; charset=utf-8" };
 
@@ -1470,6 +1734,13 @@ export default {
     try {
       const mode = String(body?.mode || "").toLowerCase();
       const result = mode === "headers" ? await scanHeaders(url, lang) : await scan(url, lang);
+      // The row is written after the result exists and outside the response:
+      // a Sheet round trip is seconds, and the reader is waiting. A scan that
+      // failed has no score to log.
+      if (!result.error && isOperator(body, env)) {
+        const write = logScan(result, env);
+        ctx?.waitUntil ? ctx.waitUntil(write) : await write;
+      }
       return new Response(JSON.stringify(result), { status: result.error ? 502 : 200, headers });
     } catch (e) {
       return new Response(JSON.stringify({ error: E.crashed(e.message) }), { status: 500, headers });

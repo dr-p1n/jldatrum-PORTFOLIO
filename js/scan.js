@@ -100,21 +100,44 @@
   // there. Naming twenty-six passes to sell an audit of five failures buries
   // the five, and the head line already carries how many of how many passed —
   // so what was measured is still on the page, in one line instead of twenty.
+  /* The gated view, and the one a prospect is most likely to be looking at:
+     behind the address the report is this list and nothing else. It groups
+     for the same reason the table does — nine consecutive crosses, six of
+     them saying one thing about one server setting, is not a list anybody
+     reads to the end.
+
+     The gate is unchanged. Free is still every gap named with its plain
+     sentence; the cost and the evidence line are still what the address buys,
+     and neither appears here. */
   function buildChecklist(data, onlyGaps) {
     var box = el("div", "scan-checklist-box");
     var list = el("ul", "scan-checklist");
-    var rows = onlyGaps
-      ? data.checks.filter(function (c) { return !c.pass; })
+    var byId = {};
+    (data.checks || []).forEach(function (c) { byId[c.id] = c; });
+    var grouped = onlyGaps && data.findings && data.findings.length;
+    var rows = grouped ? data.findings
+      : onlyGaps ? data.checks.filter(function (c) { return !c.pass; })
       : data.checks;
     rows.forEach(function (c) {
-      var li = el("li", c.pass ? "is-ok" : "is-gap");
-      li.appendChild(el("span", "scan-check-mark", c.pass ? "✓" : "✕"));
+      var ok = !grouped && c.pass;
+      var li = el("li", ok ? "is-ok" : "is-gap");
+      li.appendChild(el("span", "scan-check-mark", ok ? "✓" : "✕"));
       var body = el("span", "scan-check-title", c.title);
       // What the gap means, wherever the gap is named. The technical reason and
       // the cost are what the address buys; this is what the two people looking
       // at the screen actually say to each other, and withholding it only makes
       // the free result harder to act on without making the audit worth more.
       if (c.so) body.appendChild(el("span", "scan-check-so", c.so));
+      // The checks inside a rolled-up finding, named. Still the free half —
+      // "each gap named" — and it is what keeps the group from reading as a
+      // vaguer version of the nine lines it replaced.
+      if (c.members && c.members.length > 1) {
+        var ul = el("ul", "scan-members");
+        c.members.forEach(function (id) {
+          if (byId[id]) ul.appendChild(el("li", null, byId[id].title));
+        });
+        body.appendChild(ul);
+      }
       li.appendChild(body);
       list.appendChild(li);
     });
@@ -122,11 +145,39 @@
     return box;
   }
 
+  /* The operator key. Arriving once as ?op=… on either instrument, it is kept
+     for this browser and stripped from the address immediately — it must not
+     survive into a screenshot, a share, or the back button. Its only effect is
+     that the worker writes the result to the studio's prospect sheet. A
+     visitor never has one, nothing of theirs is written, and the line on the
+     page saying results are not stored stays true for them.
+     ⚠️ IT IS A BROWSER, NOT A PERSON. Demoing the instrument to a prospect from
+     the browser that holds the key writes their scan to the sheet too. */
+  var OP_STORE = "datrum.op";
+  var OP = "";
+  try {
+    var q = /[?&]op=([^&#]+)/.exec(window.location.search);
+    if (q) {
+      OP = decodeURIComponent(q[1]);
+      window.localStorage.setItem(OP_STORE, OP);
+      window.history.replaceState(null, "",
+        window.location.pathname + window.location.search.replace(/([?&])op=[^&#]*&?/, "$1").replace(/[?&]$/, ""));
+    } else {
+      OP = window.localStorage.getItem(OP_STORE) || "";
+    }
+  } catch (e) {
+    // Private windows throw on localStorage. The instrument is unaffected;
+    // only the logging half is, and it is the studio's own convenience.
+    OP = OP || "";
+  }
+
   function runScan(url, mode) {
+    var payload = { url: url, lang: LANG, mode: mode };
+    if (OP) payload.op = OP;
     return fetch(ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: url, lang: LANG, mode: mode })
+      body: JSON.stringify(payload)
     }).then(function (r) {
       return r.json().then(function (d) {
         if (!r.ok || d.error) throw new Error(d.error || t("genericError", "The scan failed."));
@@ -200,15 +251,48 @@
       table.appendChild(thead);
 
       var tbody = document.createElement("tbody");
-      gaps.forEach(function (c) {
+
+      /* Rows are FINDINGS, not checks. Seven separate alarms for a server
+         that sends no protections is seven ways of saying one thing, and it
+         is unreadable out loud — which is where this report is actually
+         used. The worker rolls the same rows into a handful of groups; the
+         checks underneath stay, named, as the evidence.
+
+         The count in the heading above is still the CHECK count, because the
+         head line says "6/13 checks passed" two inches higher and a smaller
+         number beside it reads as a contradiction. Seven gaps, three things
+         to fix, and each finding says which of its members failed. */
+      var byId = {};
+      data.checks.forEach(function (c) { byId[c.id] = c; });
+      var rows = (data.findings && data.findings.length)
+        ? data.findings
+        // An older worker sends no findings. The flat list is what this
+        // report was before grouping and it is still correct — the site
+        // deploys on push and the worker does not, so the two are never
+        // guaranteed to be the same age.
+        : gaps;
+
+      rows.forEach(function (f) {
         var tr = document.createElement("tr");
         var td = document.createElement("td");
-        if (!compact && area[c.group]) td.appendChild(el("span", "scan-area", area[c.group]));
-        td.appendChild(el("p", "scan-title", c.title));
-        if (c.so) td.appendChild(el("p", "scan-so", c.so));
-        td.appendChild(el("p", "scan-detail", c.detail));
+        if (!compact && !f.members && area[f.group])
+          td.appendChild(el("span", "scan-area", area[f.group]));
+        td.appendChild(el("p", "scan-title", f.title));
+        if (f.so) td.appendChild(el("p", "scan-so", f.so));
+        td.appendChild(el("p", "scan-detail", f.detail));
+        // Each failing check named under the finding it belongs to. This is
+        // the free half of the gate — "each gap named" — so it stays outside
+        // it; the cost and the evidence line are what the address buys.
+        if (f.members && f.members.length > 1) {
+          var ul = el("ul", "scan-members");
+          f.members.forEach(function (id) {
+            var c = byId[id];
+            if (c) ul.appendChild(el("li", null, c.title));
+          });
+          td.appendChild(ul);
+        }
         tr.appendChild(td);
-        tr.appendChild(el("td", "scan-col-cost scan-cost", "\u2212" + c.deduction));
+        tr.appendChild(el("td", "scan-col-cost scan-cost", "\u2212" + f.deduction));
         tbody.appendChild(tr);
       });
       table.appendChild(tbody);
@@ -855,7 +939,12 @@
 
   // Worst first, everywhere: the ordinal in the card and in the pasted text is
   // the priority, the same ordering the downloaded report prints.
+  /* What the report, the cards and the comparison all count as "a gap".
+     Findings when the worker sent them, individual checks when it did not:
+     a card showing seven and a screen showing three is the kind of thing a
+     prospect notices out loud. */
   function gapsOf(data) {
+    if (data.findings && data.findings.length) return data.findings;
     return (data.checks || []).filter(function (c) { return !c.pass; })
              .sort(function (a, b) { return b.deduction - a.deduction; });
   }

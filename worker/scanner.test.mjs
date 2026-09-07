@@ -11,7 +11,7 @@ const tmpPath = path.join(here, ".scanner.undertest.mjs");
 
 let src = fs.readFileSync(srcPath, "utf8");
 src = src.slice(0, src.indexOf("export default"));
-src += "\nexport { isNoindex, langDeclared, mixedContent, canonicalOffsite, decodeEntities, parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR, validEmail, handleLead, titleNames, hasOneH1, descPresent, descUsable, canonicalAbs, headingSkip, headingCensus, ceiling, h1State, h1Subject, looksUnrendered };";
+src += "\nexport { isNoindex, langDeclared, mixedContent, canonicalOffsite, decodeEntities, parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR, validEmail, handleLead, titleNames, hasOneH1, descPresent, descUsable, canonicalAbs, headingSkip, headingCensus, ceiling, h1State, h1Subject, looksUnrendered, isOperator, logScan, LOG_GAPS, buildFindings, FINDINGS, FIND };";
 fs.writeFileSync(tmpPath, src);
 const M = await import(tmpPath);
 fs.unlinkSync(tmpPath);
@@ -648,6 +648,191 @@ t("each endpoint reads its own",
 t("the 429 names the number",    /\b60 per hour\b/.test(M.ERR.en.rate(60)), true);
 t("...in Spanish too",           /\b60 por hora\b/.test(M.ERR.es.rate(60)), true);
 t("...and follows the var",      /\b120 per hour\b/.test(M.ERR.en.rate(120)), true);
+
+console.log("\nthe scan log writes the studio's scans and nobody else's");
+{
+  const KEY = "s3cr3t-operator-key";
+  t("the key marks a scan as ours",     M.isOperator({ op: KEY }, { OPERATOR_KEY: KEY }), true);
+  t("a visitor is not the operator",    M.isOperator({}, { OPERATOR_KEY: KEY }), false);
+  t("a wrong key is not the operator",  M.isOperator({ op: "nope" }, { OPERATOR_KEY: KEY }), false);
+  // The two failure modes that would silently start logging everyone.
+  t("an unset secret logs nobody",      M.isOperator({ op: KEY }, {}), false);
+  t("...not even an empty op",          M.isOperator({ op: "" }, { OPERATOR_KEY: "" }), false);
+  t("a missing env logs nobody",        M.isOperator({ op: KEY }, undefined), false);
+  t("a missing body logs nobody",       M.isOperator(undefined, { OPERATOR_KEY: KEY }), false);
+
+  // Without a destination the call is a no-op, and it must not throw: an
+  // unconfigured Sheet is not a failed scan.
+  let called = 0;
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (u, init) => { called++; return new Response("{}"); };
+  await M.logScan({ url: "https://x.com/", score: 1, grade: "F", checks: [] }, {});
+  t("no SHEET_URL, no request",         called, 0);
+  await M.logScan({ url: "https://x.com/", score: 1, grade: "F", checks: [] },
+                  { SHEET_URL: "https://s/exec" });
+  t("no SHEET_TOKEN, no request",       called, 0);
+
+  let sent = null;
+  globalThis.fetch = async (u, init) => { called++; sent = JSON.parse(init.body); return new Response("{}"); };
+  const checks = [
+    { id: "a", pass: false, deduction: 5,  title: "five" },
+    { id: "b", pass: true,  deduction: 0,  title: "passed" },
+    { id: "c", pass: false, deduction: 15, title: "fifteen" },
+    { id: "d", pass: false, deduction: 10, title: "ten" },
+    { id: "e", pass: false, deduction: 3,  title: "three" },
+  ];
+  await M.logScan({ url: "https://x.com/", score: 72, grade: "C-", checks },
+                  { SHEET_URL: "https://s/exec", SHEET_TOKEN: "tok" });
+  t("it posts once",                    called, 1);
+  t("the token rides on the request",   sent.token, "tok");
+  t("three gaps, worst first",          sent.gaps, ["fifteen", "ten", "five"]);
+  t("...and that is LOG_GAPS of them",  sent.gaps.length, M.LOG_GAPS);
+  t("a passing check is not a gap",     sent.gaps.includes("passed"), false);
+  t("the AI scan logs as the AI mode",  sent.mode, "");
+  await M.logScan({ url: "https://x.com/", mode: "headers", score: 90, grade: "A-", checks: [] },
+                  { SHEET_URL: "https://s/exec", SHEET_TOKEN: "tok" });
+  t("the header scan says so",          sent.mode, "headers");
+  t("a clean site logs no gaps",        sent.gaps, []);
+
+  // The reader is owed the scan even when the Sheet is down.
+  globalThis.fetch = async () => { throw new Error("sheet is down"); };
+  let threw = false;
+  try { await M.logScan({ url: "https://x.com/", score: 1, grade: "F", checks: [] },
+                        { SHEET_URL: "https://s/exec", SHEET_TOKEN: "tok" }); }
+  catch { threw = true; }
+  t("a dead Sheet is not a failed scan", threw, false);
+  globalThis.fetch = realFetch;
+}
+
+console.log("\nthe report groups what is one problem into one finding");
+{
+  // A row shaped like the ones the runners produce. Nothing here re-scores
+  // anything: a finding is a view over rows that already carry their weight.
+  const row = (id, pass, deduction) => ({ id, pass, deduction: pass ? 0 : deduction, title: id });
+  const F = (rows, mode, lang) => M.buildFindings(rows, mode || "", lang || "en");
+
+  // ⚠️ THE ASSERTION THAT KEEPS THIS HONEST. A check added without a home
+  // would vanish from the report while still costing points. Both directions
+  // are checked: nothing unplaced, and nothing placed that does not exist.
+  const aiIds = M.runChecks({
+    doc: { title: "", description: "", canonical: "", lang: "", headings: [], h1: [],
+           jsonld: [], hreflang: [], imgTotal: 0, imgNoAlt: 0, textLen: 0,
+           robotsMeta: "", insecureRefs: 0 },
+    robots: { ok: true, served: true, groups: M.parseRobots(""), declaresSitemap: false },
+    sitemap: { ok: true, served: true, declared: false },
+    llms: { ok: false }, headers: { hsts: "" },
+    shape: { seen: true, locs: ["/a"], families: [], person: false },
+    path: "/", lang: "en",
+  }).filter(c => c.report === "b").map(c => c.id);
+  const aiPlaced = M.FINDINGS[""].flatMap(g => g.members);
+  t("every AI check has a finding",     aiIds.filter(id => !aiPlaced.includes(id)), []);
+  t("every AI member is a real check",  aiPlaced.filter(id => !aiIds.includes(id)), []);
+  t("...and none is placed twice",      aiPlaced.length, new Set(aiPlaced).size);
+
+  const hdrIds = M.runHeaderChecks(
+    { headers: { get: () => null } }, new URL("https://x.com/"), "en",
+    { title: "", description: "", canonical: "", lang: "", headings: [], h1: [],
+      jsonld: [], hreflang: [], imgTotal: 0, imgNoAlt: 0, textLen: 0,
+      robotsMeta: "", insecureRefs: 1 }).map(c => c.id);
+  const hdrPlaced = M.FINDINGS.headers.flatMap(g => g.members);
+  t("every header check has a finding",    hdrIds.filter(id => !hdrPlaced.includes(id)), []);
+  t("every header member is a real check", hdrPlaced.filter(id => !hdrIds.includes(id)), []);
+  t("...and none is placed twice",         hdrPlaced.length, new Set(hdrPlaced).size);
+
+  // Six alarms for one server setting was the complaint. One finding now.
+  const noHeaders = F([
+    row("csp", false, 14), row("frame", false, 12), row("nosniff", false, 5),
+    row("referrer", false, 2), row("permissions", false, 2),
+  ], "headers");
+  t("five missing protections are one finding", noHeaders.length, 1);
+  t("...that says nothing protects them",
+    /Nothing protects visitors/.test(noHeaders[0].title), true);
+  t("...and carries the whole cost",            noHeaders[0].deduction, 35);
+  t("...and says they share one place",         /same place/.test(noHeaders[0].detail), true);
+  t("...and names every member",                noHeaders[0].members.length, 5);
+  t("...without naming a header",
+    /content-security|x-frame|nosniff|referrer-policy|permissions-policy/i
+      .test(noHeaders[0].title + noHeaders[0].so + noHeaders[0].detail), false);
+
+  // Partial is a different sentence from total. Probing both branches rather
+  // than loosening the assertion — see the `so`-as-a-function lesson.
+  const someHeaders = F([
+    row("csp", true, 14), row("frame", true, 12), row("nosniff", false, 5),
+    row("referrer", false, 2), row("permissions", true, 2),
+  ], "headers");
+  t("a partial failure says so",   /Some of what protects/.test(someHeaders[0].title), true);
+  t("...and counts only what failed", /2 of 5/.test(someHeaders[0].detail), true);
+  t("...and costs only its own",   someHeaders[0].deduction, 7);
+  t("a clean group is no finding", F([row("csp", true, 14)], "headers").length, 0);
+
+  // ⚠️ A missing robots.txt means every crawler is ALLOWED, not refused.
+  // Calling it a refusal would be the invented-absence bug one level up.
+  const bots = M.AI_CRAWLERS.map(b => `bot-${b.ua}`);
+  const noFile = F([Object.assign(row("robots-exists", false, 5),
+                     { title: "No rules are published for what may be read" })]
+                   .concat(bots.map(id => row(id, true, 10))));
+  t("a missing file is not a refusal", /turned away/.test(noFile[0].title), false);
+  const allBlocked = F([row("robots-exists", true, 5)].concat(bots.map(id => row(id, false, 10))));
+  t("every crawler blocked reads as every",
+    /Every AI assistant is turned away/.test(allBlocked[0].title), true);
+  const someBlocked = F([row("robots-exists", true, 5)]
+    .concat(bots.map((id, i) => row(id, i > 1, 10))));
+  t("two blocked reads as two",  /^2 of the AI assistants/.test(someBlocked[0].title), true);
+
+  // One failure is not a group: the check's own title is more concrete than
+  // any summary of it, so the finding carries the check's three strings.
+  const lone = F([row("ssr", true, 25),
+                  Object.assign(row("hsts", false, 2),
+                    { title: "The encrypted page loads through a detour",
+                      so: "own so", detail: "own detail" })]);
+  t("a lone failure keeps its own title", lone[0].title, "The encrypted page loads through a detour");
+  t("...its own sentence",                lone[0].so, "own so");
+  t("...and its own evidence line",       lone[0].detail, "own detail");
+  t("...and still names its group",       lone[0].id, "arrives");
+  t("two failures roll up instead",
+    /arrives nearly empty/.test(F([row("ssr", false, 25), row("hsts", false, 2)])[0].title), true);
+
+  // Worst first: the ordinal a prospect hears on a call is the priority.
+  const mixed = F([
+    row("lang", false, 1), row("noindex", false, 15), row("csp", false, 14),
+  ], "headers");
+  t("findings come worst first", mixed.map(f => f.id), ["indexed", "protections", "appearance"]);
+
+  // Every rolled-up group, in both languages, or the Spanish page frames
+  // English findings. Only multi-failure cases: a lone failure inherits the
+  // check's strings, which the existing per-check language tests already cover.
+  const MULTI = [
+    ["", ["robots-exists", "bot-GPTBot", "bot-CCBot"]],
+    ["", ["ssr", "hsts"]],
+    ["", ["title", "description", "canonical"]],
+    ["", ["sitemap", "footprint", "people"]],
+    ["headers", ["https", "hsts", "mixed"]],
+    ["headers", ["csp", "frame", "nosniff"]],
+    ["headers", ["title", "canonical", "lang"]],
+  ];
+  for (const lang of ["en", "es"]) {
+    const all = MULTI.map(([mode, ids]) =>
+      F(ids.map(id => row(id, false, 5)), mode, lang)[0]);
+    t(`${lang}: every group is written`, all.length, MULTI.length);
+    t(`${lang}: every one has all three lines`,
+      all.every(f => typeof f.title === "string" && f.title
+                  && typeof f.so === "string" && f.so
+                  && typeof f.detail === "string" && f.detail), true);
+    t(`${lang}: every one counts what failed`,
+      all.every(f => /\d/.test(f.detail)), true);
+  }
+  t("es findings are not the en ones",
+    F([row("csp", false, 14), row("frame", false, 12)], "headers", "es")[0].title
+      === F([row("csp", false, 14), row("frame", false, 12)], "headers", "en")[0].title, false);
+  // Every branch, not every string: `nt` and `d` may be functions, and probing
+  // one input would leave the other branch unread. See the `so` lesson.
+  t("no voseo in the es findings",
+    M.FIND.es && Object.values(M.FIND.es).flatMap(s => [s.t, s.nt, s.so, s.d])
+      .flatMap(x => typeof x !== "function" ? [x]
+        : [{ failed: 2, total: 6, ids: ["ssr"], bots: 2, crawlers: 6 },
+           { failed: 6, total: 6, ids: ["hsts"], bots: 6, crawlers: 6 }].map(v => x(v)))
+      .some(x => /\b(hac\u00e9s|ten\u00e9s|sos|vos)\b/.test(String(x))), false);
+}
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
