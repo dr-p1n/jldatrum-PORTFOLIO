@@ -1,0 +1,36 @@
+# Seguros Corco — https://www.seguroscorco.com
+# Correduría de seguros boutique en Panamá.
+
+User-agent: *
+Allow: /
+
+# Answer engines: explicitly welcome. A named block overrides the
+# wildcard above, so these stay allowed even if * is ever tightened.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://www.seguroscorco.com/sitemap.xml

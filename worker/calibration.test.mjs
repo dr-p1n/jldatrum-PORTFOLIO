@@ -113,6 +113,28 @@ const REFERENCES = [
     outcome: null,          // nobody has recorded where this ranks
     floorGrade: null,
   },
+  /* The studio's own clients, captured 2026-09-05. They are here because no
+     second site was found with an outcome as cleanly observed as Piekno's, and
+     these are the sites whose search results the studio can actually go and
+     look at. Until someone looks, every one of them asserts no ordering. */
+  {
+    name: "obstacleracepanama.com",
+    file: "obstaclerace",
+    outcome: null,
+    floorGrade: null,
+  },
+  {
+    name: "panamatreasures.com",
+    file: "panamatreasures",
+    outcome: null,
+    floorGrade: null,
+  },
+  {
+    name: "seguroscorco.com",
+    file: "seguroscorco",
+    outcome: null,
+    floorGrade: null,
+  },
   {
     name: "brochure.example (synthetic)",
     file: "brochure",
@@ -160,6 +182,17 @@ console.log("\nthe harness reads the page the way the worker does");
   t("no structured data, as the worker saw", doc.jsonld.length, 0);
   t("the title is the one the worker read", /PIEKNO Studio/.test(doc.title), true);
   gte("the words arrive with the page",    doc.textLen, 500);
+}
+
+/* ── the roster ────────────────────────────────────────────────────────
+   Printed, never asserted. A score next to "outcome not recorded" is the
+   instrument talking to itself; it becomes calibration the day somebody
+   looks the site up and writes down what they saw. */
+console.log("\nwhat the instrument scores today");
+for (const ref of REFERENCES) {
+  const r = run(ref);
+  console.log(`  ${String(r.score).padStart(3)}/100 ${r.grade.padEnd(2)}  ${r.locs.length} url(s)  ${ref.name}`
+    + `   ${ref.outcome ? "outcome " + ref.outcome.recorded : "outcome not recorded"}`);
 }
 
 /* ── the defect that produced this file ────────────────────────────────*/

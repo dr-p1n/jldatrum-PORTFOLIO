@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Obstacle Race Panamá — Conquer the course, become an O'Racer</title>
+<meta name="description" content="Obstacle Race Panamá — festival deportivo de aventura con 32 obstáculos naturales, rutas 5K y 8K. Lodo, fuerza y comunidad. Próximamente. Regístrate, explora los recursos y súmate como aliado estratégico." />
+<meta name="theme-color" content="#000000" />
+<meta name="author" content="Obstacle Race Panamá" />
+<link rel="canonical" href="https://www.obstacleracepanama.com/" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/favicon.svg" />
+
+<!-- Open Graph / social -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Obstacle Race Panamá" />
+<meta property="og:title" content="Obstacle Race Panamá" />
+<meta property="og:description" content="Conquista la ruta. Conviértete en O'Racer. Festival deportivo de aventura con 32 obstáculos naturales — lodo, fuerza y comunidad. Próximamente en Panamá." />
+<meta property="og:url" content="https://www.obstacleracepanama.com/" />
+<meta property="og:image" content="https://www.obstacleracepanama.com/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="es_PA" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Obstacle Race Panamá" />
+<meta name="twitter:description" content="Conquista la ruta. Conviértete en O'Racer. Próximamente en Panamá." />
+<meta name="twitter:image" content="https://www.obstacleracepanama.com/og.png" />
+
+<!-- Type triplet: Anton (shout/headlines) + Barlow (read/body) + Space Mono (mark/labels-buttons-tabs) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+<!-- JSON-LD structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SportsEvent",
+  "name": "Obstacle Race Panamá",
+  "sport": "Obstacle Course Racing",
+  "description": "Festival deportivo de aventura con 32 obstáculos naturales, rutas 5K y 8K. Lodo, fuerza y comunidad. Conquista la ruta y conviértete en O'Racer. Próximamente.",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "url": "https://www.obstacleracepanama.com/",
+  "image": "https://www.obstacleracepanama.com/og.png",
+  "location": {
+    "@type": "Place",
+    "name": "Panamá",
+    "address": { "@type": "PostalAddress", "addressCountry": "PA" }
+  },
+  "organizer": {
+    "@type": "Organization",
+    "name": "Obstacle Race Panamá",
+    "url": "https://www.obstacleracepanama.com/"
+  }
+}
+</script>
+
+<style>
+  :root{
+    --choco-950:#000000;
+    --choco-900:#0c0c0c;
+    --choco-800:#161616;
+    --choco-700:#1e1e1e;
+    --choco-600:#262626;
+    --choco-500:#333333;
+    --tan:#d0d0d0;
+    --tan-dim:#8a8a8a;
+    --cream:#f4f4f4;
+    --white:#ffffff;
+    --muted:#9a9a9a;
+    --red:#D21034;
+    --red-bright:#E4142F;
+    --blue:#21386e;
+    --maxw:1120px;
+    --ease:cubic-bezier(.2,.7,.2,1);
+    --hard:6px 6px 0 rgba(0,0,0,.5);
+    --ember-shadow:0 12px 32px -8px rgba(228,20,47,.4);
+    --gradient-ember:linear-gradient(135deg,var(--red-bright),var(--red));
+
+    /* Type triplet — each font has one job, never overlapping:
+       Anton   = shout (headlines, numerals-as-graphic) — condensed, industrial, poster-weight
+       Barlow  = read (body copy, descriptions) — drawn from DOT highway-signage forms;
+                 road/trail utility character instead of a neutral corporate grotesque
+       Sp.Mono = mark (labels, timestamps, buttons, tabs, badges) — technical/brutalist accents */
+    --font-display:"Anton",Impact,sans-serif;
+    --font-brutal:"Space Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+    --font-read:"Barlow","Helvetica Neue",Arial,sans-serif;
+
+    /* Spacing scale — one rhythm, used everywhere instead of one-off values */
+    --space-3xs:.375rem;
+    --space-2xs:.625rem;
+    --space-xs:1rem;
+    --space-sm:1.5rem;
+    --space-md:2.25rem;
+    --space-lg:3.5rem;
+    --space-xl:5rem;
+    --space-2xl:7rem;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--choco-950);
+    color:var(--cream);
+    font-family:var(--font-read);
+    font-size:15.5px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    min-height:100vh;
+    display:flex;flex-direction:column;
+  }
+  a{color:inherit;text-decoration:none}
+  img,svg{display:block;max-width:100%}
+  ::selection{background:var(--red);color:#fff}
+  :focus-visible{outline:2px solid var(--tan);outline-offset:3px}
+
+  /* gritty grain overlay */
+  body::after{
+    content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;
+    opacity:.13;mix-blend-mode:soft-light;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap{width:min(100% - 2.5rem, var(--maxw));margin-inline:auto}
+  .eyebrow{
+    font-family:var(--font-brutal);font-weight:700;text-transform:uppercase;
+    letter-spacing:.24em;font-size:.72rem;color:var(--red-bright);
+  }
+  .read{font-family:var(--font-read)}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:.55em;font-family:var(--font-brutal);
+    font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:.82rem;
+    padding:.95em 1.7em;border-radius:8px;cursor:pointer;
+    border:2px solid transparent;transition:transform .15s var(--ease),box-shadow .2s var(--ease),background .2s,color .2s;
+    white-space:nowrap;
+  }
+  .btn-primary{background:var(--gradient-ember);color:#fff;border-color:var(--red);box-shadow:0 3px 0 #7a0a1f,var(--ember-shadow)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 5px 0 #7a0a1f,var(--ember-shadow)}
+  .btn-primary:active{transform:translateY(1px);box-shadow:0 2px 0 #7a0a1f}
+  .btn-ghost{background:var(--choco-600);color:var(--cream);border-color:var(--choco-600)}
+  .btn-ghost:hover{background:var(--choco-500);color:var(--white);transform:translateY(-2px)}
+
+  .flag-rule{height:6px;width:120px;
+    background:linear-gradient(90deg,var(--red) 0 33.3%,var(--white) 33.3% 66.6%,var(--blue) 66.6% 100%)}
+
+  /* ---------- HEADER / TABS ---------- */
+  header.site{position:sticky;top:0;z-index:100;background:var(--choco-900);box-shadow:0 10px 26px rgba(0,0,0,.5)}
+  .nav{display:flex;align-items:center;gap:1.6rem;height:70px}
+  .brand{display:flex;align-items:center;gap:.7rem;flex:none}
+  .brand img{width:38px;height:38px}
+  .brand b{font-family:var(--font-display);font-size:1.02rem;letter-spacing:.05em;line-height:1;font-weight:400}
+  .brand span{display:block;font-family:var(--font-brutal);font-size:.5rem;letter-spacing:.34em;text-transform:uppercase;color:var(--tan);margin-top:2px}
+  .tabs{display:flex;align-items:center;gap:.35rem;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{font-family:var(--font-brutal);font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    font-size:.74rem;color:var(--muted);padding:.5rem .8rem;border:2px solid transparent;border-radius:8px;
+    white-space:nowrap;transition:color .2s,border-color .2s,background .2s}
+  .tab:hover{color:var(--cream)}
+  .tab.active{color:#fff;border-color:var(--red);background:var(--gradient-ember)}
+  .nav .btn{flex:none;margin-left:.4rem;padding:.65em 1.1em}
+  @media (max-width:1080px){
+    .nav{flex-wrap:wrap;height:auto;padding:.7rem 0;gap:.6rem 1rem}
+    .tabs{order:3;width:100%;margin-left:0;padding-bottom:.2rem}
+    .nav .btn{margin-left:auto}
+  }
+
+  /* ---------- PANELS ---------- */
+  main{flex:1 0 auto}
+  .panel{padding:clamp(3rem,6vw,var(--space-xl)) 0 clamp(4rem,9vw,var(--space-2xl))}
+  .panel[hidden]{display:none}
+  .panel.enter{animation:pop .45s var(--ease) both}
+  @keyframes pop{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+  /* INICIO */
+  #inicio{position:relative;overflow:hidden;text-align:center}
+  #inicio:not([hidden]){min-height:calc(100svh - 70px);display:flex;align-items:center;justify-content:center}
+  #inicio .bg{position:absolute;inset:0;z-index:0;background:#000}
+  #inicio .glow{position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(ellipse 60% 45% at 50% 38%,rgba(228,20,47,.22),transparent 70%)}
+  #inicio .inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:var(--space-md)}
+  .coming-soon{font-family:var(--font-brutal);font-weight:700;text-transform:uppercase;
+    letter-spacing:.42em;font-size:.82rem;color:var(--red-bright)}
+  .emblem{width:min(72vw,340px);height:auto;filter:drop-shadow(0 22px 46px rgba(0,0,0,.65));animation:rise 1s var(--ease) both}
+  @keyframes rise{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+  h1.headline{font-family:var(--font-display);font-weight:400;text-transform:uppercase;line-height:1.12;
+    letter-spacing:.045em;font-size:clamp(2rem,6vw,4.2rem);color:var(--white);max-width:18ch}
+  h1.headline em{font-style:normal;color:var(--red-bright)}
+  .hero-sub{color:var(--muted);font-size:clamp(.92rem,1.9vw,1.08rem);max-width:56ch;line-height:1.85;letter-spacing:.02em}
+  .hero-sub strong{color:var(--tan)}
+  .cta-row{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin-top:.25rem}
+  .fact-chips{display:flex;flex-wrap:wrap;gap:.6rem 1.8rem;justify-content:center;margin-top:.75rem;
+    font-family:var(--font-brutal);font-size:.82rem;color:var(--tan)}
+  .fact-chips span{display:inline-flex;align-items:center;gap:.5em}
+  .fact-chips span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red-bright);flex:none}
+
+  /* Generic section head */
+  .head{max-width:64ch;margin-bottom:var(--space-lg)}
+  .head .eyebrow{display:block;margin-bottom:var(--space-xs)}
+  .head h2{font-family:var(--font-display);font-weight:400;text-transform:uppercase;line-height:.95;
+    font-size:clamp(2rem,5.5vw,3.6rem);color:var(--white)}
+  .head h2 em{font-style:normal;color:var(--red-bright)}
+  .head p{color:var(--muted);margin-top:var(--space-xs);font-size:1.02rem;max-width:60ch}
+  .head p + p{margin-top:var(--space-2xs)}
+  .head p strong{color:var(--tan)}
+  .subhead{margin:var(--space-xl) 0 var(--space-sm)}
+  .subhead h3{font-family:var(--font-display);font-weight:400;text-transform:uppercase;
+    font-size:clamp(1.35rem,3.4vw,2rem);color:var(--white)}
+  .subhead h3 em{font-style:normal;color:var(--red-bright)}
+  .subhead p{color:var(--muted);margin-top:var(--space-3xs);max-width:56ch;font-size:.92rem}
+
+  /* MOVIMIENTO */
+  #movimiento:not([hidden]){display:flex;flex-direction:column;justify-content:center}
+  #movimiento .wrap{max-width:920px}
+  #movimiento .head{margin-bottom:2rem}
+  .statement{font-family:var(--font-read);font-weight:400;color:var(--cream);
+    font-size:clamp(1.5rem,4.4vw,2.7rem);line-height:1.15;max-width:20ch}
+  .movimiento-glow{position:relative}
+  .movimiento-glow::before{content:"";position:absolute;top:-4rem;right:-8rem;width:420px;height:420px;
+    background:radial-gradient(circle,rgba(228,20,47,.18),transparent 65%);pointer-events:none;z-index:0}
+
+  /* CARD GRID */
+  .grid{display:grid;gap:clamp(1rem,2vw,1.5rem)}
+  .grid.cols3{grid-template-columns:repeat(3,1fr)}
+  .grid.cols2{grid-template-columns:repeat(2,1fr)}
+  .grid.auto{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+  .card{position:relative;background:var(--choco-800);border:1px solid rgba(210,16,52,.22);border-radius:14px;
+    padding:var(--space-sm) var(--space-xs);transition:transform .18s var(--ease),border-color .2s,box-shadow .25s,background .2s}
+  .card:hover{transform:translateY(-4px);border-color:rgba(228,20,47,.55);box-shadow:var(--ember-shadow);background:var(--choco-700)}
+  .card .k{font-family:var(--font-brutal);font-weight:700;font-size:.72rem;color:var(--tan-dim);letter-spacing:.1em}
+  .card h3{font-family:var(--font-display);font-weight:400;text-transform:uppercase;font-size:1.35rem;
+    line-height:1;margin:var(--space-2xs) 0 var(--space-3xs);color:var(--white)}
+  .card p{font-size:.86rem;color:var(--muted);line-height:1.55}
+  .tag{display:inline-block;margin-top:var(--space-xs);font-family:var(--font-brutal);font-weight:700;font-size:.6rem;
+    letter-spacing:.16em;text-transform:uppercase;color:#fff;background:var(--gradient-ember);
+    border-radius:6px;padding:.24rem .55rem}
+  .badge-pill{display:inline-flex;align-items:center;font-family:var(--font-brutal);font-weight:700;font-size:.62rem;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--red-bright);border:1px solid rgba(228,20,47,.4);
+    border-radius:999px;padding:.28rem .7rem}
+  .note-strip{margin-top:var(--space-lg);padding:0;
+    display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-xs);justify-content:space-between}
+  .note-strip p{color:var(--muted);font-size:.9rem;max-width:44ch}
+
+  /* Obstacles */
+  .obs-panel{border:1px solid rgba(210,16,52,.22);border-radius:16px;background:var(--choco-800);
+    padding:clamp(1.75rem,3vw,var(--space-md))}
+  .obs-panel.elite{border-color:rgba(228,20,47,.55);background:linear-gradient(180deg,rgba(228,20,47,.09),transparent 60%),var(--choco-800)}
+  .obs-panel-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:var(--space-2xs)}
+  .obs-panel-head h3{font-family:var(--font-display);font-weight:400;text-transform:uppercase;
+    font-size:1.5rem;color:var(--white);margin-top:var(--space-3xs)}
+  .obs-list{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;margin-top:var(--space-sm)}
+  .obs-list li{display:flex;align-items:center;gap:.7rem;border:1px solid var(--choco-600);border-radius:8px;
+    background:var(--choco-900);padding:.7rem .85rem;font-size:.84rem}
+  .obs-list .n{font-family:var(--font-brutal);font-weight:700;font-size:.72rem;color:var(--red-bright);width:1.6em;flex:none}
+  .obs-note{margin-top:var(--space-xs);font-family:var(--font-brutal);font-size:.78rem;color:var(--tan-dim)}
+  .obs-grid{display:grid;gap:var(--space-sm);grid-template-columns:1.4fr 1fr}
+  @media (max-width:900px){.obs-grid{grid-template-columns:1fr}.obs-list{grid-template-columns:1fr}}
+
+  /* Itinerary timeline */
+  .timeline{list-style:none;position:relative;margin-top:var(--space-sm);padding-left:2.4rem;
+    border-left:2px solid rgba(228,20,47,.35)}
+  .tl-item{position:relative;padding-bottom:var(--space-md)}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-item .dot{position:absolute;left:-2.6rem;top:0;width:1.6rem;height:1.6rem;border-radius:50%;
+    background:var(--choco-900);border:2px solid var(--red-bright);display:grid;place-items:center;
+    font-family:var(--font-brutal);font-weight:700;font-size:.62rem;color:var(--red-bright)}
+  .tl-item .time{font-family:var(--font-brutal);font-weight:700;font-size:.78rem;color:var(--red-bright)}
+  .tl-item h4{font-family:var(--font-display);font-weight:400;text-transform:uppercase;
+    font-size:1.15rem;color:var(--white);margin-top:var(--space-3xs)}
+  .tl-item p{font-size:.86rem;color:var(--muted);margin-top:.3rem}
+
+  /* PATROCINADORES / EMPRESAS contact block */
+  .contact-box{margin-top:var(--space-lg);background:var(--choco-800);border:1px solid rgba(210,16,52,.3);border-radius:14px;
+    padding:clamp(1.75rem,4vw,var(--space-md));display:flex;flex-wrap:wrap;gap:var(--space-sm);
+    align-items:center;justify-content:space-between}
+  .contact-box .ci h3{font-family:var(--font-display);font-weight:400;text-transform:uppercase;
+    font-size:1.7rem;color:var(--white);line-height:1;margin-bottom:var(--space-2xs)}
+  .contact-box .ci p{color:var(--muted);font-size:.92rem;max-width:42ch}
+  .contact-box .mail{display:block;margin-top:var(--space-2xs);font-family:var(--font-brutal);font-weight:700;
+    color:var(--tan);font-size:1.02rem;word-break:break-all}
+  .contact-box .mail:hover{color:var(--cream)}
+
+  .benefit-list{list-style:none;display:grid;gap:.85rem;grid-template-columns:repeat(2,1fr);margin-top:var(--space-sm)}
+  .benefit-list li{display:flex;align-items:flex-start;gap:.75rem;border:1px solid var(--choco-600);
+    border-radius:10px;background:var(--choco-800);padding:1.05rem 1.15rem;font-size:.86rem}
+  .benefit-list .b-dot{flex:none;width:1.4rem;height:1.4rem;border-radius:50%;background:rgba(228,20,47,.18);
+    color:var(--red-bright);display:grid;place-items:center;font-weight:700;font-size:.7rem;margin-top:.1rem}
+  @media (max-width:700px){.benefit-list{grid-template-columns:1fr}}
+
+  /* ---------- FOOTER ---------- */
+  footer.site{flex:none;background:var(--choco-950);padding:var(--space-lg) 0 var(--space-sm);margin-top:auto}
+  .foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--space-sm)}
+  .foot-brand{display:flex;align-items:center;gap:var(--space-2xs)}
+  .foot-brand img{width:54px;height:54px}
+  .foot-brand b{font-family:var(--font-display);font-size:1.2rem;letter-spacing:.05em;display:block;line-height:1}
+  .foot-brand a{display:block;font-size:.78rem;color:var(--tan);margin-top:.3rem}
+  .foot-links{display:flex;flex-wrap:wrap;gap:.6rem 1.3rem}
+  .foot-links a{font-family:var(--font-brutal);font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+  .foot-links a:hover{color:var(--cream)}
+  .foot-bottom{display:flex;flex-wrap:wrap;gap:.7rem 1.3rem;align-items:center;justify-content:space-between;
+    margin-top:var(--space-md)}
+  .foot-bottom p{font-family:var(--font-brutal);font-size:.72rem;color:var(--tan-dim)}
+  .powered{display:flex;align-items:center;gap:.5rem;font-family:var(--font-brutal);font-size:.74rem;color:var(--tan-dim)}
+  .powered b{color:var(--muted);font-weight:700}
+  .powered .x{color:var(--red)}
+
+  @media (max-width:760px){
+    .grid.cols3,.grid.cols2{grid-template-columns:1fr}
+    .foot{flex-direction:column;align-items:flex-start}
+    .contact-box{flex-direction:column;align-items:flex-start}
+    .cta-row .btn{flex:1 1 auto;justify-content:center}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;scroll-behavior:auto}
+  }
+</style>
+</head>
+<body id="top">
+
+<!-- ============ HEADER + TABS ============ -->
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="#inicio" aria-label="Obstacle Race Panamá — inicio">
+      <img src="/logo.jpg" width="38" height="38" alt="" />
+      <span><b>OBSTACLE RACE</b><span>Panamá</span></span>
+    </a>
+    <nav class="tabs" role="tablist" aria-label="Secciones">
+      <a class="tab" id="tab-evento" role="tab" href="#evento" aria-controls="evento">La Carrera</a>
+      <a class="tab" id="tab-movimiento" role="tab" href="#movimiento" aria-controls="movimiento">ZeroWaste Athletes</a>
+      <a class="tab" id="tab-empresas" role="tab" href="#empresas" aria-controls="empresas">Empresas</a>
+      <a class="tab" id="tab-recursos" role="tab" href="#recursos" aria-controls="recursos">Recursos</a>
+      <a class="tab" id="tab-patrocinadores" role="tab" href="#patrocinadores" aria-controls="patrocinadores">Aliados Estratégicos</a>
+    </nav>
+    <a href="#inicio" class="btn btn-primary" data-register>Regístrate</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ INICIO ============ -->
+  <section class="panel" id="inicio" role="tabpanel" aria-labelledby="tab-inicio">
+    <div class="bg" aria-hidden="true"></div>
+    <div class="glow" aria-hidden="true"></div>
+    <div class="wrap inner">
+      <p class="coming-soon">Coming soon</p>
+      <img class="emblem" src="/logo.jpg" width="340" height="340"
+           alt="Obstacle Race Panamá — Conquer the course, become an O'Racer" />
+      <h1 class="headline">Conquista la ruta.<br><em>Conviértete en O'Racer.</em></h1>
+      <p class="hero-sub">Un festival deportivo de aventura con <strong>32 obstáculos naturales</strong> entre lodo, piscinas, sogas y selva. No es solo correr — es superarte, en equipo, con toda tu tribu.</p>
+      <div class="cta-row">
+        <a href="#inicio" class="btn btn-primary" data-register>Regístrate
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#evento" class="btn btn-ghost">Descubre el reto</a>
+      </div>
+      <div class="fact-chips">
+        <span>Oct 2026 / Feb 2027 (tentativo)</span>
+        <span>Panamá Norte</span>
+        <span>1,200 cupos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EL EVENTO ============ -->
+  <section class="panel" id="evento" role="tabpanel" aria-labelledby="tab-evento" hidden>
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">La carrera</span>
+        <h2>Qué es <em>Obstacle Race Panamá</em></h2>
+        <p>Mucho más que una carrera. Es un <strong>festival deportivo de aventura</strong> que combina obstáculos naturales, superación personal, trabajo en equipo y sostenibilidad — diseñado para <strong>todos los niveles</strong>: atletas elite, familias, empresas y corredores de todas las edades.</p>
+        <p>Aquí no cruzas una meta: la conquistas. Y sales con más amigos, más historias y más orgullo del que trajiste.</p>
+      </div>
+
+      <div class="grid auto">
+        <article class="card"><div class="k">01</div><h3>Trabajo en equipo</h3><p>Se corre en tribu. Los obstáculos se superan hombro con hombro.</p></article>
+        <article class="card"><div class="k">02</div><h3>Desafío</h3><p>32 pruebas naturales de fuerza, agilidad y mente.</p></article>
+        <article class="card"><div class="k">03</div><h3>Diversión</h3><p>Música, lodo, agua y festival — el reto también se ríe.</p></article>
+        <article class="card"><div class="k">04</div><h3>Experiencia</h3><p>Un día completo de festival deportivo, no una carrera de 40 minutos.</p></article>
+        <article class="card"><div class="k">05</div><h3>Recuerdos</h3><p>Historias, fotos y orgullo que te llevas mucho después de la meta.</p></article>
+      </div>
+
+      <div class="subhead">
+        <h3>5 modalidades, <em>un solo festival</em></h3>
+        <p>O'RACER se vive de muchas formas. Estas son las cinco modalidades que conviven en el mismo día:</p>
+      </div>
+      <div class="grid auto">
+        <article class="card"><div class="k">01</div><h3>Carrera OCR 5K y 8K</h3><p>Individual y por equipos.</p></article>
+        <article class="card"><div class="k">02</div><h3>Copa Empresarial</h3><p>Se la gana la empresa que motive y movilice más colaboradores.</p></article>
+        <article class="card"><div class="k">03</div><h3>Experiencia Familiar</h3><p>Categoría diseñada para familias completas.</p></article>
+        <article class="card"><div class="k">04</div><h3>Categoría Elite 8K</h3><p>Loop extra y los obstáculos más exigentes.</p></article>
+        <article class="card"><div class="k">05</div><h3>Categorías por edades</h3><p>Juvenil, 20-29, 30-39, 40-49 y 50+.</p></article>
+      </div>
+
+      <div class="subhead">
+        <h3>Lo que necesitas <em>saber</em></h3>
+        <p>Los datos generales del evento, de un vistazo.</p>
+      </div>
+      <div class="grid auto">
+        <article class="card"><div class="k">32</div><h3>Obstáculos</h3><p>24 en la ruta 5K + 8 exclusivos del loop 8K. Todos naturales.</p></article>
+        <article class="card"><div class="k">1,200</div><h3>Cupos</h3><p>Capacidad limitada. Los O'Racers no esperan.</p></article>
+        <article class="card"><div class="k">5K / 8K</div><h3>Distancias</h3><p>Dos distancias, un mismo punto de partida y meta.</p></article>
+        <article class="card"><div class="k">2026-27</div><h3>Oct 2026 / Feb 2027</h3><p>Fecha tentativa. Fecha oficial próximamente.</p></article>
+        <article class="card"><div class="k">8:00</div><h3>8:00 · 8:30 a.m.</h3><p>Convocatoria a las 8:00. Partida oficial a las 8:30.</p></article>
+        <article class="card"><div class="k">📍</div><h3>Panamá Norte</h3><p>Terreno con lodo, riachuelos, trillos y pendientes.</p></article>
+        <article class="card"><div class="k">🏅</div><h3>Medalla con propósito</h3><p>Para todo el que complete el recorrido. Sin excepción.</p></article>
+        <article class="card"><div class="k">👕</div><h3>Kit Oficial O'Racer</h3><p>Suéter personalizado, chip, número, cinta O'RACER y regalos.</p></article>
+        <article class="card"><div class="k">🏆</div><h3>Premios en efectivo</h3><p>Para categorías Elite 8K, Open 5K, por edades y equipos.</p></article>
+      </div>
+
+      <div class="subhead">
+        <h3>Todo <em>natural</em>. Todo <em>real</em>.</h3>
+        <p>En la ruta <strong>5K</strong> superas 24 obstáculos. En la <strong>8K Elite</strong> haces un loop extra de 3 km con 8 obstáculos adicionales — los más exigentes — y regresas a la ruta 5K para terminar en el mismo punto de partida. Total: <strong>32 obstáculos</strong>.</p>
+      </div>
+      <div class="obs-grid">
+        <div class="obs-panel">
+          <div class="obs-panel-head">
+            <div><span class="eyebrow">Ruta 5K</span><h3>24 obstáculos</h3></div>
+            <span class="badge-pill">Open · Familiar · Empresarial</span>
+          </div>
+          <ol class="obs-list">
+            <li><span class="n">01</span>Piscina natural</li>
+            <li><span class="n">02</span>Salto de llantas</li>
+            <li><span class="n">03</span>Carrera de sacos</li>
+            <li><span class="n">04</span>Túneles</li>
+            <li><span class="n">05</span>Low Crawl</li>
+            <li><span class="n">06</span>River Crossing</li>
+            <li><span class="n">07</span>Troncos</li>
+            <li><span class="n">08</span>Puente de equilibrio</li>
+            <li><span class="n">09</span>Puente de sogas</li>
+            <li><span class="n">10</span>Arrastre de llanta</li>
+            <li><span class="n">11</span>Pallets</li>
+            <li><span class="n">12</span>Tanques</li>
+            <li><span class="n">13</span>Talud</li>
+            <li><span class="n">14</span>Piscina de lodo</li>
+            <li><span class="n">15</span>Buscar tesoro en el fango</li>
+            <li><span class="n">16</span>Arrastre bajo red</li>
+            <li><span class="n">17</span>Pared de 1 m</li>
+            <li><span class="n">18</span>Muro de tablones</li>
+            <li><span class="n">19</span>Pacas de heno</li>
+            <li><span class="n">20</span>Plástico para deslizar</li>
+            <li><span class="n">21</span>Piscina natural #2</li>
+            <li><span class="n">22</span>Llantas sube y baja</li>
+            <li><span class="n">23</span>Pared de 2 m</li>
+            <li><span class="n">24</span>Torre de campana</li>
+          </ol>
+        </div>
+
+        <div class="obs-panel elite">
+          <div class="obs-panel-head">
+            <div><span class="eyebrow">Loop 8K Elite (+3 km)</span><h3>+8 obstáculos</h3></div>
+            <span class="badge-pill">Solo Elite</span>
+          </div>
+          <ol class="obs-list" style="grid-template-columns:1fr">
+            <li><span class="n">25</span>Carga de sacos</li>
+            <li><span class="n">26</span>Truss para colgarse</li>
+            <li><span class="n">27</span>Monkey Bars (Mono Mono)</li>
+            <li><span class="n">28</span>Soga de escalar</li>
+            <li><span class="n">29</span>Pared lisa con soga</li>
+            <li><span class="n">30</span>Pared con tacos</li>
+            <li><span class="n">31</span>Piscina de hielo</li>
+            <li><span class="n">32</span>Malla con sogas en U</li>
+          </ol>
+          <p class="obs-note">La 8K completa los 32 obstáculos del evento.</p>
+        </div>
+      </div>
+
+      <div class="subhead">
+        <h3>Siete formas de <em>conquistar la ruta</em></h3>
+        <p>Distancias de <strong>5 y 8K</strong> con lodo, piscinas naturales, obstáculos, trillos, pendientes y riachuelos. Elige la categoría en la que vas a dejarlo todo.</p>
+      </div>
+      <div class="grid auto">
+        <article class="card"><span class="badge-pill">8K</span><p class="k" style="margin-top:.9rem">CAT · 01</p><h3>Elite 8K</h3><p>Absoluto femenino y masculino. Se premian posiciones 1, 2 y 3.</p></article>
+        <article class="card"><span class="badge-pill">5K</span><p class="k" style="margin-top:.9rem">CAT · 02</p><h3>Open 5K</h3><p>Absoluto femenino y masculino. Se premian posiciones 1, 2 y 3.</p></article>
+        <article class="card"><span class="badge-pill">5K</span><p class="k" style="margin-top:.9rem">CAT · 03</p><h3>Por edades 5K</h3><p>Juvenil (U19), 20-29, 30-39, 40-49 y 50+. Premios en efectivo por sexo y categoría.</p></article>
+        <article class="card"><span class="badge-pill">8K</span><p class="k" style="margin-top:.9rem">CAT · 04</p><h3>Por edades 8K</h3><p>Juvenil (U19), 20-29, 30-39, 40-49 y 50+. Premios en efectivo por sexo y categoría.</p></article>
+        <article class="card"><span class="badge-pill">5K</span><p class="k" style="margin-top:.9rem">CAT · 05</p><h3>Equipos 5K</h3><p>Mínimo 3 integrantes, al menos una mujer. Premio a los 3 primeros equipos que crucen juntos.</p></article>
+        <article class="card"><span class="badge-pill">8K</span><p class="k" style="margin-top:.9rem">CAT · 06</p><h3>Equipos 8K</h3><p>Mínimo 3 integrantes, al menos una mujer. Premio a los 3 primeros equipos que crucen juntos.</p></article>
+        <article class="card"><span class="badge-pill">5K</span><p class="k" style="margin-top:.9rem">CAT · 07</p><h3>Familiar</h3><p>Para familias completas. Todos los niños deben participar acompañados de un adulto.</p></article>
+      </div>
+      <div class="grid cols2" style="margin-top:1.6rem">
+        <article class="card">
+          <span class="eyebrow">Categoría Familiar</span>
+          <h3 style="margin-top:.6rem">Toda la familia, un mismo reto</h3>
+          <p>Pensada para que padres, madres, tíos e hijos compartan la aventura. Los niños siempre participan acompañados de un adulto. Aquí no se trata de competir — se trata de ensuciarse juntos y crear recuerdos.</p>
+        </article>
+        <article class="card">
+          <span class="eyebrow">Copa Empresarial</span>
+          <h3 style="margin-top:.6rem">Colaboradores en acción</h3>
+          <p>Los colaboradores de las empresas corren en la ruta 5K. La empresa que motive y movilice a más gente se lleva la Copa Empresarial.</p>
+        </article>
+      </div>
+
+      <div class="subhead">
+        <h3>El día del <em>reto</em></h3>
+        <p>El itinerario completo, hora por hora.</p>
+      </div>
+      <ol class="timeline">
+        <li class="tl-item"><span class="dot">1</span><p class="time">7:30 – 8:00 a.m.</p><h4>Llegada de participantes</h4></li>
+        <li class="tl-item"><span class="dot">2</span><p class="time">7:45 – 8:15 a.m.</p><h4>Apertura del Festival de Arcos Inflables</h4><p>Activaciones, fotos y pintura de caras.</p></li>
+        <li class="tl-item"><span class="dot">3</span><p class="time">8:30 a.m.</p><h4>Partida oficial por el Arco del Desafío</h4><p>Rutas de 5K y 8K.</p></li>
+        <li class="tl-item"><span class="dot">4</span><p class="time">10:30 – 11:00 a.m.</p><h4>Llegada, entrega de medallas y descanso</h4></li>
+        <li class="tl-item"><span class="dot">5</span><p class="time">11:30 a.m.</p><h4>Reconocimientos y premiación</h4></li>
+        <li class="tl-item"><span class="dot">6</span><p class="time">12:30 – 2:00 p.m.</p><h4>Cierre del evento</h4></li>
+      </ol>
+
+      <div class="subhead">
+        <h3>Tres amenidades, <em>un solo día</em></h3>
+        <p>Las zonas de experiencia del evento.</p>
+      </div>
+      <div class="grid cols3">
+        <article class="card"><h3>Start &amp; Finish Zone</h3><p>200-300 metros de asfalto con carrileras, banners, arcos inflables y logos de patrocinadores. Corrales para partida por lotes, pinta caras, energizantes y zona de selfies, justo antes del truss que da entrada a los obstáculos.</p></article>
+        <article class="card"><h3>Runner's Lounge</h3><p>Bar de bebidas naturales, barras de proteína, frutas y agua. Los atletas descansan en hamacas, pacas, poofs, llantas, pallets y demás accesorios naturales. Todo es sostenible — como el resto del evento.</p></article>
+        <article class="card"><h3>After Race Festival &amp; Family Zone</h3><p>Los atletas se refrescan con un carro cisterna y los niños en una piscina natural con pelotas e inflables. Food trucks, música y ambiente de festival para cerrar el día con la familia completa.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MOVIMIENTO ============ -->
+  <section class="panel movimiento-glow" id="movimiento" role="tabpanel" aria-labelledby="tab-movimiento" hidden>
+    <div class="wrap" style="position:relative;z-index:1">
+      <div class="head">
+        <span class="badge-pill">Powered by Ecofit</span>
+        <h2 style="margin-top:1rem">Zero <em>Waste</em></h2>
+      </div>
+      <p class="statement">Nada se desperdicia. Cada tenis y cada prenda deportiva tiene otra carrera por delante.</p>
+
+      <div class="subhead">
+        <h3>Un legado <em>más allá de la meta</em></h3>
+        <p>Cada desafío superado también puede generar un impacto positivo en nuestro planeta. Por eso creamos iniciativas sostenibles que forman parte esencial del evento — porque aquí todo es natural: los obstáculos, el terreno y nuestra huella.</p>
+      </div>
+      <div class="grid auto">
+        <article class="card"><h3>Ecofit</h3><p>El movimiento de vida activa y sostenible que le da motor a Zero Waste — antes, durante y después del día de la carrera.</p></article>
+        <article class="card"><h3>Segunda vida</h3><p>Recolección de zapatillas usadas en el evento — deja las tuyas y dales una segunda vida.</p></article>
+        <article class="card"><h3>Medallas con propósito</h3><p>Diseñadas y producidas con materiales de bajo impacto y significado.</p></article>
+        <article class="card"><h3>Evento responsable</h3><p>Gestión de residuos, materiales reutilizables y logística baja en huella.</p></article>
+        <article class="card"><h3>Alianzas verdes</h3><p>Colaboraciones con marcas y organizaciones comprometidas con el planeta.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EMPRESAS (Copa Empresarial) ============ -->
+  <section class="panel" id="empresas" role="tabpanel" aria-labelledby="tab-empresas" hidden>
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Copa Empresarial</span>
+        <h2>Bienestar corporativo <em>en acción</em></h2>
+        <p>Incentivamos el bienestar corporativo y la integración de equipos con un <strong>reconocimiento especial</strong> a la empresa que logre inspirar y movilizar la mayor participación de su equipo.</p>
+      </div>
+
+      <ul class="benefit-list">
+        <li><span class="b-dot">›</span>Incentiva estilos de vida saludables y bienestar integral</li>
+        <li><span class="b-dot">›</span>Motiva la participación de colaboradores de todos los niveles</li>
+        <li><span class="b-dot">›</span>Fortalece el trabajo en equipo y la cultura organizacional</li>
+        <li><span class="b-dot">›</span>Genera orgullo y sentido de pertenencia</li>
+        <li><span class="b-dot">›</span>Crea experiencias memorables para colaboradores y familias</li>
+        <li><span class="b-dot">›</span>Impulsa una experiencia fuera de la rutina laboral</li>
+      </ul>
+
+      <div class="note-strip">
+        <p>¿Tu empresa quiere movilizar a su gente? Escríbenos y armamos el plan de participación.</p>
+        <a href="mailto:info@obstacleracepanama.com?subject=Inscripci%C3%B3n%20Copa%20Empresarial" class="btn btn-primary">Inscribe a tu empresa</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RECURSOS ============ -->
+  <section class="panel" id="recursos" role="tabpanel" aria-labelledby="tab-recursos" hidden>
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Recursos</span>
+        <h2>Prepárate para<br>el <em>lodo</em></h2>
+        <p class="read">La serie <strong>Road to Obstacle Race</strong> y todo lo que necesitas para llegar listo a la salida. Se libera pronto — regístrate para recibirlo primero.</p>
+      </div>
+      <div class="grid cols3">
+        <article class="card"><div class="k">01</div><h3>Nutrición</h3><p>Combustible para el ascenso: qué comer para rendir y recuperarte.</p><span class="tag">Próximamente</span></article>
+        <article class="card"><div class="k">02</div><h3>Cardio</h3><p>El motor que no se apaga cuando el terreno se empina.</p><span class="tag">Próximamente</span></article>
+        <article class="card"><div class="k">03</div><h3>Fuerza</h3><p>Potencia para muros, cuerdas y cargas — cada obstáculo, un peldaño.</p><span class="tag">Próximamente</span></article>
+        <article class="card"><div class="k">04</div><h3>Recuperación</h3><p>Descanso inteligente: lo que haces entre entrenamientos también cuenta.</p><span class="tag">Próximamente</span></article>
+        <article class="card"><div class="k">05</div><h3>Guía del corredor</h3><p>Qué llevar, cómo prepararte y qué esperar el día de la carrera.</p><span class="tag">Próximamente</span></article>
+        <article class="card"><div class="k">06</div><h3>Preguntas frecuentes</h3><p>Todo lo que necesitas saber sobre categorías, ruta y logística.</p><span class="tag">Próximamente</span></article>
+      </div>
+      <div class="note-strip">
+        <p>Los recursos se liberan por etapas. Regístrate y sé el primero en recibirlos.</p>
+        <a href="#inicio" class="btn btn-primary" data-register>Recibir recursos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PATROCINADORES ============ -->
+  <section class="panel" id="patrocinadores" role="tabpanel" aria-labelledby="tab-patrocinadores" hidden>
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Aliados Estratégicos</span>
+        <h2>Sé parte del<br><em>movimiento</em></h2>
+        <p class="read">Obstacle Race Panamá conecta marcas con una comunidad activa que quiere moverse y aportar. Sin vallas genéricas: propiedad narrativa real y una causa con propósito — mover a Panamá.</p>
+      </div>
+      <div class="grid cols3">
+        <article class="card"><div class="k">↗</div><h3>Marca con propósito</h3><p>Asóciate a salud, comunidad y naturaleza — no a un logo más en una valla.</p></article>
+        <article class="card"><div class="k">↗</div><h3>Comunidad activa</h3><p>Atletas y familias movilizadas antes, durante y después de la carrera.</p></article>
+        <article class="card"><div class="k">↗</div><h3>Impacto real</h3><p>Tu marca respalda la recolecta de zapatillas y ropa deportiva — y se nota.</p></article>
+      </div>
+      <div class="contact-box">
+        <div class="ci">
+          <h3>Cuéntanos tu marca</h3>
+          <p>Escríbenos y te enviamos las opciones de activación para esta temporada.</p>
+          <a class="mail" href="mailto:info@obstacleracepanama.com?subject=Alianza%20—%20Obstacle%20Race%20Panam%C3%A1">info@obstacleracepanama.com</a>
+        </div>
+        <a href="mailto:info@obstacleracepanama.com?subject=Alianza%20—%20Obstacle%20Race%20Panam%C3%A1" class="btn btn-primary">Escríbenos
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site">
+  <div class="wrap">
+    <div class="foot">
+      <div class="foot-brand">
+        <img src="/logo.jpg" width="54" height="54" alt="Obstacle Race Panamá" />
+        <div>
+          <b>OBSTACLE RACE PANAMÁ</b>
+        </div>
+      </div>
+      <div class="foot-links">
+        <a href="#evento">La Carrera</a>
+        <a href="#movimiento">ZeroWaste Athletes</a>
+        <a href="#empresas">Empresas</a>
+        <a href="#recursos">Recursos</a>
+        <a href="#patrocinadores">Aliados Estratégicos</a>
+        <a href="mailto:info@obstacleracepanama.com">Contacto</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <p>© <span id="year">2026</span> Obstacle Race Panamá. Todos los derechos reservados.</p>
+      <div class="powered"><b>Conquer the course</b> <span class="x">·</span> <b>Become an O'Racer</b></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    "use strict";
+
+    /* ==========================================================
+       REGISTER_URL — Google Form. All "Regístrate / Recibir
+       recursos" buttons point here. Falls back to mailto if
+       ever cleared or invalid.
+       ========================================================== */
+    var REGISTER_URL = "https://docs.google.com/forms/d/e/1FAIpQLSenCuUGcd9s2kkZGa4aX72jBFwusojFdjYMPD3GWUbCxtt-Pw/viewform";
+    var FALLBACK_MAIL = "mailto:info@obstacleracepanama.com?subject=Inscripci%C3%B3n%20%E2%80%94%20Obstacle%20Race%20Panam%C3%A1";
+
+    var valid = /^https?:\/\//.test(REGISTER_URL) && REGISTER_URL.indexOf("REEMPLAZAR") === -1;
+    document.querySelectorAll("[data-register]").forEach(function(a){
+      if (valid){ a.href = REGISTER_URL; a.target = "_blank"; a.rel = "noopener"; }
+      else { a.href = FALLBACK_MAIL; }
+    });
+
+    /* ---------- Tabs (hash routing) ---------- */
+    var TABS = ["inicio","evento","movimiento","empresas","recursos","patrocinadores"];
+    function activate(name){
+      if (TABS.indexOf(name) < 0) name = "inicio";
+      TABS.forEach(function(t){
+        var panel = document.getElementById(t);
+        var tab = document.getElementById("tab-" + t);
+        var on = (t === name);
+        panel.hidden = !on;
+        panel.classList.toggle("enter", on);
+        if (tab){ tab.classList.toggle("active", on); tab.setAttribute("aria-selected", on ? "true" : "false"); }
+      });
+      window.scrollTo(0, 0);
+    }
+    window.addEventListener("hashchange", function(){
+      activate((location.hash || "").replace("#",""));
+    });
+    activate((location.hash || "").replace("#","") || "inicio");
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  })();
+</script>
+</body>
+</html>
