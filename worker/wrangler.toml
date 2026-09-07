@@ -32,5 +32,17 @@ id = "1361a8801c4f4c8ca804168b8c93a3d6"
 binding = "LEADS"
 id = "f6ebc9c9e73940c9b73c7722b50b8f6e"
 
+# ── Secrets, set with `npx wrangler secret put NAME` ──────────────────
+# None of these belong in this file: it is tracked in a PUBLIC repo.
+#   SHEET_URL     the Apps Script /exec that appends to the prospect sheet.
+#                 A capability URL — possession is the permission.
+#   SHEET_TOKEN   the SHARED_TOKEN the Apps Script checks. Never leaves the
+#                 worker.
+#   OPERATOR_KEY  what marks a scan as the studio's own, so it gets a row.
+#                 This one travels to a browser as ?op=…, which is exactly
+#                 why it is not the same value as SHEET_TOKEN.
+# With SHEET_URL or SHEET_TOKEN unset, nothing is ever logged and both
+# instruments behave as before. Setup is documented in worker/sheet-log.gs.
+
 [observability]
 enabled = true
