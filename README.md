@@ -53,11 +53,11 @@ node worker/calibration.test.mjs
 
 ## The scanners
 
-Two instruments, one worker, in this repo. Both languages are served by the
+Three instruments, one worker, in this repo. Both languages are served by the
 same code: the page declares its language and the worker picks the copy file.
 
-This worker, two instruments, at `POST /scan`. Omit `mode` for the AI Visibility Map;
-pass `"mode":"headers"` for the Header Security & Indexability Scanner (13 checks).
+This worker, three instruments, at `POST /scan`. Omit `mode` for the AI Visibility Map;
+pass `"mode":"headers"` for the Trust Index (13 checks).
 `POST /lead` records a report request. Rate limited to 60 requests per IP per hour on
 each endpoint; the ceilings are `SCAN_LIMIT` and `LEAD_LIMIT` in `worker/wrangler.toml`.
 

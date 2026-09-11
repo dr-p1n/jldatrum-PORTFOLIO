@@ -28,7 +28,8 @@ path prefixed with `/es/`.
 
 - [AI Visibility Map](https://jldatrum.com/resources/scan/): fetches a URL and grades how legible it is to answer engines. Automated, not self-reported.
 
-- [Header Security &amp; Indexability Scanner](https://jldatrum.com/resources/security-headers/): reads a URL's response headers and the page itself, and grades the thirteen things a corporate buyer checks. Automated, not self-reported.
+- [Trust Index](https://jldatrum.com/resources/security-headers/): reads a URL's response headers and the page itself, and grades the thirteen things a corporate buyer checks. Automated, not self-reported.
+- [Responsiveness Radar](https://jldatrum.com/resources/responsive/): measures what a phone has to download against what a laptop does, and how much of it is pixels no phone can display. Automated, not self-reported.
 
 ## Guides
 
