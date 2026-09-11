@@ -176,6 +176,7 @@ const ERR = {
     email:    "That doesn't look like an email address.",
     leadRate: "Too many requests \u2014 try again shortly.",
     leadOff:  "The report service is not configured.",
+    rspThin:  "This page carries no images, so there is nothing to measure about what a phone has to download. The test needs a page that actually serves pictures \u2014 a home page or a portfolio, not a text-only page."
   },
   es: {
     parse:    "Eso no se puede leer como una URL.",
@@ -200,6 +201,7 @@ const ERR = {
     email:    "Eso no parece una direcci\u00f3n de correo.",
     leadRate: "Demasiadas peticiones \u2014 prueba de nuevo en un rato.",
     leadOff:  "El servicio de informes no est\u00e1 configurado.",
+    rspThin:  "Esta p\u00e1gina no lleva im\u00e1genes, as\u00ed que no hay nada que medir sobre lo que tiene que bajar un tel\u00e9fono. La prueba necesita una p\u00e1gina que sirva im\u00e1genes de verdad \u2014 una home o un portafolio, no una p\u00e1gina de solo texto."
   },
 };
 const errs = lang => ERR[lang === "es" ? "es" : "en"];
@@ -1392,9 +1394,10 @@ function frameIsClosed(csp, xfo) {
    heading level is not that — it was scoring the same two facts the visibility
    instrument scores, in near-identical words, so a prospect running both read
    one problem twice and saw an <h1> inside something calling itself a security
-   score. What survives in `page` is indexability, which the instrument's name
-   covers: the title, the canonical, the description and the declared language
-   are all statements about whether the page can be found and identified.
+   score. What survives in `page` is indexability: the title, the canonical,
+   the description and the declared language are all statements about whether
+   the page can be found and identified. The name stopped spelling that out
+   when the instrument became the Trust Index, so it is written down here.
    The heading outline now lives in exactly one place — the structural
    observations, which carry no grade at all.
 
@@ -1529,6 +1532,358 @@ async function scanHeaders(target, lang) {
     headings: doc ? headingCensus(doc) : null,
     checks,
     findings: buildFindings(checks, "headers", lang),
+  };
+}
+
+/* ── THE THIRD INSTRUMENT: WHAT A PHONE HAS TO DOWNLOAD ─────────────
+ *
+ * THE QUESTION IT ASKS: does this site send a phone something different from
+ * what it sends a laptop? Not "does the layout adapt" — every site measured so
+ * far has a viewport tag and media queries and looks fine on a phone. What
+ * none of them do is adapt the PAYLOAD. The phone downloads the desktop site
+ * and then shrinks it on screen.
+ *
+ * ⚠️ WHY THIS AND NOT A SPEED SCORE. Largest Contentful Paint, Layout Shift
+ * and Event Timing are Chrome-only APIs — Safari, Safari iOS and Firefox
+ * implement none of them, and on an iPhone every browser is WebKit. A number
+ * from Lighthouse describes a device a large part of the buying group is not
+ * using, and Google's field data contains no iPhone visitors at all. Bytes do
+ * not have a browser: what a phone must download is the same on every engine.
+ *
+ * ⚠️ AND WHY NOT TOTAL WEIGHT. The best-ranked site we have measured is also
+ * the heaviest — 5 MB of portfolio photography IS the product for an
+ * architecture studio, and grading that F is the inversion of v16 all over
+ * again. What is graded here is the DIFFERENCE between the two devices, which
+ * a heavy site can pass and a light one can fail.
+ *
+ * ⚠️ IT DOES NOT SEE THE LAYOUT. A viewport tag and width-based CSS say the
+ * site attempts to adapt; nothing here can say the layout does not break. The
+ * page says so where a reader can see it.
+ * ─────────────────────────────────────────────────────────────────── */
+
+// 390 CSS px at 3x. Nothing wider than this is ever shown on a phone; the
+// laptop figure is a common retina viewport. Both are printed in the report so
+// the arithmetic under every number is the reader's to check.
+const PHONE_PX = 1170;
+const LAPTOP_PX = 1920;
+// Stated, never hidden: every second in this report is bytes divided by this.
+const PHONE_BPS = 4e6;
+
+const RSP_CACHE_MIN = 86400;   // a day. Below it a repeat visit refetches.
+
+function srcsetCandidates(txt) {
+  return String(txt || "").split(",").map(p => p.trim()).filter(Boolean).map(p => {
+    const bits = p.split(/\s+/);
+    const w = /^(\d+)w$/.exec(bits[1] || "");
+    return { u: bits[0], w: w ? Number(w[1]) : null };
+  }).filter(c => c.u);
+}
+
+// The rule a browser follows, resolved on the server: the narrowest candidate
+// that still covers the device, or the widest there is.
+function pickFor(cands, need) {
+  const sized = cands.filter(c => c.w).sort((a, b) => a.w - b.w);
+  if (!sized.length) return cands[0] || null;
+  return sized.find(c => c.w >= need) || sized[sized.length - 1];
+}
+
+/* Intrinsic pixel size straight out of the file header. No decode, no render —
+   the first bytes of a JPEG, PNG or WebP say how big it is. */
+function imageDims(b) {
+  if (b.length < 32) return null;
+  const d = new DataView(b.buffer, b.byteOffset, b.byteLength);
+  if (b[0] === 0xFF && b[1] === 0xD8) {
+    let o = 2;
+    while (o + 9 < b.length) {
+      if (b[o] !== 0xFF) { o++; continue; }
+      const m = b[o + 1];
+      if (m >= 0xC0 && m <= 0xCF && m !== 0xC4 && m !== 0xC8 && m !== 0xCC)
+        return { w: d.getUint16(o + 7), h: d.getUint16(o + 5) };
+      const len = d.getUint16(o + 2);
+      if (len < 2) return null;
+      o += 2 + len;
+    }
+    return null;
+  }
+  if (b[0] === 0x89 && b[1] === 0x50) return { w: d.getUint32(16), h: d.getUint32(20) };
+  if (b[8] === 0x57 && b[9] === 0x45 && b[10] === 0x42 && b[11] === 0x50) {
+    const c = String.fromCharCode(b[12], b[13], b[14], b[15]);
+    if (c === "VP8X") return { w: 1 + (b[24] | b[25] << 8 | b[26] << 16), h: 1 + (b[27] | b[28] << 8 | b[29] << 16) };
+    if (c === "VP8 ") return { w: d.getUint16(26, true) & 0x3FFF, h: d.getUint16(28, true) & 0x3FFF };
+    if (c === "VP8L") return { w: 1 + (((b[22] & 0x3F) << 8) | b[21]), h: 1 + (((b[24] & 0x0F) << 10) | (b[23] << 2) | ((b[22] & 0xC0) >> 6)) };
+  }
+  return null;
+}
+
+const attrOf = (tag, name) =>
+  (new RegExp(`\\b${name}\\s*=\\s*("([^"]*)"|'([^']*)')`, "i").exec(tag) || [])
+    .slice(2).find(x => x !== undefined) || "";
+
+/* Reads the HTML and returns, per image, which file a phone would fetch and
+   which a laptop would. Everything after this is arithmetic on that. */
+function deliveryPlan(html, base) {
+  const abs = u => { try { return new URL(u, base).href; } catch { return null; } };
+  const pictures = [...html.matchAll(/<picture\b[\s\S]*?<\/picture>/gi)].map(m => m[0]);
+  const tags = [...html.matchAll(/<img\b[^>]*>/gi)].map(m => m[0]);
+  const out = [];
+  for (const tag of tags) {
+    let cands = srcsetCandidates(attrOf(tag, "srcset"));
+    const holder = pictures.find(p => p.includes(tag));
+    if (holder)
+      for (const s of holder.matchAll(/<source\b[^>]*>/gi))
+        cands = cands.concat(srcsetCandidates(attrOf(s[0], "srcset")));
+    const src = attrOf(tag, "src");
+    if (!cands.length && src) cands = [{ u: src, w: null }];
+    if (!cands.length) continue;
+    const offersSizes = cands.some(c => c.w);
+    const phone = abs((pickFor(cands, PHONE_PX) || {}).u);
+    const laptop = abs((pickFor(cands, LAPTOP_PX) || {}).u);
+    if (!phone && !laptop) continue;
+    out.push({ offersSizes, phone, laptop });
+  }
+  return out;
+}
+
+/* Same four-string contract as the other two instruments: `t` passes, `nt` is
+   what a failing row says, `so` rides on failures only, `d` is the evidence.
+   Nothing here names srcset, a viewport tag or a cache header. */
+const RSP = {
+  en: {
+    oversized: {
+      t: "Nothing is sent wider than a phone can show",
+      nt: "Images are sent wider than any phone can show",
+      so: "Those pixels are paid for on the phone bill and thrown away before anything is drawn.",
+      d: v => v.na ? (v.blind ? "Some files could not be read, so this was not measured." : "No image on this page has a fixed pixel size to compare against a screen.")
+        : v.n ? `${v.n} image${v.n > 1 ? "s" : ""} wider than ${PHONE_PX}px — ${v.wm} MB a phone cannot use, ${v.ws}s of it.`
+              : `Every image fits ${PHONE_PX}px.`,
+    },
+    viewport: {
+      t: "The page tells a phone it was built for a phone",
+      nt: "The page never tells a phone it was built for one",
+      so: "Without it a phone lays the page out at desktop width and zooms out, so everything reads at a third of its size.",
+      d: v => v.ok ? "Declared." : "Not declared — a phone falls back to a desktop-width layout.",
+    },
+    cache: {
+      t: "The heavy files are kept between visits",
+      nt: "The heavy files are downloaded again on every visit",
+      so: "A second visit costs the same as the first, on a connection the visitor is paying for.",
+      d: v => v.na ? "Nothing heavy enough to measure."
+        : v.n ? `${v.n} of ${v.of} told the browser not to keep them.` : "All kept.",
+    },
+  },
+  es: {
+    oversized: {
+      t: "No se manda nada más ancho de lo que un teléfono puede mostrar",
+      nt: "Se mandan imágenes más anchas de lo que cualquier teléfono puede mostrar",
+      so: "Esos píxeles los paga el plan de datos del visitante y se descartan antes de dibujar nada.",
+      d: v => v.na ? (v.blind ? "No se pudieron leer algunos archivos, así que esto no se midió." : "Ninguna imagen de esta página tiene un tamaño en píxeles que comparar contra una pantalla.")
+        : v.n ? `${v.n} imagen${v.n > 1 ? "es" : ""} más ancha${v.n > 1 ? "s" : ""} que ${PHONE_PX}px — ${v.wm} MB que un teléfono no puede usar, ${v.ws}s de espera.`
+              : `Todas las imágenes caben en ${PHONE_PX}px.`,
+    },
+    viewport: {
+      t: "La página le avisa al teléfono que fue hecha para un teléfono",
+      nt: "La página nunca le avisa al teléfono que fue hecha para uno",
+      so: "Sin eso el teléfono arma la página al ancho de un escritorio y la aleja, así que todo se lee a un tercio de su tamaño.",
+      d: v => v.ok ? "Declarado." : "No declarado — el teléfono cae a un layout de ancho de escritorio.",
+    },
+    cache: {
+      t: "Los archivos pesados se guardan entre visitas",
+      nt: "Los archivos pesados se vuelven a bajar en cada visita",
+      so: "Una segunda visita cuesta lo mismo que la primera, en una conexión que paga el visitante.",
+      d: v => v.na ? "Nada lo bastante pesado para medir."
+        : v.n ? `${v.n} de ${v.of} le dicen al navegador que no los guarde.` : "Todos se guardan.",
+    },
+  },
+};
+
+// Three checks, because three things are measurable from outside without
+// guessing: bytes a phone cannot use, whether the page admits it is on a
+// phone, and whether any of it survives to the next visit. The phone-versus-
+// laptop comparison is reported as a FACT beside them, not graded — a site
+// that loads in 0.7 seconds has nothing to gain from sending two sizes, and
+// failing it for that was this instrument's own inversion.
+const RSP_WEIGHTS = { oversized: 60, viewport: 20, cache: 20 };
+
+// Below this there is not enough on the page to judge how it reaches a phone.
+// A page with no images has not been shown to deliver well or badly, and a
+// grade off a twenty-point pool flatters whoever happens to have no images —
+// which, today, is this studio's own site.
+const RSP_MIN_POOL = 50;
+
+function runResponsiveChecks(m, lang) {
+  const L = RSP[lang === "es" ? "es" : "en"];
+  const c = [];
+  const mb = n => (n / 1048576).toFixed(2);
+  const add = (id, pass, vars) => {
+    const S = L[id];
+    // n/a: the check could not be measured, so it leaves the pool entirely
+    // rather than counting as a pass or a failure. A site with no images has
+    // not been shown to serve them badly.
+    const na = pass === null;
+    const row = {
+      id, group: "delivery", report: "b", pass: na ? true : pass,
+      na,
+      weight: na ? 0 : RSP_WEIGHTS[id],
+      deduction: na || pass ? 0 : RSP_WEIGHTS[id],
+      title: !na && !pass ? S.nt : S.t,
+      detail: S.d(vars),
+    };
+    if (!na && !pass) row.so = S.so;
+    c.push(row);
+  };
+
+  // An unmeasured check leaves the pool. It never counts as a pass, and it
+  // never counts as a failure — the site has not been shown to do either.
+  // ⚠️ MEASURED, NOT MENTIONED. `images` counts what the HTML referenced;
+  // `sized` counts the raster files whose dimensions actually came back. A
+  // check that passes because nothing was read is the failure this instrument
+  // keeps rediscovering, so it is the second number that gates the check.
+  const hasImgs = m.sized > 0 && !m.imgBlind;
+  add("oversized", hasImgs ? m.oversized === 0 : null,
+      { na: !hasImgs, blind: m.imgBlind, n: m.oversized, wm: mb(m.wastedBytes),
+        ws: (m.wastedBytes * 8 / PHONE_BPS).toFixed(1) });
+  add("viewport", m.viewport, { ok: m.viewport });
+  add("cache", m.cacheOf > 0 ? m.cacheMisses === 0 : null,
+      { na: m.cacheOf === 0, n: m.cacheMisses, of: m.cacheOf });
+  return c;
+}
+
+// A ceiling on how many files one scan will pull. Past this the numbers stop
+// getting more true and the scan starts costing the target real bandwidth.
+const RSP_MAX_FILES = 30;
+
+/* fetchCapped decodes to text and stops at 2 MB, which is wrong twice for an
+   image: the bytes are not text, and a 5 MB photograph is exactly the one this
+   report exists to find. So this reads Content-Length for the size — the
+   number the browser is told before it downloads anything — and streams only
+   the header bytes needed to read the dimensions. */
+const RSP_HEAD_BYTES = 65536;
+
+async function weighFile(url) {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const r = await weighOnce(url);
+    if (r.ok) return r;
+  }
+  return { ok: false, bytes: 0, head: null, cc: "" };
+}
+
+async function weighOnce(url) {
+  try {
+    const res = await fetch(url, {
+      redirect: "follow",
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+      headers: { "User-Agent": "DATRUM-VisibilityScanner/1.0 (+https://jldatrum.com/resources/scan/)" },
+      cf: { cacheTtl: 300, cacheEverything: true },
+    });
+    if (!res.ok) return { ok: false, bytes: 0, head: null, cc: "" };
+    const cc = res.headers.get("cache-control") || "";
+    const declared = Number(res.headers.get("content-length"));
+    const reader = res.body?.getReader();
+    if (!reader) return { ok: true, bytes: declared > 0 ? declared : 0, head: null, cc };
+
+    const chunks = []; let head = 0, total = 0;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.length;
+      if (head < RSP_HEAD_BYTES) { chunks.push(value); head += value.length; }
+      // With a declared size there is no reason to pull the rest of a 5 MB
+      // photograph across the wire to learn what the header already said.
+      if (declared > 0 && head >= RSP_HEAD_BYTES) { reader.cancel(); break; }
+    }
+    const buf = new Uint8Array(head);
+    let off = 0;
+    for (const c of chunks) { buf.set(c.subarray(0, Math.min(c.length, head - off)), off); off += c.length; }
+    const bytes = declared > 0 ? declared : total;
+    // ⚠️ ZERO BYTES IS AN UNREAD FILE, NOT A WEIGHTLESS ONE. Returning ok on an
+    // empty read would let a site score clean on images nobody weighed — the
+    // same failure-to-measure-reported-as-a-pass this instrument has already
+    // produced twice.
+    return bytes > 0 ? { ok: true, bytes, head: buf, cc } : { ok: false, bytes: 0, head: null, cc };
+  } catch { return { ok: false, bytes: 0, head: null, cc: "" }; }
+}
+
+async function scanResponsive(target, lang) {
+  const E = errs(lang);
+  const page = await Promise.allSettled([fetchCapped(target.href)]).then(r => r[0]);
+  if (page.status !== "fulfilled") return { error: E.fetch(page.reason?.message || E.failed) };
+  if (!page.value.res.ok) return { error: E.http(page.value.res.status) };
+  const ct = page.value.res.headers.get("content-type") || "";
+  if (!/text\/html/i.test(ct)) return { error: E.notHtml(ct) };
+
+  const html = page.value.body;
+  const base = new URL(page.value.res.url || target.href);
+  const plan = deliveryPlan(html, base);
+
+  // One fetch per distinct file, not per reference — a logo used eight times
+  // is downloaded once by a browser and must be counted once here.
+  const phoneSet = [...new Set(plan.map(p => p.phone).filter(Boolean))].slice(0, RSP_MAX_FILES);
+  const laptopSet = [...new Set(plan.map(p => p.laptop).filter(Boolean))].slice(0, RSP_MAX_FILES);
+  const files = new Map();
+  await Promise.all([...new Set([...phoneSet, ...laptopSet])].map(async u =>
+    files.set(u, await weighFile(u))));
+
+  const sum = set => set.reduce((n, u) => n + (files.get(u)?.bytes || 0), 0);
+  const phoneBytes = sum(phoneSet), laptopBytes = sum(laptopSet);
+
+  // Waste is measured only on what the PHONE actually receives, and only on
+  // the part above what it can display. Bytes scale with pixel area.
+  let oversized = 0, wastedBytes = 0, unread = 0, sized = 0;
+  for (const u of phoneSet) {
+    const f = files.get(u);
+    // Same rule as the stylesheets: a file we could not weigh makes the site
+    // look lighter than it is, so it is counted rather than ignored.
+    if (!f?.ok) { unread++; continue; }   // see imgBlind: one unread file understates the total
+    if (!f.head) continue;
+    const dm = imageDims(f.head);
+    // Only a raster file has a pixel width worth comparing to a screen. An SVG
+    // scales to whatever it is given, so it is not measured here — and a page
+    // whose only images are SVG logos has not been shown to deliver well.
+    if (!dm) continue;
+    sized++;
+    if (dm.w <= PHONE_PX) continue;
+    oversized++;
+    wastedBytes += f.bytes * (1 - (PHONE_PX / dm.w) ** 2);
+  }
+
+  const heavy = phoneSet.filter(u => (files.get(u)?.bytes || 0) > 51200);
+  const cacheMisses = heavy.filter(u => {
+    const age = /max-age\s*=\s*(\d+)/i.exec(files.get(u)?.cc || "");
+    return !age || Number(age[1]) < RSP_CACHE_MIN;
+  }).length;
+
+  const m = {
+    images: plan.length, phoneBytes, laptopBytes, oversized, wastedBytes,
+    viewport: /<meta[^>]*name\s*=\s*["']?viewport["']?[^>]*>/i.test(html),
+    cacheMisses, cacheOf: heavy.length,
+    // Blind, not clean: a file we could not weigh is not a file that is light.
+    imgBlind: unread > 0,
+    // What was actually measured, as opposed to what the HTML mentioned.
+    sized,
+    unread,
+  };
+  const checks = runResponsiveChecks(m, lang);
+  const scored = checks.filter(c => !c.na);
+  const pool = scored.reduce((n, c) => n + c.weight, 0);
+  const deducted = scored.reduce((n, c) => n + c.deduction, 0);
+  if (pool < RSP_MIN_POOL) return { error: E.rspThin };
+  const score = Math.max(0, Math.round(100 * (pool - deducted) / pool));
+
+  return {
+    url: target.href, lang: lang === "es" ? "es" : "en", mode: "responsive",
+    scannedAt: new Date().toISOString(),
+    score, grade: grade(score), pool, deducted,
+    passed: scored.filter(c => c.pass).length, total: scored.length,
+    checks,
+    // The two numbers the report is named for, with the divisor printed so the
+    // seconds can be re-derived by anyone who doubts them.
+    devices: {
+      phoneBytes, laptopBytes,
+      phoneSeconds: +(phoneBytes * 8 / PHONE_BPS).toFixed(1),
+      laptopSeconds: +(laptopBytes * 8 / PHONE_BPS).toFixed(1),
+      bps: PHONE_BPS, phonePx: PHONE_PX, laptopPx: LAPTOP_PX,
+      images: plan.length, adaptive: plan.filter(p => p.offersSizes).length,
+    },
   };
 }
 
@@ -1721,9 +2076,12 @@ export default {
       const limit = ceiling(env, "SCAN_LIMIT");
       const key = `scan:${ip}:${Math.floor(Date.now() / 3600000)}`;
       const n = Number(await env.RATE.get(key)) || 0;
-      if (n >= limit)
+      // A bundle performs three scans and is charged for three. Charging it as
+      // one would let the hourly ceiling be tripled by choosing a mode.
+      const cost = String(body?.mode || "").toLowerCase() === "all" ? 3 : 1;
+      if (n + cost > limit)
         return new Response(JSON.stringify({ error: E.rate(limit) }), { status: 429, headers });
-      await env.RATE.put(key, String(n + 1), { expirationTtl: 3700 });
+      await env.RATE.put(key, String(n + cost), { expirationTtl: 3700 });
     }
 
     if (body === null) return new Response(JSON.stringify({ error: E.json }), { status: 400, headers });
@@ -1733,7 +2091,33 @@ export default {
 
     try {
       const mode = String(body?.mode || "").toLowerCase();
-      const result = mode === "headers" ? await scanHeaders(url, lang) : await scan(url, lang);
+
+      /* One URL in, three instruments out. This exists because the studio's
+         own process is "paste a URL, get a row" — every manual step after the
+         address is a step that gets skipped on a busy day, and the row that
+         never gets written is the index that never gets built. The three run
+         concurrently: one call costs about what the slowest of them costs.
+         ⚠️ IT SPENDS THREE OF THE HOUR'S SCANS, because it performs three. */
+      if (mode === "all") {
+        const [visibility, trust, responsive] = await Promise.all([
+          scan(url, lang).catch(e => ({ error: E.crashed(e.message) })),
+          scanHeaders(url, lang).catch(e => ({ error: E.crashed(e.message) })),
+          scanResponsive(url, lang).catch(e => ({ error: E.crashed(e.message) })),
+        ]);
+        const bundle = { url: url.href, lang, mode: "all", scannedAt: new Date().toISOString(),
+                         visibility, trust, responsive };
+        if (isOperator(body, env)) {
+          // Each instrument writes its own columns on the one row for this URL.
+          const writes = Promise.all([visibility, trust, responsive]
+            .filter(r => !r.error).map(r => logScan(r, env)));
+          ctx?.waitUntil ? ctx.waitUntil(writes) : await writes;
+        }
+        return new Response(JSON.stringify(bundle), { status: 200, headers });
+      }
+
+      const result = mode === "headers"    ? await scanHeaders(url, lang)
+                   : mode === "responsive" ? await scanResponsive(url, lang)
+                   : await scan(url, lang);
       // The row is written after the result exists and outside the response:
       // a Sheet round trip is seconds, and the reader is waiting. A scan that
       // failed has no score to log.

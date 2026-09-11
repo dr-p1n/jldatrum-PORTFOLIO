@@ -212,6 +212,29 @@
     head.appendChild(meta);
     result.appendChild(head);
 
+    /* The two devices, side by side. A fact, not a check — a site that loads
+       in under a second has nothing to gain from sending two sizes, so this is
+       reported and never graded. The divisor is printed with it: every second
+       here is bytes over a stated connection speed, which makes the number
+       one the reader can redo rather than one they have to believe. */
+    if (data.devices) {
+      var dv = data.devices, mb = function (n) { return (n / 1048576).toFixed(2); };
+      var box = el("div", "scan-devices");
+      [[t("devPhone", "On a phone"), dv.phoneSeconds, dv.phoneBytes],
+       [t("devLaptop", "On a laptop"), dv.laptopSeconds, dv.laptopBytes]].forEach(function (r) {
+        var cell = el("div", "scan-device");
+        cell.appendChild(el("p", "scan-device-label", r[0]));
+        cell.appendChild(el("p", "scan-device-time", r[1] + "s"));
+        cell.appendChild(el("p", "scan-device-bytes", mb(r[2]) + " MB"));
+        box.appendChild(cell);
+      });
+      result.appendChild(box);
+      result.appendChild(el("p", "scan-obslede",
+        t("devNote", "Transfer time over a {bps} Mbps connection — bytes divided by speed, so it is a floor and never the whole wait. {images} images on the page, {adaptive} of them offering a phone-sized version.")
+          .replace("{bps}", Math.round(dv.bps / 1e6))
+          .replace("{images}", dv.images).replace("{adaptive}", dv.adaptive)));
+    }
+
     var area = {};
     GROUPS.forEach(function (grp) { area[grp.id] = grp.label; });
 
@@ -338,7 +361,29 @@
 
     // Everything that passed, named and nothing more. Redundant behind the
     // gate, where the checklist has already named every check.
-    var ok = gated ? [] : data.checks.filter(function (c) { return c.pass; });
+    /* ⚠️ AN UNMEASURED CHECK IS NOT A PASSING ONE. The responsive instrument
+       returns n/a rows — no images to compare, nothing heavy enough to judge —
+       and they carry pass:true only so they never land in the gap list. Listing
+       them under "Passed" would tell a reader the site cleared something it was
+       never held to. They get their own list, with a dash. */
+    var skipped = (data.checks || []).filter(function (c) { return c.na; });
+    if (skipped.length) {
+      result.appendChild(el("h2", "scan-subhead",
+        t("skippedTitle", "Not measured") + " (" + skipped.length + ")"));
+      var slist = el("ul", "scan-obs");
+      skipped.forEach(function (c) {
+        var li = el("li", "scan-obs-item");
+        li.appendChild(el("span", "scan-obs-mark", "—"));
+        var sb = el("div", "scan-obs-body");
+        sb.appendChild(el("p", "scan-title", c.title));
+        sb.appendChild(el("p", "scan-detail", c.detail));
+        li.appendChild(sb);
+        slist.appendChild(li);
+      });
+      result.appendChild(slist);
+    }
+
+    var ok = gated ? [] : data.checks.filter(function (c) { return c.pass && !c.na; });
     if (ok.length) {
       result.appendChild(el("h2", "scan-subhead",
         t("passedTitle", "Passed") + " (" + ok.length + ")"));

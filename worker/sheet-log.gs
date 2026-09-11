@@ -1,10 +1,10 @@
 /* ── DATRUM scan log — Google Apps Script ──────────────────────────────
  *
- * WHAT IT IS. One Google Sheet, one row per prospect URL, written by both
- * instruments. The AI scan fills its two columns, the header scan fills its
- * two, and a second scan of the same URL updates the row it already has
- * instead of appending a duplicate. Everything a human types — business name,
- * vertical, outreach status — is never touched by this script.
+ * WHAT IT IS. One Google Sheet, one row per prospect URL, written by all three
+ * instruments. Each fills its own pair of columns, and a second scan of the
+ * same URL updates the row it already has instead of appending a duplicate.
+ * Everything a human types — business name, vertical, outreach status — is
+ * never touched by this script.
  *
  * WHY IT IS NOT IN THE SITE REPO'S ROOT. The repo root is the Cloudflare Pages
  * deploy directory, so anything tracked there is a public URL. `/worker/*`
@@ -47,16 +47,24 @@
 
 var COLUMNS = [
   "URL", "Business", "Vertical",
-  "AI score", "AI grade", "Security score", "Security grade",
-  "AI gaps", "Security gaps",
+  "AI score", "AI grade", "Trust score", "Trust grade", "Radar score", "Radar grade",
+  "AI gaps", "Trust gaps", "Radar gaps",
   "First scanned", "Last scanned", "Outreach status",
 ];
 
-/* The two instruments do not share a scale — the AI score is normalised
-   against a pool that varies with what could be measured, the header score is
-   100 minus deductions out of a fixed 93. Ranking one list of gaps across both
-   would be sorting numbers that do not mean the same thing, so each instrument
-   keeps its own column and the ordering inside a column is real. */
+// mode as the worker sends it -> the pair of columns it owns.
+var MODES = {
+  "":            { score: "AI score",     grade: "AI grade",     gaps: "AI gaps" },
+  "headers":     { score: "Trust score",  grade: "Trust grade",  gaps: "Trust gaps" },
+  "responsive":  { score: "Radar score",  grade: "Radar grade",  gaps: "Radar gaps" },
+};
+
+/* The three do not share a scale — the AI score is normalised against a pool
+   that varies with what could be measured, the Trust score is 100 minus
+   deductions out of a fixed 93, and the Radar is normalised over whichever of
+   its three checks could be measured. Merging their gaps into one ranked list
+   would be sorting numbers that do not mean the same thing, so each keeps its
+   own column and the ordering inside a column is real. */
 var COL = {};
 for (var i = 0; i < COLUMNS.length; i++) COL[COLUMNS[i]] = i + 1;
 
@@ -129,7 +137,6 @@ function doPost(e) {
     var sh = sheet_();
     var row = findRow_(sh, key);
     var now = new Date();
-    var headers = String(body.mode || "").toLowerCase() === "headers";
 
     if (!row) {
       row = sh.getLastRow() + 1;
@@ -137,18 +144,23 @@ function doPost(e) {
       sh.getRange(row, COL["First scanned"]).setValue(now);
     }
 
+    var cols = MODES[String(body.mode || "")];
+    // An unknown mode means a fourth instrument shipped and this script did
+    // not. Writing it into the AI columns would corrupt the one number the
+    // row exists for, so it is refused loudly instead.
+    if (!cols) return json_({ ok: false, error: "unknown mode: " + String(body.mode || "") });
+
     var score = Number(body.score);
     if (isFinite(score)) {
-      sh.getRange(row, COL[headers ? "Security score" : "AI score"]).setValue(score);
-      sh.getRange(row, COL[headers ? "Security grade" : "AI grade"]).setValue(String(body.grade || ""));
+      sh.getRange(row, COL[cols.score]).setValue(score);
+      sh.getRange(row, COL[cols.grade]).setValue(String(body.grade || ""));
     }
 
     // The gaps arrive already cut to three and already sorted by what they
     // cost. Joining them here rather than in three columns keeps the row
     // readable next to a WhatsApp draft, which is the only place it is used.
     var gaps = (body.gaps || []).slice(0, 3);
-    if (gaps.length)
-      sh.getRange(row, COL[headers ? "Security gaps" : "AI gaps"]).setValue(gaps.join("\n"));
+    if (gaps.length) sh.getRange(row, COL[cols.gaps]).setValue(gaps.join("\n"));
 
     sh.getRange(row, COL["Last scanned"]).setValue(now);
     // Business, Vertical and Outreach status are never written here. They are

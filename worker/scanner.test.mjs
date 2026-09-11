@@ -11,7 +11,7 @@ const tmpPath = path.join(here, ".scanner.undertest.mjs");
 
 let src = fs.readFileSync(srcPath, "utf8");
 src = src.slice(0, src.indexOf("export default"));
-src += "\nexport { isNoindex, langDeclared, mixedContent, canonicalOffsite, decodeEntities, parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR, validEmail, handleLead, titleNames, hasOneH1, descPresent, descUsable, canonicalAbs, headingSkip, headingCensus, ceiling, h1State, h1Subject, looksUnrendered, isOperator, logScan, LOG_GAPS, buildFindings, FINDINGS, FIND };";
+src += "\nexport { isNoindex, langDeclared, mixedContent, canonicalOffsite, decodeEntities, parseRobots, blocksAgent, grade, validateTarget, isPrivateHost, AI_CRAWLERS, runChecks, STR, ERR, runHeaderChecks, HDR, validEmail, handleLead, titleNames, hasOneH1, descPresent, descUsable, canonicalAbs, headingSkip, headingCensus, ceiling, h1State, h1Subject, looksUnrendered, isOperator, logScan, LOG_GAPS, buildFindings, FINDINGS, FIND, runResponsiveChecks, deliveryPlan, imageDims, pickFor, srcsetCandidates, RSP, RSP_WEIGHTS, PHONE_PX, RSP_MIN_POOL };";
 fs.writeFileSync(tmpPath, src);
 const M = await import(tmpPath);
 fs.unlinkSync(tmpPath);
@@ -832,6 +832,82 @@ console.log("\nthe report groups what is one problem into one finding");
         : [{ failed: 2, total: 6, ids: ["ssr"], bots: 2, crawlers: 6 },
            { failed: 6, total: 6, ids: ["hsts"], bots: 6, crawlers: 6 }].map(v => x(v)))
       .some(x => /\b(hac\u00e9s|ten\u00e9s|sos|vos)\b/.test(String(x))), false);
+}
+
+console.log("\nresponsiveness radar: what a phone would fetch");
+{
+  const base = new URL("https://x.com/");
+  const plan = h => M.deliveryPlan(h, base);
+  const by = (cs, id) => cs.find(c => c.id === id);
+
+  const fixed = plan('<img src="/hero.jpg">');
+  t("a bare src serves both devices",   [fixed.length, fixed[0].phone === fixed[0].laptop], [1, true]);
+  t("...and offers no sizes",           fixed[0].offersSizes, false);
+
+  const resp = plan('<img src="/a-2000.jpg" srcset="/a-600.jpg 600w, /a-1200.jpg 1200w, /a-2400.jpg 2400w">');
+  t("a phone takes the 1200 candidate", resp[0].phone, "https://x.com/a-1200.jpg");
+  t("a laptop takes the 2400 one",      resp[0].laptop, "https://x.com/a-2400.jpg");
+  t("...so the two differ",             resp[0].phone !== resp[0].laptop, true);
+  t("...and it offers sizes",           resp[0].offersSizes, true);
+
+  const pic = plan('<picture><source srcset="/s-500.webp 500w, /s-1500.webp 1500w"><img src="/f.jpg"></picture>');
+  t("picture sources are candidates",   pic[0].offersSizes, true);
+  t("...and the phone takes 1500",      pic[0].phone, "https://x.com/s-1500.webp");
+
+  t("an img with no src is skipped",    plan('<img alt="x">').length, 0);
+  t("the widest wins when none fit",    M.pickFor([{u:"a",w:100},{u:"b",w:300}], M.PHONE_PX).u, "b");
+  t("descriptors without w are kept",   M.srcsetCandidates("/a.jpg 2x, /b.jpg").length, 2);
+
+  const png = new Uint8Array(32); png[0]=0x89; png[1]=0x50;
+  const dv = new DataView(png.buffer); dv.setUint32(16, 1600); dv.setUint32(20, 900);
+  t("PNG dimensions are read",          M.imageDims(png), { w: 1600, h: 900 });
+  t("a short buffer reads as unknown",  M.imageDims(new Uint8Array(8)), null);
+  t("junk reads as unknown",            M.imageDims(new Uint8Array(64).fill(7)), null);
+
+  const M0 = { images: 2, sized: 2, phoneBytes: 1e6, laptopBytes: 1e6, oversized: 1, wastedBytes: 5e5,
+               viewport: true, cacheMisses: 0, cacheOf: 2, imgBlind: false, unread: 0 };
+  const r1 = M.runResponsiveChecks(M0, "en");
+  t("an oversized image fails",         by(r1, "oversized").pass, false);
+  t("...and costs what it weighs",      by(r1, "oversized").deduction, M.RSP_WEIGHTS.oversized);
+  t("...and carries a consequence",     typeof by(r1, "oversized").so, "string");
+  t("a passing check carries none",     by(r1, "viewport").so, undefined);
+
+  // ⚠️ The defect this instrument shipped with on its first run: a site that
+  // loads in under a second was failed for not offering a second size it has
+  // no use for. Nothing here may grade the phone-versus-laptop difference.
+  const light = M.runResponsiveChecks({ ...M0, oversized: 0, wastedBytes: 0 }, "en");
+  t("a light site is not failed for one size", light.every(c => c.pass), true);
+  t("...and no check compares the devices",    light.some(c => c.id === "adapts"), false);
+
+  // ⚠️ Mentioned is not measured. A page whose only images are SVG logos has
+  // no pixel width to compare, and passing it would be a clean score for a
+  // measurement that never ran — this reproduced against a real client site.
+  const svgOnly = M.runResponsiveChecks({ ...M0, images: 3, sized: 0, oversized: 0 }, "en");
+  t("images with no pixel size are not measured", by(svgOnly, "oversized").na, true);
+  t("...so they never score clean",               by(svgOnly, "oversized").weight, 0);
+
+  const none = M.runResponsiveChecks({ ...M0, images: 0, sized: 0 }, "en");
+  t("no images means not measured",     [by(none,"oversized").na, by(none,"oversized").weight], [true, 0]);
+  t("...and is not a failure",          by(none,"oversized").deduction, 0);
+  const blind = M.runResponsiveChecks({ ...M0, imgBlind: true, unread: 1 }, "en");
+  t("unreadable files are not clean",   by(blind,"oversized").na, true);
+  t("...and say why",                   /could not be read/.test(by(blind,"oversized").detail), true);
+
+  for (const lang of ["en", "es"]) {
+    const rows = M.runResponsiveChecks(M0, lang);
+    t(`${lang}: every check has a title`,  rows.every(c => c.title && c.title.length > 8), true);
+    t(`${lang}: every check has evidence`, rows.every(c => c.detail && c.detail.length > 8), true);
+    t(`${lang}: a failure states the failure`, by(rows, "oversized").title, M.RSP[lang].oversized.nt);
+    t(`${lang}: ...and it is not the passing form`,
+      by(rows, "oversized").title === M.RSP[lang].oversized.t, false);
+  }
+  t("es differs from en",
+    M.runResponsiveChecks(M0, "es")[0].title === M.runResponsiveChecks(M0, "en")[0].title, false);
+  t("no voseo in the es radar strings",
+    Object.values(M.RSP.es).some(v => /\b(hac\u00e9s|ten\u00e9s|sos|vos)\b/.test(JSON.stringify(v))), false);
+  // A viewport-only pool must not be enough to hand out a letter.
+  t("the pool floor outranks the unmeasurable case",
+    M.RSP_MIN_POOL > M.RSP_WEIGHTS.viewport + M.RSP_WEIGHTS.cache, true);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

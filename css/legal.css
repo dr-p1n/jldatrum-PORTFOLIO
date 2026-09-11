@@ -1271,3 +1271,40 @@ body.has-nav .band--top .wrap { padding-top: 160px; }
   body.has-nav .band .wrap { padding-top: 56px; padding-bottom: 56px; }
   body.has-nav .band--top .wrap { padding-top: 120px; }
 }
+
+/* ── Responsiveness Radar: the two devices ─────────────────────────────
+   A fact reported beside the checks, never one of them. Two cells so the
+   comparison is the shape of the thing rather than a sentence about it. */
+.scan-devices {
+  display: flex;
+  gap: 16px;
+  margin: 24px 0 8px;
+  flex-wrap: wrap;
+}
+.scan-device {
+  flex: 1 1 160px;
+  border: 1px solid var(--border, #1A3A40);
+  border-radius: 2px;
+  padding: 16px;
+}
+.scan-device-label {
+  margin: 0 0 8px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted, #9AABAF);
+}
+.scan-device-time {
+  margin: 0;
+  font-family: var(--font-display, "Space Grotesk", system-ui, sans-serif);
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--text, #E8EDED);
+}
+.scan-device-bytes {
+  margin: 4px 0 0;
+  font-size: 0.875rem;
+  color: var(--muted, #9AABAF);
+}

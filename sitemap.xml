@@ -154,10 +154,28 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+<url>
+    <loc>https://jldatrum.com/resources/responsive/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/responsive/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/security-headers/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/responsive/"/>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://jldatrum.com/es/resources/security-headers/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/security-headers/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/security-headers/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/security-headers/"/>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+<url>
+    <loc>https://jldatrum.com/es/resources/responsive/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/resources/security-headers/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/resources/responsive/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/resources/security-headers/"/>
     <lastmod>2026-08-18</lastmod>
     <changefreq>monthly</changefreq>
