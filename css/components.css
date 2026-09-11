@@ -278,31 +278,9 @@ nav {
   opacity: 1;
 }
 
-/* Names what the lanes measure, above them — a bare "Time" at the bottom
-   read as an axis tick and said nothing. */
-.mark-cap {
-  font-family: var(--font-body);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 20px;
-}
-
-.mark-foot { margin-top: 26px; }
-.mark-asym {
-  font-family: var(--font-body);
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--lemon);
-}
-
 @media (max-width: 639px) {
   .mark-lane { gap: 8px; }
   .mark-lane--owned { height: 92px; }
-  .mark-asym { font-size: 11px; letter-spacing: 0.08em; }
-  .mark-foot { margin-top: 20px; }
 }
 
 /* ── the animated state, applied ONLY by js/viz.js ── */
