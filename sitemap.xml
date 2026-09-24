@@ -272,24 +272,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jldatrum.com/work/obstacle-race/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/obstacle-race/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/obstacle-race/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/obstacle-race/"/>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jldatrum.com/es/work/obstacle-race/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/obstacle-race/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/obstacle-race/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/obstacle-race/"/>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://jldatrum.com/work/panama-treasures/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/panama-treasures/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/panama-treasures/"/>
@@ -321,24 +303,6 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/seguros/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/seguros/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/seguros/"/>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jldatrum.com/work/ucc/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/ucc/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/ucc/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/ucc/"/>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jldatrum.com/es/work/ucc/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jldatrum.com/work/ucc/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://jldatrum.com/es/work/ucc/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://jldatrum.com/work/ucc/"/>
     <lastmod>2026-08-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>

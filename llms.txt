@@ -21,7 +21,7 @@ path prefixed with `/es/`.
 ## Services and work
 
 - [Services](https://jldatrum.com/work/#services): six engagement types, from a single product to full presence architecture, plus the four-pillar DATRUM Method.
-- [Case studies](https://jldatrum.com/work/): seven engagements — what was broken, what was built, what changed.
+- [Case studies](https://jldatrum.com/work/): five engagements — what was broken, what was built, what changed.
 - [Bio](https://jldatrum.com/bio/): background of the operator — contemporary art and photography training, investment brokerage, then cybersecurity and IT.
 
 ## Instruments (free, no account)

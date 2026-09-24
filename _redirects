@@ -65,3 +65,10 @@
 # llms.txt, so the addresses exist out there; they go where the instruments are.
 /resources/pipeline/*                              /resources/                    301
 /es/resources/pipeline/*                           /es/resources/                 301
+
+# Two case studies were withdrawn from the portfolio. They were in the sitemap
+# and linked from /work/, so the addresses exist out there; they go to the grid.
+/work/obstacle-race/*                              /work/                         301
+/es/work/obstacle-race/*                           /es/work/                      301
+/work/ucc/*                                        /work/                         301
+/es/work/ucc/*                                     /es/work/                      301
