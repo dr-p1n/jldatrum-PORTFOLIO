@@ -11,7 +11,7 @@ import {
   RUNGS, REJECTIONS, OUTCOMES, addEvent, afterEvent, refreshLast, createProspect,
   findProspect, normPhone, updateProspect, nowIso,
 } from './db.js';
-import { readBatch } from './leads.js';
+import { readBatch, readBundle, remapGroup, MAPPABLE_FIELDS } from './leads.js';
 import { aiJSON, transcribe, PROMPTS } from './ai.js';
 import { parseWhatsApp, groupIntoEvents } from './whatsapp.js';
 import { analytics } from './analytics.js';
@@ -140,44 +140,76 @@ export async function route(request, env, url) {
   }
 
   // ── lead batches: preview → commit ───────────────────
+  // ── import: one paste, one or many tables ────────────
+  // Each table in the paste is a group with its own industry and region. The
+  // duplicate check runs against the CRM and across every group in the bundle,
+  // so the same firm appearing in two tables is caught before commit as well
+  // as at commit time.
   if (parts[0] === 'import' && parts[1] === 'preview' && method === 'POST') {
-    const result = readBatch(String(body?.text || '').slice(0, 500_000), { industry: body?.industry, region: body?.region });
+    const result = readBundle(String(body?.text || '').slice(0, 2_000_000), { industry: body?.industry, region: body?.region });
     if (result.error) return bad(result.error);
     const seen = new Map();
-    for (const lead of result.leads) {
-      const match = await findProspect(db, { email: lead.email, phone: lead.phone, website: lead.website, company: lead.company });
-      if (match) lead.duplicate = { id: match.id, name: match.name, company: match.company, rung: match.rung, status: match.status };
-      const key = lead.website || lead.email || (lead.company || '').toLowerCase();
-      if (key && seen.has(key)) lead.duplicate_in_batch = seen.get(key);
-      else if (key) seen.set(key, lead.lead_ref || lead.company);
+    for (const group of result.groups) {
+      for (const lead of group.leads) {
+        const match = await findProspect(db, { email: lead.email, phone: lead.phone, website: lead.website, company: lead.company });
+        if (match) lead.duplicate = { id: match.id, name: match.name, company: match.company, rung: match.rung, status: match.status };
+        const key = lead.website || lead.email || (lead.company || '').toLowerCase();
+        if (key && seen.has(key)) lead.duplicate_in_batch = seen.get(key);
+        else if (key) seen.set(key, lead.lead_ref || lead.company);
+      }
     }
+    return json({ groups: result.groups, fields: MAPPABLE_FIELDS });
+  }
+
+  // Re-read one group under a corrected column map. The data model does not
+  // change; this only fixes a wrong header guess before anything is written.
+  if (parts[0] === 'import' && parts[1] === 'remap' && method === 'POST') {
+    const result = remapGroup(String(body?.text || '').slice(0, 2_000_000), body?.fields || [], { industry: body?.industry, region: body?.region });
+    if (result.error) return bad(result.error);
     return json(result);
   }
 
   if (parts[0] === 'import' && parts[1] === 'commit' && method === 'POST') {
-    const leads = (body?.leads || []).slice(0, 1000);
-    if (!leads.length) return bad('No leads selected');
-    const label = (body.label || '').trim() || `Batch ${new Date().toISOString().slice(0, 10)}`;
-    // re-check at commit time: nothing is ever imported twice
-    const fresh = [], keys = new Set();
-    for (const lead of leads) {
-      const key = lead.website || lead.email || lead.phone || (lead.company || '').toLowerCase();
-      if (key && keys.has(key)) continue; // same lead twice in one batch
-      if (await findProspect(db, { email: lead.email, phone: lead.phone, website: lead.website, company: lead.company })) continue;
-      if (key) keys.add(key);
-      fresh.push(lead);
+    // Accepts a bundle. A single table arrives as one group.
+    const groups = Array.isArray(body?.groups) && body.groups.length
+      ? body.groups
+      : [{ label: body?.label, industry: body?.industry, region: body?.region, leads: body?.leads || [] }];
+    const bundleId = groups.length > 1 ? crypto.randomUUID() : null;
+    const today = new Date().toISOString().slice(0, 10);
+
+    // One shared key set across the whole bundle: nothing is imported twice,
+    // not within a group and not across two groups of the same paste.
+    const keys = new Set();
+    const out = [];
+    let totalImported = 0, totalSkipped = 0;
+
+    for (const [i, group] of groups.entries()) {
+      const leads = (group.leads || []).slice(0, 1000);
+      const label = (group.label || '').trim() || (groups.length > 1 ? `Batch ${today} (${i + 1})` : `Batch ${today}`);
+      const fresh = [];
+      for (const lead of leads) {
+        const key = lead.website || lead.email || lead.phone || (lead.company || '').toLowerCase();
+        if (key && keys.has(key)) continue;
+        if (await findProspect(db, { email: lead.email, phone: lead.phone, website: lead.website, company: lead.company })) continue;
+        if (key) keys.add(key);
+        fresh.push(lead);
+      }
+      const skipped = leads.length - fresh.length;
+      totalSkipped += skipped;
+      if (!fresh.length) { out.push({ batch_id: null, label, imported: 0, skipped }); continue; }
+
+      const batch = await db.prepare('INSERT INTO batches (label, source, industry, region, bundle_id) VALUES (?, ?, ?, ?, ?) RETURNING *')
+        .bind(label, body.source || null, group.industry || null, group.region || null, bundleId).first();
+      let imported = 0;
+      for (const lead of fresh) {
+        await createProspect(db, { ...lead, rung: 0, source: body.source || null, batch_id: batch.id });
+        imported++;
+      }
+      await db.prepare('UPDATE batches SET imported = ? WHERE id = ?').bind(imported, batch.id).run();
+      totalImported += imported;
+      out.push({ batch_id: batch.id, label, imported, skipped });
     }
-    const skipped = leads.length - fresh.length;
-    if (!fresh.length) return json({ batch_id: null, label, imported: 0, skipped });
-    const batch = await db.prepare('INSERT INTO batches (label, source, industry, region) VALUES (?, ?, ?, ?) RETURNING *')
-      .bind(label, body.source || null, body.industry || null, body.region || null).first();
-    let imported = 0;
-    for (const lead of fresh) {
-      await createProspect(db, { ...lead, rung: 0, source: body.source || null, batch_id: batch.id });
-      imported++;
-    }
-    await db.prepare('UPDATE batches SET imported = ? WHERE id = ?').bind(imported, batch.id).run();
-    return json({ batch_id: batch.id, label, imported, skipped }, 201);
+    return json({ bundle_id: bundleId, batches: out, imported: totalImported, skipped: totalSkipped }, 201);
   }
 
   // ── today's queue: next leads to contact, oldest batch first ──

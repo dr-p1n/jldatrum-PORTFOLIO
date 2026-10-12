@@ -195,3 +195,100 @@ export function readBatch(text, defaults = {}) {
     leads,
   };
 }
+
+// ── bundles ────────────────────────────────────────────
+// One paste can carry several tables. Gemini and Manus answer with two or
+// three, sometimes with a heading above each and prose in between. A block only
+// becomes a group if readBatch can actually find a company or name column in
+// it, which is what keeps the prose out — guessing from shape alone would turn
+// a paragraph with commas into a table.
+
+function headingParts(h) {
+  if (!h) return { label: null, industry: null, region: null };
+  const clean = String(h).replace(/^#+\s*/, '').replace(/^\*\*/, '').replace(/\*\*$/, '').replace(/:$/, '').trim();
+  if (!clean) return { label: null, industry: null, region: null };
+  const bits = clean.split(/\s*[—–·|]\s*|\s+-\s+/).map((s) => s.trim()).filter(Boolean);
+  return { label: clean, industry: bits[0] || null, region: bits[1] || null };
+}
+
+function looksTabular(line) {
+  const t = line.trim();
+  if (!t) return false;
+  if (t.startsWith('|')) return true;
+  if (t.includes('\t')) return true;
+  return t.split(',').length >= 3 || t.split(';').length >= 3;
+}
+
+// text → [{ heading, text }] — contiguous runs of table-shaped lines, each
+// carrying the last non-table line above it as its heading.
+export function splitBundle(text) {
+  const src = String(text || '').replace(/^﻿/, '').replace(/```[a-z]*\n?/gi, '');
+  const lines = src.split(/\r?\n/);
+  const blocks = [];
+  let buf = [], heading = null, lastProse = null;
+
+  const flush = () => {
+    if (buf.length >= 2) blocks.push({ heading, text: buf.join('\n') });
+    buf = []; heading = null;
+  };
+  for (const line of lines) {
+    if (looksTabular(line)) {
+      if (!buf.length) heading = lastProse;
+      buf.push(line);
+    } else {
+      flush();
+      if (line.trim()) lastProse = line;
+    }
+  }
+  flush();
+  return blocks;
+}
+
+// The bundle entry point. Falls back to a single unnamed group so an ordinary
+// one-table paste behaves exactly as it did before.
+export function readBundle(text, defaults = {}) {
+  const blocks = splitBundle(text);
+  const groups = [];
+  for (const b of blocks) {
+    const { label, industry, region } = headingParts(b.heading);
+    const parsed = readBatch(b.text, {
+      industry: defaults.industry || industry || null,
+      region: defaults.region || region || null,
+    });
+    if (parsed.error) continue;              // prose, or a table with no usable columns
+    if (!parsed.leads.length) continue;
+    groups.push({
+      label: label || null,
+      industry: defaults.industry || industry || null,
+      region: defaults.region || region || null,
+      columns: parsed.columns,
+      leads: parsed.leads,
+    });
+  }
+  if (!groups.length) {
+    const single = readBatch(text, defaults);
+    if (single.error) return { error: single.error };
+    return { groups: [{ label: null, industry: defaults.industry || null, region: defaults.region || null, columns: single.columns, leads: single.leads }] };
+  }
+  return { groups };
+}
+
+// Re-read one group's rows under a corrected column map, so a wrong guess in
+// the preview can be fixed without re-pasting. `fields` is one field name (or
+// null) per column, in column order.
+export function remapGroup(text, fields, defaults = {}) {
+  const rows = parseTable(text);
+  if (rows.length < 2) return { error: 'Need a header row plus at least one lead.' };
+  const header = rows[0];
+  const map = header.map((h, i) => (fields && fields[i] !== undefined ? fields[i] : mapHeader(h)));
+  if (!map.includes('company') && !map.includes('name')) {
+    return { error: 'Map at least one column to Company or Name.' };
+  }
+  const leads = rows.slice(1)
+    .filter((cells) => cells.some((c) => c && c.trim()))
+    .map((cells) => normalizeRow(cells, map, defaults));
+  return { columns: header.map((h, i) => ({ header: h, field: map[i] || null })), leads };
+}
+
+// The fields a column can be mapped to, for the override select in the preview.
+export const MAPPABLE_FIELDS = HEADERS.map(([field]) => field);

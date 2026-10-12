@@ -1,11 +1,14 @@
+// Imports reach into functions/_crm/ on purpose: the mail Worker and the
+// /admin API must match an incoming message to a prospect by exactly the
+// same rules. Two copies of db.js would drift.
 // Email intake via Cloudflare Email Routing.
 //  • Outbound: BCC the log address on any prospect email you send.
 //  • Inbound:  forward a prospect's reply to the log address.
 // The Worker decides direction, matches (or creates) the prospect and logs the event.
 
 import PostalMime from 'postal-mime';
-import { addEvent, createProspect, findProspect, normEmail } from './db.js';
-import { aiJSON, PROMPTS } from './ai.js';
+import { addEvent, createProspect, findProspect, normEmail } from '../../functions/_crm/db.js';
+import { aiJSON, PROMPTS } from '../../functions/_crm/ai.js';
 
 const FWD_SUBJECT = /^\s*(fwd?|fw|rv|reenv(iado)?)\s*:/i;
 // "From: Name <a@b.com>" / "De: Name <a@b.com>" / "From: a@b.com" inside a forwarded body

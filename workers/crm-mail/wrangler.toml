@@ -1,0 +1,33 @@
+# DATRUM CRM — email intake Worker.
+#
+# Deployed separately from the site: Pages auto-deploys on push to main, this
+# does not. From this directory: npx wrangler deploy
+#
+# No routes and no workers.dev: the only way in is Cloudflare Email Routing,
+# which invokes the email() handler directly. There is no HTTP surface, so
+# there is nothing to put behind Access.
+#
+# DEV_SKIP_ACCESS must never appear in this file. functions/_crm/security.test.mjs
+# fails the build if it does.
+
+name = "datrum-crm-mail"
+main = "worker.js"
+compatibility_date = "2025-09-01"
+workers_dev = false
+preview_urls = false
+
+[[d1_databases]]
+binding = "DB"
+database_name = "datrum-crm"
+database_id = "REPLACE_WITH_D1_ID"   # npx wrangler d1 create datrum-crm
+migrations_dir = "../../migrations"  # same migrations as /admin — one schema
+
+[ai]
+binding = "AI"
+
+[vars]
+OWNER_EMAILS = "julio@jldatrum.com,julioernestolv@gmail.com"
+LOG_ADDRESS = "log@crm-mail.jldatrum.com"
+OWNER_WA_NAMES = "Julio,You,Tú"
+TZ_OFFSET_HOURS = "-5"
+ANTHROPIC_MODEL = "claude-haiku-5-5"
