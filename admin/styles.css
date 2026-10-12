@@ -271,3 +271,15 @@ details.table-view summary { color: var(--ink-3); font-size: var(--fs-14); curso
 .stage-when { font-size: var(--fs-12); }
 .call-result { width: auto; min-height: 34px; padding: 6px 10px; }
 @media (max-width: 760px) { .stages { grid-template-columns: 1fr 1fr; } .stage-when { grid-column: span 2; } }
+
+/* Column-mapping row in the import preview. One select per detected column,
+   sitting directly under its header, so a wrong guess is fixed where it is
+   seen. Scrolls inside its own container like every other wide table here. */
+.import-table.map-row th { padding-bottom: 4px; }
+.import-table.map-row td { padding-top: 0; vertical-align: top; }
+.import-table.map-row select {
+  width: 100%;
+  min-width: 112px;
+  font-size: 12px;
+  padding: 4px 6px;
+}

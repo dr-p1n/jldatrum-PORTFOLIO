@@ -477,17 +477,18 @@ async function viewLeads(_, params) {
 function renderImporter(el) {
   el.innerHTML = `
     <section class="panel stack" style="margin-bottom:16px">
-      <div class="panel-head"><h2>Import a batch</h2><span class="faint small">CSV, a table copied from Sheets, or a table pasted from Gemini / Manus</span></div>
-      <textarea id="batch" placeholder="ID,Firm Name,Focus Area,Primary Email,WhatsApp Contact,Office Telephone&#10;CRM-01,…"></textarea>
+      <div class="panel-head"><h2>Import a batch</h2><span class="faint small">One or several tables — CSV, Sheets, Gemini / Manus, or a file</span></div>
+      <textarea id="batch" placeholder="Paste one table, or several. A heading above a table — ### Insurance brokers — Colón — fills in that group's industry and region."></textarea>
       <div class="grid-3">
         <label class="field">Batch name<input type="text" id="b-label" value="${new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} batch"></label>
-        <label class="field">Industry (whole batch)<input type="text" id="b-industry" list="dl-industry" placeholder="Corporate services"></label>
-        <label class="field">Region (whole batch)<input type="text" id="b-region" list="dl-region" placeholder="Panama City"></label>
+        <label class="field">Industry (default)<input type="text" id="b-industry" list="dl-industry" placeholder="Corporate services"></label>
+        <label class="field">Region (default)<input type="text" id="b-region" list="dl-region" placeholder="Panama City"></label>
       </div>
       <div class="row">
         <label class="field" style="display:flex;gap:8px;align-items:center">Source
           <select id="b-source" style="width:auto"><option>gemini</option><option>manus</option><option>scanner</option><option>chatgpt</option><option>referral</option><option>manual</option></select></label>
-        <label class="btn ghost">Attach .csv<input type="file" id="b-file" accept=".csv,.tsv,.txt,text/csv" class="sr-only"></label>
+        <label class="btn ghost">Attach file<input type="file" id="b-file" accept=".csv,.tsv,.txt,.md,.xlsx" class="sr-only"></label>
+        <span class="faint small" id="b-file-name"></span>
         <span class="spacer"></span>
         <button class="btn primary" id="b-read">Check batch</button>
       </div>
@@ -495,47 +496,141 @@ function renderImporter(el) {
       <datalist id="dl-region">${(state.facets?.region || []).map((v) => `<option value="${esc(v)}">`).join('')}</datalist>
     </section>
     <div id="b-preview"></div>`;
-  $('#b-file', el).onchange = async (e) => { const f = e.target.files[0]; if (f) $('#batch', el).value = await f.text(); };
+
+  $('#b-file', el).onchange = async (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    $('#b-file-name', el).textContent = f.name;
+    try {
+      $('#batch', el).value = /\.xlsx$/i.test(f.name) ? await readXlsx(f) : await f.text();
+      toast(`${f.name} loaded — check it before importing`);
+    } catch (err) { toast(err.message, 5000); }
+  };
+
   $('#b-read', el).onclick = async () => {
     try {
-      const { data } = await api('import/preview', { method: 'POST', body: { text: $('#batch', el).value, industry: $('#b-industry', el).value, region: $('#b-region', el).value } });
+      const { data } = await api('import/preview', { method: 'POST', body: {
+        text: $('#batch', el).value, industry: $('#b-industry', el).value, region: $('#b-region', el).value } });
       renderBatchPreview($('#b-preview', el), data, el);
     } catch (err) { toast(err.message, 5000); }
   };
 }
 
+// xlsx → one markdown-ish table per sheet, each under its sheet name, so the
+// server splits it with exactly the same bundle rules as a pasted answer.
+// SheetJS is pinned and is the only external script the admin CSP allows.
+const XLSX_SRC = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+let xlsxLoading = null;
+function loadXlsx() {
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  if (!xlsxLoading) {
+    xlsxLoading = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = XLSX_SRC;
+      s.onload = () => resolve(window.XLSX);
+      s.onerror = () => reject(new Error('Could not load the spreadsheet reader. Save the sheet as CSV and paste it instead.'));
+      document.head.appendChild(s);
+    });
+  }
+  return xlsxLoading;
+}
+async function readXlsx(file) {
+  const XLSX = await loadXlsx();
+  const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
+  const blocks = [];
+  for (const name of wb.SheetNames) {
+    const csv = XLSX.utils.sheet_to_csv(wb.Sheets[name]).trim();
+    if (csv.split(/\r?\n/).filter((l) => l.trim()).length < 2) continue;
+    blocks.push(`### ${name}\n\n${csv}`);
+  }
+  if (!blocks.length) throw new Error('No sheet in that file had a header row plus a lead.');
+  return blocks.join('\n\n');
+}
+
 function renderBatchPreview(el, data, root) {
-  const leads = data.leads.map((l) => ({ ...l, keep: !l.duplicate && !l.duplicate_in_batch && !!(l.phone || l.email) }));
-  const unmapped = data.columns.filter((c) => !c.field).map((c) => c.header);
+  // One state object per table in the paste. `text` is kept so a column can be
+  // re-mapped server-side without re-pasting.
+  const groups = data.groups.map((g, gi) => ({
+    ...g,
+    gi,
+    leads: g.leads.map((l) => ({ ...l, keep: !l.duplicate && !l.duplicate_in_batch && !!(l.phone || l.email) })),
+  }));
+  const fields = data.fields || [];
+
   const draw = () => {
-    const n = leads.filter((l) => l.keep).length;
-    el.innerHTML = `
-      <section class="panel" style="margin-bottom:16px">
-        <div class="panel-head"><h2>${data.leads.length} leads read</h2><span class="faint small">${n} selected</span></div>
-        <p class="small muted" style="margin:0 0 12px">Columns: ${data.columns.map((c) => `${esc(c.header)} → <b>${esc(c.field || 'notes')}</b>`).join(' · ')}${unmapped.length ? ' (unrecognised columns go to notes)' : ''}</p>
+    const total = groups.reduce((n, g) => n + g.leads.filter((l) => l.keep).length, 0);
+    el.innerHTML = groups.map((g) => {
+      const n = g.leads.filter((l) => l.keep).length;
+      const unmapped = g.columns.filter((c) => !c.field).length;
+      return `
+      <section class="panel" style="margin-bottom:16px" data-g="${g.gi}">
+        <div class="panel-head">
+          <h2>${esc(g.label || `Table ${g.gi + 1}`)}</h2>
+          <span class="faint small">${g.leads.length} read · ${n} selected${unmapped ? ` · ${unmapped} column${unmapped > 1 ? 's' : ''} → notes` : ''}</span>
+        </div>
+        <div class="grid-3" style="margin-bottom:12px">
+          <label class="field">Industry<input type="text" data-gf="industry" data-g="${g.gi}" list="dl-industry" value="${esc(g.industry || '')}"></label>
+          <label class="field">Region<input type="text" data-gf="region" data-g="${g.gi}" list="dl-region" value="${esc(g.region || '')}"></label>
+          <label class="field">Group name<input type="text" data-gf="label" data-g="${g.gi}" value="${esc(g.label || '')}" placeholder="Table ${g.gi + 1}"></label>
+        </div>
+        <div class="table-scroll" style="margin-bottom:12px"><table class="data-table import-table map-row">
+          <thead><tr>${g.columns.map((c) => `<th><div class="tiny one-line" style="max-width:150px">${esc(c.header)}</div></th>`).join('')}</tr></thead>
+          <tbody><tr>${g.columns.map((c, ci) => `<td><select data-map="${ci}" data-g="${g.gi}" aria-label="Map column ${esc(c.header)}">
+            <option value=""${c.field ? '' : ' selected'}>→ notes</option>
+            ${fields.map((f) => `<option value="${f}"${c.field === f ? ' selected' : ''}>${f}</option>`).join('')}
+          </select></td>`).join('')}</tr></tbody>
+        </table></div>
         <div class="table-scroll"><table class="data-table import-table">
           <thead><tr><th></th><th>Company</th><th>Phone used</th><th>Email</th><th>Check</th></tr></thead>
-          <tbody>${leads.map((l, i) => `<tr class="${l.keep ? '' : 'off'}">
-            <td><input type="checkbox" data-i="${i}" ${l.keep ? 'checked' : ''} aria-label="Import ${esc(l.company)}"></td>
+          <tbody>${g.leads.map((l, i) => `<tr class="${l.keep ? '' : 'off'}">
+            <td><input type="checkbox" data-i="${i}" data-g="${g.gi}" ${l.keep ? 'checked' : ''} aria-label="Import ${esc(l.company)}"></td>
             <td><div class="one-line" style="max-width:260px">${esc(l.company || l.name)}</div><div class="faint tiny one-line" style="max-width:260px">${esc(l.focus || '')}</div></td>
             <td>${l.phone ? esc(fmtPhone(l.phone)) : '<span class="faint">—</span>'}</td>
             <td><div class="one-line" style="max-width:220px">${esc(l.email || '—')}</div></td>
             <td class="checks">${l.duplicate ? `<div class="reason">Already in CRM: <a href="#/p/${l.duplicate.id}">${esc(l.duplicate.company || l.duplicate.name)}</a> (${esc(l.duplicate.status === 'active' ? rungName(l.duplicate.rung) : l.duplicate.status)})</div>` : ''}
-              ${l.duplicate_in_batch ? `<div class="reason">Repeats ${esc(l.duplicate_in_batch)} in this batch</div>` : ''}
+              ${l.duplicate_in_batch ? `<div class="reason">Repeats ${esc(l.duplicate_in_batch)} in this bundle</div>` : ''}
               ${l.flags.map((f) => `<div class="${/Placeholder|No usable|Foreign/.test(f) ? 'reason' : 'faint'} tiny">${esc(f)}</div>`).join('')}</td>
           </tr>`).join('')}</tbody>
         </table></div>
-        <div class="row" style="margin-top:16px"><button class="btn primary" id="b-commit" ${n ? '' : 'disabled'}>Add ${n} to the queue</button><span class="faint small">Duplicates and leads with no phone or email start unticked.</span></div>
       </section>`;
-    $$('input[data-i]', el).forEach((c) => (c.onchange = () => { leads[c.dataset.i].keep = c.checked; draw(); }));
+    }).join('') + `
+      <section class="panel">
+        <div class="row">
+          <button class="btn primary" id="b-commit" ${total ? '' : 'disabled'}>Add ${total} to the queue</button>
+          <span class="faint small">${groups.length > 1 ? `${groups.length} groups, one batch each.` : ''} Duplicates and leads with no phone or email start unticked.</span>
+        </div>
+      </section>`;
+
+    $$('input[data-i]', el).forEach((c) => (c.onchange = () => {
+      groups[+c.dataset.g].leads[+c.dataset.i].keep = c.checked; draw();
+    }));
+    $$('input[data-gf]', el).forEach((inp) => (inp.onchange = () => {
+      groups[+inp.dataset.g][inp.dataset.gf] = inp.value || null;
+    }));
+    $$('select[data-map]', el).forEach((sel) => (sel.onchange = async () => {
+      const g = groups[+sel.dataset.g];
+      const map = $$(`select[data-map][data-g="${g.gi}"]`, el).map((s) => s.value || null);
+      try {
+        const { data: r } = await api('import/remap', { method: 'POST', body: {
+          text: g.text, fields: map, industry: g.industry, region: g.region } });
+        g.columns = r.columns;
+        g.leads = r.leads.map((l) => ({ ...l, keep: !!(l.phone || l.email) }));
+        draw();
+      } catch (err) { toast(err.message, 5000); draw(); }
+    }));
+
     $('#b-commit', el).onclick = async () => {
       const body = {
-        label: $('#b-label', root).value, industry: $('#b-industry', root).value || null,
-        region: $('#b-region', root).value || null, source: $('#b-source', root).value,
-        leads: leads.filter((l) => l.keep).map(({ keep, duplicate, duplicate_in_batch, ...l }) => l),
+        source: $('#b-source', root).value,
+        groups: groups.map((g) => ({
+          label: g.label || $('#b-label', root).value,
+          industry: g.industry || $('#b-industry', root).value || null,
+          region: g.region || $('#b-region', root).value || null,
+          leads: g.leads.filter((l) => l.keep).map(({ keep, duplicate, duplicate_in_batch, ...l }) => l),
+        })).filter((g) => g.leads.length),
       };
       const { data: r } = await api('import/commit', { method: 'POST', body });
-      toast(`${r.imported} leads queued${r.skipped ? ` · ${r.skipped} skipped as duplicates` : ''}`);
+      toast(`${r.imported} leads queued${r.batches.length > 1 ? ` in ${r.batches.length} batches` : ''}${r.skipped ? ` · ${r.skipped} skipped as duplicates` : ''}`);
       await loadFacets();
       viewLeads(null, new URLSearchParams());
       refreshInboxBadge();

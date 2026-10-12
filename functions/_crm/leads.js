@@ -258,6 +258,7 @@ export function readBundle(text, defaults = {}) {
     if (parsed.error) continue;              // prose, or a table with no usable columns
     if (!parsed.leads.length) continue;
     groups.push({
+      text: b.text,                          // kept so the UI can re-map columns
       label: label || null,
       industry: defaults.industry || industry || null,
       region: defaults.region || region || null,
@@ -268,7 +269,7 @@ export function readBundle(text, defaults = {}) {
   if (!groups.length) {
     const single = readBatch(text, defaults);
     if (single.error) return { error: single.error };
-    return { groups: [{ label: null, industry: defaults.industry || null, region: defaults.region || null, columns: single.columns, leads: single.leads }] };
+    return { groups: [{ text: String(text || ''), label: null, industry: defaults.industry || null, region: defaults.region || null, columns: single.columns, leads: single.leads }] };
   }
   return { groups };
 }

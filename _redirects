@@ -59,6 +59,7 @@
 /_crm-source/*                                     /404                           301
 /tools/*                                           /404                           301
 /package.json                                      /404                           301
+/ADMIN.md                                          /404                           301
 /.claude/*                                         /404                           301
 /.gitignore                                        /404                           301
 
