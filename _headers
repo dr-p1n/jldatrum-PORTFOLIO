@@ -6,3 +6,21 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=(), interest-cohort=()
   Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com; connect-src 'self' https://ai-visibility.julioernestolv.workers.dev https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://cloudflareinsights.com; form-action 'self'; manifest-src 'self'
+
+# ── /admin — the private CRM ────────────────────────────────────────────────
+# A later, more specific rule wins per header name, so this replaces the public
+# policy for these paths rather than adding to it. Deliberate differences:
+#   · no googletagmanager / google-analytics anywhere. The CRM holds prospect
+#     personal data (Ley 81); it is not measured.
+#   · no-store, so prospect data never sits in a disk cache.
+#   · Referrer-Policy: no-referrer — an /admin URL must not leak outbound.
+#   · microphone=(self) for the voice-note capture; everything else denied.
+#   · cdnjs only in script-src, for the pinned SheetJS build the xlsx import
+#     loads. It is the single external script the admin is allowed.
+/admin/*
+  Cache-Control: no-store
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: microphone=(self), geolocation=(), camera=(), payment=(), usb=(), interest-cohort=()
+  Content-Security-Policy: default-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self' blob:; connect-src 'self'; form-action 'self'; manifest-src 'self'

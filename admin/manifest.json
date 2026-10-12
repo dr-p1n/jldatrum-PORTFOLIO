@@ -1,0 +1,26 @@
+{
+  "name": "DATRUM CRM",
+  "short_name": "CRM",
+  "start_url": "/admin/#/today",
+  "display": "standalone",
+  "background_color": "#0C1B1F",
+  "theme_color": "#0C1B1F",
+  "icons": [
+    {
+      "src": "/admin/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "share_target": {
+    "action": "/admin/",
+    "method": "GET",
+    "params": {
+      "title": "share_title",
+      "text": "share_text",
+      "url": "share_url"
+    }
+  },
+  "scope": "/admin/"
+}
