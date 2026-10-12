@@ -56,6 +56,7 @@
 # They belong in the public repo; they do not belong on jldatrum.com. Pages does
 # not accept a bare 404 status here, so these 301 to the real 404 page.
 /worker/*                                          /404                           301
+/_crm-source/*                                     /404                           301
 /tools/*                                           /404                           301
 /package.json                                      /404                           301
 /.claude/*                                         /404                           301

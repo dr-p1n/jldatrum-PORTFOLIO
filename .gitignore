@@ -22,3 +22,11 @@ DATRUM-copy-EN.txt
 DATRUM-copy-ES.txt
 DATRUM-current-copy.txt
 datrum website copy.txt
+
+# The CRM port. _crm-source/ is reference code that is never deployed, and the
+# root IS the Pages deploy directory, so an untracked copy here is one
+# `git add -A` away from being served at jldatrum.com/_crm-source/. The
+# existing `_*.py` / `_*.mjs` rules do not cover directories.
+_crm-source/
+*.zip
+.dev.vars

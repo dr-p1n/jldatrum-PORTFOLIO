@@ -5,6 +5,9 @@
 
 User-agent: *
 Allow: /
+# /admin is a private application behind Cloudflare Access, not content.
+# Advisory only — Access is the actual control.
+Disallow: /admin
 
 # ── Answer engines / retrieval agents ──────────────────────────
 User-agent: GPTBot
