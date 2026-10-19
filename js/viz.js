@@ -39,6 +39,8 @@
     compass:'<circle cx="12" cy="12" r="8.5"/><path d="M15 9l-2.2 5.2L7.6 16l2.2-5.2z"/>',
     // website design
     window: '<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9h17"/>',
+    // mail — the Impersonation Check
+    mail:   '<rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6.5L20.5 7"/>',
     // web app / app development
     app:    '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M10.8 5.4h2.4"/><path d="M11 18.6h2"/>'
   };

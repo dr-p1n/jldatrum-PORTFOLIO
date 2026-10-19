@@ -30,6 +30,7 @@ path prefixed with `/es/`.
 
 - [Trust Index](https://jldatrum.com/resources/security-headers/): reads a URL's response headers and the page itself, and grades the thirteen things a corporate buyer checks. Automated, not self-reported.
 - [Responsiveness Radar](https://jldatrum.com/resources/responsive/): measures what a phone has to download against what a laptop does, and how much of it is pixels no phone can display. Automated, not self-reported.
+- [Impersonation Check](https://jldatrum.com/resources/impersonation/): reads a domain's public mail records and says whether a stranger could send mail that appears to come from it, with the records shown as they are. Automated, not self-reported.
 
 ## Guides
 
