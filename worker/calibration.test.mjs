@@ -37,6 +37,7 @@ const fx = n => readFileSync(join(HERE, "fixtures", n), "utf8");
    does not exist in Node. Everything else in it is portable, so the scoring
    half is imported as-is and only the parse is re-implemented below. */
 const src = readFileSync(join(HERE, "ai-visibility-scanner.js"), "utf8")
+  .replace(/^import .*mail-scan.*$/m, "")   /* the mail route is not part of calibration */
   + "\nexport { runChecks, grade, parseRobots, sitemapLocs, urlFamilies, namesAPerson, h1State };";
 const M = await import("data:text/javascript;base64," + Buffer.from(src).toString("base64"));
 

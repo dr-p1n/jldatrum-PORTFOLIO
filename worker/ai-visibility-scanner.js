@@ -10,6 +10,8 @@
  * Route:   POST /scan  { "url": "https://example.com" }
  */
 
+import { scanMail, cleanDomain } from "./mail-scan.mjs";
+
 const ALLOWED_ORIGINS = new Set([
   "https://jldatrum.com",
   "http://localhost:3456",
@@ -2085,6 +2087,20 @@ export default {
     }
 
     if (body === null) return new Response(JSON.stringify({ error: E.json }), { status: 400, headers });
+
+    /* The mail instrument takes a DOMAIN and fetches nothing from it. It is
+       answered before validateTarget because a bare domain is not a URL. */
+    if (String(body?.mode || "").toLowerCase() === "mail") {
+      const domain = cleanDomain(body?.domain || body?.url);
+      if (!domain) return new Response(JSON.stringify({ error: lang === "es"
+        ? "Eso no parece un dominio. Escribe algo como suempresa.com."
+        : "That doesn't look like a domain. Try something like yourcompany.com." }), { status: 400, headers });
+      try {
+        return new Response(JSON.stringify(await scanMail(domain, lang, env)), { status: 200, headers });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: E.crashed(e.message) }), { status: 500, headers });
+      }
+    }
 
     const { url, error } = validateTarget(String(body?.url || ""), lang);
     if (error) return new Response(JSON.stringify({ error }), { status: 400, headers });

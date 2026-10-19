@@ -5,11 +5,13 @@ compatibility_date = "2026-08-01"
 # Per-IP ceilings, per fixed hour bucket. Tuning them is a deploy of this file,
 # not a code edit. Both fall back to 60 in the worker if unset or unreadable,
 # so a typo here cannot mean "unlimited".
-# ⚠️ THESE NUMBERS ARE QUOTED IN THE SITE COPY. Change one and change all four:
+# ⚠️ THESE NUMBERS ARE QUOTED IN THE SITE COPY. Change one and change all six:
 #   /resources/scan/index.html               "Sixty scans per hour."
 #   /es/resources/scan/index.html            "Sesenta escaneos por hora."
 #   /resources/security-headers/index.html   "Sixty tests per hour."
 #   /es/resources/security-headers/index.html "Sesenta pruebas por hora."
+#   /resources/impersonation/index.html      "Sixty checks per hour."
+#   /es/resources/impersonation/index.html   "Sesenta chequeos por hora."
 # The 429 strings read the value at runtime and need no edit.
 [vars]
 SCAN_LIMIT = "60"

@@ -22,3 +22,6 @@ DATRUM-copy-EN.txt
 DATRUM-copy-ES.txt
 DATRUM-current-copy.txt
 datrum website copy.txt
+
+# third-party findings from tools/impersonation.mjs
+index-out/
